@@ -37,20 +37,20 @@ class ServiceOrderStatusController extends Controller
     }
     
     public function read($id){
-        $item = ServiceOrderStatus::find($id);
+        $item = ServiceOrderStatus::findOrFail($id);
         return $item;
     }
     
     public function update($id, Request $request){
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
-        $item = ServiceOrderStatus::find($id);
+        $item = ServiceOrderStatus::findOrFail($id);
         $item->update($request->input());
         return $item;
     }
     
     public function delete($id){
-        $item = ServiceOrderStatus::find($id);
+        $item = ServiceOrderStatus::findOrFail($id);
         $item->delete();
         return response([], 204);
     }

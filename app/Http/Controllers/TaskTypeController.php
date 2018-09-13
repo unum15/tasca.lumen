@@ -37,20 +37,20 @@ class TaskTypeController extends Controller
     }
     
     public function read($id){
-        $item = TaskType::find($id);
+        $item = TaskType::findOrFail($id);
         return $item;
     }
     
     public function update($id, Request $request){
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
-        $item = TaskType::find($id);
+        $item = TaskType::findOrFail($id);
         $item->update($request->input());
         return $item;
     }
     
     public function delete($id){
-        $item = TaskType::find($id);
+        $item = TaskType::findOrFail($id);
         $item->delete();
         return response([], 204);
     }

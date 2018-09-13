@@ -37,20 +37,20 @@ class ContactTypeController extends Controller
     }
     
     public function read($id){
-        $item = ContactType::find($id);
+        $item = ContactType::findOrFail($id);
         return $item;
     }
     
     public function update($id, Request $request){
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
-        $item = ContactType::find($id);
+        $item = ContactType::findOrFail($id);
         $item->update($request->input());
         return $item;
     }
     
     public function delete($id){
-        $item = ContactType::find($id);
+        $item = ContactType::findOrFail($id);
         $item->delete();
         return response([], 204);
     }

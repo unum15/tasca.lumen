@@ -38,7 +38,7 @@ class ServiceOrderActionController extends Controller
     }
     
     public function read($id){
-        $item = ServiceOrderAction::find($id);
+        $item = ServiceOrderAction::findOrFail($id);
         return $item;
     }
     
@@ -52,7 +52,7 @@ class ServiceOrderActionController extends Controller
         ];
         $this->validate($request, $validation);
         $this->removeConflict($request);
-        $item = ServiceOrderAction::find($id);
+        $item = ServiceOrderAction::findOrFail($id);
         if($item == null){
             return response(['success' => false, 'status' => 404, 'message' => 'HTTP_FILE_NOT_FOUND'], 404);
         }
@@ -66,7 +66,7 @@ class ServiceOrderActionController extends Controller
     }
     
     public function delete($id){
-        $item = ServiceOrderAction::find($id);
+        $item = ServiceOrderAction::findOrFail($id);
         $item->delete();
         return response([], 204);
     }

@@ -107,3 +107,9 @@ $router->get('/work_type/{id:[0-9]+}', 'WorkTypeController@read');
 $router->patch('/work_type/{id:[0-9]+}', 'WorkTypeController@update');
 $router->delete('/work_type/{id:[0-9]+}', 'WorkTypeController@delete');
 
+$router->get('/clients', 'ClientController@index');
+$router->post('/client', 'ClientController@create');
+$router->get('/client/{id:[0-9]+}', 'ClientController@read');
+$router->patch('/client/{id:[0-9]+}', 'ClientController@update');
+$router->delete('/client/{id:[0-9]+}', 'ClientController@delete');
+

@@ -37,20 +37,20 @@ class ClientTypeController extends Controller
     }
     
     public function read($id){
-        $item = ClientType::find($id);
+        $item = ClientType::findOrFail($id);
         return $item;
     }
     
     public function update($id, Request $request){
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
-        $item = ClientType::find($id);
+        $item = ClientType::findOrFail($id);
         $item->update($request->input());
         return $item;
     }
     
     public function delete($id){
-        $item = ClientType::find($id);
+        $item = ClientType::findOrFail($id);
         $item->delete();
         return response([], 204);
     }

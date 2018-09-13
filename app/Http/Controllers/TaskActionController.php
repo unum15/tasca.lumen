@@ -37,20 +37,20 @@ class TaskActionController extends Controller
     }
     
     public function read($id){
-        $item = TaskAction::find($id);
+        $item = TaskAction::findOrFail($id);
         return $item;
     }
     
     public function update($id, Request $request){
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
-        $item = TaskAction::find($id);
+        $item = TaskAction::findOrFail($id);
         $item->update($request->input());
         return $item;
     }
     
     public function delete($id){
-        $item = TaskAction::find($id);
+        $item = TaskAction::findOrFail($id);
         $item->delete();
         return response([], 204);
     }

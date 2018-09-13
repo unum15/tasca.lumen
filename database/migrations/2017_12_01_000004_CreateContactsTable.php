@@ -21,6 +21,7 @@ class CreateContactsTable extends Migration
             $table->integer('contact_method_id')->nullable();
             $table->string('login')->nullable();
             $table->string('password')->nullable();
+            $table->binary('api_token')->nullable();
             $table->rememberToken();
             $table->integer('creator_id');
             $table->integer('updater_id');

@@ -10,7 +10,8 @@ class TaskAction extends Model
 		'name',
 		'notes',
 		'sort_order',
-        'default'
+        'default',
+		'task_status_id'
 	];
 	
 	public function taskStatus(){

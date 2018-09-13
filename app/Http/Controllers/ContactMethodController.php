@@ -37,20 +37,20 @@ class ContactMethodController extends Controller
     }
     
     public function read($id){
-        $item = ContactMethod::find($id);
+        $item = ContactMethod::findOrFail($id);
         return $item;
     }
     
     public function update($id, Request $request){
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
-        $item = ContactMethod::find($id);
+        $item = ContactMethod::findOrFail($id);
         $item->update($request->input());
         return $item;
     }
     
     public function delete($id){
-        $item = ContactMethod::find($id);
+        $item = ContactMethod::findOrFail($id);
         $item->delete();
         return response([], 204);
     }
