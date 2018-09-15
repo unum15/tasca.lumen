@@ -18,11 +18,13 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
 		'activity_level_id',
 		'contact_method_id',
         'login',
-        'password',
-        'google_calendar_token',
-        'google_calendar_id',
+        'password',        
 		'creator_id',
 		'updater_id'
+    ];
+    
+     protected $hidden = [
+        'password','google_calendar_token','google_calendar_id','remember_token','api_token'
     ];
     
 	public function activeLevel(){

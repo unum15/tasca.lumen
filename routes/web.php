@@ -113,3 +113,26 @@ $router->get('/client/{id:[0-9]+}', 'ClientController@read');
 $router->patch('/client/{id:[0-9]+}', 'ClientController@update');
 $router->delete('/client/{id:[0-9]+}', 'ClientController@delete');
 
+$router->get('/contacts', 'ContactController@index');
+$router->post('/contact', 'ContactController@create');
+$router->get('/contact/{id:[0-9]+}', 'ContactController@read');
+$router->patch('/contact/{id:[0-9]+}', 'ContactController@update');
+$router->delete('/contact/{id:[0-9]+}', 'ContactController@delete');
+
+$router->get('/emails', 'EmailController@index');
+$router->post('/email', 'EmailController@create');
+$router->get('/email/{id:[0-9]+}', 'EmailController@read');
+$router->patch('/email/{id:[0-9]+}', 'EmailController@update');
+$router->delete('/email/{id:[0-9]+}', 'EmailController@delete');
+
+$router->get('/phone_numbers', 'PhoneNumberController@index');
+$router->post('/phone_number', 'PhoneNumberController@create');
+$router->get('/phone_number/{id:[0-9]+}', 'PhoneNumberController@read');
+$router->patch('/phone_number/{id:[0-9]+}', 'PhoneNumberController@update');
+$router->delete('/phone_number/{id:[0-9]+}', 'PhoneNumberController@delete');
+
+$router->get('/projects', 'ProjectController@index');
+$router->post('/project', 'ProjectController@create');
+$router->get('/project/{id:[0-9]+}', 'ProjectController@read');
+$router->patch('/project/{id:[0-9]+}', 'ProjectController@update');
+$router->delete('/project/{id:[0-9]+}', 'ProjectController@delete');
