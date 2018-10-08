@@ -15,6 +15,8 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->post('/auth', 'AuthController@auth');
+$router->post('/unauth', 'AuthController@unauth');
 
 $router->get('/activity_levels', 'ActivityLevelController@index');
 $router->post('/activity_level', 'ActivityLevelController@create');
@@ -94,7 +96,6 @@ $router->get('/task_type/{id:[0-9]+}', 'TaskTypeController@read');
 $router->patch('/task_type/{id:[0-9]+}', 'TaskTypeController@update');
 $router->delete('/task_type/{id:[0-9]+}', 'TaskTypeController@delete');
 
-
 $router->get('/work_orders', 'WorkOrderController@index');
 $router->post('/work_order', 'WorkOrderController@create');
 $router->get('/work_order/{id:[0-9]+}', 'WorkOrderController@read');
@@ -131,8 +132,22 @@ $router->get('/phone_number/{id:[0-9]+}', 'PhoneNumberController@read');
 $router->patch('/phone_number/{id:[0-9]+}', 'PhoneNumberController@update');
 $router->delete('/phone_number/{id:[0-9]+}', 'PhoneNumberController@delete');
 
-$router->get('/projects', 'ProjectController@index');
-$router->post('/project', 'ProjectController@create');
-$router->get('/project/{id:[0-9]+}', 'ProjectController@read');
-$router->patch('/project/{id:[0-9]+}', 'ProjectController@update');
-$router->delete('/project/{id:[0-9]+}', 'ProjectController@delete');
+$router->get('/properties', 'PropertyController@index');
+$router->post('/property', 'PropertyController@create');
+$router->get('/property/{id:[0-9]+}', 'PropertyController@read');
+$router->patch('/property/{id:[0-9]+}', 'PropertyController@update');
+$router->delete('/property/{id:[0-9]+}', 'PropertyController@delete');
+
+$router->get('/service_orders', 'ServiceOrderController@index');
+$router->post('/service_order', 'ServiceOrderController@create');
+$router->get('/service_order/{id:[0-9]+}', 'ServiceOrderController@read');
+$router->patch('/service_order/{id:[0-9]+}', 'ServiceOrderController@update');
+$router->delete('/service_order/{id:[0-9]+}', 'ServiceOrderController@delete');
+
+$router->get('/tasks', 'TaskController@index');
+$router->post('/task', 'TaskController@create');
+$router->get('/task/{id:[0-9]+}', 'TaskController@read');
+$router->patch('/task/{id:[0-9]+}', 'TaskController@update');
+$router->delete('/task/{id:[0-9]+}', 'TaskController@delete');
+
+$router->get('/settings', 'SettingController@index');

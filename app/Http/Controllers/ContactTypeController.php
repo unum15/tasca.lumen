@@ -25,7 +25,7 @@ class ContactTypeController extends Controller
     }
 
     public function index(){
-        $items = ContactType::All();
+        $items = ContactType::orderBy('sort_order')->get();
         return $items;
     }
     

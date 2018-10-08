@@ -18,7 +18,8 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
 		'activity_level_id',
 		'contact_method_id',
         'login',
-        'password',        
+        'password',
+        'api_token',
 		'creator_id',
 		'updater_id'
     ];
@@ -28,27 +29,29 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
     ];
     
 	public function activeLevel(){
-		return $this->belongsTo('App\Model\ActiveLevel');
+		return $this->belongsTo('App\ActiveLevel');
 	}
     
     public function clients(){
-        return $this->belongsToMany('App\Model\Client');
+        return $this->belongsToMany('App\Client')
+            ->withTimestamps()
+            ->withPivot('contact_type_id');
     }
     
     public function contactMethod(){
-		return $this->belongsTo('App\Model\ContactMethod');
+		return $this->belongsTo('App\ContactMethod');
 	}
     
 	public function emails(){
-        return $this->hasMany('App\Model\Email');
+        return $this->hasMany('App\Email');
     }
     
 	public function phoneNumbers(){
-        return $this->hasMany('App\Model\PhoneNumber');
+        return $this->hasMany('App\PhoneNumber');
     }
 	
 	public function properties(){
-        return $this->belongsToMany('App\Model\Property');
+        return $this->belongsToMany('App\Property');
     }
     
 }

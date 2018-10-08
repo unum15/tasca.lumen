@@ -14,6 +14,6 @@ class ServiceOrderStatus extends Model
 	];
 	
 	public function serviceOrderActions(){
-        return $this->hasMany('App\Model\ServiceOrderAction');
+        return $this->hasMany('App\ServiceOrderAction');
     }	
 }

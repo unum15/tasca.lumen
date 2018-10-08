@@ -25,7 +25,7 @@ class ActivityLevelController extends Controller
     }
 
     public function index(){
-        $items = ActivityLevel::All();
+        $items = ActivityLevel::orderBy('sort_order')->get();
         return $items;
     }
     

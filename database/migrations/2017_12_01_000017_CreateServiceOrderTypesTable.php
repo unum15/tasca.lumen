@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateServiceOrdersStatusesTable extends Migration
+class CreateServiceOrderTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateServiceOrdersStatusesTable extends Migration
      */
     public function up()
     {
-        Schema::create('service_order_statuses', function (Blueprint $table) {
+        Schema::create('service_order_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->text('notes')->nullable();
@@ -26,10 +26,8 @@ class CreateServiceOrdersStatusesTable extends Migration
              *Feel free to contact me and try to convince me to do it differently
              */
             $table->boolean('default')->default('false');
-            $table->boolean('allow_pending_work_order')->default('false');
-            $table->boolean('allow_work_order')->default('false');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();            
         });
     }
 
@@ -40,6 +38,6 @@ class CreateServiceOrdersStatusesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('service_order_statuses');
+        Schema::dropIfExists('service_order_types');
     }
 }

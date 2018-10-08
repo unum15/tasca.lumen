@@ -12,7 +12,7 @@ class ServiceOrder extends Model
         'completion_date',
         'expiration_date',
         'description',
-        'category_id',
+        'service_order_category_id',
         'service_order_priority_id',
         'service_order_type_id',
         'service_order_status_id',

@@ -22,32 +22,32 @@ class Client extends Model
 	];
 	
 	public function activityLevel(){
-		return $this->belongsTo('App\Model\ActivityLevel');
+		return $this->belongsTo('App\ActivityLevel');
 	}
 	
 	
 	public function billingContact(){
-		return $this->belongsTo('App\Model\Contact');
+		return $this->belongsTo('App\Contact');
 	}
 	
 	public function billingProperty(){
-		return $this->belongsTo('App\Model\Property');
+		return $this->belongsTo('App\Property');
 	}
 	
 	public function clientType(){
-		return $this->belongsTo('App\Model\ClientType');
+		return $this->belongsTo('App\ClientType');
 	}
 	
 	public function contactMethod(){
-		return $this->belongsTo('App\Model\ContactMethod');
+		return $this->belongsTo('App\ContactMethod');
 	}	
 	
 	public function contacts(){
-        return $this->belongsToMany('App\Model\Contact');
+        return $this->belongsToMany('App\Contact');
     }
 	
 	public function properties(){
-        return $this->hasMany('App\Model\Property');
+        return $this->hasMany('App\Property');
     }	
 	
 }

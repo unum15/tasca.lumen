@@ -15,15 +15,19 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
+            $table->boolean('billable');
             $table->string('description');
-            $table->integer('task_type_index');
-            $table->integer('task_status_index');
-            $table->integer('task_action_index');
-            $table->string('day');
-            $table->date('date');
-            $table->string('time');
-            $table->integer('job_hours');
-            $table->integer('crew_hours');
+            $table->integer('task_category_id');
+            $table->integer('task_status_id');
+            $table->integer('task_action_id');
+            $table->string('day')->nullable();
+            $table->date('date')->nullable();
+            $table->date('completion_date')->nullable();
+            $table->string('time')->nullable();
+            $table->string('group')->nullable();
+            $table->string('sort')->nullable();
+            $table->integer('job_hours')->nullable();
+            $table->integer('crew_hours')->nullable();
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();

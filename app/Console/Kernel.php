@@ -4,6 +4,8 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\PopulateDatabaseDefaultsCommand;
+use App\Console\Commands\TruncateDatabaseCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        PopulateDatabaseDefaultsCommand::class,
+        TruncateDatabaseCommand::class
     ];
 
     /**

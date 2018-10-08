@@ -14,6 +14,6 @@ class TaskStatus extends Model
 	];
 	
 	public function taskActions(){
-        return $this->hasMany('App\Model\TaskAction');
+        return $this->hasMany('App\TaskAction');
     }	
 }

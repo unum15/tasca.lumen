@@ -20,9 +20,8 @@ class CreateContactsTable extends Migration
             $table->integer('activity_level_id')->nullable();
             $table->integer('contact_method_id')->nullable();
             $table->string('login')->nullable();
-            $table->string('password')->nullable();
+            $table->binary('password')->nullable();
             $table->binary('api_token')->nullable();
-            $table->rememberToken();
             $table->integer('creator_id');
             $table->integer('updater_id');
             $table->timestamp('created_at')->useCurrent();

@@ -20,7 +20,7 @@ class CreateServiceOrdersTable extends Migration
             $table->date('completion_date')->nullable();
             $table->date('expiration_date')->nullable();
             $table->text('description');
-            $table->integer('category_id');
+            $table->integer('service_order_category_id');
             $table->integer('service_order_priority_id');
             $table->integer('service_order_type_id');
             $table->integer('service_order_status_id');

@@ -5,38 +5,27 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class WorkOrder extends Model
-{
-    protected $table = "workorders.workorders";
-	protected $primaryKey = "workorder_index";
-	public $timestamps = false;
+{    
 	protected $fillable = [
-		'property_index',
-		'location',
-		'instructions',
-		'priority_index', 
+		'completion_date',
+		'expiration_date',
+        'priority_id',
+        'work_type_id',
+        'crew',
+        'total_hours',
+        'location',
+        'instructions',
         'notes',
-		'budget',
+        'purchase_order_number',
+        'budget',
+        'budget_plus_minus',
+        'budget_invoice_number',
 		'bid',
-		'approval_date',
-		'progress_percentage',
-		'date_completed', 
+		'bid_plus_minus',
         'invoice_number',
-		'description',
-		'contact_index',
-		'deleted',
-		'po_number', 
-        'workorder_date',
-		'approved_by',
-		'budget_invoice_number',
-		'budget_plus_minus', 
-        'bid_plus_minus',
-		'work_hours',
-		'work_days',
-		'expires',
-		'status_index', 
-        'type_index',
-		'action_index',
-		'group_name'
+        'creator_id',
+        'updater_id'
+        
 	];
 	
 	

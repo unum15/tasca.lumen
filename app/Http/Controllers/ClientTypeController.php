@@ -25,7 +25,7 @@ class ClientTypeController extends Controller
     }
 
     public function index(){
-        $items = ClientType::All();
+        $items = ClientType::orderBy('sort_order')->get();
         return $items;
     }
     

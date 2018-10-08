@@ -15,13 +15,13 @@ class ClientController extends Controller
     
     private $validation = [
         'name' => 'string|min:1|max:255',
-        'notes' => 'string|max:255',
-		'client_type_id' => 'integer|exists:client_types,id',
-		'activity_level_id' => 'integer|exists:activity_levels,id',
-		'billing_contact_id' => 'integer|exists:contacts,id',
-		'billing_property_id' => 'integer|exists:properties,id',
-		'contact_method_id' => 'integer|exists:contact_methods,id',
-		'referred_by' => 'string|max:255'
+        'notes' => 'nullable|string|max:255',
+		'client_type_id' => 'nullable|integer|exists:client_types,id',
+		'activity_level_id' => 'nullable|integer|exists:activity_levels,id',
+		'billing_contact_id' => 'nullable|integer|exists:contacts,id',
+		'billing_property_id' => 'nullable|integer|exists:properties,id',
+		'contact_method_id' => 'nullable|integer|exists:contact_methods,id',
+		'referred_by' => 'nullable|string|max:255'
     ];
     
     public function __construct()
@@ -30,7 +30,12 @@ class ClientController extends Controller
     }
 
     public function index(){
-        $items = Client::All();
+        $items = Client::with('clientType')
+        ->with('activityLevel')
+        ->with('billingContact')
+        ->with('billingProperty')
+        ->orderBy('name')
+        ->get();
         return $items;
     }
     

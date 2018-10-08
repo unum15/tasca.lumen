@@ -15,6 +15,6 @@ class TaskAction extends Model
 	];
 	
 	public function taskStatus(){
-		return $this->belongsTo('App\Model\TaskStatus');
+		return $this->belongsTo('App\TaskStatus');
 	}
 }

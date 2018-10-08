@@ -15,7 +15,7 @@ class ServiceOrderAction extends Model
 	];
 	
 	public function serviceOrderStatus(){
-		return $this->belongsTo('App\Model\ServiceOrderStatus');
+		return $this->belongsTo('App\ServiceOrderStatus');
 	}
     
 }
