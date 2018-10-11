@@ -29,6 +29,10 @@ class ContactController extends Controller
 
     public function index(Request $request){
         $items_query = Contact::with('clients')
+        ->with('activityLevel')
+        ->with('contactMethod')
+        ->with('emails')
+        ->with('phoneNumbers')
         ->orderBy('name');
         $client_id = $request->input('client_id');
         if($client_id){

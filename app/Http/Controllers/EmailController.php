@@ -29,8 +29,14 @@ class EmailController extends Controller
         //
     }
 
-    public function index(){
-        $items = Email::All();
+    public function index(Request $request){
+        $this->validate($request, $this->validation);
+        $filters = $request->only(array_keys($this->validation));
+        $items_query = Email::orderBy('id');
+        foreach($filters as $field => $value){
+            $items_query->where($field, $value);
+        }
+        $items = $items_query->get();
         return $items;
     }
     
@@ -50,7 +56,7 @@ class EmailController extends Controller
     }
     
     public function update($id, Request $request){
-        $this->validate($request, $this->validation);     
+        $this->validate($request, $this->validation);
         $item = Email::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
         $values['updater_id'] = $request->user()->id;

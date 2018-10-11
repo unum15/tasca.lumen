@@ -28,8 +28,8 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
         'password','google_calendar_token','google_calendar_id','remember_token','api_token'
     ];
     
-	public function activeLevel(){
-		return $this->belongsTo('App\ActiveLevel');
+	public function activityLevel(){
+		return $this->belongsTo('App\ActivityLevel');
 	}
     
     public function clients(){
