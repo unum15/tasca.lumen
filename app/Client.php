@@ -43,7 +43,9 @@ class Client extends Model
 	}	
 	
 	public function contacts(){
-        return $this->belongsToMany('App\Contact');
+        return $this->belongsToMany('App\Contact')
+			->withTimestamps()
+            ->withPivot('contact_type_id');
     }
 	
 	public function properties(){

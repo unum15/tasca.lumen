@@ -38,8 +38,8 @@ class Property extends Model
         return $this->belongsTo('App\PropertyType');
     }
     
-    public function activeLevel(){
-		return $this->belongsTo('App\ActiveLevel');
+    public function activityLevel(){
+		return $this->belongsTo('App\ActivityLevel');
 	}
     
     public function contacts(){

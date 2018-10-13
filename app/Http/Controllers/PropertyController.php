@@ -12,23 +12,11 @@ class PropertyController extends Controller
      *
      * @return void
      */
-    private $validation_create = [
-        'name' => 'string|required|min:1|max:255',
-        'contact_id' => 'integer|required|exists:contacts,id',
-		'property_id' => 'integer|required|exists:properties,id',
-        'open_date' => 'date|required',
-        'close_date' => 'date',
-        'notes' => 'string|max:255'
-		
-    ];
-    
     private $validation = [
-        'name' => 'string|required|min:1|max:255',
-		'property_id' => 'integer|exists:properties,id',
-        'open_date' => 'date',
-		'contact_id' => 'integer|exists:contacts,id',
-        'close_date' => 'date',
-        'notes' => 'string|max:255'
+        'name' => 'string|min:1|max:255',
+		'client_id' => 'integer|exists:clients,id',
+		'contact_id' => 'nullable|integer|exists:contacts,id',
+        'notes' => 'nullable|string|max:255'
     ];
     
     public function __construct()
@@ -37,13 +25,18 @@ class PropertyController extends Controller
     }
 
     public function index(){
-        $items = Property::All();
+        $items = Property::with('client')
+        ->with('activityLevel')
+        ->with('propertyType')
+        ->with('contact')
+        ->get();
         return $items;
     }
     
     public function create(Request $request){
-        $this->validate($request, $this->validation_create);
+        $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
+        $values = $request->input();
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = Property::create($values);

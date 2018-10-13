@@ -72,11 +72,23 @@ $router->get('/service_order_priority/{id:[0-9]+}', 'ServiceOrderPriorityControl
 $router->patch('/service_order_priority/{id:[0-9]+}', 'ServiceOrderPriorityController@update');
 $router->delete('/service_order_priority/{id:[0-9]+}', 'ServiceOrderPriorityController@delete');
 
+$router->get('/service_order_categories', 'ServiceOrderCategoryController@index');
+$router->post('/service_order_category', 'ServiceOrderCategoryController@create');
+$router->get('/service_order_category/{id:[0-9]+}', 'ServiceOrderCategoryController@read');
+$router->patch('/service_order_category/{id:[0-9]+}', 'ServiceOrderCategoryController@update');
+$router->delete('/service_order_category/{id:[0-9]+}', 'ServiceOrderCategoryController@delete');
+
 $router->get('/service_order_statuses', 'ServiceOrderStatusController@index');
 $router->post('/service_order_status', 'ServiceOrderStatusController@create');
 $router->get('/service_order_status/{id:[0-9]+}', 'ServiceOrderStatusController@read');
 $router->patch('/service_order_status/{id:[0-9]+}', 'ServiceOrderStatusController@update');
 $router->delete('/service_order_status/{id:[0-9]+}', 'ServiceOrderStatusController@delete');
+
+$router->get('/service_order_types', 'ServiceOrderTypeController@index');
+$router->post('/service_order_type', 'ServiceOrderTypeController@create');
+$router->get('/service_order_type/{id:[0-9]+}', 'ServiceOrderTypeController@read');
+$router->patch('/service_order_type/{id:[0-9]+}', 'ServiceOrderTypeController@update');
+$router->delete('/service_order_type/{id:[0-9]+}', 'ServiceOrderTypeController@delete');
 
 $router->get('/task_actions', 'TaskActionController@index');
 $router->post('/task_action', 'TaskActionController@create');
@@ -89,6 +101,12 @@ $router->post('/task_status', 'TaskStatusController@create');
 $router->get('/task_status/{id:[0-9]+}', 'TaskStatusController@read');
 $router->patch('/task_status/{id:[0-9]+}', 'TaskStatusController@update');
 $router->delete('/task_status/{id:[0-9]+}', 'TaskStatusController@delete');
+
+$router->get('/task_categories', 'TaskCategoryController@index');
+$router->post('/task_category', 'TaskCategoryController@create');
+$router->get('/task_category/{id:[0-9]+}', 'TaskCategoryController@read');
+$router->patch('/task_category/{id:[0-9]+}', 'TaskCategoryController@update');
+$router->delete('/task_category/{id:[0-9]+}', 'TaskCategoryController@delete');
 
 $router->get('/task_types', 'TaskTypeController@index');
 $router->post('/task_type', 'TaskTypeController@create');

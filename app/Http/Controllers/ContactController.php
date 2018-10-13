@@ -41,12 +41,6 @@ class ContactController extends Controller
             });
         }
         $items = $items_query->get();
-        foreach($items as $item){
-            foreach($item->clients as $client){
-                error_log($client->pivot->contact_type_id);
-                error_log($client->pivot->created_at);
-            }
-        }
         return $items;
     }
     

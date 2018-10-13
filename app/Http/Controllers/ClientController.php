@@ -51,7 +51,9 @@ class ClientController extends Controller
     }
     
     public function read($id){
-        $item = Client::findOrFail($id);
+        $item = Client::with('contacts')
+        ->with('properties')
+        ->findOrFail($id);
         return $item;
     }
     
