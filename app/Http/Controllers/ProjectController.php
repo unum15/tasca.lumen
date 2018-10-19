@@ -17,8 +17,8 @@ class ProjectController extends Controller
         'contact_id' => 'integer|required|exists:contacts,id',
 		'property_id' => 'integer|required|exists:properties,id',
         'open_date' => 'date|required',
-        'close_date' => 'date',
-        'notes' => 'string|max:255'
+        'close_date' => 'nullable|date',
+        'notes' => 'nullable|string|max:255'
 		
     ];
     
@@ -27,8 +27,8 @@ class ProjectController extends Controller
 		'property_id' => 'integer|exists:properties,id',
         'open_date' => 'date',
 		'contact_id' => 'integer|exists:contacts,id',
-        'close_date' => 'date',
-        'notes' => 'string|max:255'
+        'close_date' => 'nullable|date',
+        'notes' => 'nullable|string|max:255'
     ];
     
     public function __construct()

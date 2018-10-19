@@ -150,6 +150,12 @@ $router->get('/phone_number/{id:[0-9]+}', 'PhoneNumberController@read');
 $router->patch('/phone_number/{id:[0-9]+}', 'PhoneNumberController@update');
 $router->delete('/phone_number/{id:[0-9]+}', 'PhoneNumberController@delete');
 
+$router->get('/projects', 'ProjectController@index');
+$router->post('/project', 'ProjectController@create');
+$router->get('/project/{id:[0-9]+}', 'ProjectController@read');
+$router->patch('/project/{id:[0-9]+}', 'ProjectController@update');
+$router->delete('/project/{id:[0-9]+}', 'ProjectController@delete');
+
 $router->get('/properties', 'PropertyController@index');
 $router->post('/property', 'PropertyController@create');
 $router->get('/property/{id:[0-9]+}', 'PropertyController@read');
