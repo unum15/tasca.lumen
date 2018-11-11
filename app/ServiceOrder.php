@@ -38,4 +38,8 @@ class ServiceOrder extends Model
         'creator_id',
         'updater_id'
 	];
+    
+    function project(){
+       return $this->belongsTo('App\Project');
+    }
 }

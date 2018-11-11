@@ -41,7 +41,7 @@ class ClientsTableSeeder extends Seeder
                 'activity_level_id' => $faker->randomElement($activity_levels),
                 'contact_method_id' => $faker->randomElement($contact_methods),
                 'login' => 'admin@truecomputing.biz',
-                'password' => bcrypt("testpass"),
+                'password' => password_hash("testpass", PASSWORD_DEFAULT),
                 'creator_id' => $faker->numberBetween(1,100000),
                 'updater_id' => $faker->numberBetween(1,100000)
         ]);

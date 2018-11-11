@@ -19,7 +19,8 @@ class PhoneNumberController extends Controller
     ];
     
     private $validation = [
-        'phone_number' => 'string|min:10|max:10|regex:/^\d+$/',
+        //'phone_number' => 'string|min:10|max:10|regex:/^\d+$/',
+        'phone_number' => 'string|min:10|max:64',
 		'phone_number_type_id' => 'integer|exists:phone_number_types,id',		
 		'contact_id' => 'integer|exists:contacts,id'
     ];

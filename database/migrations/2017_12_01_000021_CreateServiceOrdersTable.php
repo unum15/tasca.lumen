@@ -15,6 +15,7 @@ class CreateServiceOrdersTable extends Migration
     {
         Schema::create('service_orders', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('project_id');
             $table->date('date');
             $table->date('approval_date')->nullable();
             $table->date('completion_date')->nullable();

@@ -29,37 +29,19 @@ class WorkOrder extends Model
 	];
 	
 	
-	public function Contact(){
-		return $this->belongsTo('App\Contact', 'contact_index', 'contact_index');
-	}
-	
-	
 	public function Priority(){
-		return $this->belongsTo('App\Priority', 'priority_index', 'priority_index');
+		return $this->belongsTo('App\Priority');
 	}
 	
-	public function Property(){
-		return $this->belongsTo('App\Property', 'property_index', 'property_index');
+	public function WorkType(){
+		return $this->belongsTo('App\WorkType');
 	}
-	
-	public function ApprovedBy(){
-		return $this->belongsTo('App\Contact', 'approved_by', 'contact_index');
-	}
-	
-	public function Status(){
-		return $this->belongsTo('App\Model\WorkOrder\Status', 'status_index', 'status_index');
-	}
-	
-	public function Type(){
-		return $this->belongsTo('App\Model\WorkOrder\Type', 'type_index', 'type_index');
-	}
-	
-	public function Action(){
-		return $this->belongsTo('App\Model\WorkOrder\Action', 'action_index', 'action_index');
-	}
-	
+		
 	public function Tasks(){
-		return $this->hasMany('App\Model\Task\Task', 'workorder_index', 'workorder_index')->orderBy('schedule_index');
+		return $this->hasMany('App\Task')->orderBy('schedule_index');
 	}
 	
+	public function Project(){
+		return $this->belongsTo('App\Project');
+	}
 }

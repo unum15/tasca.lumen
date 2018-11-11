@@ -23,12 +23,8 @@ class TaskController extends Controller
     ];
     
     private $validation = [
-        'name' => 'string|required|min:1|max:255',
-		'property_id' => 'integer|exists:properties,id',
-        'open_date' => 'date',
-		'contact_id' => 'integer|exists:contacts,id',
-        'close_date' => 'date',
-        'notes' => 'string|max:255'
+		'service_order_id' => 'integer|exists:service_orders,id',
+        'notes' => 'nullable|string|max:255'
     ];
     
     public function __construct()
@@ -36,9 +32,15 @@ class TaskController extends Controller
         //
     }
 
-    public function index(){
-        $items = Task::All();
-        return $items;
+    public function index(Request $request){
+        $this->validate($request, $this->validation);
+        $values = $request->only(array_keys($this->validation));
+        $items_query = Task::with('service_order', 'service_order.project', 'service_order.project.property', 'service_order.project.contact', 'service_order.project.property.client')
+        ->orderBy('id');
+        foreach($values as $field => $value){
+            $items_query->where($field, $value);
+        }
+        return $items_query->get();
     }
     
     public function create(Request $request){

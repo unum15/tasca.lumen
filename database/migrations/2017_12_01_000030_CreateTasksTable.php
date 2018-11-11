@@ -17,6 +17,8 @@ class CreateTasksTable extends Migration
             $table->increments('id');
             $table->boolean('billable');
             $table->string('description');
+            $table->integer('service_order_id')->nullable();
+            $table->integer('work_order_id')->nullable();
             $table->integer('task_category_id');
             $table->integer('task_status_id');
             $table->integer('task_action_id');

@@ -13,6 +13,7 @@ class WorkOrderController extends Controller
      * @return void
      */
     private $validation_create = [
+        'project_id' => 'integer|exists:projects,id',
         'completion_date' => 'date',
         'expiration_date' => 'date',
         'priority_id' => 'integer',
@@ -32,6 +33,7 @@ class WorkOrderController extends Controller
     ];
     
     private $validation = [
+        'project_id' => 'integer|exists:projects,id',
         'completion_date' => 'date',
         'expiration_date' => 'date',
         'priority_id' => 'integer',
@@ -55,9 +57,15 @@ class WorkOrderController extends Controller
         //
     }
 
-    public function index(){
-        $items = WorkOrder::All();
-        return $items;
+    public function index(Request $request){
+        $this->validate($request, $this->validation);
+        $values = $request->only(array_keys($this->validation));
+        $items_query = WorkOrder::with('project', 'project.property', 'project.contact', 'project.property.client')
+        ->orderBy('id');
+        foreach($values as $field => $value){
+            $items_query->where($field, $value);
+        }
+        return $items_query->get();
     }
     
     public function create(Request $request){

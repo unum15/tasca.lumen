@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
   protected $fillable =  [
+      'service_order_id',
+      'work_order_id',
       'description',
       'billable',
       'task_type_id',
@@ -21,4 +23,8 @@ class Task extends Model
       'notes',
       'sort_order'
     ];
+  
+  public function service_order(){
+    return $this->belongsTo('App\ServiceOrder');
+  }
 }

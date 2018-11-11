@@ -14,21 +14,17 @@ class ServiceOrderController extends Controller
      */
     private $validation_create = [
         'name' => 'string|required|min:1|max:255',
-        'contact_id' => 'integer|required|exists:contacts,id',
-		'property_id' => 'integer|required|exists:properties,id',
-        'open_date' => 'date|required',
-        'close_date' => 'date',
+        'project_id' => 'integer|required|exists:projects,id',
+        'date' => 'date',
         'notes' => 'string|max:255'
 		
     ];
     
     private $validation = [
-        'name' => 'string|required|min:1|max:255',
-		'property_id' => 'integer|exists:properties,id',
-        'open_date' => 'date',
-		'contact_id' => 'integer|exists:contacts,id',
-        'close_date' => 'date',
-        'notes' => 'string|max:255'
+        'name' => 'string|min:1|max:255',
+		'project_id' => 'integer|exists:projects,id',
+        'date' => 'date',
+        'notes' => 'nullable|string|max:255'
     ];
     
     public function __construct()
@@ -36,9 +32,15 @@ class ServiceOrderController extends Controller
         //
     }
 
-    public function index(){
-        $items = ServiceOrder::All();
-        return $items;
+    public function index(Request $request){
+        $this->validate($request, $this->validation);
+        $values = $request->only(array_keys($this->validation));
+        $items_query = ServiceOrder::with('project', 'project.property', 'project.contact', 'project.property.client')
+        ->orderBy('date');
+        foreach($values as $field => $value){
+            $items_query->where($field, $value);
+        }
+        return $items_query->get();
     }
     
     public function create(Request $request){
