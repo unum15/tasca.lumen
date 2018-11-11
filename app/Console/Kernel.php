@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\PopulateDatabaseDefaultsCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
+use App\Console\Commands\MigrateOldDataCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -16,7 +17,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         PopulateDatabaseDefaultsCommand::class,
-        TruncateDatabaseCommand::class
+        TruncateDatabaseCommand::class,
+        MigrateOldDataCommand::class
     ];
 
     /**
