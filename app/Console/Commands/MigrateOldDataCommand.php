@@ -592,6 +592,6 @@ class MigrateOldDataCommand extends Command
             }
         }
         
-        Contact::where('login', 'paul')->first()->update(['login' => 'paul@waterscontracting.com']);
+        //Contact::where('login', 'paul')->first()->update(['login' => 'paul@waterscontracting.com']);
     }
 }
