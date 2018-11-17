@@ -12,7 +12,7 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return 'Tasca API 1.0';
 });
 
 $router->post('/auth', 'AuthController@auth');
