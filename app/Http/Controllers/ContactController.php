@@ -24,7 +24,7 @@ class ContactController extends Controller
     
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(Request $request){
@@ -51,7 +51,9 @@ class ContactController extends Controller
         $values = $request->only(array_keys($this->validation));
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
+        error_log(print_r($values, true));
         $item = Contact::create($values);
+        error_log(print_r($item, true));
         $item = Contact::findOrFail($item->id);
         $client_id = $request->input('client_id');
         if($client_id){

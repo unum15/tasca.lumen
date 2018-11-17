@@ -30,8 +30,13 @@ class PhoneNumberController extends Controller
         //
     }
 
-    public function index(){
-        $items = PhoneNumber::All();
+    public function index(Request $request){
+        $items_query = PhoneNumber::orderBy('phone_number_type_id');
+        $contact_id = $request->input('contact_id');
+        if($contact_id != ''){
+            $items_query = $items_query->where('contact_id', $contact_id);
+        }
+        $items = $items_query->get();
         return $items;
     }
     
