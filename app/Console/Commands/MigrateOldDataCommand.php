@@ -12,6 +12,7 @@ use App\ContactMethod;
 use App\ContactType;
 use App\EmailType;
 use App\PhoneNumberType;
+use App\Project;
 use App\PropertyType;
 use App\Property;
 use App\ServiceOrder;
@@ -536,6 +537,7 @@ class MigrateOldDataCommand extends Command
             
             $property_sql="
                 SELECT
+                    property_index,
                     property_name,
                     notes,
                     phone,
@@ -581,7 +583,92 @@ class MigrateOldDataCommand extends Command
                     'property_type_id' => $property_types[$property_type]->id,
                     'creator_id' => $admin->id,
                     'updater_id' => $admin->id
-                ]);            
+                ]);
+                
+                
+                
+                $work_order_sql = "
+                    SELECT
+                        workorder_index,
+                        property_index,
+                        location,
+                        instructions,
+                        priority_index, 
+                        notes,
+                        budget,
+                        bid,
+                        approval_date,
+                        progress_percentage,
+                        date_completed,
+                        invoice_number,
+                        description,
+                        contact_index,
+                        deleted,
+                        po_number,
+                        workorder_date,
+                        approved_by,
+                        budget_invoice_number,
+                        budget_plus_minus,
+                        bid_plus_minus,
+                        work_hours,
+                        work_days,
+                        expires,
+                        status_index,
+                        type_index,
+                        action_index,
+                        group_name
+                    FROM 
+                        workorders.workorders
+                    WHERE
+                        property_index='" . $property->property_index. "'
+                ";
+
+                $work_orders = $olddb->select($work_order_sql);
+                foreach($work_orders as $work_order){
+                    $project = Project::create([
+                        'name' => $client->client_name.' Project',
+                        'notes' => null,
+                        'property_id' => $new_property->id,
+                        'contact_id' => null,
+                        'open_date' => null,
+                        'close_date' => null, 
+                        'creator_id' => $admin->id,
+                        'updater_id' => $admin->id
+                    ]);
+                    $new_work_order = WorkOrder::create([
+                        'completion_date' => $work_order->date_completed,
+                        'expiration_date' => $work_order->expires,
+                        'priority_id' => null,
+                        'work_type_id' => null,
+                        'crew' => null,
+                        'total_hours' => $work_order->work_hours,
+                        'location' => $work_order->location,
+                        'instructions' => $work_order->instructions,
+                        'notes' => $work_order->notes,
+                        'purchase_order_number' => $work_order->po_number,
+                        'budget' => $work_order->budget,
+                        'budget_plus_minus' => $work_order->budget_plus_minus,
+                        'budget_invoice_number' => $work_order->budget_invoice_number,
+                        'bid' => $work_order->bid,
+                        'bid_plus_minus' => $work_order->bid_plus_minus,
+                        'invoice_number' => $work_order->invoice_number,
+                        'creator_id' => $admin->id,
+                        'updater_id' => $admin->id
+                    ]);
+                }
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
             }
             
             $associated_contacts = $olddb->select("SELECT contact_index,COALESCE(type,'Owner') AS type FROM clients.clients_contacts LEFT JOIN contacts.types ON (clients_contacts.contact_type_index=types.type_index) WHERE client_index='".$client->client_index."'");
