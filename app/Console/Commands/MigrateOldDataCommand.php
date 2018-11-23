@@ -630,7 +630,7 @@ class MigrateOldDataCommand extends Command
                         'notes' => null,
                         'property_id' => $new_property->id,
                         'contact_id' => null,
-                        'open_date' => $work_order->workorder_date,
+                        'open_date' => date("Y-m-d"),
                         'close_date' => null, 
                         'creator_id' => $admin->id,
                         'updater_id' => $admin->id
