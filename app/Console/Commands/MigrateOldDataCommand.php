@@ -26,7 +26,6 @@ use App\Task;
 use App\TaskAction;
 use App\TaskStatus;
 use App\TaskCategory;
-use App\TaskType;
 use App\WorkOrder;
 
 class MigrateOldDataCommand extends Command
@@ -656,6 +655,69 @@ class MigrateOldDataCommand extends Command
                         'creator_id' => $admin->id,
                         'updater_id' => $admin->id
                     ]);
+                    $task_sql = "
+                        SELECT
+                            schedule_index,
+                            workorder_index,
+                            status,
+                            type,
+                            action, 
+                            day,
+                            date,
+                            sorder,
+                            \"time\",
+                            contact_status_index,
+                            job_hours,
+                            crew_hours, 
+                            description,
+                            notes,
+                            hide,
+                            group_name
+                       FROM
+                            workorders.schedule s
+                            LEFT JOIN workorders.status ON (s.status_index=status.status_index)
+                            LEFT JOIN workorders.types t ON (s.type_index=t.type_index)
+                            LEFT JOIN workorders.action a ON (s.action_index = a.action_index)
+                        WHERE
+                            workorder_index=".$work_order->workorder_index."
+                            AND description IS NOT NULL
+                        ;
+                    ";
+                    $tasks = $olddb->select($task_sql);
+                    foreach($tasks as $task){
+                        $task_status_id = null;
+                        $task_action_id = null;
+                        $task_category_id = null;
+                        $task_status = TaskStatus::where('name', $task->status)->first();
+                        $task_action = TaskAction::where('name', $task->action)->first();
+                        $task_category = TaskCategory::where('name', $task->type)->first();
+                        if($task_status){
+                            $task_status_id = $task_status->id;
+                        }
+                        if($task_action){
+                            $task_action_id = $task_action->id;
+                        }
+                        if($task_category){
+                            $task_category_id = $task_category->id;
+                        }
+                        
+                        $new_task = Task::create([
+                            'service_order_id' => null,
+                            'work_order_id' => $new_work_order->id,
+                            'description' => $task->description,
+                            'billable' => true,
+                            'task_status_id' => $task_status_id,
+                            'task_action_id' => $task_action_id,
+                            'task_category_id' => $task_category_id,
+                            'day' => $task->day,
+                            'date' => $task->date,
+                            'time' => $task->time,
+                            'job_hours' => $task->job_hours,
+                            'crew_hours' => $task->crew_hours,
+                            'notes' => $task->notes,
+                            'sort_order' => $task->sorder
+                        ]);
+                    }
                 }
                 
                 
