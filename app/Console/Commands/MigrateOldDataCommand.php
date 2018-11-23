@@ -630,12 +630,13 @@ class MigrateOldDataCommand extends Command
                         'notes' => null,
                         'property_id' => $new_property->id,
                         'contact_id' => null,
-                        'open_date' => null,
+                        'open_date' => $work_order->workorder_date,
                         'close_date' => null, 
                         'creator_id' => $admin->id,
                         'updater_id' => $admin->id
                     ]);
                     $new_work_order = WorkOrder::create([
+                        'project_id' => $project->id,
                         'completion_date' => $work_order->date_completed,
                         'expiration_date' => $work_order->expires,
                         'priority_id' => null,
