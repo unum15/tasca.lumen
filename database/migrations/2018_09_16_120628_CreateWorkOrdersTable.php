@@ -22,8 +22,8 @@ class CreateWorkOrdersTable extends Migration
             $table->integer('work_type_id')->nullable();
             $table->integer('crew')->nullable();
             $table->integer('total_hours')->nullable();
-            $table->string('location')->nullable();
-            $table->string('instructions')->nullable();
+            $table->text('location')->nullable();
+            $table->text('instructions')->nullable();
             $table->text('notes')->nullable();
             $table->string('purchase_order_number')->nullable();
             $table->string('budget')->nullable();
