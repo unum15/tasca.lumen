@@ -19,9 +19,9 @@ class CreateTasksTable extends Migration
             $table->string('description');
             $table->integer('service_order_id')->nullable();
             $table->integer('work_order_id')->nullable();
-            $table->integer('task_category_id');
-            $table->integer('task_status_id');
-            $table->integer('task_action_id');
+            $table->integer('task_category_id')->nullable();
+            $table->integer('task_status_id')->nullable();
+            $table->integer('task_action_id')->nullable();
             $table->string('day')->nullable();
             $table->date('date')->nullable();
             $table->date('completion_date')->nullable();
