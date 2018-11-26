@@ -702,20 +702,20 @@ class MigrateOldDataCommand extends Command
                         }
                         
                         $new_task = Task::create([
-                            'service_order_id' => null,
+                          //  'service_order_id' => null,
                             'work_order_id' => $new_work_order->id,
                             'description' => $task->description,
                             'billable' => true,
                             'task_status_id' => $task_status_id,
                             'task_action_id' => $task_action_id,
                             'task_category_id' => $task_category_id,
-                            'day' => $task->day,
-                            'date' => $task->date,
-                            'time' => $task->time,
-                            'job_hours' => $task->job_hours,
-                            'crew_hours' => $task->crew_hours,
+                            //'day' => $task->day,
+                            //'date' => $task->date,
+                            //'time' => $task->time,
+                            //'job_hours' => $task->job_hours,
+                            //'crew_hours' => $task->crew_hours,
                             'notes' => $task->notes,
-                            'sort_order' => $task->sorder
+                            //'sort_order' => $task->sorder
                         ]);
                     }
                 }
