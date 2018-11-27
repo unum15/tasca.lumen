@@ -24,6 +24,7 @@ class TaskController extends Controller
     
     private $validation = [
 		'service_order_id' => 'integer|exists:service_orders,id',
+        'work_order_id' => 'integer|exists:work_orders,id',
         'notes' => 'nullable|string|max:255'
     ];
     
