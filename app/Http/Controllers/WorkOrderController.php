@@ -12,25 +12,6 @@ class WorkOrderController extends Controller
      *
      * @return void
      */
-    private $validation_create = [
-        'project_id' => 'integer|exists:projects,id',
-        'completion_date' => 'date',
-        'expiration_date' => 'date',
-        'priority_id' => 'integer',
-        'work_type_id' => 'integer',
-        'crew' => 'integer',
-        'total_hours' => 'integer',
-        'location' => 'string|max:255',
-        'instructions' => 'string|max:255',
-        'notes' => 'string|max:255',
-        'purchase_order_number' => 'string|max:255',
-        'budget' => 'string|max:255',
-        'budget_plus_minus' => 'integer',
-        'budget_invoice_number' => 'string|max:255',
-		'bid' => 'string|max:255',
-		'bid_plus_minus' => 'string|max:255',
-        'invoice_number' => 'integer'
-    ];
     
     private $validation = [
         'project_id' => 'integer|exists:projects,id',
@@ -69,7 +50,7 @@ class WorkOrderController extends Controller
     }
     
     public function create(Request $request){
-        $this->validate($request, $this->validation_create);
+        $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;

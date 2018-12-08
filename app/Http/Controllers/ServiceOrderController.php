@@ -12,16 +12,8 @@ class ServiceOrderController extends Controller
      *
      * @return void
      */
-    private $validation_create = [
-        'name' => 'string|required|min:1|max:255',
-        'project_id' => 'integer|required|exists:projects,id',
-        'date' => 'date',
-        'notes' => 'string|max:255'
-		
-    ];
-    
     private $validation = [
-        'name' => 'string|min:1|max:255',
+        'description' => 'string|min:1|max:255',
 		'project_id' => 'integer|exists:projects,id',
         'date' => 'date',
         'notes' => 'nullable|string|max:255'
@@ -44,8 +36,9 @@ class ServiceOrderController extends Controller
     }
     
     public function create(Request $request){
-        $this->validate($request, $this->validation_create);
-        $values = $request->only(array_keys($this->validation));
+        $this->validate($request, $this->validation);
+        //$values = $request->only(array_keys($this->validation));
+        $values = $request->input();
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = ServiceOrder::create($values);
