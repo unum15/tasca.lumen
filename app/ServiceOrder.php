@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceOrder extends Model
 {
     protected $fillable = [
+        'project_id',
 		'date',
         'approval_date',
         'completion_date',
