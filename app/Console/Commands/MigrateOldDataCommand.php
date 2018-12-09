@@ -10,7 +10,9 @@ use App\ClientType;
 use App\Contact;
 use App\ContactMethod;
 use App\ContactType;
+use App\Email;
 use App\EmailType;
+use App\PhoneNumber;
 use App\PhoneNumberType;
 use App\Project;
 use App\PropertyType;
@@ -514,6 +516,50 @@ class MigrateOldDataCommand extends Command
                     'contact_method_id' => $contact_method
                 ]
             );
+            $phone_numbers_sql="
+                SELECT
+                    phone,
+                    type
+                FROM
+                    contacts.phone_numbers
+                    LEFT JOIN contacts.phone_types ON (phone_numbers.type_index = phone_types.type_index)
+                WHERE
+                    phone != ''
+                    AND contact_index='".$contact->contact_index."'
+            ";
+            $phone_numbers = $olddb->select($phone_numbers_sql);
+            foreach($phone_numbers as $phone_number){
+                $phone_number_type = $phone_number_types->search($phone_number->type);
+                PhoneNumber::create([
+                    'contact_id' => $new_contact->id,
+                    'phone_number_type_id' => $phone_number_type,
+                    'phone_number' => $phone_number->phone,
+                    'creator_id' => 1,
+                    'updater_id' => 1, 
+                ]);
+            }
+            $emails_sql="
+                SELECT
+                    email,
+                    type
+                FROM
+                    contacts.emails
+                    LEFT JOIN contacts.email_types ON (emails.type_index = email_types.type_index)
+                WHERE
+                    email != ''
+                    AND contact_index='".$contact->contact_index."'
+            ";
+            $emails = $olddb->select($emails_sql);
+            foreach($emails as $email){
+                $email_type = $email_types->search($email->type);
+                Email::create([
+                    'contact_id' => $new_contact->id,
+                    'email_type_id' => $email_type,
+                    'email' => $email->email,
+                    'creator_id' => 1,
+                    'updater_id' => 1, 
+                ]);
+            }
             $contacts_map[$contact->contact_index] = $new_contact->id;
         }
         $admin = Contact::orderBy('id')->first();
