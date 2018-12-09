@@ -28,5 +28,6 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-    ]
+    ],
+    'migrations' => 'migrations'
 ];

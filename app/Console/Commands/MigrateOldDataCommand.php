@@ -319,19 +319,19 @@ class MigrateOldDataCommand extends Command
                 "Report",
                 "Next Task",
                 "Bid/Price"
-                         ],
+            ],
             "Next Action" => [
-                        ],
+            ],
             "Pending" => [
-                        ],
+            ],
             "Done" => [
-                        ],
+            ],
             "Cancelled" => [
-                        ],
+            ],
             "Inprogress" => [
-                        ],
+            ],
             "Waiting on Customer" => [
-                        ]
+            ]
         ];
         $sort = 1;
         foreach($names as $name => $actions){
@@ -448,7 +448,7 @@ class MigrateOldDataCommand extends Command
                 client_name,
                 clients.notes,
                 clients.referred_by,
-                types.type,
+                COALESCE(types.type, 'Residential') AS type,
                 active_levels.type as active_level,
                 contact_method,
                 billing_contact_index,
@@ -472,7 +472,7 @@ class MigrateOldDataCommand extends Command
                 notes,
                 login,
                 active_levels.type as active_level,                
-                contact_method
+                COALESCE(contact_method, 'None') AS contact_method
             FROM
                 contacts.contacts
                 LEFT JOIN clients.active_levels ON (contacts.active_level_index=active_levels.type_index)
@@ -483,13 +483,13 @@ class MigrateOldDataCommand extends Command
         
         $contacts = $olddb->select($contact_sql);
         
-        $activity_levels = ActivityLevel::all();
-        $client_types = ClientType::all();
-        $contact_methods = ContactMethod::all();
-        $contact_types = ContactType::all();        
-        $email_types = EmailType::all();
-        $phone_number_types = PhoneNumberType::all();
-        $property_types = PropertyType::all();
+        $activity_levels = ActivityLevel::pluck('name', 'id');
+        $client_types = ClientType::pluck('name', 'id');
+        $contact_methods = ContactMethod::pluck('name', 'id');
+        $contact_types = ContactType::pluck('name', 'id');        
+        $email_types = EmailType::pluck('name', 'id');
+        $phone_number_types = PhoneNumberType::pluck('name', 'id');
+        $property_types = PropertyType::pluck('name', 'id');
         
         $contacts_map = [];
         
@@ -500,7 +500,7 @@ class MigrateOldDataCommand extends Command
         };
         
         foreach($contacts as $contact){            
-            $activity_level = $activity_levels->search($contact->active_level);            
+            $activity_level = $activity_levels->search($contact->active_level);
             $contact_method = $contact_methods->search($contact->contact_method);
             $new_contact = Contact::create(
                 [
@@ -510,15 +510,15 @@ class MigrateOldDataCommand extends Command
                     'password' => password_hash($contact->last_name, PASSWORD_DEFAULT),
                     'creator_id' => 1,
                     'updater_id' => 1,                    
-                    'activity_level_id' => $activity_levels[$activity_level]->id,
-                    'contact_method_id' => $contact_methods[$contact_method]->id
+                    'activity_level_id' => $activity_level,
+                    'contact_method_id' => $contact_method
                 ]
             );
             $contacts_map[$contact->contact_index] = $new_contact->id;
         }
         $admin = Contact::orderBy('id')->first();
-        foreach($clients as $client){            
-            $client_type = $client_types->search($client->type);            
+        foreach($clients as $client){
+            $client_type = $client_types->search($client->type);
             $activity_level = $activity_levels->search($client->active_level);            
             $contact_method = $contact_methods->search($client->contact_method);
             $new_client = Client::create(
@@ -528,9 +528,9 @@ class MigrateOldDataCommand extends Command
                     'referred_by' => $client->referred_by,
                     'creator_id' => $admin->id,
                     'updater_id' => $admin->id,
-                    'client_type_id' => $client_types[$client_type]->id,
-                    'activity_level_id' => $activity_levels[$activity_level]->id,
-                    'contact_method_id' => $contact_methods[$contact_method]->id
+                    'client_type_id' => $client_type,
+                    'activity_level_id' => $activity_level,
+                    'contact_method_id' => $contact_method
                 ]
             );
             
@@ -547,7 +547,7 @@ class MigrateOldDataCommand extends Command
                     zip,
                     work_property,
                     active_levels.type as active_level,
-                    types.type,
+                    COALESCE(types.type, 'Home') AS type,
                     contact_index
                 FROM
                     properties.properties
@@ -570,7 +570,7 @@ class MigrateOldDataCommand extends Command
                 $new_property = $new_client->properties()->create([
                     'name' => $property->property_name,
                     'notes' => $property->notes,
-                    'activity_level_id' => $activity_levels[$activity_level]->id,
+                    'activity_level_id' => $activity_level,
                     'phone_number' => $property->phone,
                     'address1' => $property->address1,
                     'address2' => $property->address2,
@@ -579,7 +579,7 @@ class MigrateOldDataCommand extends Command
                     'zip' => $property->zip,
                     'primary_contact_id' => $contact_id,
                     'work_property' => $property->work_property,
-                    'property_type_id' => $property_types[$property_type]->id,
+                    'property_type_id' => $property_type,
                     'creator_id' => $admin->id,
                     'updater_id' => $admin->id
                 ]);
@@ -738,7 +738,7 @@ class MigrateOldDataCommand extends Command
             foreach($associated_contacts as $associated_contact){
                 $contact = Contact::find($contacts_map[$associated_contact->contact_index]);
                 $contact_type = $contact_types->search($associated_contact->type);
-                $new_client->contacts()->save($contact,['contact_type_id' => $contact_types[$contact_type]->id]);
+                $new_client->contacts()->save($contact,['contact_type_id' => $contact_type]);
             }
         }
         
