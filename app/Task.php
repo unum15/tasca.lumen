@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
   protected $fillable =  [
-      'service_order_id',
-      'work_order_id',
+      'order_id',
       'description',
       'billable',
       'task_type_id',

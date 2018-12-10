@@ -60,35 +60,35 @@ $router->get('/property_type/{id:[0-9]+}', 'PropertyTypeController@read');
 $router->patch('/property_type/{id:[0-9]+}', 'PropertyTypeController@update');
 $router->delete('/property_type/{id:[0-9]+}', 'PropertyTypeController@delete');
 
-$router->get('/service_order_actions', 'ServiceOrderActionController@index');
-$router->post('/service_order_action', 'ServiceOrderActionController@create');
-$router->get('/service_order_action/{id:[0-9]+}', 'ServiceOrderActionController@read');
-$router->patch('/service_order_action/{id:[0-9]+}', 'ServiceOrderActionController@update');
-$router->delete('/service_order_action/{id:[0-9]+}', 'ServiceOrderActionController@delete');
+$router->get('/order_actions', 'OrderActionController@index');
+$router->post('/order_action', 'OrderActionController@create');
+$router->get('/order_action/{id:[0-9]+}', 'OrderActionController@read');
+$router->patch('/order_action/{id:[0-9]+}', 'OrderActionController@update');
+$router->delete('/order_action/{id:[0-9]+}', 'OrderActionController@delete');
 
-$router->get('/service_order_priorities', 'ServiceOrderPriorityController@index');
-$router->post('/service_order_priority', 'ServiceOrderPriorityController@create');
-$router->get('/service_order_priority/{id:[0-9]+}', 'ServiceOrderPriorityController@read');
-$router->patch('/service_order_priority/{id:[0-9]+}', 'ServiceOrderPriorityController@update');
-$router->delete('/service_order_priority/{id:[0-9]+}', 'ServiceOrderPriorityController@delete');
+$router->get('/order_priorities', 'OrderPriorityController@index');
+$router->post('/order_priority', 'OrderPriorityController@create');
+$router->get('/order_priority/{id:[0-9]+}', 'OrderPriorityController@read');
+$router->patch('/order_priority/{id:[0-9]+}', 'OrderPriorityController@update');
+$router->delete('/order_priority/{id:[0-9]+}', 'OrderPriorityController@delete');
 
-$router->get('/service_order_categories', 'ServiceOrderCategoryController@index');
-$router->post('/service_order_category', 'ServiceOrderCategoryController@create');
-$router->get('/service_order_category/{id:[0-9]+}', 'ServiceOrderCategoryController@read');
-$router->patch('/service_order_category/{id:[0-9]+}', 'ServiceOrderCategoryController@update');
-$router->delete('/service_order_category/{id:[0-9]+}', 'ServiceOrderCategoryController@delete');
+$router->get('/order_categories', 'OrderCategoryController@index');
+$router->post('/order_category', 'OrderCategoryController@create');
+$router->get('/order_category/{id:[0-9]+}', 'OrderCategoryController@read');
+$router->patch('/order_category/{id:[0-9]+}', 'OrderCategoryController@update');
+$router->delete('/order_category/{id:[0-9]+}', 'OrderCategoryController@delete');
 
-$router->get('/service_order_statuses', 'ServiceOrderStatusController@index');
-$router->post('/service_order_status', 'ServiceOrderStatusController@create');
-$router->get('/service_order_status/{id:[0-9]+}', 'ServiceOrderStatusController@read');
-$router->patch('/service_order_status/{id:[0-9]+}', 'ServiceOrderStatusController@update');
-$router->delete('/service_order_status/{id:[0-9]+}', 'ServiceOrderStatusController@delete');
+$router->get('/order_statuses', 'OrderStatusController@index');
+$router->post('/order_status', 'OrderStatusController@create');
+$router->get('/order_status/{id:[0-9]+}', 'OrderStatusController@read');
+$router->patch('/order_status/{id:[0-9]+}', 'OrderStatusController@update');
+$router->delete('/order_status/{id:[0-9]+}', 'OrderStatusController@delete');
 
-$router->get('/service_order_types', 'ServiceOrderTypeController@index');
-$router->post('/service_order_type', 'ServiceOrderTypeController@create');
-$router->get('/service_order_type/{id:[0-9]+}', 'ServiceOrderTypeController@read');
-$router->patch('/service_order_type/{id:[0-9]+}', 'ServiceOrderTypeController@update');
-$router->delete('/service_order_type/{id:[0-9]+}', 'ServiceOrderTypeController@delete');
+$router->get('/order_types', 'OrderTypeController@index');
+$router->post('/order_type', 'OrderTypeController@create');
+$router->get('/order_type/{id:[0-9]+}', 'OrderTypeController@read');
+$router->patch('/order_type/{id:[0-9]+}', 'OrderTypeController@update');
+$router->delete('/order_type/{id:[0-9]+}', 'OrderTypeController@delete');
 
 $router->get('/task_actions', 'TaskActionController@index');
 $router->post('/task_action', 'TaskActionController@create');
@@ -113,12 +113,6 @@ $router->post('/task_type', 'TaskTypeController@create');
 $router->get('/task_type/{id:[0-9]+}', 'TaskTypeController@read');
 $router->patch('/task_type/{id:[0-9]+}', 'TaskTypeController@update');
 $router->delete('/task_type/{id:[0-9]+}', 'TaskTypeController@delete');
-
-$router->get('/work_orders', 'WorkOrderController@index');
-$router->post('/work_order', 'WorkOrderController@create');
-$router->get('/work_order/{id:[0-9]+}', 'WorkOrderController@read');
-$router->patch('/work_order/{id:[0-9]+}', 'WorkOrderController@update');
-$router->delete('/work_order/{id:[0-9]+}', 'WorkOrderController@delete');
 
 $router->get('/work_types', 'WorkTypeController@index');
 $router->post('/work_type', 'WorkTypeController@create');
@@ -162,11 +156,11 @@ $router->get('/property/{id:[0-9]+}', 'PropertyController@read');
 $router->patch('/property/{id:[0-9]+}', 'PropertyController@update');
 $router->delete('/property/{id:[0-9]+}', 'PropertyController@delete');
 
-$router->get('/service_orders', 'ServiceOrderController@index');
-$router->post('/service_order', 'ServiceOrderController@create');
-$router->get('/service_order/{id:[0-9]+}', 'ServiceOrderController@read');
-$router->patch('/service_order/{id:[0-9]+}', 'ServiceOrderController@update');
-$router->delete('/service_order/{id:[0-9]+}', 'ServiceOrderController@delete');
+$router->get('/orders', 'OrderController@index');
+$router->post('/order', 'OrderController@create');
+$router->get('/order/{id:[0-9]+}', 'OrderController@read');
+$router->patch('/order/{id:[0-9]+}', 'OrderController@update');
+$router->delete('/order/{id:[0-9]+}', 'OrderController@delete');
 
 $router->get('/tasks', 'TaskController@index');
 $router->post('/task', 'TaskController@create');

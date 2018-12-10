@@ -17,18 +17,17 @@ use App\PhoneNumberType;
 use App\Project;
 use App\PropertyType;
 use App\Property;
-use App\ServiceOrder;
-use App\ServiceOrderAction;
-use App\ServiceOrderCategory;
-use App\ServiceOrderPriority;
-use App\ServiceOrderStatus;
-use App\ServiceOrderType;
+use App\Order;
+use App\OrderAction;
+use App\OrderCategory;
+use App\OrderPriority;
+use App\OrderStatus;
+use App\OrderType;
 use App\Setting;
 use App\Task;
 use App\TaskAction;
 use App\TaskStatus;
 use App\TaskCategory;
-use App\WorkOrder;
 
 class MigrateOldDataCommand extends Command
 {
@@ -216,7 +215,7 @@ class MigrateOldDataCommand extends Command
         ];
         $sort = 1;
         foreach($names as $name){
-            ServiceOrderPriority::create([
+            OrderPriority::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
@@ -238,7 +237,7 @@ class MigrateOldDataCommand extends Command
         ];
         $sort = 1;
         foreach($names as $name){
-            ServiceOrderCategory::create([
+            OrderCategory::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
@@ -278,13 +277,13 @@ class MigrateOldDataCommand extends Command
         ];
         $sort = 1;
         foreach($names as $name => $actions){
-            $status = ServiceOrderStatus::create([
+            $status = OrderStatus::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
             $sort_action = 1;
             foreach($actions as $action){
-                $status->serviceOrderActions()->create([
+                $status->orderActions()->create([
                     'name' => $action,
                     'sort_order' => $sort_action++
                 ]);
@@ -301,7 +300,7 @@ class MigrateOldDataCommand extends Command
         ];
         $sort = 1;
         foreach($names as $name){
-            ServiceOrderType::create([
+            OrderType::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
@@ -408,20 +407,20 @@ class MigrateOldDataCommand extends Command
             'value' => PropertyType::where('name', 'Home')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_service_order_action_id',
-            'value' => ServiceOrderAction::where('name', 'To Do')->first()->id
+            'name' => 'default_order_action_id',
+            'value' => OrderAction::where('name', 'To Do')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_service_order_category_id',
-            'value' => ServiceOrderCategory::where('name', 'Irrigation')->first()->id
+            'name' => 'default_order_category_id',
+            'value' => OrderCategory::where('name', 'Irrigation')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_service_order_priority_id',
-            'value' => ServiceOrderPriority::where('name', 'Next Action')->first()->id
+            'name' => 'default_order_priority_id',
+            'value' => OrderPriority::where('name', 'Next Action')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_service_order_status_id',
-            'value' => ServiceOrderStatus::where('name', 'Approved')->first()->id
+            'name' => 'default_order_status_id',
+            'value' => OrderStatus::where('name', 'Approved')->first()->id
         ]);
         Setting::create([
             'name' => 'default_task_action_id',
@@ -436,11 +435,11 @@ class MigrateOldDataCommand extends Command
             'value' => TaskCategory::where('name', 'Service Call')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_service_order_type_id',
-            'value' => ServiceOrderType::where('name', 'Estimate')->first()->id
+            'name' => 'default_order_type_id',
+            'value' => OrderType::where('name', 'Estimate')->first()->id
         ]);
 
-        ServiceOrderStatus::where('name', 'Completed')->first()->update(['allow_work_order' => true]);  
+        OrderStatus::where('name', 'Completed')->first()->update(['allow_work_order' => true]);  
         
         $olddb = DB::connection('pgsql_old');
         
@@ -680,7 +679,7 @@ class MigrateOldDataCommand extends Command
                         'creator_id' => $admin->id,
                         'updater_id' => $admin->id
                     ]);
-                    $new_work_order = WorkOrder::create([
+                    $new_work_order = Order::create([
                         'project_id' => $project->id,
                         'completion_date' => $work_order->date_completed,
                         'expiration_date' => $work_order->expires,
@@ -725,11 +724,11 @@ class MigrateOldDataCommand extends Command
                             LEFT JOIN workorders.types t ON (s.type_index=t.type_index)
                             LEFT JOIN workorders.action a ON (s.action_index = a.action_index)
                         WHERE
-                            workorder_index=".$work_order->workorder_index."
-                            AND description IS NOT NULL
+                            workorder_index='".$work_order->workorder_index."'
                         ;
                     ";
                     $tasks = $olddb->select($task_sql);
+                    print_r($tasks);
                     foreach($tasks as $task){
                         $task_status_id = null;
                         $task_action_id = null;
@@ -748,8 +747,7 @@ class MigrateOldDataCommand extends Command
                         }
                         
                         $new_task = Task::create([
-                          //  'service_order_id' => null,
-                            'work_order_id' => $new_work_order->id,
+                            'order_id' => $new_work_order->id,
                             'description' => $task->description,
                             'billable' => true,
                             'task_status_id' => $task_status_id,
