@@ -16,7 +16,8 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('project_id');
-            $table->date('date');
+			$table->integer('order_billing_type_id');
+            $table->date('date')->nullable();
             $table->date('approval_date')->nullable();
             $table->date('completion_date')->nullable();
             $table->date('expiration_date')->nullable();

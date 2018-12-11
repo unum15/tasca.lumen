@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\ServiceOrderStatus;
+use App\OrderStatus;
 use Illuminate\Http\Request;
 
-class ServiceOrderStatusController extends Controller
+class OrderStatusController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -25,32 +25,32 @@ class ServiceOrderStatusController extends Controller
     }
 
     public function index(){
-        $items = ServiceOrderStatus::All();
+        $items = OrderStatus::All();
         return $items;
     }
     
     public function create(Request $request){
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
-        $item = ServiceOrderStatus::create($request->input());
+        $item = OrderStatus::create($request->input());
         return $item;
     }
     
     public function read($id){
-        $item = ServiceOrderStatus::findOrFail($id);
+        $item = OrderStatus::findOrFail($id);
         return $item;
     }
     
     public function update($id, Request $request){
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
-        $item = ServiceOrderStatus::findOrFail($id);
+        $item = OrderStatus::findOrFail($id);
         $item->update($request->input());
         return $item;
     }
     
     public function delete($id){
-        $item = ServiceOrderStatus::findOrFail($id);
+        $item = OrderStatus::findOrFail($id);
         $item->delete();
         return response([], 204);
     }
@@ -59,11 +59,11 @@ class ServiceOrderStatusController extends Controller
         $sort_order = $request->input('sort_order');
         $default = $request->input('default');
         if($sort_order){
-            ServiceOrderStatus::where('sort_order', $sort_order)
+            OrderStatus::where('sort_order', $sort_order)
                 ->update(['sort_order' => null]);
         }
         if($default){
-            ServiceOrderStatus::where('default', true)
+            OrderStatus::where('default', true)
             ->update(['default' => false]);
         }        
     }

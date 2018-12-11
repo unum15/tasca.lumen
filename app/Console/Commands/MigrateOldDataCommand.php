@@ -19,6 +19,7 @@ use App\PropertyType;
 use App\Property;
 use App\Order;
 use App\OrderAction;
+use App\OrderBillingType;
 use App\OrderCategory;
 use App\OrderPriority;
 use App\OrderStatus;
@@ -291,6 +292,20 @@ class MigrateOldDataCommand extends Command
         }
         
                 
+       $names = [
+            "Service Order",
+            "Pending Work Order",
+            "Work Order"
+        ];
+        $sort = 1;
+        foreach($names as $name){
+            OrderBillingType::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+
+        
         
         $names = [
             "Lead",

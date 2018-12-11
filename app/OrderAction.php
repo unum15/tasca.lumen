@@ -10,8 +10,7 @@ class OrderAction extends Model
 		'order_status_id',
 		'name',
 		'notes',
-		'sort_order',
-        'default'
+		'sort_order'
 	];
 	
 	public function orderStatus(){

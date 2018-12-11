@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\ServiceOrderAction;
+use App\OrderAction;
 use Illuminate\Http\Request;
 
-class ServiceOrderActionController extends Controller
+class OrderActionController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -19,7 +19,7 @@ class ServiceOrderActionController extends Controller
     }
 
     public function index(){
-        $items = ServiceOrderAction::All();
+        $items = OrderAction::All();
         return $items;
     }
     
@@ -33,12 +33,12 @@ class ServiceOrderActionController extends Controller
         ];
         $this->validate($request, $validation);
         $this->removeConflict($request);
-        $item = ServiceOrderAction::create($request->input());
+        $item = OrderAction::create($request->input());
         return $item;
     }
     
     public function read($id){
-        $item = ServiceOrderAction::findOrFail($id);
+        $item = OrderAction::findOrFail($id);
         return $item;
     }
     
@@ -52,7 +52,7 @@ class ServiceOrderActionController extends Controller
         ];
         $this->validate($request, $validation);
         $this->removeConflict($request);
-        $item = ServiceOrderAction::findOrFail($id);
+        $item = OrderAction::findOrFail($id);
         if($item == null){
             return response(['success' => false, 'status' => 404, 'message' => 'HTTP_FILE_NOT_FOUND'], 404);
         }
@@ -66,7 +66,7 @@ class ServiceOrderActionController extends Controller
     }
     
     public function delete($id){
-        $item = ServiceOrderAction::findOrFail($id);
+        $item = OrderAction::findOrFail($id);
         $item->delete();
         return response([], 204);
     }
@@ -75,11 +75,11 @@ class ServiceOrderActionController extends Controller
         $sort_order = $request->input('sort_order');
         $default = $request->input('default');
         if($sort_order){
-            ServiceOrderAction::where('sort_order', $sort_order)
+            OrderAction::where('sort_order', $sort_order)
                 ->update(['sort_order' => null]);
         }
         if($default){
-            ServiceOrderAction::where('default', true)
+            OrderAction::where('default', true)
             ->update(['default' => false]);
         }        
     }
