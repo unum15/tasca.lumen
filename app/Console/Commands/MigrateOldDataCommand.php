@@ -305,7 +305,7 @@ class MigrateOldDataCommand extends Command
             ]);
         }
 
-        
+        $work_order_type_id = OrderBillingType::where('name', 'Work Order')->first()->id;
         
         $names = [
             "Lead",
@@ -654,8 +654,8 @@ class MigrateOldDataCommand extends Command
                         instructions,
                         priority_index, 
                         notes,
-                        budget,
-                        bid,
+                        budget::numeric AS budget,
+                        bid::numeric AS bid,
                         approval_date,
                         progress_percentage,
                         date_completed,
@@ -696,6 +696,8 @@ class MigrateOldDataCommand extends Command
                     ]);
                     $new_work_order = Order::create([
                         'project_id' => $project->id,
+                        'renewable' => false,
+                        'order_billing_type_id' => $work_order_type_id,
                         'completion_date' => $work_order->date_completed,
                         'expiration_date' => $work_order->expires,
                         'priority_id' => null,
@@ -743,7 +745,6 @@ class MigrateOldDataCommand extends Command
                         ;
                     ";
                     $tasks = $olddb->select($task_sql);
-                    print_r($tasks);
                     foreach($tasks as $task){
                         $task_status_id = null;
                         $task_action_id = null;

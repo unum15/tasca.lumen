@@ -30,6 +30,6 @@ class CreateOrderBillingTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_types');
+        Schema::dropIfExists('order_billing_types');
     }
 }
