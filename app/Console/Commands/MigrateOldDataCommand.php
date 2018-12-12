@@ -680,6 +680,8 @@ class MigrateOldDataCommand extends Command
                         workorders.workorders
                     WHERE
                         property_index='" . $property->property_index. "'
+                    ORDER BY
+                        workorder_index
                 ";
 
                 $work_orders = $olddb->select($work_order_sql);

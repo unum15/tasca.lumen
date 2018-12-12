@@ -15,6 +15,7 @@ class OrderController extends Controller
     private $validation = [
         'description' => 'string|min:1|max:255',
 		'project_id' => 'integer|exists:projects,id',
+        'order_billing_type_id' => 'integer|exists:order_billing_types,id',
         'date' => 'date',
         'notes' => 'nullable|string|max:255'
     ];

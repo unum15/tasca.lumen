@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\OrderBillingType;
 use Illuminate\Http\Request;
 
-class OrderTypeController extends Controller
+class OrderBillingTypeController extends Controller
 {
     /**
      * Create a new controller instance.
