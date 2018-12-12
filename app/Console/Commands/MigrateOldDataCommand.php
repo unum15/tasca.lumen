@@ -491,6 +491,11 @@ class MigrateOldDataCommand extends Command
         $email_types = EmailType::pluck('name', 'id');
         $phone_number_types = PhoneNumberType::pluck('name', 'id');
         $property_types = PropertyType::pluck('name', 'id');
+        $order_actions = OrderAction::pluck('name', 'id');
+        $order_categories = OrderCategory::pluck('name', 'id');
+        $order_priorities = OrderPriority::pluck('name', 'id');
+        $order_statuses = OrderStatus::pluck('name', 'id');
+        $order_types = OrderType::pluck('name', 'id');
         
         $contacts_map = [];
         
@@ -679,11 +684,30 @@ class MigrateOldDataCommand extends Command
                         'creator_id' => $admin->id,
                         'updater_id' => $admin->id
                     ]);
+                    
+                    $order_action = $order_actions->search($work_order->action);
+                    $order_category = $order_categories->search($work_order->category);
+                    $order_priority = $order_priorities->search($work_order->priority);
+                    $order_status = $order_statuses->search($work_order->status);
+                    $order_type = $order_types->search($work_order->type);
+                    
                     $new_work_order = Order::create([
+                        
+//                        progress_percentage,
+//                        contact_index,
+//                        approved_by,
+//                        work_days,
+                        
                         'project_id' => $project->id,
+                        'description' => $work_order->description,
+                        'order_date' => $work_order->workorder_date,
+                        'approval_date' => $work_order->approval_date,
                         'completion_date' => $work_order->date_completed,
                         'expiration_date' => $work_order->expires,
-                        'priority_id' => null,
+                        'order_priority_id' => $order_priority,
+                        'order_status_id' => $order_status,
+                        'order_type_id' => $order_type,
+                        'order_action_id' => $action_type,
                         'work_type_id' => null,
                         'crew' => null,
                         'total_hours' => $work_order->work_hours,
