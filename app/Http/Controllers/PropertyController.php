@@ -15,8 +15,18 @@ class PropertyController extends Controller
     private $validation = [
         'name' => 'string|min:1|max:255',
 		'client_id' => 'integer|exists:clients,id',
-		'contact_id' => 'nullable|integer|exists:contacts,id',
-        'notes' => 'nullable|string|max:255'
+		'primary_contact_id' => 'nullable|integer|exists:contacts,id',
+        'notes' => 'nullable|string|max:255',
+        'phone' => 'nullable|string|max:255',
+        'address1' => 'nullable|string|max:255',
+        'address2' => 'nullable|string|max:255',
+        'city' => 'nullable|string|max:255', 
+        'state' => 'nullable|string|max:255',
+        'zip' => 'nullable|string|max:255',
+        'work_property' => 'boolean',
+        'address_type_id' => 'integer|exists:address_types,id', 
+        'activity_level_id' => 'integer|exists:activity_levels,id',
+		'property_type_id' => 'integer|exists:property_types,id'
     ];
     
     public function __construct()
