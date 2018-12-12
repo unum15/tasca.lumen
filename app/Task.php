@@ -23,7 +23,7 @@ class Task extends Model
       'sort_order'
     ];
   
-  public function service_order(){
-    return $this->belongsTo('App\ServiceOrder');
+  public function order(){
+    return $this->belongsTo('App\Order');
   }
 }

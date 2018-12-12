@@ -12,15 +12,6 @@ class TaskController extends Controller
      *
      * @return void
      */
-    private $validation_create = [
-        'name' => 'string|required|min:1|max:255',
-        'contact_id' => 'integer|required|exists:contacts,id',
-		'property_id' => 'integer|required|exists:properties,id',
-        'open_date' => 'date|required',
-        'close_date' => 'date',
-        'notes' => 'string|max:255'
-		
-    ];
     
     private $validation = [
         'order_id' => 'integer|exists:orders,id',
@@ -35,7 +26,7 @@ class TaskController extends Controller
     public function index(Request $request){
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = Task::with('service_order', 'service_order.project', 'service_order.project.property', 'service_order.project.contact', 'service_order.project.property.client')
+        $items_query = Task::with('order', 'order.project', 'order.project.property', 'order.project.contact', 'order.project.property.client')
         ->orderBy('id');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
@@ -44,7 +35,7 @@ class TaskController extends Controller
     }
     
     public function create(Request $request){
-        $this->validate($request, $this->validation_create);
+        $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;

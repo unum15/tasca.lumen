@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\ServiceOrder;
+use App\Order;
 use Illuminate\Http\Request;
 
-class ServiceOrderController extends Controller
+class OrderController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -15,6 +15,7 @@ class ServiceOrderController extends Controller
     private $validation = [
         'description' => 'string|min:1|max:255',
 		'project_id' => 'integer|exists:projects,id',
+        'order_billing_type_id' => 'integer|exists:order_billing_types,id',
         'date' => 'date',
         'notes' => 'nullable|string|max:255'
     ];
@@ -27,7 +28,7 @@ class ServiceOrderController extends Controller
     public function index(Request $request){
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = ServiceOrder::with('project', 'project.property', 'project.contact', 'project.property.client')
+        $items_query = Order::with('project', 'project.property', 'project.contact', 'project.property.client')
         ->orderBy('date');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
@@ -41,19 +42,19 @@ class ServiceOrderController extends Controller
         $values = $request->input();
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
-        $item = ServiceOrder::create($values);
-        $item = ServiceOrder::findOrFail($item->id);
+        $item = Order::create($values);
+        $item = Order::findOrFail($item->id);
         return $item;
     }
     
     public function read($id){
-        $item = ServiceOrder::findOrFail($id);
+        $item = Order::findOrFail($id);
         return $item;
     }
     
     public function update($id, Request $request){
         $this->validate($request, $this->validation);     
-        $item = ServiceOrder::findOrFail($id);
+        $item = Order::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
@@ -61,7 +62,7 @@ class ServiceOrderController extends Controller
     }
     
     public function delete($id){
-        $item = ServiceOrder::findOrFail($id);
+        $item = Order::findOrFail($id);
         $item->delete();
         return response([], 204);
     }    

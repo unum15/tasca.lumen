@@ -19,6 +19,7 @@ use App\PropertyType;
 use App\Property;
 use App\Order;
 use App\OrderAction;
+use App\OrderBillingType;
 use App\OrderCategory;
 use App\OrderPriority;
 use App\OrderStatus;
@@ -291,6 +292,20 @@ class MigrateOldDataCommand extends Command
         }
         
                 
+       $names = [
+            "Service Order",
+            "Pending Work Order",
+            "Work Order"
+        ];
+        $sort = 1;
+        foreach($names as $name){
+            OrderBillingType::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+
+        $work_order_type_id = OrderBillingType::where('name', 'Work Order')->first()->id;
         
         $names = [
             "Lead",
@@ -642,10 +657,10 @@ class MigrateOldDataCommand extends Command
                         property_index,
                         location,
                         instructions,
-                        priority_index, 
+                        priority_text AS priority, 
                         notes,
-                        budget,
-                        bid,
+                        budget::numeric AS budget,
+                        bid::numeric AS bid,
                         approval_date,
                         progress_percentage,
                         date_completed,
@@ -662,14 +677,20 @@ class MigrateOldDataCommand extends Command
                         work_hours,
                         work_days,
                         expires,
-                        status_index,
-                        type_index,
-                        action_index,
+                        status,
+                        type,
+                        action,
                         group_name
                     FROM 
                         workorders.workorders
+                        LEFT JOIN workorders.priorities ON (workorders.priority_index = priorities.priority_index)
+                        LEFT JOIN workorders.workorder_actions ON (workorders.action_index = workorder_actions.action_index)
+                        LEFT JOIN workorders.workorder_statuses ON (workorders.status_index = workorder_statuses.status_index)
+                        LEFT JOIN workorders.workorder_types ON (workorders.type_index = workorder_types.type_index)
                     WHERE
                         property_index='" . $property->property_index. "'
+                    ORDER BY
+                        workorder_index
                 ";
 
                 $work_orders = $olddb->select($work_order_sql);
@@ -686,7 +707,7 @@ class MigrateOldDataCommand extends Command
                     ]);
                     
                     $order_action = $order_actions->search($work_order->action);
-                    $order_category = $order_categories->search($work_order->category);
+                    //$order_category = $order_categories->search($work_order->category);
                     $order_priority = $order_priorities->search($work_order->priority);
                     $order_status = $order_statuses->search($work_order->status);
                     $order_type = $order_types->search($work_order->type);
@@ -702,12 +723,14 @@ class MigrateOldDataCommand extends Command
                         'description' => $work_order->description,
                         'order_date' => $work_order->workorder_date,
                         'approval_date' => $work_order->approval_date,
+                        'renewable' => false,
+                        'order_billing_type_id' => $work_order_type_id,
                         'completion_date' => $work_order->date_completed,
                         'expiration_date' => $work_order->expires,
                         'order_priority_id' => $order_priority,
                         'order_status_id' => $order_status,
-                        'order_type_id' => $order_type,
-                        'order_action_id' => $action_type,
+                        'order_category_id' => $order_type,
+                        'order_action_id' => $order_action,
                         'work_type_id' => null,
                         'crew' => null,
                         'total_hours' => $work_order->work_hours,
@@ -752,7 +775,6 @@ class MigrateOldDataCommand extends Command
                         ;
                     ";
                     $tasks = $olddb->select($task_sql);
-                    print_r($tasks);
                     foreach($tasks as $task){
                         $task_status_id = null;
                         $task_action_id = null;

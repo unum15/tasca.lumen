@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\OrderType;
+use App\OrderBillingType;
 use Illuminate\Http\Request;
 
-class OrderTypeController extends Controller
+class OrderBillingTypeController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -19,7 +19,7 @@ class OrderTypeController extends Controller
     }
 
     public function index(){
-        $items = OrderType::All();
+        $items = OrderBillingType::All();
         return $items;
     }
     
@@ -33,12 +33,12 @@ class OrderTypeController extends Controller
         ];
         $this->validate($request, $validation);
         $this->removeConflict($request);
-        $item = OrderType::create($request->input());
+        $item = OrderBillingType::create($request->input());
         return $item;
     }
     
     public function read($id){
-        $item = OrderType::findOrFail($id);
+        $item = OrderBillingType::findOrFail($id);
         return $item;
     }
     
@@ -52,7 +52,7 @@ class OrderTypeController extends Controller
         ];
         $this->validate($request, $validation);
         $this->removeConflict($request);
-        $item = OrderType::findOrFail($id);
+        $item = OrderBillingType::findOrFail($id);
         if($item == null){
             return response(['success' => false, 'status' => 404, 'message' => 'HTTP_FILE_NOT_FOUND'], 404);
         }
@@ -66,7 +66,7 @@ class OrderTypeController extends Controller
     }
     
     public function delete($id){
-        $item = OrderType::findOrFail($id);
+        $item = OrderBillingType::findOrFail($id);
         $item->delete();
         return response([], 204);
     }
@@ -75,11 +75,11 @@ class OrderTypeController extends Controller
         $sort_order = $request->input('sort_order');
         $default = $request->input('default');
         if($sort_order){
-            OrderType::where('sort_order', $sort_order)
+            OrderBilingType::where('sort_order', $sort_order)
                 ->update(['sort_order' => null]);
         }
         if($default){
-            OrderType::where('default', true)
+            OrderBillingType::where('default', true)
             ->update(['default' => false]);
         }        
     }

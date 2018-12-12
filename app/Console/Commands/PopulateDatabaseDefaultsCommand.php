@@ -11,11 +11,12 @@ use App\ContactType;
 use App\EmailType;
 use App\PhoneNumberType;
 use App\PropertyType;
-use App\ServiceOrderAction;
-use App\ServiceOrderCategory;
-use App\ServiceOrderPriority;
-use App\ServiceOrderStatus;
-use App\ServiceOrderType;
+use App\OrderAction;
+use App\OrderBillingType;
+use App\OrderCategory;
+use App\OrderPriority;
+use App\OrderStatus;
+use App\OrderType;
 use App\Setting;
 use App\TaskAction;
 use App\TaskStatus;
@@ -207,7 +208,7 @@ class PopulateDatabaseDefaultsCommand extends Command
         ];
         $sort = 1;
         foreach($names as $name){
-            ServiceOrderPriority::create([
+            OrderPriority::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
@@ -220,7 +221,7 @@ class PopulateDatabaseDefaultsCommand extends Command
         ];
         $sort = 1;
         foreach($names as $name){
-            ServiceOrderCategory::create([
+            OrderCategory::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
@@ -260,20 +261,31 @@ class PopulateDatabaseDefaultsCommand extends Command
         ];
         $sort = 1;
         foreach($names as $name => $actions){
-            $status = ServiceOrderStatus::create([
+            $status = OrderStatus::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
             $sort_action = 1;
             foreach($actions as $action){
-                $status->serviceOrderActions()->create([
+                $status->orderActions()->create([
                     'name' => $action,
                     'sort_order' => $sort_action++
                 ]);
             }
         }
         
-                
+         $names = [
+            "Service Order",
+            "Pending Work Order",
+            "Work Order"
+        ];
+        $sort = 1;
+        foreach($names as $name){
+            OrderBillingType::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }        
         
         $names = [
             "Lead",
@@ -283,7 +295,7 @@ class PopulateDatabaseDefaultsCommand extends Command
         ];
         $sort = 1;
         foreach($names as $name){
-            ServiceOrderType::create([
+            OrderType::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
@@ -365,22 +377,6 @@ class PopulateDatabaseDefaultsCommand extends Command
             'updater_id' => 1 
         ]);
         
-        //set defaults for forms
-        ActivityLevel::where('name', 'Level 1')->first()->update(['default' => true]);
-        ClientType::where('name', 'Residential')->first()->update(['default' => true]);
-        ContactMethod::where('name', 'Text')->first()->update(['default' => true]);
-        ContactType::where('name', 'Owner')->first()->update(['default' => true]);
-        EmailType::where('name', 'Personal')->first()->update(['default' => true]);
-        PhoneNumberType::where('name', 'Mobile')->first()->update(['default' => true]);
-        PropertyType::where('name', 'Home')->first()->update(['default' => true]);
-        ServiceOrderAction::where('name', 'To Do')->first()->update(['default' => true]);
-        ServiceOrderPriority::where('name', 'Next Action')->first()->update(['default' => true]);
-        ServiceOrderStatus::where('name', 'Approved')->first()->update(['default' => true]);
-        TaskAction::where('name', 'Schedule')->first()->update(['default' => true]);
-        TaskStatus::where('name', 'Next Action')->first()->update(['default' => true]);
-//        TaskType::where('name', 'Service Call')->first()->update(['default' => true]);
-//        WorkType::where('name', 'Irrigation')->first()->update(['default' => true]);
-
         Setting::create([
             'name' => 'default_activity_level_id',
             'value' => ActivityLevel::where('name', 'Level 1')->first()->id
@@ -410,20 +406,20 @@ class PopulateDatabaseDefaultsCommand extends Command
             'value' => PropertyType::where('name', 'Home')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_service_order_action_id',
-            'value' => ServiceOrderAction::where('name', 'To Do')->first()->id
+            'name' => 'default_order_action_id',
+            'value' => OrderAction::where('name', 'To Do')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_service_order_category_id',
-            'value' => ServiceOrderCategory::where('name', 'Consulting')->first()->id
+            'name' => 'default_order_category_id',
+            'value' => OrderCategory::where('name', 'Consulting')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_service_order_priority_id',
-            'value' => ServiceOrderPriority::where('name', 'Next Action')->first()->id
+            'name' => 'default_order_priority_id',
+            'value' => OrderPriority::where('name', 'Next Action')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_service_order_status_id',
-            'value' => ServiceOrderStatus::where('name', 'Approved')->first()->id
+            'name' => 'default_order_status_id',
+            'value' => OrderStatus::where('name', 'Approved')->first()->id
         ]);
         Setting::create([
             'name' => 'default_task_action_id',
@@ -439,10 +435,10 @@ class PopulateDatabaseDefaultsCommand extends Command
         ]);
         Setting::create([
             'name' => 'default_service_order_type_id',
-            'value' => ServiceOrderType::where('name', 'Estimate')->first()->id
+            'value' => OrderType::where('name', 'Estimate')->first()->id
         ]);
 
-        ServiceOrderStatus::where('name', 'Completed')->first()->update(['allow_work_order' => true]);
+        OrderStatus::where('name', 'Completed')->first()->update(['allow_work_order' => true]);
 
     }
 }
