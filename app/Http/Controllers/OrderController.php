@@ -16,8 +16,36 @@ class OrderController extends Controller
         'description' => 'string|min:1|max:255',
 		'project_id' => 'integer|exists:projects,id',
         'order_billing_type_id' => 'integer|exists:order_billing_types,id',
+        'name' => 'nullable|string|max:255',
         'date' => 'date',
-        'notes' => 'nullable|string|max:255'
+        'notes' => 'nullable|string|max:255',
+		'order_billing_type_id' => 'integer:exists:order_billing_types,id',
+        'approval_date' => 'nullable|date',
+        'completion_date' => 'nullable|date',
+        'expiration_date' => 'nullable|date',
+        'order_category_id' => 'nullable|integer:exists:order_categories,id',
+        'order_priority_id' => 'nullable|integer:exists:order_priorities,id',
+        'order_type_id' => 'nullable|integer:exists:order_types,id',
+        'order_status_id' => 'nullable|integer:exists:order_statuses,id',
+        'order_action_id' => 'nullable|integer:exists:order_actions,id',
+        'start_date' => 'nullable|date',
+        'recurrences' => 'nullable|integer',
+        'service_window' => 'nullable|integer',
+        'location' => 'nullable|string|max:255',
+        'instructions' => 'nullable|string|max:255',
+        'notes' => 'nullable|string|max:255',
+        'purchase_order_number' => 'nullable|string|max:255',
+        'budget' => 'nullable|string|max:255',
+        'budget_plus_minus' => 'nullable|integer|max:255',
+        'budget_invoice_number' => 'nullable|string|max:255',
+        'bid' => 'nullable|string|max:255',
+        'bid_plus_minus' => 'nullable|integer|max:255',
+        'invoice_number' => 'nullable|string|max:255',
+        'renewable' => 'boolean',
+        'frequency' => 'nullable|max:255',
+        'renewal_date' => 'nullable|date',
+        'notification_lead' => 'nullable|max:255',
+        'renewal_message' => 'nullable|string|max:255'
     ];
     
     public function __construct()
@@ -38,7 +66,7 @@ class OrderController extends Controller
     
     public function create(Request $request){
         $this->validate($request, $this->validation);
-        //$values = $request->only(array_keys($this->validation));
+        $values = $request->only(array_keys($this->validation));
         $values = $request->input();
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
@@ -53,6 +81,7 @@ class OrderController extends Controller
     }
     
     public function update($id, Request $request){
+        error_log(print_r($request, true));
         $this->validate($request, $this->validation);     
         $item = Order::findOrFail($id);
         $values = $request->only(array_keys($this->validation));

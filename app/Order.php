@@ -9,6 +9,7 @@ class Order extends Model
     protected $fillable = [
         'project_id',
 		'order_billing_type_id',
+        'name',
 		'date',
         'approval_date',
         'completion_date',

@@ -15,6 +15,7 @@ class Property extends Model
         'city', 
         'state',
         'zip',
+        'phone_number',
         'primary_contact_id',
         'work_property',
         'client_id',

@@ -8,6 +8,7 @@ class Task extends Model
 {
   protected $fillable =  [
       'order_id',
+      'name',
       'description',
       'billable',
       'task_type_id',
@@ -20,7 +21,8 @@ class Task extends Model
       'job_hours',
       'crew_hours',
       'notes',
-      'sort_order'
+      'sort_order',
+      'group'
     ];
   
   public function order(){

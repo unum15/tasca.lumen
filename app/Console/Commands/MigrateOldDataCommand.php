@@ -630,7 +630,7 @@ class MigrateOldDataCommand extends Command
                 $activity_level = $activity_levels->search($property->active_level);
                 $contact_id = null;
                 if($property->contact_index != ""){
-                    $contact_id = $contacts_map[$property->contact_index]->id;
+                    $contact_id = $contacts_map[$property->contact_index];
                 }
                 $new_property = $new_client->properties()->create([
                     'name' => $property->property_name,
@@ -695,11 +695,15 @@ class MigrateOldDataCommand extends Command
 
                 $work_orders = $olddb->select($work_order_sql);
                 foreach($work_orders as $work_order){
+                    $contact_id = null;
+                    if($work_order->contact_index != ""){
+                        $contact_id = $contacts_map[$work_order->contact_index];
+                    }
                     $project = Project::create([
                         'name' => $client->client_name.' Project',
                         'notes' => null,
                         'property_id' => $new_property->id,
-                        'contact_id' => null,
+                        'contact_id' => $contact_id,
                         'open_date' => date("Y-m-d"),
                         'close_date' => null, 
                         'creator_id' => $admin->id,
@@ -792,6 +796,14 @@ class MigrateOldDataCommand extends Command
                             $task_category_id = $task_category->id;
                         }
                         
+                        $sort_order = preg_replace('/\w/','', $task->sorder);
+                        $group = preg_replace('/\d/','', $task->sorder);
+                        if($sort_order === ''){
+                            $sort_order = null;
+                        }
+                        if($group === ''){
+                            $group = null;
+                        }
                         $new_task = Task::create([
                             'order_id' => $new_work_order->id,
                             'description' => $task->description,
@@ -799,13 +811,14 @@ class MigrateOldDataCommand extends Command
                             'task_status_id' => $task_status_id,
                             'task_action_id' => $task_action_id,
                             'task_category_id' => $task_category_id,
-                            //'day' => $task->day,
-                            //'date' => $task->date,
-                            //'time' => $task->time,
-                            //'job_hours' => $task->job_hours,
-                            //'crew_hours' => $task->crew_hours,
+                            'day' => $task->day,
+                            'date' => $task->date,
+                            'time' => $task->time,
+                            'job_hours' => $task->job_hours,
+                            'crew_hours' => $task->crew_hours,
                             'notes' => $task->notes,
-                            //'sort_order' => $task->sorder
+                            'sort_order' => $sort_order,
+                            'group' => $group
                         ]);
                     }
                 }

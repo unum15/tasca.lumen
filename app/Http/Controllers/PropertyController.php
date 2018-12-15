@@ -17,7 +17,7 @@ class PropertyController extends Controller
 		'client_id' => 'integer|exists:clients,id',
 		'primary_contact_id' => 'nullable|integer|exists:contacts,id',
         'notes' => 'nullable|string|max:255',
-        'phone' => 'nullable|string|max:255',
+        'phone_number' => 'nullable|string|max:255',
         'address1' => 'nullable|string|max:255',
         'address2' => 'nullable|string|max:255',
         'city' => 'nullable|string|max:255', 

@@ -14,8 +14,23 @@ class TaskController extends Controller
      */
     
     private $validation = [
+        'description' => 'nullable|string|max:255',
+        'name' => 'nullable|string|max:255',
+        'billable' => 'nullable|boolean',
+        'task_type_id' => 'nullable|integer:exists:task_types,id',
+        'task_status_id' => 'nullable|integer:exists:task_statuses,id',
+        'task_action_id' => 'nullable|integer:exists:task_actions,id',
+        'task_category_id' => 'nullable|integer:exists:task_category,id',
+        'day' => 'nullable|string|max:255',
+        'date' => 'nullable|date',
+        'time' => 'nullable|string|max:255',
+        'job_hours' => 'nullable|integer',
+        'crew_hours' => 'nullable|integer',
+        'notes' => 'nullable|string|max:255',
+        'sort_order' => 'nullable|integer',
         'order_id' => 'integer|exists:orders,id',
-        'notes' => 'nullable|string|max:255'
+        'notes' => 'nullable|string|max:255',
+        'group' => 'nullable|string|max:255'
     ];
     
     public function __construct()
