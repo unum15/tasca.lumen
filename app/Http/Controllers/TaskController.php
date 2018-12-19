@@ -23,6 +23,7 @@ class TaskController extends Controller
         'task_category_id' => 'nullable|integer:exists:task_category,id',
         'day' => 'nullable|string|max:255',
         'date' => 'nullable|date',
+        'completion_date' => 'nullable|date',
         'time' => 'nullable|string|max:255',
         'job_hours' => 'nullable|integer',
         'crew_hours' => 'nullable|integer',
@@ -41,11 +42,19 @@ class TaskController extends Controller
     public function index(Request $request){
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = Task::with('order', 'order.project', 'order.project.property', 'order.project.contact', 'order.project.property.client')
+        $items_query = Task::with('order', 'order.project', 'order.project.property', 'order.project.contact', 'order.project.property.client', 'TaskCategory')
         ->orderBy('id');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $items_query->whereHas(
+            'order' , function($q){
+                $q->whereNull('completion_date');
+                $q->whereNull('expiration_date');
+                $q->whereNotNull('approval_date');
+            }
+        );
+        
         return $items_query->get();
     }
     

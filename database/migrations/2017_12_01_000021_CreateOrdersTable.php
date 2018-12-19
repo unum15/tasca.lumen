@@ -23,6 +23,10 @@ class CreateOrdersTable extends Migration
             $table->date('completion_date')->nullable();
             $table->date('expiration_date')->nullable();
             $table->text('description')->nullable();
+            $table->integer('progress_percentage')->nullable();
+            $table->integer('contact_id')->nullable();
+            $table->integer('approver_id')->nullable();
+            $table->string('work_days')->nullable();
             $table->integer('order_category_id')->nullable();
             $table->integer('order_priority_id')->nullable();
             $table->integer('order_type_id')->nullable();

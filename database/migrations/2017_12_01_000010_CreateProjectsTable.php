@@ -19,7 +19,7 @@ class CreateProjectsTable extends Migration
             $table->text('notes')->nullable();
             $table->integer('property_id');
             $table->integer('contact_id')->nullable();
-            $table->date('open_date');
+            $table->date('open_date')->nullable();
             $table->date('close_date')->nullable();
             $table->integer('creator_id');
             $table->integer('updater_id');            

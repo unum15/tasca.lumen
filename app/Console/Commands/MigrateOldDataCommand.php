@@ -625,6 +625,7 @@ class MigrateOldDataCommand extends Command
             ";
             
             $properties = $olddb->select($property_sql);
+            $project_number = 1;
             foreach($properties as $property){
                 $property_type = $property_types->search($property->type);
                 $activity_level = $activity_levels->search($property->active_level);
@@ -699,13 +700,17 @@ class MigrateOldDataCommand extends Command
                     if($work_order->contact_index != ""){
                         $contact_id = $contacts_map[$work_order->contact_index];
                     }
+                    $approver_id = null;
+                    if($work_order->approved_by != ""){
+                        $approver_id = $contacts_map[$work_order->approved_by];
+                    }
                     $project = Project::create([
-                        'name' => $client->client_name.' Project',
+                        'name' => $client->client_name.' Project '. $project_number++,
                         'notes' => null,
                         'property_id' => $new_property->id,
                         'contact_id' => $contact_id,
-                        'open_date' => date("Y-m-d"),
-                        'close_date' => null, 
+                        'open_date' => $work_order->workorder_date,
+                        'close_date' => $work_order->date_completed, 
                         'creator_id' => $admin->id,
                         'updater_id' => $admin->id
                     ]);
@@ -716,13 +721,7 @@ class MigrateOldDataCommand extends Command
                     $order_status = $order_statuses->search($work_order->status);
                     $order_type = $order_types->search($work_order->type);
                     
-                    $new_work_order = Order::create([
-                        
-//                        progress_percentage,
-//                        contact_index,
-//                        approved_by,
-//                        work_days,
-                        
+                    $new_work_order = Order::create([                        
                         'project_id' => $project->id,
                         'description' => $work_order->description,
                         'order_date' => $work_order->workorder_date,
@@ -748,6 +747,10 @@ class MigrateOldDataCommand extends Command
                         'bid' => $work_order->bid,
                         'bid_plus_minus' => $work_order->bid_plus_minus,
                         'invoice_number' => $work_order->invoice_number,
+                        'progress_percentage' => $work_order->progress_percentage,
+                        'contact_id' => $contact_id,
+                        'approver_id' => $approver_id,
+                        'work_days' => $work_order->work_days,
                         'creator_id' => $admin->id,
                         'updater_id' => $admin->id
                     ]);
@@ -811,6 +814,7 @@ class MigrateOldDataCommand extends Command
                             'task_status_id' => $task_status_id,
                             'task_action_id' => $task_action_id,
                             'task_category_id' => $task_category_id,
+                            'hide' => $task->day,
                             'day' => $task->day,
                             'date' => $task->date,
                             'time' => $task->time,
