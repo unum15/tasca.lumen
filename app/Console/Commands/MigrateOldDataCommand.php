@@ -56,6 +56,12 @@ class MigrateOldDataCommand extends Command
         parent::__construct();
     }
 
+    public function formatPhoneNumber($number){
+        $number = preg_replace('/"\(\)/', '', $number);
+        $number = preg_replace('/^\s+/', '', $number);
+        $number = preg_replace('/\s+/', '-', $number);
+        return $number;
+    }
     /**
      * Execute the console command.
      *
@@ -552,7 +558,7 @@ class MigrateOldDataCommand extends Command
                 PhoneNumber::create([
                     'contact_id' => $new_contact->id,
                     'phone_number_type_id' => $phone_number_type,
-                    'phone_number' => $phone_number->phone,
+                    'phone_number' => $this->formatPhoneNumber($phone_number->phone),
                     'creator_id' => 1,
                     'updater_id' => 1, 
                 ]);
@@ -637,7 +643,7 @@ class MigrateOldDataCommand extends Command
                     'name' => $property->property_name,
                     'notes' => $property->notes,
                     'activity_level_id' => $activity_level,
-                    'phone_number' => $property->phone,
+                    'phone_number' => $this->formatPhoneNumber($property->phone),
                     'address1' => $property->address1,
                     'address2' => $property->address2,
                     'city' => trim($property->city),
@@ -826,17 +832,6 @@ class MigrateOldDataCommand extends Command
                         ]);
                     }
                 }
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
                 
                 
             }
