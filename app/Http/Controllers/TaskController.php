@@ -14,6 +14,7 @@ class TaskController extends Controller
      */
     
     private $validation = [
+        'order_id' => 'integer:exists:orders,id',
         'description' => 'nullable|string|max:255',
         'name' => 'nullable|string|max:255',
         'billable' => 'nullable|boolean',
@@ -47,14 +48,16 @@ class TaskController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
-        $items_query->whereHas(
-            'order' , function($q){
-                $q->whereNull('completion_date');
-                $q->whereNull('expiration_date');
-                $q->whereNotNull('approval_date');
-            }
-        );
-        
+        $active_only = $request->only('active_only');
+        if($active_only == 'true'){
+            $items_query->whereHas(
+                'order' , function($q){
+                    $q->whereNull('completion_date');
+                    $q->whereNull('expiration_date');
+                    $q->whereNotNull('approval_date');
+                }
+            );
+        }
         return $items_query->get();
     }
     

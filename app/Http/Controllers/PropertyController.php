@@ -39,6 +39,7 @@ class PropertyController extends Controller
         ->with('activityLevel')
         ->with('propertyType')
         ->with('contact')
+        ->orderBy('name')
         ->get();
         return $items;
     }

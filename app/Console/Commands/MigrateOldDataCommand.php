@@ -640,9 +640,9 @@ class MigrateOldDataCommand extends Command
                     'phone_number' => $property->phone,
                     'address1' => $property->address1,
                     'address2' => $property->address2,
-                    'city' => $property->city,
+                    'city' => trim($property->city),
                     'state' => $property->state,
-                    'zip' => $property->zip,
+                    'zip' => trim($property->zip),
                     'primary_contact_id' => $contact_id,
                     'work_property' => $property->work_property,
                     'property_type_id' => $property_type,
@@ -705,7 +705,7 @@ class MigrateOldDataCommand extends Command
                         $approver_id = $contacts_map[$work_order->approved_by];
                     }
                     $project = Project::create([
-                        'name' => $client->client_name.' Project '. $project_number++,
+                        'name' => $client->client_name.' Project '. sprintf('%03d', $project_number++),
                         'notes' => null,
                         'property_id' => $new_property->id,
                         'contact_id' => $contact_id,

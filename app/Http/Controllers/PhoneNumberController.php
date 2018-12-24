@@ -12,11 +12,6 @@ class PhoneNumberController extends Controller
      *
      * @return void
      */
-    private $validation_create = [
-        'phone_number' => 'string|required|max:255',
-		'phone_number_type_id' => 'integer|required|exists:phone_number_types,id',		
-		'contact_id' => 'integer|required|exists:contacts,id'
-    ];
     
     private $validation = [
         //'phone_number' => 'string|min:10|max:10|regex:/^\d+$/',
@@ -41,7 +36,7 @@ class PhoneNumberController extends Controller
     }
     
     public function create(Request $request){
-        $this->validate($request, $this->validation_create);
+        $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
