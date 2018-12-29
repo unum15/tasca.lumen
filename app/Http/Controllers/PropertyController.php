@@ -15,7 +15,6 @@ class PropertyController extends Controller
     private $validation = [
         'name' => 'string|min:1|max:255',
 		'client_id' => 'integer|exists:clients,id',
-		'primary_contact_id' => 'nullable|integer|exists:contacts,id',
         'notes' => 'nullable|string|max:255',
         'phone_number' => 'nullable|string|max:255',
         'address1' => 'nullable|string|max:255',
@@ -31,14 +30,14 @@ class PropertyController extends Controller
     
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(){
         $items = Property::with('client')
         ->with('activityLevel')
         ->with('propertyType')
-        ->with('contact')
+        ->with('contacts')
         ->orderBy('name')
         ->get();
         return $items;
@@ -66,6 +65,8 @@ class PropertyController extends Controller
         $values = $request->only(array_keys($this->validation));
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
+        $contacts = $request->only('contacts');
+        $item->contacts()->sync($contacts['contacts']);
         return $item;
     }
     

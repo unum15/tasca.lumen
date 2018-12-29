@@ -14,4 +14,7 @@ class PhoneNumber extends Model
 		'updater_id'
 	];
 	
+	public function phoneNumberType(){
+        return $this->belongsTo('App\PhoneNumberType');
+    }
 }

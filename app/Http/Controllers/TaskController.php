@@ -20,6 +20,7 @@ class TaskController extends Controller
         'billable' => 'nullable|boolean',
         'task_type_id' => 'nullable|integer:exists:task_types,id',
         'task_status_id' => 'nullable|integer:exists:task_statuses,id',
+        'task_appointment_status_id' => 'nullable|integer:exists:task_appointment_statuses,id',
         'task_action_id' => 'nullable|integer:exists:task_actions,id',
         'task_category_id' => 'nullable|integer:exists:task_category,id',
         'day' => 'nullable|string|max:255',
@@ -43,13 +44,25 @@ class TaskController extends Controller
     public function index(Request $request){
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = Task::with('order', 'order.project', 'order.project.property', 'order.project.contact', 'order.project.property.client', 'TaskCategory')
+        $items_query = Task::with(
+            'order',
+            'order.project',
+            'order.project.property',
+            'order.project.contact',
+            'order.project.property.client',
+            'TaskCategory',
+            'TaskStatus',
+            'TaskAppointmentStatus',
+            'TaskAction',
+            'order.orderPriority',
+            'order.orderCategory'
+        )
         ->orderBy('id');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
         $active_only = $request->only('active_only');
-        if($active_only == 'true'){
+        if((!empty($active_only)) && ($active_only['active_only'] == 'true')){
             $items_query->whereHas(
                 'order' , function($q){
                     $q->whereNull('completion_date');
@@ -72,7 +85,29 @@ class TaskController extends Controller
     }
     
     public function read($id){
-        $item = Task::findOrFail($id);
+        $item = Task::with(
+            'order',
+            'order.project',
+            'order.project.property',
+            'order.project.contact',
+            'order.project.contact.phoneNumbers',
+            'order.project.contact.phoneNumbers.phoneNumberType',
+            'order.project.property.client',
+            'order.project.property.contacts',
+            'order.project.property.contacts.phoneNumbers',
+            'order.project.property.contacts.phoneNumbers.phoneNumberType',
+            'TaskCategory',
+            'TaskStatus',
+            'TaskAppointmentStatus',
+            'TaskAction',
+            'order.orderPriority',
+            'order.orderCategory'
+        )
+        ->where('id', $id)
+        ->first();
+        if(empty($item)){
+            return response([], 404);
+        }
         return $item;
     }
     

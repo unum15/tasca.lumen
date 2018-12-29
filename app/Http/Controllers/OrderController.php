@@ -76,7 +76,31 @@ class OrderController extends Controller
     }
     
     public function read($id){
-        $item = Order::findOrFail($id);
+        $item = Order::with(
+            'project',
+            'project.property',
+            'project.contact',
+            'project.contact.phoneNumbers',
+            'project.contact.phoneNumbers.phoneNumberType',
+            'project.property.client',
+            'project.property.contacts',
+            'project.property.contacts.phoneNumbers',
+            'project.property.contacts.phoneNumbers.phoneNumberType',
+            'approver',
+            'tasks',
+            'tasks.taskCategory',
+            'tasks.taskStatus',
+            'tasks.taskAppointmentStatus',
+            'tasks.taskAction',
+            'tasks.taskType',
+            'orderPriority',
+            'orderCategory'
+        )
+        ->where('id', $id)
+        ->first();
+        if(empty($item)){
+            return response([], 404);
+        }
         return $item;
     }
     

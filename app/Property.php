@@ -16,7 +16,6 @@ class Property extends Model
         'state',
         'zip',
         'phone_number',
-        'primary_contact_id',
         'work_property',
         'client_id',
         'address_type_id', 
@@ -31,10 +30,6 @@ class Property extends Model
         return $this->belongsTo('App\Client');
     }
     
-    public function contact(){
-        return $this->belongsTo('App\Contact');
-    }
-    
     public function propertyType(){
         return $this->belongsTo('App\PropertyType');
     }
@@ -44,6 +39,7 @@ class Property extends Model
 	}
     
     public function contacts(){
-        return $this->belongsToMany('App\Contact');
+        return $this->belongsToMany('App\Contact')
+            ->withTimestamps();
     }
 }

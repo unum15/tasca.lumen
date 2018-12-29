@@ -54,7 +54,13 @@ class ClientController extends Controller
         $item = Client::with(['contacts' => function($q) {
             $q->orderBy('name');
         }])
+        ->with(['contacts.properties' => function($q) {
+            $q->orderBy('name');
+        }])
         ->with(['properties' => function($q) {
+            $q->orderBy('name');
+        }])
+        ->with(['properties.contacts' => function($q) {
             $q->orderBy('name');
         }])
         ->findOrFail($id);

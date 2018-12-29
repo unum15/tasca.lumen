@@ -20,7 +20,6 @@ class CreatePropertiesTable extends Migration
             $table->integer('activity_level_id');
             $table->integer('property_type_id');
             $table->integer('client_id');
-            $table->integer('primary_contact_id')->nullable();
             $table->boolean('work_property')->default(true);
             $table->string('phone_number')->nullable();
             $table->string('address1')->nullable();
@@ -47,9 +46,6 @@ class CreatePropertiesTable extends Migration
             $table->foreign('client_id')
                 ->references('id')->on('clients')
                 ->onDelete('CASCADE');
-            $table->foreign('primary_contact_id')
-                ->references('id')->on('contacts')
-                ->onDelete('SET NULL');
         });
         
         

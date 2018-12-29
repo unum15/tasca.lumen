@@ -45,4 +45,36 @@ class Order extends Model
     function project(){
        return $this->belongsTo('App\Project');
     }
+    
+    function orderAction(){
+       return $this->belongsTo('App\OrderAction');
+    }
+    
+    function orderBillingType(){
+       return $this->belongsTo('App\OrderBillingType');
+    }
+    
+    function orderCategory(){
+       return $this->belongsTo('App\OrderCategory');
+    }
+    
+    function orderPriority(){
+       return $this->belongsTo('App\OrderPriority');
+    }
+    
+    function orderStatus(){
+       return $this->belongsTo('App\OrderStatus');
+    }
+    
+    function orderType(){
+       return $this->belongsTo('App\OrderType');
+    }
+    
+    function tasks(){
+        return $this->hasMany('App\Task');
+    }
+    
+    function approver(){
+        return $this->belongsTo('App\Contact');
+    }
 }

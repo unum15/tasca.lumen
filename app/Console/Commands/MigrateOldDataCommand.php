@@ -27,6 +27,7 @@ use App\OrderType;
 use App\Setting;
 use App\Task;
 use App\TaskAction;
+use App\TaskAppointmentStatus;
 use App\TaskStatus;
 use App\TaskCategory;
 
@@ -253,43 +254,63 @@ class MigrateOldDataCommand extends Command
         
         $names = [
             "Waiting Bid" => [
-                "Contact",
-                "Site Visit",
-                "Bid/Price",
-                "Design",
-                "Get P.O.",
-                "Follow Up",            
-                "To Do",
-                "Report",
-                "Bill",
-                "Other",
-                "Close Out",            
+                "actions" => [
+                    "Contact",
+                    "Site Visit",
+                    "Bid/Price",
+                    "Design",
+                    "Get P.O.",
+                    "Follow Up",
+                    "To Do",
+                    "Report",
+                    "Bill",
+                    "Other",
+                    "Close Out"
+                ],
+                "allow_work_order" => false
             ],
             "Bidded" => [
+                "actions" => [],
+                "allow_work_order" => false
                         ],
             "Waiting Approval" => [
+                "actions" => [],
+                "allow_work_order" => false
                         ],
             "Approved" => [
+                "actions" => [],
+                "allow_work_order" => false
                         ],
             "Call Back" => [
+                "actions" => [],
+                "allow_work_order" => false
                         ],
             "Will Call Back" => [
+                "actions" => [],
+                "allow_work_order" => false
                         ],
             "On Hold" => [
+                "actions" => [],
+                "allow_work_order" => false
                         ],
             "Completed" => [
+                "actions" => [],
+                "allow_work_order" => true
                         ],
             "Pre Bid" => [
+                "actions" => [],
+                "allow_work_order" => false
                         ]
         ];
         $sort = 1;
-        foreach($names as $name => $actions){
+        foreach($names as $name => $settings){
             $status = OrderStatus::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
+                'allow_work_order' => $settings['allow_work_order']
             ]);
             $sort_action = 1;
-            foreach($actions as $action){
+            foreach($settings['actions'] as $action){
                 $status->orderActions()->create([
                     'name' => $action,
                     'sort_order' => $sort_action++
@@ -311,6 +332,23 @@ class MigrateOldDataCommand extends Command
             ]);
         }
 
+        $names = [
+            "No Appointment",
+            "Contact for Appointment",
+            "Confirmed Appointment",
+            "Message",
+            "Text",
+            "Email"
+        ];
+        $sort = 1;
+        foreach($names as $name){
+            TaskAppointmentStatus::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+
+        
         $work_order_type_id = OrderBillingType::where('name', 'Work Order')->first()->id;
         
         $names = [
@@ -526,7 +564,8 @@ class MigrateOldDataCommand extends Command
             return $item->name == $key;
         };
         
-        foreach($contacts as $contact){            
+        foreach($contacts as $contact){
+            echo "Importing contact ".$contact->first_name." ".$contact->last_name."(".$contact->contact_index.")\n";
             $activity_level = $activity_levels->search($contact->active_level);
             $contact_method = $contact_methods->search($contact->contact_method);
             $new_contact = Contact::create(
@@ -589,9 +628,19 @@ class MigrateOldDataCommand extends Command
         }
         $admin = Contact::orderBy('id')->first();
         foreach($clients as $client){
+            echo "Importing client ".$client->client_name."(".$client->client_index.")\n";
             $client_type = $client_types->search($client->type);
-            $activity_level = $activity_levels->search($client->active_level);            
+            $activity_level = $activity_levels->search($client->active_level);
             $contact_method = $contact_methods->search($client->contact_method);
+            $billing_contact_id = null;
+            if($client->billing_contact_index != ""){
+                if(isset($contacts_map[$client->billing_contact_index])){
+                    $billing_contact = Contact::find($contacts_map[$client->billing_contact_index]);
+                    if($billing_contact){
+                        $billing_contact_id = $billing_contact->id;
+                    }
+                }
+            }
             $new_client = Client::create(
                 [
                     'name' => $client->client_name,
@@ -599,6 +648,7 @@ class MigrateOldDataCommand extends Command
                     'referred_by' => $client->referred_by,
                     'creator_id' => $admin->id,
                     'updater_id' => $admin->id,
+                    'billing_contact_id' => $billing_contact_id,
                     'client_type_id' => $client_type,
                     'activity_level_id' => $activity_level,
                     'contact_method_id' => $contact_method
@@ -618,8 +668,7 @@ class MigrateOldDataCommand extends Command
                     zip,
                     work_property,
                     active_levels.type as active_level,
-                    COALESCE(types.type, 'Home') AS type,
-                    contact_index
+                    COALESCE(types.type, 'Home') AS type
                 FROM
                     properties.properties
                     LEFT JOIN properties.types ON (types.type_index=properties.type_index)
@@ -635,10 +684,6 @@ class MigrateOldDataCommand extends Command
             foreach($properties as $property){
                 $property_type = $property_types->search($property->type);
                 $activity_level = $activity_levels->search($property->active_level);
-                $contact_id = null;
-                if($property->contact_index != ""){
-                    $contact_id = $contacts_map[$property->contact_index];
-                }
                 $new_property = $new_client->properties()->create([
                     'name' => $property->property_name,
                     'notes' => $property->notes,
@@ -649,13 +694,20 @@ class MigrateOldDataCommand extends Command
                     'city' => trim($property->city),
                     'state' => $property->state,
                     'zip' => trim($property->zip),
-                    'primary_contact_id' => $contact_id,
                     'work_property' => $property->work_property,
                     'property_type_id' => $property_type,
                     'creator_id' => $admin->id,
                     'updater_id' => $admin->id
                 ]);
                 
+                if($client->billing_property_index == $property->property_index){
+                    $new_client->update(['billing_property_id' => $new_property->id]);
+                }
+                $property_contacts = $olddb->select("SELECT contact_index FROM contacts.contacts_properties WHERE property_index='".$property->property_index."'");
+                foreach($property_contacts as $property_contact){
+                    $contact = Contact::find($contacts_map[$property_contact->contact_index]);
+                    $new_property->contacts()->save($contact);
+                }
                 
                 
                 $work_order_sql = "
@@ -771,7 +823,7 @@ class MigrateOldDataCommand extends Command
                             date,
                             sorder,
                             \"time\",
-                            contact_status_index,
+                            contact_status,
                             job_hours,
                             crew_hours, 
                             description,
@@ -783,15 +835,19 @@ class MigrateOldDataCommand extends Command
                             LEFT JOIN workorders.status ON (s.status_index=status.status_index)
                             LEFT JOIN workorders.types t ON (s.type_index=t.type_index)
                             LEFT JOIN workorders.action a ON (s.action_index = a.action_index)
+                            LEFT JOIN workorders.contact_status cs ON (s.contact_status_index = cs.contact_status_index)
                         WHERE
                             workorder_index='".$work_order->workorder_index."'
                         ;
                     ";
                     $tasks = $olddb->select($task_sql);
                     foreach($tasks as $task){
+                        //contact status index
                         $task_status_id = null;
                         $task_action_id = null;
                         $task_category_id = null;
+                        $task_appointment_status_id = null;
+                        $task_appointment_status = TaskAppointmentStatus::where('name', $task->contact_status)->first();
                         $task_status = TaskStatus::where('name', $task->status)->first();
                         $task_action = TaskAction::where('name', $task->action)->first();
                         $task_category = TaskCategory::where('name', $task->type)->first();
@@ -804,7 +860,9 @@ class MigrateOldDataCommand extends Command
                         if($task_category){
                             $task_category_id = $task_category->id;
                         }
-                        
+                        if($task_appointment_status){
+                            $task_appointment_status_id = $task_appointment_status->id;
+                        }
                         $sort_order = preg_replace('/\w/','', $task->sorder);
                         $group = preg_replace('/\d/','', $task->sorder);
                         if($sort_order === ''){
@@ -820,6 +878,7 @@ class MigrateOldDataCommand extends Command
                             'task_status_id' => $task_status_id,
                             'task_action_id' => $task_action_id,
                             'task_category_id' => $task_category_id,
+                            'task_appointment_status_id' => $task_appointment_status_id,
                             'hide' => $task->day,
                             'day' => $task->day,
                             'date' => $task->date,

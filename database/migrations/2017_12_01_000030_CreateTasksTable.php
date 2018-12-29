@@ -23,6 +23,7 @@ class CreateTasksTable extends Migration
             $table->integer('task_category_id')->nullable();
             $table->integer('task_status_id')->nullable();
             $table->integer('task_action_id')->nullable();
+            $table->integer('task_appointment_status_id')->nullable();
             $table->boolean('hide')->default(false);
             $table->string('day')->nullable();
             $table->date('date')->nullable();

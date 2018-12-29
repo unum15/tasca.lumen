@@ -83,6 +83,8 @@ class ContactController extends Controller
                 $item->clients()->attach($client, ['contact_type_id' => $contact_type_id]);
             }
         }
+        $properties = $request->only('properties');
+        $item->properties()->sync($properties['properties']);
         return $item;
     }
     

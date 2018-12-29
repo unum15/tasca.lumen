@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTaskActionsTable extends Migration
+class TaskAppointmentStatus extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateTaskActionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('task_actions', function (Blueprint $table) {
+        Schema::create('task_appointment_statuses', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('task_status_id');
             $table->string('name');
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
+            
         });
     }
 
@@ -31,6 +31,6 @@ class CreateTaskActionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('task_actions');
+        Schema::dropIfExists('task_appointment_statuses');
     }
 }

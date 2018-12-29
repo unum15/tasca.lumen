@@ -51,7 +51,8 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
     }
 	
 	public function properties(){
-        return $this->belongsToMany('App\Property');
+        return $this->belongsToMany('App\Property')
+            ->withTimestamps();
     }
     
 }
