@@ -701,7 +701,7 @@ class MigrateOldDataCommand extends Command
                 ]);
                 
                 if($client->billing_property_index == $property->property_index){
-                    $new_client->update(['billing_property_id' => $new_property->id]);
+                    $new_client->update(['main_mailing_property_id' => $new_property->id]);
                 }
                 $property_contacts = $olddb->select("SELECT contact_index FROM contacts.contacts_properties WHERE property_index='".$property->property_index."'");
                 foreach($property_contacts as $property_contact){
@@ -763,12 +763,12 @@ class MigrateOldDataCommand extends Command
                         $approver_id = $contacts_map[$work_order->approved_by];
                     }
                     $project = Project::create([
-                        'name' => $client->client_name.' Project '. sprintf('%03d', $project_number++),
+                        'name' => !empty($work_order->description) ? $work_order->description : 'Project #' . $project_number++,
                         'notes' => null,
                         'property_id' => $new_property->id,
                         'contact_id' => $contact_id,
                         'open_date' => $work_order->workorder_date,
-                        'close_date' => $work_order->date_completed, 
+                        'close_date' => !empty($work_order->date_completed) ? $work_order->date_completed: $work_order->expires, 
                         'creator_id' => $admin->id,
                         'updater_id' => $admin->id
                     ]);
@@ -781,7 +781,8 @@ class MigrateOldDataCommand extends Command
                     
                     $new_work_order = Order::create([                        
                         'project_id' => $project->id,
-                        'description' => $work_order->description,
+                        'description' => !empty($work_order->description) ? $work_order->description : 'Order #' . $work_order->workorder_index,
+                        'name' => $work_order->description,
                         'order_date' => $work_order->workorder_date,
                         'approval_date' => $work_order->approval_date,
                         'renewable' => false,
@@ -882,6 +883,7 @@ class MigrateOldDataCommand extends Command
                             'hide' => $task->day,
                             'day' => $task->day,
                             'date' => $task->date,
+                            'completion_date' => $work_order->date_completed,
                             'time' => $task->time,
                             'job_hours' => $task->job_hours,
                             'crew_hours' => $task->crew_hours,

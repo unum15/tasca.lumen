@@ -22,7 +22,7 @@ class CreateClientsTable extends Migration
             $table->integer('activity_level_id')->nullable();
             $table->integer('contact_method_id')->nullable();
             $table->integer('billing_contact_id')->nullable();
-            $table->integer('billing_property_id')->nullable();
+            $table->integer('main_mailing_property_id')->nullable();
             $table->integer('creator_id');
             $table->integer('updater_id');
             $table->timestamp('created_at')->useCurrent();

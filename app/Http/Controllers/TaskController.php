@@ -103,11 +103,7 @@ class TaskController extends Controller
             'order.orderPriority',
             'order.orderCategory'
         )
-        ->where('id', $id)
-        ->first();
-        if(empty($item)){
-            return response([], 404);
-        }
+        ->findOrFail($id);
         return $item;
     }
     

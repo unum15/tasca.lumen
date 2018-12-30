@@ -61,6 +61,20 @@ class OrderController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $completed = $request->input('completed');
+        if($completed == 'false'){
+            
+            $items_query->whereNull('completion_date');
+        }
+        
+        $expired = $request->input('expired');
+        if($completed == 'false'){
+            $items_query->where(function ($q) {
+                $q->where('expiration_date','>=',date('Y-m-d'))
+                ->orWhereNull('expiration_date');
+            });
+        }
+        
         return $items_query->get();
     }
     

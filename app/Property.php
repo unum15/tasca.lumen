@@ -17,6 +17,7 @@ class Property extends Model
         'zip',
         'phone_number',
         'work_property',
+        'billing_property',
         'client_id',
         'address_type_id', 
         'activity_level_id',

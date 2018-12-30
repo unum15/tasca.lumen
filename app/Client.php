@@ -12,7 +12,7 @@ class Client extends Model
 		'client_type_id',
 		'activity_level_id',
 		'billing_contact_id',		
-		'billing_property_id',		
+		'main_mailing_property_id',		
 		'contact_method_id',
 //		'bill_to',
 //		'attention_to',
@@ -45,11 +45,13 @@ class Client extends Model
 	public function contacts(){
         return $this->belongsToMany('App\Contact')
 			->withTimestamps()
-            ->withPivot('contact_type_id');
+            ->withPivot('contact_type_id')
+			->orderBy('name')
+			;
     }
 	
 	public function properties(){
-        return $this->hasMany('App\Property');
+        return $this->hasMany('App\Property')->orderBy('name');
     }	
 	
 }

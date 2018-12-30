@@ -26,7 +26,7 @@ class ClientController extends Controller
     
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(){
@@ -51,18 +51,12 @@ class ClientController extends Controller
     }
     
     public function read($id){
-        $item = Client::with(['contacts' => function($q) {
-            $q->orderBy('name');
-        }])
-        ->with(['contacts.properties' => function($q) {
-            $q->orderBy('name');
-        }])
-        ->with(['properties' => function($q) {
-            $q->orderBy('name');
-        }])
-        ->with(['properties.contacts' => function($q) {
-            $q->orderBy('name');
-        }])
+        $item = Client::with(
+            'contacts',
+            'contacts.properties',
+            'properties',
+            'properties.contacts'
+        )
         ->findOrFail($id);
         return $item;
     }

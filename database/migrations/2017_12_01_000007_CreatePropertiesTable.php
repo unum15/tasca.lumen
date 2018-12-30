@@ -21,6 +21,7 @@ class CreatePropertiesTable extends Migration
             $table->integer('property_type_id');
             $table->integer('client_id');
             $table->boolean('work_property')->default(true);
+            $table->boolean('billing_property')->default(true);
             $table->string('phone_number')->nullable();
             $table->string('address1')->nullable();
             $table->string('address2')->nullable();
@@ -50,7 +51,7 @@ class CreatePropertiesTable extends Migration
         
         
         Schema::table('clients', function (Blueprint $table) {
-            $table->foreign('billing_property_id')
+            $table->foreign('main_mailing_property_id')
                 ->references('id')->on('properties')
                 ->onDelete('RESTRICT');
         });
