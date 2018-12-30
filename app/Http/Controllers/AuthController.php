@@ -37,7 +37,7 @@ class AuthController extends Controller
 		}
 		$user->api_token = bin2hex(openssl_random_pseudo_bytes(16));
 		$user->save();
-		return ['login' => $user->login, 'api_token' => $user->api_token];	
+		return ['id' => $user->id, 'login' => $user->login, 'api_token' => $user->api_token];	
 	}
 
 	public function unauth(){
