@@ -71,6 +71,54 @@ class MigrateOldDataCommand extends Command
     public function handle()
     {
         
+        Setting::create([
+            'name' => 'help_client',
+            'value' => 'A client represents a household or organization that you do business with. Contact information for individuals and properties should be store on their respective pages.'
+        ]);
+        
+        Setting::create([
+            'name' => 'help_contact',
+            'value' => 'A contact represent and individual.  Contacts can be associated with multiple clients and with multiple properties for each client.'
+        ]);
+        
+        Setting::create([
+            'name' => 'help_property',
+            'value' => 'A property represent a physical location. Whether that location is a work, billing or administrative location.'
+        ]);
+        
+        Setting::create([
+            'name' => 'help_project',
+            'value' => 'A project represents an over objective, you may have multiple invoices per project.'
+        ]);
+        
+        Setting::create([
+            'name' => 'help_service_order',
+            'value' => 'A service order represent a set of tasks that are to be done for a client, prior to being able to bill the client.'
+        ]);
+        
+        Setting::create([
+            'name' => 'help_pending_work_order',
+            'value' => 'A pending work order is awaitng a purchase order.'
+        ]);
+        
+        Setting::create([
+            'name' => 'help_work_order',
+            'value' => 'A work order is essential a billing unit.'
+        ]);
+        
+        Setting::create([
+            'name' => 'help_task',
+            'value' => 'A task is an amount of work that can completed in one visit or less.'
+        ]);
+        
+        Setting::create([
+            'name' => 'help_show',
+            'value' => 'true'
+        ]);
+        
+        
+        
+        
         $activity_levels = [
             [
                 'name' => 'Level 1',
@@ -304,6 +352,7 @@ class MigrateOldDataCommand extends Command
         ];
         $sort = 1;
         foreach($names as $name => $settings){
+            print_r($settings);
             $status = OrderStatus::create([
                 'name' => $name,
                 'sort_order' => $sort++,

@@ -10,7 +10,8 @@ class OrderStatus extends Model
 		'name',
 		'notes',
 		'sort_order',
-        'default'
+        'allow_work_order',
+        'allow_pending_work_order'
 	];
 	
 	public function orderActions(){

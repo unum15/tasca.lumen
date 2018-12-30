@@ -65,7 +65,7 @@ class CreatePropertiesTable extends Migration
     public function down()
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->dropForeign('clients_billing_property_id_foreign');
+            $table->dropForeign('clients_main_mailing_property_id_foreign');
         });
         Schema::dropIfExists('properties');
     }
