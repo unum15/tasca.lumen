@@ -36,12 +36,20 @@ class SettingController extends Controller
         $item = Setting::findOrFail($id);
         return $item;
     }
-    
+/*    
     public function update($id, Request $request){
         $this->validate($request, $this->validation);
         $item = Setting::findOrFail($id);
         $item->update($request->input());
         return $item;
+    }
+*/
+    public function update(Request $request){
+        $settings = $request->all();
+        foreach($settings as $setting => $value){
+            $setting = Setting::where('name', $setting)->first();
+            $setting->update(['value' => $value]);
+        }
     }
     
     public function delete($id){

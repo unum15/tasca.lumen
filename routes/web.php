@@ -181,6 +181,7 @@ $router->patch('/task/{id:[0-9]+}', 'TaskController@update');
 $router->delete('/task/{id:[0-9]+}', 'TaskController@delete');
 
 $router->get('/settings', 'SettingController@index');
+$router->patch('/settings', 'SettingController@update');
 
 $router->get('/calendar/status', 'GoogleCalendarController@status');
 $router->get('/calendar/url', 'GoogleCalendarController@url');

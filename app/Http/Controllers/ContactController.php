@@ -84,7 +84,9 @@ class ContactController extends Controller
             }
         }
         $properties = $request->only('properties');
-        $item->properties()->sync($properties['properties']);
+        if($properties){
+            $item->properties()->sync($properties['properties']);
+        }
         return $item;
     }
     

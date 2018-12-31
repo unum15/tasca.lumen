@@ -44,10 +44,9 @@ class OrderBillingTypeController extends Controller
     
     public function update($id, Request $request){
         $validation = [
-            'name' => 'string|min:1|max:255',
-            'notes' => 'string|max:255',
-            'sort_order' => 'integer',
-            'default' => 'boolean',
+            'name' => 'string|min:1|max:255|nullable',
+            'notes' => 'string|max:255|nullable',
+            'sort_order' => 'integer|nullable',
             'service_order_status_id' => 'integer|exists:service_order_statuses,id'
         ];
         $this->validate($request, $validation);
@@ -75,7 +74,7 @@ class OrderBillingTypeController extends Controller
         $sort_order = $request->input('sort_order');
         $default = $request->input('default');
         if($sort_order){
-            OrderBilingType::where('sort_order', $sort_order)
+            OrderBillingType::where('sort_order', $sort_order)
                 ->update(['sort_order' => null]);
         }
         if($default){
