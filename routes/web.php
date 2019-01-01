@@ -17,6 +17,7 @@ $router->get('/', function () use ($router) {
 
 $router->post('/auth', 'AuthController@auth');
 $router->post('/unauth', 'AuthController@unauth');
+$router->get('/status', 'AuthController@status');
 
 $router->get('/activity_levels', 'ActivityLevelController@index');
 $router->post('/activity_level', 'ActivityLevelController@create');
@@ -180,9 +181,16 @@ $router->get('/task/{id:[0-9]+}', 'TaskController@read');
 $router->patch('/task/{id:[0-9]+}', 'TaskController@update');
 $router->delete('/task/{id:[0-9]+}', 'TaskController@delete');
 
+$router->get('/sign_ins', 'SignInController@index');
+$router->post('/sign_in', 'SignInController@create');
+$router->get('/sign_in/{id:[0-9]+}', 'SignInController@read');
+$router->patch('/sign_in/{id:[0-9]+}', 'SignInController@update');
+$router->delete('/sign_in/{id:[0-9]+}', 'SignInController@delete');
+
+
 $router->get('/settings', 'SettingController@index');
 $router->patch('/settings', 'SettingController@update');
 
 $router->get('/calendar/status', 'GoogleCalendarController@status');
 $router->get('/calendar/url', 'GoogleCalendarController@url');
-$router->get('/calendar/callback', 'GoogleCalendarController@callback');
+$router->post('/calendar/callback', 'GoogleCalendarController@callback');

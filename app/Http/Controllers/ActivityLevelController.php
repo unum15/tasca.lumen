@@ -14,8 +14,8 @@ class ActivityLevelController extends Controller
      */
     private $validation = [
         'name' => 'string|required|min:1|max:255',
-        'notes' => 'string|max:255',
-        'sort_order' => 'integer',
+        'notes' => 'string|max:255|nullable',
+        'sort_order' => 'integer|nullable',
         'default' => 'boolean'        
     ];
     

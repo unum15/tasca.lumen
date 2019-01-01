@@ -15,11 +15,13 @@ class ContactController extends Controller
      */
     private $validation = [
         'name' => 'string|min:1|max:255',
-        'notes' => 'nullable|string|max:255',		
+        'notes' => 'nullable|string|max:255',
 		'activity_level_id' => 'nullable|integer|exists:activity_levels,id',
-        'contact_method_id' => 'nullable|integer|exists:contact_methods,id',		
+        'contact_method_id' => 'nullable|integer|exists:contact_methods,id',
+        'show_help' => 'boolean',
+        'show_maximium_activity_level_id' => 'integer|exists:activity_levels,id|nullable',
 		'login' => 'nullable|string|max:255',
-        'password' => 'nullable|string|max:255'        
+        'password' => 'nullable|string|max:255'
     ];
     
     public function __construct()

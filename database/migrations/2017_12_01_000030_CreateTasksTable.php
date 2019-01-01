@@ -35,6 +35,8 @@ class CreateTasksTable extends Migration
             $table->integer('crew_hours')->nullable();
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();
+            $table->integer('creator_id');
+            $table->integer('updater_id');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });

@@ -27,14 +27,14 @@ class GoogleCalendarController extends Controller
         $client = new \Google_Client();
         $client->setApplicationName('Tasca');
         $client->setScopes(\Google_Service_Calendar::CALENDAR_READONLY);
-        $client->setAccessType('offline');
+        //$client->setAccessType('offline');
         //$client->setPrompt('select_account consent');
         
         
 
         $client->setClientId(env('GOOGLE_CLIENT_ID'));
         $client->setClientSecret(env('GOOGLE_API_KEY'));
-        $client->setRedirectUri('http://'.$_SERVER['HTTP_HOST'].'/calendar/callback');
+        $client->setRedirectUri('http://'.env('GOOGLE_CLIENT_HOST',$_SERVER['HTTP_HOST']).'/calendar');
         $client->setDeveloperKey(env('GOOGLE_API_KEY'));
         return $client;
     }
@@ -69,13 +69,13 @@ class GoogleCalendarController extends Controller
         }
     }
     
-    function status($request){
+    function status(Request $request){
         $token = $request->user()->google_calendar_token;
         if(empty($token)){
             return ['status' => 'Not Authorized'];
         }
         $client = $this->getClient();
-        $client->setAccessToken(json_decode($token,true));
+        $client->setAccessToken(['access_token' => $token]);
         if ($client->isAccessTokenExpired()) {
             if ($client->getRefreshToken()) {
                 $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
@@ -110,5 +110,17 @@ class GoogleCalendarController extends Controller
             }
             file_put_contents($tokenPath, json_encode($client->getAccessToken()));
         */
+    }
+    
+    function callback(Request $request){
+        
+
+        $user = $request->user();
+        $code = $request->only('code');
+        $client = $this->getClient();
+        $accessToken = $client->fetchAccessTokenWithAuthCode($code['code']);
+        error_log(print_r($accessToken,true));
+        $user->update(['google_calendar_token' => $accessToken['code']]);
+        return $this->status($request);
     }
 }

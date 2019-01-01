@@ -24,7 +24,9 @@ class Task extends Model
       'crew_hours',
       'notes',
       'sort_order',
-      'group'
+      'group',
+      'creator_id',
+      'updater_id'
     ];
   
   public function order(){

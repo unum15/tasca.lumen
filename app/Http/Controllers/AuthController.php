@@ -48,5 +48,10 @@ class AuthController extends Controller
 		}
 		return $user;
 	}
+	
+	public function status(){
+		$user = Auth::user();
+		return $user;
+	}
  
 }

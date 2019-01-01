@@ -16,10 +16,12 @@ class CreateSignInsTable extends Migration
         Schema::create('sign_ins', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('contact_id');
-            $table->integer('work_order_id');
+            $table->integer('order_id');
             $table->timestamp('sign_in')->useCurrent();
             $table->timestamp('sign_out')->nullable();
             $table->text('notes')->nullable();
+            $table->integer('creator_id');
+            $table->integer('updater_id');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->foreign('contact_id')

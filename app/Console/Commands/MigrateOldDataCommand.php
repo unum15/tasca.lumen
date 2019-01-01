@@ -25,6 +25,7 @@ use App\OrderPriority;
 use App\OrderStatus;
 use App\OrderType;
 use App\Setting;
+use App\SignIn;
 use App\Task;
 use App\TaskAction;
 use App\TaskAppointmentStatus;
@@ -88,27 +89,31 @@ class MigrateOldDataCommand extends Command
         
         Setting::create([
             'name' => 'help_project',
-            'value' => 'A project represents an over objective, you may have multiple invoices per project.'
+            'value' =>
+"<p>A project is the end result the customer needs completed. It can be a simple repair of something that is damaged, an ongoing service or a full design build job.</p>
+<p>Project Name: Give the Project a short name.</p>
+<p>Contact: The person who is overseeing the project. This will default to the billing contact.</p>
+"
         ]);
         
         Setting::create([
             'name' => 'help_service_order',
-            'value' => 'A service order represent a set of tasks that are to be done for a client, prior to being able to bill the client.'
+            'value' => 'Orders are the actions it will take to get the project completed. There can be a single action like a service call for a simple repair or several actions it will take to complete a design build job. There are 3 types of orders, Servie, Pending, and Work orders. Typilicy a order can be tied to a work phase or a billing invoice.'
         ]);
         
         Setting::create([
             'name' => 'help_pending_work_order',
-            'value' => 'A pending work order is awaitng a purchase order.'
+            'value' => 'Orders are the actions it will take to get the project completed. There can be a single action like a service call for a simple repair or several actions it will take to complete a design build job. There are 3 types of orders, Servie, Pending, and Work orders. Typilicy a order can be tied to a work phase or a billing invoice.'
         ]);
         
         Setting::create([
             'name' => 'help_work_order',
-            'value' => 'A work order is essential a billing unit.'
+            'value' => 'Orders are the actions it will take to get the project completed. There can be a single action like a service call for a simple repair or several actions it will take to complete a design build job. There are 3 types of orders, Servie, Pending, and Work orders. Typilicy a order can be tied to a work phase or a billing invoice.'
         ]);
         
         Setting::create([
             'name' => 'help_task',
-            'value' => 'A task is an amount of work that can completed in one visit or less.'
+            'value' => 'Task are the To Do items that get the orders completed they are assigned to a employee or crew. They are the items that need to be done for a order to be completed. There are 2 type of tasks; Service Order Task (Change to Non Billing) are Tasks that need to be done in preparation for the order to be completed. This is typical the task that are not charged to the client. Work Order Task(Change to Billing) are Tasks that need to done to complete the order. This is work the client will be billed for. '
         ]);
         
         Setting::create([
@@ -352,7 +357,6 @@ class MigrateOldDataCommand extends Command
         ];
         $sort = 1;
         foreach($names as $name => $settings){
-            print_r($settings);
             $status = OrderStatus::create([
                 'name' => $name,
                 'sort_order' => $sort++,
@@ -606,6 +610,7 @@ class MigrateOldDataCommand extends Command
         $order_types = OrderType::pluck('name', 'id');
         
         $contacts_map = [];
+        $work_orders_map = [];
         
         
         
@@ -862,6 +867,8 @@ class MigrateOldDataCommand extends Command
                         'creator_id' => $admin->id,
                         'updater_id' => $admin->id
                     ]);
+                    
+                    $work_orders_map[$work_order->workorder_index] = $new_work_order->id;
                     $task_sql = "
                         SELECT
                             schedule_index,
@@ -938,7 +945,9 @@ class MigrateOldDataCommand extends Command
                             'crew_hours' => $task->crew_hours,
                             'notes' => $task->notes,
                             'sort_order' => $sort_order,
-                            'group' => $group
+                            'group' => $group,
+                            'creator_id' => $admin->id,
+                            'updater_id' => $admin->id
                         ]);
                     }
                 }
@@ -954,6 +963,19 @@ class MigrateOldDataCommand extends Command
             }
         }
         
+        $sign_ins = $olddb->select("SELECT * FROM contacts.sign_ins WHERE contact_index IS NOT NULL AND workorder_index IS NOT NULL");
+        foreach($sign_ins as $sign_in){
+            if(isset($contacts_map[$sign_in->contact_index]) && isset($contacts_map[$sign_in->workorder_index])){
+                SignIn::create([
+                   'contact_id' =>  $contacts_map[$sign_in->contact_index],
+                   'order_id' =>  $contacts_map[$sign_in->workorder_index],
+                   'sign_in' => $sign_in->sign_in_time,
+                   'sign_out' => $sign_in->sign_out_time,
+                   'creator_id' => $admin->id,
+                   'updater_id' => $admin->id
+                ]);
+            }
+        }
         //Contact::where('login', 'paul')->first()->update(['login' => 'paul@waterscontracting.com']);
     }
 }
