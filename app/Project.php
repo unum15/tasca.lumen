@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     protected $fillable = [
+        'client_id',
         'name',
         'notes',
-		'property_id',
 		'contact_id',
         'open_date',
         'close_date', 
@@ -17,11 +17,11 @@ class Project extends Model
         'updater_id'
     ];
     
-    public function property(){
-        return $this->belongsTo('App\Property');
-    }
-    
     public function contact(){
         return $this->belongsTo('App\Contact');
+    }
+    
+    public function client(){
+        return $this->belongsTo('App\Client');
     }
 }

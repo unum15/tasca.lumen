@@ -14,7 +14,7 @@ class ProjectController extends Controller
      */
     private $validation = [
         'name' => 'string|min:1|max:255',
-		'property_id' => 'integer|exists:properties,id',
+		'client_id' => 'integer|exists:clients,id',
         'open_date' => 'date',
 		'contact_id' => 'integer|exists:contacts,id',
         'close_date' => 'nullable|date',
@@ -29,20 +29,14 @@ class ProjectController extends Controller
     public function index(Request $request){
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = Project::with('contact', 'property', 'property.client')
+        $items_query = Project::with('contact', 'client')
         ->orderBy('name');
-        $client_id = $request->input('client_id');
-        if($client_id){
-            $items_query->whereHas('property', function($q) use ($client_id){
-                $q->where('client_id', $client_id);
-            });
-        }
         $completed = $request->input('completed');
         if($completed == 'false'){
             error_log('completed');
             $items_query->whereNull('close_date');
         }
-        foreach($values as $filed => $value){
+        foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
         return $items_query->get();

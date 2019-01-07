@@ -18,6 +18,7 @@ class CreateTaskCategoriesTable extends Migration
             $table->string('name');
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();
+            $table->integer('task_type')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });

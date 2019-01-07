@@ -59,4 +59,8 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
             ->withTimestamps();
     }
     
+    public function logIns(){
+        return $this->hasMany('App\LogIn');
+    }
+    
 }

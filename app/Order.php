@@ -11,16 +11,16 @@ class Order extends Model
 		'order_billing_type_id',
         'name',
 		'date',
-        'approval_date',
         'completion_date',
         'expiration_date',
+        'approval_date',
+		'start_date',
         'description',
         'order_category_id',
         'order_priority_id',
         'order_type_id',
         'order_status_id',
         'order_action_id',
-        'start_date',
         'recurrences',
         'service_window',
         'location',
@@ -77,4 +77,10 @@ class Order extends Model
     function approver(){
         return $this->belongsTo('App\Contact');
     }
+    
+    public function properties(){
+        return $this->belongsToMany('App\Property')
+            ->withTimestamps();
+    }
+    
 }

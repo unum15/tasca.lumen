@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClockInsTable extends Migration
+class CreateTaskDatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,18 @@ class CreateClockInsTable extends Migration
      */
     public function up()
     {
-        Schema::create('clock_ins', function (Blueprint $table) {
+        Schema::create('task_dates', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('contact_id');
-            $table->timestamp('clock_in')->useCurrent();
-            $table->timestamp('clock_out')->nullable();
-            $table->text('notes')->nullable();
+            $table->integer('task_id');
+            $table->date('date')->nullable();
+            $table->time('time')->nullable();
             $table->integer('creator_id');
             $table->integer('updater_id');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            $table->foreign('contact_id')
-                ->references('id')->on('contacts')
-                ->onDelete('cascade');
         });
+        
+        DB::statement('ALTER TABLE task_dates ADD COLUMN hours INTERVAL');
     }
 
     /**
@@ -36,6 +34,6 @@ class CreateClockInsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clock_ins');
+        Schema::dropIfExists('task_dates');
     }
 }

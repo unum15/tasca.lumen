@@ -56,7 +56,7 @@ class OrderController extends Controller
     public function index(Request $request){
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = Order::with('project', 'project.property', 'project.contact', 'project.property.client')
+        $items_query = Order::with('project', 'project.contact', 'project.client')
         ->orderBy('date');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
@@ -92,14 +92,13 @@ class OrderController extends Controller
     public function read($id){
         $item = Order::with(
             'project',
-            'project.property',
             'project.contact',
             'project.contact.phoneNumbers',
             'project.contact.phoneNumbers.phoneNumberType',
-            'project.property.client',
-            'project.property.contacts',
-            'project.property.contacts.phoneNumbers',
-            'project.property.contacts.phoneNumbers.phoneNumberType',
+            'project.client',
+            'properties.contacts',
+            'properties.contacts.phoneNumbers',
+            'properties.contacts.phoneNumbers.phoneNumberType',
             'approver',
             'tasks',
             'tasks.taskCategory',

@@ -26,12 +26,9 @@ class CreateTasksTable extends Migration
             $table->integer('task_appointment_status_id')->nullable();
             $table->boolean('hide')->default(false);
             $table->string('day')->nullable();
-            $table->date('date')->nullable();
             $table->date('completion_date')->nullable();
-            $table->string('time')->nullable();
             $table->string('group')->nullable();
             $table->string('sort')->nullable();
-            $table->integer('job_hours')->nullable();
             $table->integer('crew_hours')->nullable();
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();

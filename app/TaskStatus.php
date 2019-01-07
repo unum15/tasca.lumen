@@ -9,8 +9,7 @@ class TaskStatus extends Model
 	protected $fillable = [
 		'name',
 		'notes',
-		'sort_order',
-        'default'
+		'sort_order'
 	];
 	
 	public function taskActions(){

@@ -28,7 +28,12 @@ class SignInController extends Controller
     public function index(Request $request){
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = SignIn::with('order', 'contact')
+        $items_query = SignIn::with(
+            'order',
+            'contact',
+            'order.project',
+            'order.project.client'
+        )
         ->orderBy('sign_in');
         foreach($values as $field => $value){
             $items_query->where($field, $value);

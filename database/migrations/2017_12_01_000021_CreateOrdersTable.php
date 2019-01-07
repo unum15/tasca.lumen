@@ -19,9 +19,10 @@ class CreateOrdersTable extends Migration
             $table->string('name')->nullable();
 			$table->integer('order_billing_type_id');
             $table->date('date')->nullable();
-            $table->date('approval_date')->nullable();
             $table->date('completion_date')->nullable();
             $table->date('expiration_date')->nullable();
+            $table->date('approval_date')->nullable();
+            $table->date('start_date')->nullable();
             $table->text('description')->nullable();
             $table->integer('progress_percentage')->nullable();
             $table->integer('contact_id')->nullable();
@@ -32,9 +33,6 @@ class CreateOrdersTable extends Migration
             $table->integer('order_type_id')->nullable();
             $table->integer('order_status_id')->nullable();
             $table->integer('order_action_id')->nullable();
-            $table->date('start_date')->nullable();
-            $table->integer('recurrences')->nullable();
-            $table->integer('service_window')->nullable();
             $table->text('location')->nullable();
             $table->text('instructions')->nullable();
             $table->text('notes')->nullable();
@@ -45,8 +43,13 @@ class CreateOrdersTable extends Migration
             $table->float('bid')->nullable();
             $table->integer('bid_plus_minus')->nullable();
             $table->string('invoice_number')->nullable();
-            $table->boolean('renewable');
+            $table->integer('service_window')->nullable();
+            $table->boolean('renewable')->default(false);
+            $table->integer('recurrences')->nullable();
+            $table->boolean('indefinite')->default(false);
+            //$table->interval('order_interval')->nullable();
             $table->integer('frequency')->nullable();
+            //$table->interval('renewal_interval')->nullable();
             $table->date('renewal_date')->nullable();
             $table->integer('notification_lead')->nullable();
             $table->text('renewal_message')->nullable();
@@ -55,6 +58,10 @@ class CreateOrdersTable extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
+        
+        
+        DB::statement('ALTER TABLE orders ADD COLUMN order_interval INTERVAL');
+        DB::statement('ALTER TABLE orders ADD COLUMN renewal_interval INTERVAL');
     }
 /*
     	'progress_percentage',		

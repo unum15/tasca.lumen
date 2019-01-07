@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrdersStatusesTable extends Migration
+class CreateOrderPropertiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateOrdersStatusesTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_statuses', function (Blueprint $table) {
+        Schema::create('order_property', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->text('notes')->nullable();
-            $table->integer('sort_order')->nullable();
-            $table->integer('order_billing_type_id')->nullable();
-            $table->boolean('allow_pending_work_order')->default('false');
-            $table->boolean('allow_work_order')->default('false');
+            $table->integer('order_id');
+            $table->integer('property_id');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
@@ -33,6 +29,6 @@ class CreateOrdersStatusesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_statuses');
+        Schema::dropIfExists('order_property');
     }
 }

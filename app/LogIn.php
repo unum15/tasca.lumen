@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TaskCategory extends Model
+class LogIn extends Model
 {
 	protected $fillable = [
-		'name',
-		'notes',
-		'sort_order',
-		'task_type_id'
+		'contact_id',
+		'bearer_token',
+        'user_agent',
+        'host'
 	];
 }

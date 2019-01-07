@@ -15,7 +15,15 @@ class CreateLogInsTable extends Migration
     {
         Schema::create('log_ins', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->integer('contact_id');
+            $table->binary('bearer_token')->nullable();
+            $table->string('user_agent')->nullable();
+            $table->string('host')->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+            $table->foreign('contact_id')
+                ->references('id')->on('contacts')
+                ->onDelete('cascade');
         });
     }
 

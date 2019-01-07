@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Contact;
+use App\LogIn;
 
 class AuthController extends Controller
 {
@@ -35,23 +36,57 @@ class AuthController extends Controller
 		if(!password_verify($password,$password_hash)){
 			return response()->json(['error' => 'invalid_credentials'], 401);
 		}
-		$user->api_token = bin2hex(openssl_random_pseudo_bytes(16));
-		$user->save();
-		return ['id' => $user->id, 'login' => $user->login, 'api_token' => $user->api_token];	
+		$bearer_token = bin2hex(openssl_random_pseudo_bytes(16));
+		$user_agent = $request->header('user-agent');
+		$host = $request->header('host');
+		LogIn::create([
+			'contact_id' => $user->id,
+			'bearer_token' => $bearer_token,
+			'user_agent' => $user_agent,
+			'host' => $host
+		]);
+		$user_array = $this->getReturnUserData($user->id);
+		$user_array['bearer_token'] = $bearer_token;
+		return $user_array;
 	}
 
-	public function unauth(){
+	public function unauth(Request $request){
 		$user = Auth::user();
 		if($user != null){
-			$user->api_token = null;
-			$user->save();
+			$bearer_token = $request->header('authorization');
+            $bearer_token = preg_replace('/^Bearer\s*/', '', $bearer_token);
+            LogIn::where('bearer_token', $bearer_token)->delete();
 		}
-		return $user;
+		return ['status' => 'success'];
 	}
 	
-	public function status(){
+	
+	public function status(Request $request){
+		error_log(print_r($request->header(),true));
 		$user = Auth::user();
-		return $user;
+		if($user){
+			$user = $this->getReturnUserData($user->id);
+			$user['status'] = 'active';
+			return $user;
+		}
+		else{
+			return ['status' => 'inactive'];
+		}
+	}
+	
+	
+	private function getReturnUserData($id){
+		$user = Contact::select([
+			'id',
+			'name',
+			'login',
+			'show_help',
+			'show_maximium_activity_level_id',
+			'default_window',
+			'fluid_containers'
+		])
+		->findOrFail($id);
+		return $user->toArray();
 	}
  
 }

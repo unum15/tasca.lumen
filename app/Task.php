@@ -53,4 +53,8 @@ class Task extends Model
     return $this->belongsTo('App\TaskType');
   }
   
+  public function dates(){
+    return $this->hasMany('App\TaskDate');
+  }
+  
 }

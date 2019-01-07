@@ -21,6 +21,7 @@ use App\Order;
 use App\OrderAction;
 use App\OrderBillingType;
 use App\OrderCategory;
+use App\OrderDate;
 use App\OrderPriority;
 use App\OrderStatus;
 use App\OrderType;
@@ -29,6 +30,7 @@ use App\SignIn;
 use App\Task;
 use App\TaskAction;
 use App\TaskAppointmentStatus;
+use App\TaskDate;
 use App\TaskStatus;
 use App\TaskCategory;
 
@@ -817,9 +819,9 @@ class MigrateOldDataCommand extends Command
                         $approver_id = $contacts_map[$work_order->approved_by];
                     }
                     $project = Project::create([
+                        'client_id' => $new_client->id,
                         'name' => !empty($work_order->description) ? $work_order->description : 'Project #' . $project_number++,
                         'notes' => null,
-                        'property_id' => $new_property->id,
                         'contact_id' => $contact_id,
                         'open_date' => $work_order->workorder_date,
                         'close_date' => !empty($work_order->date_completed) ? $work_order->date_completed: $work_order->expires, 
@@ -838,11 +840,12 @@ class MigrateOldDataCommand extends Command
                         'description' => !empty($work_order->description) ? $work_order->description : 'Order #' . $work_order->workorder_index,
                         'name' => $work_order->description,
                         'order_date' => $work_order->workorder_date,
-                        'approval_date' => $work_order->approval_date,
                         'renewable' => false,
                         'order_billing_type_id' => $work_order_type_id,
                         'completion_date' => $work_order->date_completed,
                         'expiration_date' => $work_order->expires,
+                        'approval_date' => $work_order->approval_date,
+                        'start_date' => $work_order->approval_date,
                         'order_priority_id' => $order_priority,
                         'order_status_id' => $order_status,
                         'order_category_id' => $order_type,
@@ -867,6 +870,9 @@ class MigrateOldDataCommand extends Command
                         'creator_id' => $admin->id,
                         'updater_id' => $admin->id
                     ]);
+                    
+                    $new_work_order->properties()->save($new_property);
+                    
                     
                     $work_orders_map[$work_order->workorder_index] = $new_work_order->id;
                     $task_sql = "
@@ -938,10 +944,7 @@ class MigrateOldDataCommand extends Command
                             'task_appointment_status_id' => $task_appointment_status_id,
                             'hide' => $task->day,
                             'day' => $task->day,
-                            'date' => $task->date,
                             'completion_date' => $work_order->date_completed,
-                            'time' => $task->time,
-                            'job_hours' => $task->job_hours,
                             'crew_hours' => $task->crew_hours,
                             'notes' => $task->notes,
                             'sort_order' => $sort_order,
@@ -949,6 +952,15 @@ class MigrateOldDataCommand extends Command
                             'creator_id' => $admin->id,
                             'updater_id' => $admin->id
                         ]);
+                        TaskDate::create([
+                               'task_id' => $new_task->id,
+                               'date' => $task->date,
+                               'time' => $task->time,
+                               'hours' => $task->job_hours ? $task->job_hours.' hours' : null,
+                               'creator_id' => $admin->id,
+                                'updater_id' => $admin->id
+                            ]);
+                        
                     }
                 }
                 
