@@ -56,7 +56,7 @@ class OrderController extends Controller
     public function index(Request $request){
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = Order::with('project', 'project.contact', 'project.client')
+        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties')
         ->orderBy('date');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
@@ -86,6 +86,8 @@ class OrderController extends Controller
         $values['updater_id'] = $request->user()->id;
         $item = Order::create($values);
         $item = Order::findOrFail($item->id);
+        $properties = $request->only('properties');
+        $item->properties()->sync($properties['properties']);
         return $item;
     }
     
@@ -96,6 +98,7 @@ class OrderController extends Controller
             'project.contact.phoneNumbers',
             'project.contact.phoneNumbers.phoneNumberType',
             'project.client',
+            'properties',
             'properties.contacts',
             'properties.contacts.phoneNumbers',
             'properties.contacts.phoneNumbers.phoneNumberType',
@@ -124,6 +127,8 @@ class OrderController extends Controller
         $values = $request->only(array_keys($this->validation));
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
+        $properties = $request->only('properties');
+        $item->properties()->sync($properties['properties']);
         return $item;
     }
     
