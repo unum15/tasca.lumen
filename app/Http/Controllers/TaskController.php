@@ -23,11 +23,8 @@ class TaskController extends Controller
         'task_appointment_status_id' => 'nullable|integer:exists:task_appointment_statuses,id',
         'task_action_id' => 'nullable|integer:exists:task_actions,id',
         'task_category_id' => 'nullable|integer:exists:task_category,id',
-        'day' => 'nullable|string|max:255',
-        'date' => 'nullable|date',
         'completion_date' => 'nullable|date',
-        'time' => 'nullable|string|max:255',
-        'job_hours' => 'nullable|integer',
+        'task_hours' => 'nullable|integer',
         'crew_hours' => 'nullable|integer',
         'notes' => 'nullable|string|max:255',
         'sort_order' => 'nullable|integer',
@@ -101,7 +98,8 @@ class TaskController extends Controller
             'TaskAppointmentStatus',
             'TaskAction',
             'order.orderPriority',
-            'order.orderCategory'
+            'order.orderCategory',
+            'dates'
         )
         ->findOrFail($id);
         return $item;

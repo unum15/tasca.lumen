@@ -62,7 +62,6 @@ class AuthController extends Controller
 	
 	
 	public function status(Request $request){
-		error_log(print_r($request->header(),true));
 		$user = Auth::user();
 		if($user){
 			$user = $this->getReturnUserData($user->id);

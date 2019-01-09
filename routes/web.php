@@ -181,6 +181,12 @@ $router->get('/task/{id:[0-9]+}', 'TaskController@read');
 $router->patch('/task/{id:[0-9]+}', 'TaskController@update');
 $router->delete('/task/{id:[0-9]+}', 'TaskController@delete');
 
+$router->get('/task_dates', 'TaskDateController@index');
+$router->post('/task_date', 'TaskDateController@create');
+$router->get('/task_date/{id:[0-9]+}', 'TaskDateController@read');
+$router->patch('/task_date/{id:[0-9]+}', 'TaskDateController@update');
+$router->delete('/task_date/{id:[0-9]+}', 'TaskDateController@delete');
+
 $router->get('/sign_ins', 'SignInController@index');
 $router->post('/sign_in', 'SignInController@create');
 $router->get('/sign_in/{id:[0-9]+}', 'SignInController@read');

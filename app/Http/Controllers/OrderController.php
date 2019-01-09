@@ -121,7 +121,6 @@ class OrderController extends Controller
     }
     
     public function update($id, Request $request){
-        error_log(print_r($request, true));
         $this->validate($request, $this->validation);     
         $item = Order::findOrFail($id);
         $values = $request->only(array_keys($this->validation));

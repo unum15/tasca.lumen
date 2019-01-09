@@ -943,22 +943,23 @@ class MigrateOldDataCommand extends Command
                             'task_category_id' => $task_category_id,
                             'task_appointment_status_id' => $task_appointment_status_id,
                             'hide' => $task->day,
-                            'day' => $task->day,
                             'completion_date' => $work_order->date_completed,
                             'crew_hours' => $task->crew_hours,
+                            'task_hours' => $task->job_hours ? $task->job_hours.' hours' : null,
                             'notes' => $task->notes,
                             'sort_order' => $sort_order,
                             'group' => $group,
                             'creator_id' => $admin->id,
                             'updater_id' => $admin->id
                         ]);
+                        
                         TaskDate::create([
                                'task_id' => $new_task->id,
                                'date' => $task->date,
                                'time' => $task->time,
-                               'hours' => $task->job_hours ? $task->job_hours.' hours' : null,
+                               'day' => $task->day,
                                'creator_id' => $admin->id,
-                                'updater_id' => $admin->id
+                               'updater_id' => $admin->id
                             ]);
                         
                     }

@@ -33,7 +33,6 @@ class ProjectController extends Controller
         ->orderBy('name');
         $completed = $request->input('completed');
         if($completed == 'false'){
-            error_log('completed');
             $items_query->whereNull('close_date');
         }
         foreach($values as $field => $value){
@@ -45,7 +44,6 @@ class ProjectController extends Controller
     public function create(Request $request){
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        error_log(print_r($values, true));
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = Project::create($values);

@@ -18,6 +18,7 @@ class CreateTaskDatesTable extends Migration
             $table->integer('task_id');
             $table->date('date')->nullable();
             $table->time('time')->nullable();
+            $table->string('day')->nullable();
             $table->integer('creator_id');
             $table->integer('updater_id');
             $table->timestamp('created_at')->useCurrent();

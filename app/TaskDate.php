@@ -10,8 +10,12 @@ class TaskDate extends Model
 		'task_id',
 		'date',
 		'time',
-        'hours',
+        'day',
 		'creator_id',
 		'updater_id'
 	];
+	
+	public function task(){
+		return $this->belongsTo('App\Task');
+	}
 }
