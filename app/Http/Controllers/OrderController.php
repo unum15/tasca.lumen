@@ -31,6 +31,7 @@ class OrderController extends Controller
         'start_date' => 'nullable|date',
         'recurrences' => 'nullable|integer',
         'service_window' => 'nullable|integer',
+        'indefinite' => 'boolean',
         'location' => 'nullable|string|max:255',
         'instructions' => 'nullable|string|max:255',
         'notes' => 'nullable|string|max:255',
@@ -45,7 +46,9 @@ class OrderController extends Controller
         'frequency' => 'nullable|max:255',
         'renewal_date' => 'nullable|date',
         'notification_lead' => 'nullable|max:255',
-        'renewal_message' => 'nullable|string|max:255'
+        'renewal_message' => 'nullable|string|max:255',
+        'order_interval' => 'nullable|string|max:255',
+        'renewal_interval' => 'nullable|string|max:255'
     ];
     
     public function __construct()
@@ -121,9 +124,11 @@ class OrderController extends Controller
     }
     
     public function update($id, Request $request){
+        error_log(print_r($request->all(),true));
         $this->validate($request, $this->validation);     
         $item = Order::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
+        error_log(print_r($values, true));
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         $properties = $request->only('properties');

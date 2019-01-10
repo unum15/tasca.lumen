@@ -25,7 +25,7 @@ class CreateContactsTable extends Migration
             $table->string('google_calendar_id')->nullable();
             $table->boolean('show_help')->default(true);
             $table->integer('show_maximium_activity_level_id')->nullable();
-            $table->integer('default_window')->default(7);
+            $table->integer('default_service_window')->default(7);
             $table->boolean('fluid_containers')->default(true);
             $table->integer('creator_id');
             $table->integer('updater_id');
