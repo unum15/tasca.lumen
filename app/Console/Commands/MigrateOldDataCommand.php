@@ -32,6 +32,7 @@ use App\TaskAction;
 use App\TaskAppointmentStatus;
 use App\TaskDate;
 use App\TaskStatus;
+use App\TaskType;
 use App\TaskCategory;
 
 class MigrateOldDataCommand extends Command
@@ -308,8 +309,26 @@ class MigrateOldDataCommand extends Command
         
         
         $names = [
-            "Waiting Bid" => [
-                "actions" => [
+            "Waiting Bid",
+            "Bidded",
+            "Waiting Approval",
+            "Approved",
+            "Call Back",
+            "Will Call Back",
+            "On Hold",
+            "Completed",
+            "Pre Bid"
+        ];
+        $sort = 1;
+        foreach($names as $name){
+            $status = OrderStatus::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+        
+        
+        $actions => [
                     "Contact",
                     "Site Visit",
                     "Bid/Price",
@@ -321,58 +340,15 @@ class MigrateOldDataCommand extends Command
                     "Bill",
                     "Other",
                     "Close Out"
-                ],
-                "allow_work_order" => false
-            ],
-            "Bidded" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "Waiting Approval" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "Approved" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "Call Back" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "Will Call Back" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "On Hold" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "Completed" => [
-                "actions" => [],
-                "allow_work_order" => true
-                        ],
-            "Pre Bid" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ]
-        ];
-        $sort = 1;
-        foreach($names as $name => $settings){
-            $status = OrderStatus::create([
-                'name' => $name,
-                'sort_order' => $sort++,
-                'allow_work_order' => $settings['allow_work_order']
-            ]);
-            $sort_action = 1;
-            foreach($settings['actions'] as $action){
-                $status->orderActions()->create([
-                    'name' => $action,
-                    'sort_order' => $sort_action++
-                ]);
-            }
-        }
+                ];
         
+        $sort = 1;
+        foreach($actions as $name){
+            $action = OrderAction::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
                 
        $names = [
             "T & M",
@@ -421,49 +397,58 @@ class MigrateOldDataCommand extends Command
             ]);
         }
 
-        
         $names = [
-            "Active" => [
-                "Call/Email",
-                "Waiting for INFO",
-                "Schedule",
-                "Bill",
-                "Close Out",
-                "Wait",
-                "Wating of AP",
-                "ReSchedule",
-                "Report",
-                "Next Task",
-                "Bid/Price"
-            ],
-            "Next Action" => [
-            ],
-            "Pending" => [
-            ],
-            "Done" => [
-            ],
-            "Cancelled" => [
-            ],
-            "Inprogress" => [
-            ],
-            "Waiting on Customer" => [
-            ]
+            "Non Billing",
+            "Billing"
         ];
         $sort = 1;
-        foreach($names as $name => $actions){
+        foreach($names as $name){
+            TaskType::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+
+        
+        
+        $names = [
+            "Active",
+            "Next Action",
+            "Pending",
+            "Done",
+            "Cancelled",
+            "Inprogress",
+            "Waiting on Customer"
+        ];
+               
+        $sort = 1;
+        foreach($names as $name){
             $status = TaskStatus::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
-            $sort_action = 1;
-            foreach($actions as $action){
-                $status->taskActions()->create([
-                    'name' => $action,
-                    'sort_order' => $sort_action++
-                ]);
-            }
+            
         }
-        
+        $actions = [
+            "Call/Email",
+            "Waiting for INFO",
+            "Schedule",
+            "Bill",
+            "Close Out",
+            "Wait",
+            "Wating of AP",
+            "ReSchedule",
+            "Report",
+            "Next Task",
+            "Bid/Price"
+        ];
+        $sort = 1;
+        foreach($actions as $action){
+            $status->taskActions()->create([
+               'name' => $action,
+               'sort_order' => $sort++
+            ]);
+        }
         $names = [
             "Stop By",
             "Clean Up",

@@ -18,9 +18,6 @@ class CreateOrdersStatusesTable extends Migration
             $table->string('name');
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();
-            $table->integer('order_billing_type_id')->nullable();
-            $table->boolean('allow_pending_work_order')->default('false');
-            $table->boolean('allow_work_order')->default('false');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });

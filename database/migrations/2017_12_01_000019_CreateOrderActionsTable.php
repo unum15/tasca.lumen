@@ -15,7 +15,6 @@ class CreateOrderActionsTable extends Migration
     {
         Schema::create('order_actions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('order_status_id');
             $table->string('name');
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();
