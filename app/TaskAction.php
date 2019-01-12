@@ -9,12 +9,10 @@ class TaskAction extends Model
 	protected $fillable = [
 		'name',
 		'notes',
-		'sort_order',
-        'default',
-		'task_status_id'
+		'sort_order'
 	];
 	
-	public function taskStatus(){
-		return $this->belongsTo('App\TaskStatus');
+	public function taskTypes(){
+		return $this->belongsToMany('App\TaskType');
 	}
 }

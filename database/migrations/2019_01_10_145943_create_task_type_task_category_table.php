@@ -14,8 +14,17 @@ class CreateTaskTypeTaskCategoryTable extends Migration
     public function up()
     {
         Schema::create('task_type_task_category', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+            $table->integer('task_type_id');
+            $table->integer('task_category_id');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();                        
+            $table->unique(['task_type_id', 'task_category_id']);
+            $table->foreign('task_type_id')
+                ->references('id')->on('task_types')
+                ->onDelete('cascade');
+            $table->foreign('task_category_id')
+                ->references('id')->on('task_categories')
+                ->onDelete('cascade');
         });
     }
 

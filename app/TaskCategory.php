@@ -9,7 +9,10 @@ class TaskCategory extends Model
 	protected $fillable = [
 		'name',
 		'notes',
-		'sort_order',
-		'task_type_id'
+		'sort_order'
 	];
+	
+	public function taskTypes(){
+		return $this->belongsToMany('App\TaskType');
+	}
 }

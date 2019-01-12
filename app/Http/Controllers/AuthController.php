@@ -81,7 +81,7 @@ class AuthController extends Controller
 			'login',
 			'show_help',
 			'show_maximium_activity_level_id',
-			'default_window',
+			'default_service_window',
 			'fluid_containers'
 		])
 		->findOrFail($id);

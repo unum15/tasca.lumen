@@ -14,8 +14,17 @@ class CreateOrderActionOrderStatusTable extends Migration
     public function up()
     {
         Schema::create('order_action_order_status', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+            $table->integer('order_action_id');
+            $table->integer('order_status_id');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();                        
+            $table->unique(['order_action_id', 'order_status_id']);
+            $table->foreign('order_action_id')
+                ->references('id')->on('order_actions')
+                ->onDelete('cascade');
+            $table->foreign('order_status_id')
+                ->references('id')->on('order_statuses')
+                ->onDelete('cascade');
         });
     }
 
