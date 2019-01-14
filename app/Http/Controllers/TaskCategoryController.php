@@ -24,7 +24,7 @@ class TaskCategoryController extends Controller
     }
 
     public function index(){
-        $items = TaskCategory::All();
+        $items = TaskCategory::with('taskTypes')->get();
         return $items;
     }
     

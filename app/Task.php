@@ -10,7 +10,6 @@ class Task extends Model
       'order_id',
       'name',
       'description',
-      'billable',
       'task_type_id',
       'task_status_id',
       'task_action_id',

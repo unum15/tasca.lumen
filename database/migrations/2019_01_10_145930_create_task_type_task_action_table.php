@@ -13,7 +13,7 @@ class CreateTaskTypeTaskActionTable extends Migration
      */
     public function up()
     {
-        Schema::create('task_type_task_action', function (Blueprint $table) {
+        Schema::create('task_action_task_type', function (Blueprint $table) {
             $table->integer('task_type_id');
             $table->integer('task_action_id');
             $table->timestamp('created_at')->useCurrent();
@@ -35,6 +35,6 @@ class CreateTaskTypeTaskActionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('task_type_task_action');
+        Schema::dropIfExists('task_action_task_type');
     }
 }

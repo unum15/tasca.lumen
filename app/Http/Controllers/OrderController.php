@@ -130,6 +130,7 @@ class OrderController extends Controller
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         $properties = $request->only('properties');
+        $properties = array_filter($properties);
         $item->properties()->sync($properties['properties']);
         return $item;
     }

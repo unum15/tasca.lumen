@@ -319,7 +319,6 @@ class MigrateOldDataCommand extends Command
             "Waiting Approval",
             "Approved",
             "Call Back",
-            "On Hold",
             "Completed",
             "Pre Bid"
         ];
@@ -337,13 +336,13 @@ class MigrateOldDataCommand extends Command
                     "Site Visit" => [2],
                     "Bid/Price" => [2],
                     "Design" => [],
-                    "Get P.O." => [3],
-                    "Follow Up" => [1,2,3],
+                    "Get P.O." => [4],
+                    "Follow Up" => [1,2,4],
                     "To Do" => [],
                     "Report" => [],
                     "Bill" => [],
                     "Other" => [],
-                    "Close Out" => [1,3,4]
+                    "Close Out" => [1,4,5]
                 ];
         
         $sort = 1;
@@ -416,22 +415,29 @@ class MigrateOldDataCommand extends Command
         }
 
         $names = [
+            "In Review" => [1],
+            "Completed" => [1],
+            "Call Off" => [1],
             "Active" => [],
             "Next Action" => [],
             "Pending" => [2],
+            
+            
+            "In Progress" => [2],
             "Done" => [2],
+            "On Hold" => [2],
             "Cancelled" => [2],
-            "Inprogress" => [2],
             "Waiting on Customer" => []
         ];
 
+        
         $sort = 1;
         foreach($names as $name => $types){
             $status = TaskStatus::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
-            
+            $status->taskTypes()->sync($types);
         }
         $actions = [
             "Call/Email" => [1],
@@ -447,11 +453,12 @@ class MigrateOldDataCommand extends Command
             "Bid/Price" => []
         ];
         $sort = 1;
-        foreach($actions as $action => $types){
-            TaskAction::create([
-               'name' => $action,
+        foreach($actions as $name => $types){
+            $action = TaskAction::create([
+               'name' => $name,
                'sort_order' => $sort++
             ]);
+            $action->taskTypes()->sync($types);
         }
         $names = [
             "Stop By" => [],
@@ -479,6 +486,7 @@ class MigrateOldDataCommand extends Command
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
+            $category->taskTypes()->sync($types);
         }
         
         //set defaults for forms
