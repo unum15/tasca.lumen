@@ -24,7 +24,7 @@ class TaskActionController extends Controller
     }
 
     public function index(){
-        $items = TaskAction::All();
+        $items = TaskAction::with('taskTypes')->get();
         return $items;
     }
     

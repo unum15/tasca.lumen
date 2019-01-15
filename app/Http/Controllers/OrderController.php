@@ -124,14 +124,13 @@ class OrderController extends Controller
     }
     
     public function update($id, Request $request){
-        error_log(print_r($request->all(),true));
         $this->validate($request, $this->validation);     
         $item = Order::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
-        error_log(print_r($values, true));
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         $properties = $request->only('properties');
+        $properties = array_filter($properties);
         $item->properties()->sync($properties['properties']);
         return $item;
     }

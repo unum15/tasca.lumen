@@ -32,6 +32,7 @@ use App\TaskAction;
 use App\TaskAppointmentStatus;
 use App\TaskDate;
 use App\TaskStatus;
+use App\TaskType;
 use App\TaskCategory;
 
 class MigrateOldDataCommand extends Command
@@ -308,74 +309,53 @@ class MigrateOldDataCommand extends Command
         
         
         $names = [
-            "Waiting Bid" => [
-                "actions" => [
-                    "Contact",
-                    "Site Visit",
-                    "Bid/Price",
-                    "Design",
-                    "Get P.O.",
-                    "Follow Up",
-                    "To Do",
-                    "Report",
-                    "Bill",
-                    "Other",
-                    "Close Out"
-                ],
-                "allow_work_order" => false
-            ],
-            "Bidded" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "Waiting Approval" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "Approved" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "Call Back" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "Will Call Back" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "On Hold" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ],
-            "Completed" => [
-                "actions" => [],
-                "allow_work_order" => true
-                        ],
-            "Pre Bid" => [
-                "actions" => [],
-                "allow_work_order" => false
-                        ]
+            "Will Call Back",
+            "Reviewing",
+            "Renewing",
+            "On Hold",
+            "Canceled",
+            "Waiting Bid",
+            "Bidded",
+            "Waiting Approval",
+            "Approved",
+            "Call Back",
+            "Completed",
+            "Pre Bid"
         ];
         $sort = 1;
-        foreach($names as $name => $settings){
+        foreach($names as $name){
             $status = OrderStatus::create([
                 'name' => $name,
-                'sort_order' => $sort++,
-                'allow_work_order' => $settings['allow_work_order']
+                'sort_order' => $sort++
             ]);
-            $sort_action = 1;
-            foreach($settings['actions'] as $action){
-                $status->orderActions()->create([
-                    'name' => $action,
-                    'sort_order' => $sort_action++
-                ]);
-            }
         }
         
+        
+        $actions = [
+                    "Contact" => [3],
+                    "Site Visit" => [2],
+                    "Bid/Price" => [2],
+                    "Design" => [],
+                    "Get P.O." => [4],
+                    "Follow Up" => [1,2,4],
+                    "To Do" => [],
+                    "Report" => [],
+                    "Bill" => [],
+                    "Other" => [],
+                    "Close Out" => [1,4,5]
+                ];
+        
+        $sort = 1;
+        foreach($actions as $name => $statuses){
+            $action = OrderAction::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+            
+            $action->orderStatuses()->sync($statuses);
+        }
                 
        $names = [
-            "T & M",
             "Service Order",
             "Pending Work Order",
             "Work Order"
@@ -408,6 +388,7 @@ class MigrateOldDataCommand extends Command
         $work_order_type_id = OrderBillingType::where('name', 'Work Order')->first()->id;
         
         $names = [
+            "T & M",
             "Lead",
             "Quote",
             "Estimate",
@@ -421,75 +402,92 @@ class MigrateOldDataCommand extends Command
             ]);
         }
 
-        
         $names = [
-            "Active" => [
-                "Call/Email",
-                "Waiting for INFO",
-                "Schedule",
-                "Bill",
-                "Close Out",
-                "Wait",
-                "Wating of AP",
-                "ReSchedule",
-                "Report",
-                "Next Task",
-                "Bid/Price"
-            ],
-            "Next Action" => [
-            ],
-            "Pending" => [
-            ],
-            "Done" => [
-            ],
-            "Cancelled" => [
-            ],
-            "Inprogress" => [
-            ],
-            "Waiting on Customer" => [
-            ]
+            "Non Billing",
+            "Billing"
         ];
         $sort = 1;
-        foreach($names as $name => $actions){
+        foreach($names as $name){
+            TaskType::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+
+        $names = [
+            "In Review" => [1],
+            "Completed" => [1],
+            "Call Off" => [1],
+            "Active" => [],
+            "Next Action" => [],
+            "Pending" => [2],
+            
+            
+            "In Progress" => [2],
+            "Done" => [2],
+            "On Hold" => [2],
+            "Cancelled" => [2],
+            "Waiting on Customer" => []
+        ];
+
+        
+        $sort = 1;
+        foreach($names as $name => $types){
             $status = TaskStatus::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
-            $sort_action = 1;
-            foreach($actions as $action){
-                $status->taskActions()->create([
-                    'name' => $action,
-                    'sort_order' => $sort_action++
-                ]);
-            }
+            $status->taskTypes()->sync($types);
         }
-        
-        $names = [
-            "Stop By",
-            "Clean Up",
-            "Bed Maintance",
-            "Weekly Lawn Care",
-            "Fertilizing",
-            "Spraying",
-            "Other",
-            "Errand",
-            "Office",
-            "Appointment",
-            "Audit",
-            "Winterizing",
-            "Tune Up",
-            "Startup",
-            "Day Job",
-            "Repair",
-            "Service Call",
-            "Ditch Witch"
+        $actions = [
+            "Call/Email" => [1],
+            "Waiting for INFO" => [],
+            "Schedule" => [1, 2],
+            "Bill" => [2],
+            "Close Out" => [1],
+            "Wait" => [],
+            "Wating of AP" => [],
+            "ReSchedule" => [],
+            "Report" => [1, 2],
+            "Next Task" => [],
+            "Bid/Price" => []
         ];
         $sort = 1;
-        foreach($names as $name){
-            TaskCategory::create([
+        foreach($actions as $name => $types){
+            $action = TaskAction::create([
+               'name' => $name,
+               'sort_order' => $sort++
+            ]);
+            $action->taskTypes()->sync($types);
+        }
+        $names = [
+            "Site Visit" => [1],
+            "Clean Up"  => [],
+            "Bed Maintance" => [],
+            "Weekly Lawn Care"  => [],
+            "Fertilizing" => [],
+            "Spraying" => [],
+            "Other" => [],
+            "Appointment" => [1],
+            "Office" => [1],
+            "Errand" => [1],
+            "Audit" => [],
+            "Winterizing" => [],
+            "Tune Up" => [],
+            "Startup" => [],
+            "Evaluation" => [2],
+            "Day Task" => [2],
+            "Repair" => [],
+            "Service Task" => [2],
+            "Ditch Witch" => []
+        ];
+        $sort = 1;
+        foreach($names as $name => $types){
+            $category = TaskCategory::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
+            $category->taskTypes()->sync($types);
         }
         
         //set defaults for forms
@@ -547,14 +545,12 @@ class MigrateOldDataCommand extends Command
         ]);
         Setting::create([
             'name' => 'default_task_category_id',
-            'value' => TaskCategory::where('name', 'Service Call')->first()->id
+            'value' => TaskCategory::where('name', 'Service Task')->first()->id
         ]);
         Setting::create([
             'name' => 'default_order_type_id',
             'value' => OrderType::where('name', 'Estimate')->first()->id
         ]);
-
-        OrderStatus::where('name', 'Completed')->first()->update(['allow_work_order' => true]);  
         
         $olddb = DB::connection('pgsql_old');
         
@@ -612,6 +608,15 @@ class MigrateOldDataCommand extends Command
         $order_statuses = OrderStatus::pluck('name', 'id');
         $order_types = OrderType::pluck('name', 'id');
         
+        $order_action_closed = $order_actions->search('Close Out');
+        $order_status_completed = $order_statuses->search('Completed');
+        $order_status_cancelled = $order_statuses->search('Cancelled');
+        
+        
+        $task_status_done = TaskStatus::where('name', 'Done')->first()->id;
+        $task_status_cancelled = TaskStatus::where('name', 'Cancelled')->first()->id;
+        $task_action_close = TaskAction::where('name', 'Close Out')->first()->id;
+
         $contacts_map = [];
         $work_orders_map = [];
         
@@ -848,9 +853,9 @@ class MigrateOldDataCommand extends Command
                         'approval_date' => $work_order->approval_date,
                         'start_date' => $work_order->approval_date,
                         'order_priority_id' => $order_priority,
-                        'order_status_id' => $order_status,
+                        'order_status_id' => !empty($work_order->date_completed) ? $order_status_completed: !empty($work_order->expires) ? $order_status_cancelled : $order_status,
                         'order_category_id' => $order_type,
-                        'order_action_id' => $order_action,
+                        'order_action_id' => !empty($work_order->date_completed) || !empty($work_order->expires) ? $order_action_closed: $order_action,
                         'work_type_id' => null,
                         'crew' => null,
                         'total_hours' => $work_order->work_hours,
@@ -937,10 +942,11 @@ class MigrateOldDataCommand extends Command
                         }
                         $new_task = Task::create([
                             'order_id' => $new_work_order->id,
+                            'name' => $task->description,
                             'description' => $task->description,
-                            'billable' => true,
-                            'task_status_id' => $task_status_id,
-                            'task_action_id' => $task_action_id,
+                            'task_type_id' => 2,
+                            'task_status_id' => !empty($work_order->date_completed) ? $task_status_done: !empty($work_order->expires) ? $task_status_cancelled : $task_status_id,
+                            'task_action_id' => !empty($work_order->date_completed) || !empty($work_order->expires) ? $task_action_close: $task_action_id,
                             'task_category_id' => $task_category_id,
                             'task_appointment_status_id' => $task_appointment_status_id,
                             'hide' => $task->day,

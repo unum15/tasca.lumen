@@ -19,7 +19,7 @@ class OrderActionController extends Controller
     }
 
     public function index(){
-        $items = OrderAction::All();
+        $items = OrderAction::with('orderStatuses')->get();
         return $items;
     }
     

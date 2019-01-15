@@ -12,7 +12,7 @@ class TaskStatus extends Model
 		'sort_order'
 	];
 	
-	public function taskActions(){
-        return $this->hasMany('App\TaskAction');
-    }	
+	public function taskTypes(){
+		return $this->belongsToMany('App\TaskType');
+	}
 }

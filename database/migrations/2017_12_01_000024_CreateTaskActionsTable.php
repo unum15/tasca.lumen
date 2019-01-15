@@ -15,7 +15,6 @@ class CreateTaskActionsTable extends Migration
     {
         Schema::create('task_actions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('task_status_id');
             $table->string('name');
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();

@@ -13,8 +13,8 @@ class OrderAction extends Model
 		'sort_order'
 	];
 	
-	public function orderStatus(){
-		return $this->belongsTo('App\OrderStatus');
+	public function orderStatuses(){
+		return $this->belongsToMany('App\OrderStatus');
 	}
     
 }
