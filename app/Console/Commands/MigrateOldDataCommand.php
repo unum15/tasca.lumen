@@ -461,23 +461,24 @@ class MigrateOldDataCommand extends Command
             $action->taskTypes()->sync($types);
         }
         $names = [
-            "Stop By" => [],
+            "Site Visit" => [1],
             "Clean Up"  => [],
             "Bed Maintance" => [],
             "Weekly Lawn Care"  => [],
             "Fertilizing" => [],
             "Spraying" => [],
             "Other" => [],
-            "Errand" => [],
-            "Office" => [],
-            "Appointment" => [],
+            "Appointment" => [1],
+            "Office" => [1],
+            "Errand" => [1],
             "Audit" => [],
             "Winterizing" => [],
             "Tune Up" => [],
             "Startup" => [],
-            "Day Job" => [],
+            "Evaluation" => [2],
+            "Day Task" => [2],
             "Repair" => [],
-            "Service Call" => [],
+            "Service Task" => [2],
             "Ditch Witch" => []
         ];
         $sort = 1;
@@ -544,7 +545,7 @@ class MigrateOldDataCommand extends Command
         ]);
         Setting::create([
             'name' => 'default_task_category_id',
-            'value' => TaskCategory::where('name', 'Service Call')->first()->id
+            'value' => TaskCategory::where('name', 'Service Task')->first()->id
         ]);
         Setting::create([
             'name' => 'default_order_type_id',
@@ -607,6 +608,15 @@ class MigrateOldDataCommand extends Command
         $order_statuses = OrderStatus::pluck('name', 'id');
         $order_types = OrderType::pluck('name', 'id');
         
+        $order_action_closed = $order_actions->search('Close Out');
+        $order_status_completed = $order_statuses->search('Completed');
+        $order_status_cancelled = $order_statuses->search('Cancelled');
+        
+        
+        $task_status_done = TaskStatus::where('name', 'Done')->first()->id;
+        $task_status_cancelled = TaskStatus::where('name', 'Cancelled')->first()->id;
+        $task_action_close = TaskAction::where('name', 'Close Out')->first()->id;
+
         $contacts_map = [];
         $work_orders_map = [];
         
@@ -843,9 +853,9 @@ class MigrateOldDataCommand extends Command
                         'approval_date' => $work_order->approval_date,
                         'start_date' => $work_order->approval_date,
                         'order_priority_id' => $order_priority,
-                        'order_status_id' => $order_status,
+                        'order_status_id' => !empty($work_order->date_completed) ? $order_status_completed: !empty($work_order->expires) ? $order_status_cancelled : $order_status,
                         'order_category_id' => $order_type,
-                        'order_action_id' => $order_action,
+                        'order_action_id' => !empty($work_order->date_completed) || !empty($work_order->expires) ? $order_action_closed: $order_action,
                         'work_type_id' => null,
                         'crew' => null,
                         'total_hours' => $work_order->work_hours,
@@ -932,10 +942,11 @@ class MigrateOldDataCommand extends Command
                         }
                         $new_task = Task::create([
                             'order_id' => $new_work_order->id,
+                            'name' => $task->description,
                             'description' => $task->description,
-                            'task_type' => 2,
-                            'task_status_id' => $task_status_id,
-                            'task_action_id' => $task_action_id,
+                            'task_type_id' => 2,
+                            'task_status_id' => !empty($work_order->date_completed) ? $task_status_done: !empty($work_order->expires) ? $task_status_cancelled : $task_status_id,
+                            'task_action_id' => !empty($work_order->date_completed) || !empty($work_order->expires) ? $task_action_close: $task_action_id,
                             'task_category_id' => $task_category_id,
                             'task_appointment_status_id' => $task_appointment_status_id,
                             'hide' => $task->day,

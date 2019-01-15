@@ -24,7 +24,7 @@ class TaskStatusController extends Controller
     }
 
     public function index(){
-        $items = TaskStatus::All();
+        $items = TaskStatus::with('taskTypes')->get();
         return $items;
     }
     
