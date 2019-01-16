@@ -23,6 +23,7 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
         'show_help',
         'show_maximium_activity_level_id',
         'default_service_window',
+        'pending_days_out',
 		'creator_id',
 		'updater_id',
         'google_calendar_token',

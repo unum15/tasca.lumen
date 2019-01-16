@@ -385,6 +385,8 @@ class MigrateOldDataCommand extends Command
         }
 
         
+        $service_order_type_id = OrderBillingType::where('name', 'Service Order')->first()->id;
+        $pending_work_order_type_id = OrderBillingType::where('name', 'Pending Work Order')->first()->id;
         $work_order_type_id = OrderBillingType::where('name', 'Work Order')->first()->id;
         
         $names = [
@@ -847,7 +849,7 @@ class MigrateOldDataCommand extends Command
                         'name' => $work_order->description,
                         'order_date' => $work_order->workorder_date,
                         'renewable' => false,
-                        'order_billing_type_id' => $work_order_type_id,
+                        'order_billing_type_id' => $work_order->approval_date == "" ? $service_order_type_id : $work_order->approval_date > date('Y-m-d', strtotime('+7 days')) ? $pending_work_order_type_id : $work_order_type_id,
                         'completion_date' => $work_order->date_completed,
                         'expiration_date' => $work_order->expires,
                         'approval_date' => $work_order->approval_date,
