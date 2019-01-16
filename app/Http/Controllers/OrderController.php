@@ -90,8 +90,8 @@ class OrderController extends Controller
         $item = Order::create($values);
         $item = Order::findOrFail($item->id);
         $properties = $request->only('properties');
-        array_filter($properties);
-        $item->properties()->sync($properties['properties']);
+        $properties = array_filter($properties['properties']);
+        $item->properties()->sync($properties);
         return $item;
     }
     
