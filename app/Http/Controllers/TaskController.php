@@ -109,6 +109,7 @@ class TaskController extends Controller
         $this->validate($request, $this->validation);     
         $item = Task::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
+	$values['completion_date'] = $values['completion_date'] != "" ? $values['completion_date'] : null;
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         return $item;
