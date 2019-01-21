@@ -15,11 +15,10 @@ class OrderController extends Controller
     private $validation = [
         'description' => 'string|min:1|max:255',
 		'project_id' => 'integer|exists:projects,id',
-        'order_billing_type_id' => 'integer|exists:order_billing_types,id',
+        'order_status_type_id' => 'integer|exists:order_status_types,id',
         'name' => 'nullable|string|max:255',
         'date' => 'date',
         'notes' => 'nullable|string|max:255',
-		'order_billing_type_id' => 'integer:exists:order_billing_types,id',
         'approval_date' => 'nullable|date',
         'completion_date' => 'nullable|date',
         'expiration_date' => 'nullable|date',

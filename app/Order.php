@@ -8,7 +8,7 @@ class Order extends Model
 {
     protected $fillable = [
         'project_id',
-		'order_billing_type_id',
+		'order_status_type_id',
         'name',
 		'date',
         'completion_date',
@@ -53,8 +53,8 @@ class Order extends Model
        return $this->belongsTo('App\OrderAction');
     }
     
-    function orderBillingType(){
-       return $this->belongsTo('App\OrderBillingType');
+    function orderStatusType(){
+       return $this->belongsTo('App\OrderStatusType');
     }
     
     function orderCategory(){

@@ -85,11 +85,11 @@ $router->get('/order_status/{id:[0-9]+}', 'OrderStatusController@read');
 $router->patch('/order_status/{id:[0-9]+}', 'OrderStatusController@update');
 $router->delete('/order_status/{id:[0-9]+}', 'OrderStatusController@delete');
 
-$router->get('/order_billing_types', 'OrderBillingTypeController@index');
-$router->post('/order_billing_type', 'OrderBillingTypeController@create');
-$router->get('/order_billing_type/{id:[0-9]+}', 'OrderBillingTypeController@read');
-$router->patch('/order_billing_type/{id:[0-9]+}', 'OrderBillingTypeController@update');
-$router->delete('/order_billing_type/{id:[0-9]+}', 'OrderBillingTypeController@delete');
+$router->get('/order_status_types', 'OrderStatusTypeController@index');
+$router->post('/order_status_type', 'OrderStatusTypeController@create');
+$router->get('/order_status_type/{id:[0-9]+}', 'OrderStatusTypeController@read');
+$router->patch('/order_status_type/{id:[0-9]+}', 'OrderStatusTypeController@update');
+$router->delete('/order_status_type/{id:[0-9]+}', 'OrderStatusTypeController@delete');
 
 $router->get('/order_types', 'OrderTypeController@index');
 $router->post('/order_type', 'OrderTypeController@create');

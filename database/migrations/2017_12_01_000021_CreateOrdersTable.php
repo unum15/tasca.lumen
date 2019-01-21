@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->integer('project_id');
             $table->string('name')->nullable();
-			$table->integer('order_billing_type_id');
+			$table->integer('order_status_type_id');
             $table->date('date')->nullable();
             $table->date('completion_date')->nullable();
             $table->date('expiration_date')->nullable();

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\OrderBillingType;
+use App\OrderStatusType;
 use Illuminate\Http\Request;
 
-class OrderBillingTypeController extends Controller
+class OrderStatusTypeController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -19,26 +19,22 @@ class OrderBillingTypeController extends Controller
     }
 
     public function index(){
-        $items = OrderBillingType::All();
+        $items = OrderStatusType::All();
         return $items;
     }
     
     public function create(Request $request){
         $validation = [
             'name' => 'string|required|min:1|max:255',
-            'notes' => 'string|max:255',
-            'sort_order' => 'integer',
-            'default' => 'boolean',
-            'service_order_status_id' => 'required|integer|exists:service_order_statuses,id'
+            'notes' => 'string|max:255'
         ];
         $this->validate($request, $validation);
-        $this->removeConflict($request);
-        $item = OrderBillingType::create($request->input());
+        $item = OrderStatusType::create($request->input());
         return $item;
     }
     
     public function read($id){
-        $item = OrderBillingType::findOrFail($id);
+        $item = OrderStatusType::findOrFail($id);
         return $item;
     }
     
@@ -51,7 +47,7 @@ class OrderBillingTypeController extends Controller
         ];
         $this->validate($request, $validation);
         $this->removeConflict($request);
-        $item = OrderBillingType::findOrFail($id);
+        $item = OrderStatusType::findOrFail($id);
         if($item == null){
             return response(['success' => false, 'status' => 404, 'message' => 'HTTP_FILE_NOT_FOUND'], 404);
         }
@@ -65,21 +61,8 @@ class OrderBillingTypeController extends Controller
     }
     
     public function delete($id){
-        $item = OrderBillingType::findOrFail($id);
+        $item = OrderStatusType::findOrFail($id);
         $item->delete();
         return response([], 204);
-    }
-    
-    public function removeConflict(Request $request){
-        $sort_order = $request->input('sort_order');
-        $default = $request->input('default');
-        if($sort_order){
-            OrderBillingType::where('sort_order', $sort_order)
-                ->update(['sort_order' => null]);
-        }
-        if($default){
-            OrderBillingType::where('default', true)
-            ->update(['default' => false]);
-        }        
     }
 }

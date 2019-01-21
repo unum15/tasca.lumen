@@ -19,7 +19,7 @@ use App\PropertyType;
 use App\Property;
 use App\Order;
 use App\OrderAction;
-use App\OrderBillingType;
+use App\OrderStatusType;
 use App\OrderCategory;
 use App\OrderDate;
 use App\OrderPriority;
@@ -335,13 +335,8 @@ class MigrateOldDataCommand extends Command
                     "Contact" => [3],
                     "Site Visit" => [2],
                     "Bid/Price" => [2],
-                    "Design" => [],
                     "Get P.O." => [4],
                     "Follow Up" => [1,2,4],
-                    "To Do" => [],
-                    "Report" => [],
-                    "Bill" => [],
-                    "Other" => [],
                     "Close Out" => [1,4,5]
                 ];
         
@@ -362,7 +357,7 @@ class MigrateOldDataCommand extends Command
         ];
         $sort = 1;
         foreach($names as $name){
-            OrderBillingType::create([
+            OrderStatusType::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
@@ -385,9 +380,9 @@ class MigrateOldDataCommand extends Command
         }
 
         
-        $service_order_type_id = OrderBillingType::where('name', 'Service Order')->first()->id;
-        $pending_work_order_type_id = OrderBillingType::where('name', 'Pending Work Order')->first()->id;
-        $work_order_type_id = OrderBillingType::where('name', 'Work Order')->first()->id;
+        $service_order_type_id = OrderStatusType::where('name', 'Service Order')->first()->id;
+        $pending_work_order_type_id = OrderStatusType::where('name', 'Pending Work Order')->first()->id;
+        $work_order_type_id = OrderStatusType::where('name', 'Work Order')->first()->id;
         
         $names = [
             "T & M",
@@ -420,16 +415,11 @@ class MigrateOldDataCommand extends Command
             "In Review" => [1],
             "Completed" => [1],
             "Call Off" => [1],
-            "Active" => [],
-            "Next Action" => [],
             "Pending" => [2],
-            
-            
             "In Progress" => [2],
             "Done" => [2],
             "On Hold" => [2],
             "Cancelled" => [2],
-            "Waiting on Customer" => []
         ];
 
         
@@ -443,16 +433,10 @@ class MigrateOldDataCommand extends Command
         }
         $actions = [
             "Call/Email" => [1],
-            "Waiting for INFO" => [],
             "Schedule" => [1, 2],
             "Bill" => [2],
             "Close Out" => [1],
-            "Wait" => [],
-            "Wating of AP" => [],
-            "ReSchedule" => [],
-            "Report" => [1, 2],
-            "Next Task" => [],
-            "Bid/Price" => []
+            "Report" => [1, 2]
         ];
         $sort = 1;
         foreach($actions as $name => $types){
@@ -464,24 +448,12 @@ class MigrateOldDataCommand extends Command
         }
         $names = [
             "Site Visit" => [1],
-            "Clean Up"  => [],
-            "Bed Maintance" => [],
-            "Weekly Lawn Care"  => [],
-            "Fertilizing" => [],
-            "Spraying" => [],
-            "Other" => [],
             "Appointment" => [1],
             "Office" => [1],
             "Errand" => [1],
-            "Audit" => [],
-            "Winterizing" => [],
-            "Tune Up" => [],
-            "Startup" => [],
             "Evaluation" => [2],
             "Day Task" => [2],
-            "Repair" => [],
-            "Service Task" => [2],
-            "Ditch Witch" => []
+            "Service Task" => [2]
         ];
         $sort = 1;
         foreach($names as $name => $types){
@@ -523,7 +495,7 @@ class MigrateOldDataCommand extends Command
         ]);
         Setting::create([
             'name' => 'default_order_action_id',
-            'value' => OrderAction::where('name', 'To Do')->first()->id
+            'value' => OrderAction::where('name', 'Contact')->first()->id
         ]);
         Setting::create([
             'name' => 'default_order_category_id',
@@ -543,7 +515,7 @@ class MigrateOldDataCommand extends Command
         ]);
         Setting::create([
             'name' => 'default_task_status_id',
-            'value' => TaskStatus::where('name', 'Next Action')->first()->id
+            'value' => TaskStatus::where('name', 'Pending')->first()->id
         ]);
         Setting::create([
             'name' => 'default_task_category_id',
@@ -849,7 +821,7 @@ class MigrateOldDataCommand extends Command
                         'name' => $work_order->description,
                         'order_date' => $work_order->workorder_date,
                         'renewable' => false,
-                        'order_billing_type_id' => $work_order->approval_date == "" ? $service_order_type_id : $work_order->approval_date > date('Y-m-d', strtotime('+7 days')) ? $pending_work_order_type_id : $work_order_type_id,
+                        'order_status_type_id' => $work_order->approval_date == "" ? $service_order_type_id : $work_order->approval_date > date('Y-m-d', strtotime('+7 days')) ? $pending_work_order_type_id : $work_order_type_id,
                         'completion_date' => $work_order->date_completed,
                         'expiration_date' => $work_order->expires,
                         'approval_date' => $work_order->approval_date,
@@ -880,8 +852,6 @@ class MigrateOldDataCommand extends Command
                     ]);
                     
                     $new_work_order->properties()->save($new_property);
-                    
-                    
                     $work_orders_map[$work_order->workorder_index] = $new_work_order->id;
                     $task_sql = "
                         SELECT
@@ -970,7 +940,6 @@ class MigrateOldDataCommand extends Command
                                'creator_id' => $admin->id,
                                'updater_id' => $admin->id
                             ]);
-                        
                     }
                 }
                 

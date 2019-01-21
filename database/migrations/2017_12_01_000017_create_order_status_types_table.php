@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrderBillingTypesTable extends Migration
+class CreateOrderStatusTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateOrderBillingTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_billing_types', function (Blueprint $table) {
+        Schema::create('order_status_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->text('notes')->nullable();
@@ -30,6 +30,6 @@ class CreateOrderBillingTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_billing_types');
+        Schema::dropIfExists('order_status_types');
     }
 }

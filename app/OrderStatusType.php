@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OrderBillingType extends Model
+class OrderStatusType extends Model
 {
     protected $fillable = [
 		'name',
