@@ -125,11 +125,11 @@ class OrderController extends Controller
         $this->validate($request, $this->validation);     
         $item = Order::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
-        $values['approval_date'] = $values['approval_date'] != "" ? $values['approval_date'] : null;
-        $values['start_date'] = $values['start_date'] != "" ? $values['start_date'] : null;
-        $values['completion_date'] = $values['completion_date'] != "" ? $values['completion_date'] : null;
-        $values['expiration_date'] = $values['expiration_date'] != "" ? $values['expiration_date'] : null;
-        $values['renewal_date'] = $values['renewal_date'] != "" ? $values['renewal_date'] : null;
+        $values['approval_date'] = isset($values['approval_date']) && $values['approval_date'] != "" ? $values['approval_date'] : null;
+        $values['start_date'] = isset($values['start_date']) && $values['start_date'] != "" ? $values['start_date'] : null;
+        $values['completion_date'] = isset($values['completion_date']) && $values['completion_date'] != "" ? $values['completion_date'] : null;
+        $values['expiration_date'] = isset($values['expiration_date']) && $values['expiration_date'] != "" ? $values['expiration_date'] : null;
+        $values['renewal_date'] = isset($values['renewal_date']) && $values['renewal_date'] != "" ? $values['renewal_date'] : null;
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         $this->syncProperties($item, $request);
