@@ -88,9 +88,7 @@ class OrderController extends Controller
         $values['updater_id'] = $request->user()->id;
         $item = Order::create($values);
         $item = Order::findOrFail($item->id);
-        $properties = $request->only('properties');
-        $properties = array_filter($properties['properties']);
-        $item->properties()->sync($properties);
+        $this->syncProperties($item, $request);
         return $item;
     }
     
@@ -127,12 +125,38 @@ class OrderController extends Controller
         $this->validate($request, $this->validation);     
         $item = Order::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
+        $values['approval_date'] = $values['approval_date'] != "" ? $values['approval_date'] : null;
+        $values['start_date'] = $values['start_date'] != "" ? $values['start_date'] : null;
+        $values['completion_date'] = $values['completion_date'] != "" ? $values['completion_date'] : null;
+        $values['expiration_date'] = $values['expiration_date'] != "" ? $values['expiration_date'] : null;
+        $values['renewal_date'] = $values['renewal_date'] != "" ? $values['renewal_date'] : null;
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
-        $properties = $request->only('properties');
-        $properties = array_filter($properties);
-        $item->properties()->sync($properties['properties']);
+        $this->syncProperties($item, $request);
         return $item;
+    }
+    
+    public function syncProperties($item, $request){
+        if($item->order_status_type_id == 1){
+            $properties = $request->only('properties');
+            if(!empty($properties)){
+                $properties = $properties['properties'];
+            }
+            else{
+                $properties = [];
+            }
+        }
+        else{
+            $property = $request->only('property');
+            if(!empty($property)){
+                $properties = [$property['property']];
+            }
+            else{
+                $properties = [];
+            }
+        }
+        $properties = array_filter($properties);
+        $item->properties()->sync($properties);
     }
     
     public function delete($id){
