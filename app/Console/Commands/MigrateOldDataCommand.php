@@ -106,6 +106,7 @@ class MigrateOldDataCommand extends Command
             'name' => 'help_project_general',
             'value' =>
 "
+<h3>Project General Tab</h3>
 <p>Notes: Place more details about the project here if need.</p>
 <p>Open Date: This is the date the Project was created.</p>
 <p>Close Date: This is the date the Project was closed. In Order to close a project all orders, and task must be completed, closed or expired, and no renewing SO. Projects will close out automatically after the number of days set in the settings, the default is 30 days.</p>
@@ -114,6 +115,7 @@ class MigrateOldDataCommand extends Command
         Setting::create([
             'name' => 'help_order_general',
             'value' => "
+<h3>Order General Tab</h3>
 <p>Order Name: Give a short name for the type of order</p>
 <p>Description: This is more descriptive of was the customer wants to be done. Keep it short more information can be made under the note tab.</p>
 <p>Category: This is used to group Orders together that are similar it can be customized in the setting. It can be Types of work, crews, or divisions.</p>
@@ -131,6 +133,7 @@ class MigrateOldDataCommand extends Command
         Setting::create([
             'name' => 'help_service_order',
             'value' => "
+<h3>Service Order</h3>
 <p>A service order is when a client inquires about service, this can be a Lead, Estimate, Quote or Bid. This would be work that you have not been authorized to do but may in the future. Use this section to keep track of leads, quotes, or bids you have pending.</p>
 <p>Property: This is the property the work will be done on, each order within a project can be assigned to a single property. When creating a SO multiple properties can be selected. Click on the property select box and hold the CTRL key to select multiple properties. This will allow WOs that include several properties to be created for each property.</p>
 <p>When creating a PWO or WO from a SO with multiple properties it will create a PWO or WO for each property. When creating a PWO or WO only one property can be selected.</p>
@@ -144,6 +147,7 @@ class MigrateOldDataCommand extends Command
             'name' => 'help_pending_work_order',
             'value' =>
 "
+<h3>Pending Work Order</h3>
 <p>Pending Work Orders are orders that the client has authorized to be completed but has not been placed on the schedule yet. Use pending work orders to keep track of upcoming work that you need to schedule.</p>
 "
         ]);
@@ -152,6 +156,7 @@ class MigrateOldDataCommand extends Command
             'name' => 'help_work_order',
             'value' =>
 "
+<h3>Work Order</h3>
 <p>Work Orders has been authorized by the client to be completed and the Start date falls within the number of days out. This is the work assigned to each employee or crew to complete.</p>
 "
         ]);
@@ -159,6 +164,7 @@ class MigrateOldDataCommand extends Command
         Setting::create([
             'name' => 'help_order_calendar',
             'value' => "
+<h3>Order Calendar Tab</h3>
 <p>Use the Calendar place the order on the calendar and set up recurring orders. Service orders with date will show up on the order calendar.</p>
 <p>Approval Date: The date the customer approves the order, this will typically be the date the customer calls and ask for the service.</p>
 <p>Start Date: The date the order will start or the date the client is told the order will be started. This will default to the approved date.</p>
@@ -198,7 +204,8 @@ class MigrateOldDataCommand extends Command
             'name' => 'help_order_notes',
             'value' =>
 "
-Place notes here.
+<h3>Order Notes Tab</h3>
+<p>Place notes here.</p>
 "
         ]);
 
@@ -206,6 +213,7 @@ Place notes here.
             'name' => 'help_order_billing',
             'value' =>
 "
+<h3>Order Billing Tab</h3>
 Budget and bid information.
 "
         ]);
@@ -215,6 +223,7 @@ Budget and bid information.
             'name' => 'help_order_renewing',
             'value' =>
 "
+<h3>Service Order Renewing Tab</h3>
 <p>Checkbox: Check to contact the client to renew the order if the service will need to be repeated.</p>
 <p>Renewal Date:This will be the next date the Client will be contact to renew the service. When a SO is converted to a PWO or WO blank Approval and Start Dates will be created then this SO will show up on the calendar on the renewal date.</p>
 <p>Frequency: This will be how often the client will need to be contacted to renew the order. Can be monthly, quarterly or yearly. 0 means never, 999 means indefinitely.</p>
