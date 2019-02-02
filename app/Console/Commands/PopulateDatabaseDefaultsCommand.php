@@ -630,6 +630,7 @@ Budget and bid information.
             'name' => 'Admin',
             'activity_level_id' => 1,
             'login' => 'admin@example.com',
+            'show_maximium_activity_level_id' => 5,
             'password' => password_hash("adminpass", PASSWORD_DEFAULT),
             'creator_id' => 1,
             'updater_id' => 1 
