@@ -26,16 +26,17 @@ class GoogleCalendarController extends Controller
     function getClient(){
         $client = new \Google_Client();
         $client->setApplicationName('Tasca');
-        $client->setScopes(\Google_Service_Calendar::CALENDAR_READONLY);
-        //$client->setAccessType('offline');
+        $client->setScopes("https://www.googleapis.com/auth/calendar.events");
+        
+        
+        $client->setAccessType('offline');
         //$client->setPrompt('select_account consent');
         
         
-
-        $client->setClientId(env('GOOGLE_CLIENT_ID'));
-        $client->setClientSecret(env('GOOGLE_API_KEY'));
-        $client->setRedirectUri('http://'.env('GOOGLE_CLIENT_HOST',$_SERVER['HTTP_HOST']).'/calendar');
         $client->setDeveloperKey(env('GOOGLE_API_KEY'));
+        $client->setClientId(env('GOOGLE_CLIENT_ID'));
+        $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+        $client->setRedirectUri('http://'.env('GOOGLE_CLIENT_HOST',$_SERVER['HTTP_HOST']).'/calendar');
         return $client;
     }
 
@@ -90,7 +91,7 @@ class GoogleCalendarController extends Controller
     
     function url(){
         $client = $this->getClient();
-        $authUrl = $client->createAuthUrl('https://www.googleapis.com/auth/calendar');
+        $authUrl = $client->createAuthUrl();
         return ['url' => $authUrl];
                 /*
                 $authCode = trim(fgets(STDIN));
@@ -113,13 +114,16 @@ class GoogleCalendarController extends Controller
     }
     
     function callback(Request $request){
-        
-
         $user = $request->user();
         $code = $request->only('code');
         $client = $this->getClient();
         $accessToken = $client->fetchAccessTokenWithAuthCode($code['code']);
-        error_log(print_r($accessToken,true));
+        if(isset($accessToken['error'])){
+            error_log($code['code']);
+            error_log(print_r($accessToken,true));
+            return response(['error' => 'Error communicating with Google.'], 500);
+        }
+        $client->setAccessToken($accessToken);
         $user->update(['google_calendar_token' => $accessToken['code']]);
         return $this->status($request);
     }
