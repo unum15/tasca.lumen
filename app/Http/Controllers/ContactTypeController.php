@@ -17,10 +17,10 @@ class ContactTypeController extends Controller
         'notes' => 'string|max:255|nullable',
         'sort_order' => 'integer|nullable'
     ];
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(){

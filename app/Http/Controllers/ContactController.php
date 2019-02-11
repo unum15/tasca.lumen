@@ -23,10 +23,10 @@ class ContactController extends Controller
 		'login' => 'nullable|string|max:255',
         'password' => 'nullable|string|max:255'
     ];
-    
+
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function index(Request $request){
@@ -75,6 +75,9 @@ class ContactController extends Controller
         $item = Contact::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
         $values['updater_id'] = $request->user()->id;
+        if(!empty($values['password'])){
+            $values['password'] = password_hash($values['password'], PASSWORD_DEFAULT);
+        }
         $item->update($values);
         $client_id = $request->input('client_id');
         if($client_id){

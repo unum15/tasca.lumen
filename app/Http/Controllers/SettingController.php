@@ -15,10 +15,10 @@ class SettingController extends Controller
     private $validation = [
         'name' => 'string|required|min:1|max:255'
     ];
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(){

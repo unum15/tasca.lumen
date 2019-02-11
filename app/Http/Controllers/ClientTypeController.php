@@ -18,9 +18,10 @@ class ClientTypeController extends Controller
         'sort_order' => 'integer|nullable'
     ];
     
+    
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(){

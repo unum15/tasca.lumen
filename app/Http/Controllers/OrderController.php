@@ -49,10 +49,10 @@ class OrderController extends Controller
         'order_interval' => 'nullable|string|max:255',
         'renewal_interval' => 'nullable|string|max:255'
     ];
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(Request $request){

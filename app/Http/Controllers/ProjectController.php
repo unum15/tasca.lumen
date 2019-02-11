@@ -20,10 +20,10 @@ class ProjectController extends Controller
         'close_date' => 'nullable|date',
         'notes' => 'nullable|string|max:255'
     ];
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(Request $request){
