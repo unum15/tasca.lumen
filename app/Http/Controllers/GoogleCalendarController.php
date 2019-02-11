@@ -124,7 +124,7 @@ class GoogleCalendarController extends Controller
             return response(['error' => 'Error communicating with Google.'], 500);
         }
         $client->setAccessToken($accessToken);
-        $user->update(['google_calendar_token' => $accessToken['code']]);
+        $user->update(['google_calendar_token' => $accessToken['access_token']]);
         return $this->status($request);
     }
 }
