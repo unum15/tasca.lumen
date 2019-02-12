@@ -24,6 +24,9 @@ class OrderActionController extends Controller
     }
     
     public function create(Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $validation = [
             'name' => 'string|required|min:1|max:255',
             'notes' => 'string|max:255',
@@ -43,6 +46,9 @@ class OrderActionController extends Controller
     }
     
     public function update($id, Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $validation = [
             'name' => 'string|min:1|max:255',
             'notes' => 'string|max:255|nullable',
@@ -65,6 +71,9 @@ class OrderActionController extends Controller
     }
     
     public function delete($id){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $item = OrderAction::findOrFail($id);
         $item->delete();
         return response([], 204);

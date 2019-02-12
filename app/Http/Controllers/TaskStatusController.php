@@ -29,6 +29,9 @@ class TaskStatusController extends Controller
     }
     
     public function create(Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
         $item = TaskStatus::create($request->input());
@@ -41,6 +44,9 @@ class TaskStatusController extends Controller
     }
     
     public function update($id, Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
         $item = TaskStatus::findOrFail($id);
@@ -49,6 +55,9 @@ class TaskStatusController extends Controller
     }
     
     public function delete($id){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $item = TaskStatus::findOrFail($id);
         $item->delete();
         return response([], 204);
