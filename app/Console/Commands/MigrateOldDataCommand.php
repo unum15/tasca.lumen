@@ -1187,5 +1187,4 @@ Budget and bid information.
         Contact::where('login', 'unum@unum5.org')->first()->attachRole($admin);
         
     }
-    }
 }
