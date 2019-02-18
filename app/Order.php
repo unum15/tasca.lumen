@@ -86,4 +86,8 @@ class Order extends Model
             ->withTimestamps();
     }
     
+    public function signIns(){
+        return $this->hasMany('App\SignIn')->orderBy('sign_in');
+    }
+    
 }

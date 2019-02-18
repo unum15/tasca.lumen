@@ -56,10 +56,15 @@ class SignInController extends Controller
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $values = $request->input();
+        $values['contact_id'] = $request->user()->id;
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = SignIn::create($values);
-        $item = SignIn::findOrFail($item->id);
+        $item = SignIn::with(
+            'Order',
+            'Contact'
+        )
+        ->findOrFail($item->id);
         return $item;
     }
     
@@ -74,10 +79,15 @@ class SignInController extends Controller
     
     public function update($id, Request $request){
         $this->validate($request, $this->validation);     
-        $item = SigIn::findOrFail($id);
+        $item = SignIn::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
+        $item = SignIn::with(
+            'Order',
+            'Contact'
+        )
+        ->findOrFail($id);
         return $item;
     }
     

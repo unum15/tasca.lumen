@@ -21,7 +21,7 @@ class CreateContactsTable extends Migration
             $table->integer('contact_method_id')->nullable();
             $table->string('login')->nullable();
             $table->binary('password')->nullable();
-            $table->binary('google_calendar_token')->nullable();
+            $table->string('google_calendar_token', 2048)->nullable();
             $table->string('google_calendar_id')->nullable();
             $table->boolean('show_help')->default(true);
             $table->integer('show_maximium_activity_level_id')->nullable();

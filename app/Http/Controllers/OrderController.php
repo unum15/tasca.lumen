@@ -111,7 +111,9 @@ class OrderController extends Controller
             'tasks.taskAction',
             'tasks.taskType',
             'orderPriority',
-            'orderCategory'
+            'orderCategory',
+            'signIns',
+            'signIns.contact'
         )
         ->where('id', $id)
         ->first();
