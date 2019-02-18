@@ -18,9 +18,10 @@ class ClientTypeController extends Controller
         'sort_order' => 'integer|nullable'
     ];
     
+    
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(){
@@ -29,6 +30,9 @@ class ClientTypeController extends Controller
     }
     
     public function create(Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
         $item = ClientType::create($request->input());
@@ -41,6 +45,9 @@ class ClientTypeController extends Controller
     }
     
     public function update($id, Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
         $item = ClientType::findOrFail($id);
@@ -49,6 +56,9 @@ class ClientTypeController extends Controller
     }
     
     public function delete($id){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $item = ClientType::findOrFail($id);
         $item->delete();
         return response([], 204);

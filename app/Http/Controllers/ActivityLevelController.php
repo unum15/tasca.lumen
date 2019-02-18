@@ -19,9 +19,13 @@ class ActivityLevelController extends Controller
         'default' => 'boolean'        
     ];
     
+    
     public function __construct()
     {
-        //
+        $this->middleware('auth');
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
     }
 
     public function index(){
@@ -30,6 +34,9 @@ class ActivityLevelController extends Controller
     }
     
     public function create(Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
         $item = ActivityLevel::create($request->input());
@@ -42,6 +49,9 @@ class ActivityLevelController extends Controller
     }
     
     public function update($id, Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
         $item = ActivityLevel::findOrFail($id);
@@ -50,6 +60,9 @@ class ActivityLevelController extends Controller
     }
     
     public function delete($id){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $item = ActivityLevel::findOrFail($id);
         $item->delete();
         return response([], 204);

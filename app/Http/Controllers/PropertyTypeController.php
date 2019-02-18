@@ -17,10 +17,10 @@ class PropertyTypeController extends Controller
         'notes' => 'string|max:255|nullable',
         'sort_order' => 'integer|nullable'
     ];
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(){
@@ -29,6 +29,9 @@ class PropertyTypeController extends Controller
     }
     
     public function create(Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
         $item = PropertyType::create($request->input());
@@ -41,6 +44,9 @@ class PropertyTypeController extends Controller
     }
     
     public function update($id, Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
         $item = PropertyType::findOrFail($id);
@@ -49,6 +55,9 @@ class PropertyTypeController extends Controller
     }
     
     public function delete($id){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $item = PropertyType::findOrFail($id);
         $item->delete();
         return response([], 204);

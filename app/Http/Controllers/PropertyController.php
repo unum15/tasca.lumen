@@ -27,10 +27,10 @@ class PropertyController extends Controller
         'activity_level_id' => 'integer|exists:activity_levels,id',
 		'property_type_id' => 'integer|exists:property_types,id'
     ];
-    
+
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function index(){

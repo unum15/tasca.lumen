@@ -12,10 +12,10 @@ class OrderTypeController extends Controller
      *
      * @return void
      */    
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(){
@@ -24,6 +24,9 @@ class OrderTypeController extends Controller
     }
     
     public function create(Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $validation = [
             'name' => 'string|required|min:1|max:255',
             'notes' => 'string|max:255|nullable',
@@ -42,6 +45,9 @@ class OrderTypeController extends Controller
     }
     
     public function update($id, Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $validation = [
             'name' => 'string|min:1|max:255|nullable',
             'notes' => 'string|max:255|nullable',
@@ -64,6 +70,9 @@ class OrderTypeController extends Controller
     }
     
     public function delete($id){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $item = OrderType::findOrFail($id);
         $item->delete();
         return response([], 204);

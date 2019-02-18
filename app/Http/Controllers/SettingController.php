@@ -15,10 +15,10 @@ class SettingController extends Controller
     private $validation = [
         'name' => 'string|required|min:1|max:255'
     ];
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(){
@@ -27,6 +27,9 @@ class SettingController extends Controller
     }
     
     public function create(Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $this->validate($request, $this->validation);
         $item = ContactMethod::Setting($request->input());
         return $item;
@@ -45,6 +48,9 @@ class SettingController extends Controller
     }
 */
     public function update(Request $request){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $settings = $request->all();
         foreach($settings as $setting => $value){
             $setting = Setting::where('name', $setting)->first();
@@ -53,6 +59,9 @@ class SettingController extends Controller
     }
     
     public function delete($id){
+        if(!$request->user()->can('edit-settings')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $item = Setting::findOrFail($id);
         $item->delete();
         return response([], 204);

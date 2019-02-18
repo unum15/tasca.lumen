@@ -24,6 +24,8 @@ use App\OrderDate;
 use App\OrderPriority;
 use App\OrderStatus;
 use App\OrderType;
+use App\Permission;
+use App\Role;
 use App\Setting;
 use App\SignIn;
 use App\Task;
@@ -49,7 +51,7 @@ class PopulateDatabaseDefaultsCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Populate default data for Tasca.';
 
     /**
      * Create a new command instance.
@@ -68,61 +70,96 @@ class PopulateDatabaseDefaultsCommand extends Command
      */
     public function handle()
     {
-        $owner = new Role();
-        $owner->name         = 'owner';
-        $owner->display_name = 'Project Owner'; // optional
-        $owner->description  = 'User is the owner of a given project'; // optional
-        $owner->save();
         
         $admin = new Role();
         $admin->name         = 'admin';
-        $admin->display_name = 'User Administrator'; // optional
-        $admin->description  = 'User is allowed to manage and edit other users'; // optional
+        $admin->display_name = 'Tasca Administrator';
+        $admin->description  = 'User is allowed to manage and edit everything';
         $admin->save();
+
+        $employee = new Role();
+        $employee->name         = 'employee';
+        $employee->display_name = 'Employee';
+        $employee->description  = 'User is an employee of this company.';
+        $employee->save();
+
+        $clientAdmin = new Role();
+        $clientAdmin->name         = 'client-admin';
+        $clientAdmin->display_name = 'Client Administrator';
+        $clientAdmin->description  = 'User is allowed to manage and edit everything for specified client.';
+        $clientAdmin->save();
+
+        $clientEmployee = new Role();
+        $clientEmployee->name         = 'client-employee';
+        $clientEmployee->display_name = 'Client Employee';
+        $clientEmployee->description  = 'User is an employee of specified client.';
+        $clientEmployee->save();
+
+        $viewClients = new Permission();
+        $viewClients->name = 'view-clients';
+        $viewClients->display_name = 'View Clients';
+        $viewClients->description = 'View clients and related data.';
+        $viewClients->save();
         
-        //Next, with both roles created let's assign them to the users. Thanks to the HasRole trait this is as easy as:
+        $editClients = new Permission();
+        $editClients->name = 'edit-clients';
+        $editClients->display_name = 'Edit Clients';
+        $editClients->description = 'Edit and create clients and existing data';
+        $editClients->save();
         
-        $user = User::where('username', '=', 'michele')->first();
+        $editSettings = new Permission();
+        $editSettings->name = 'edit-settings';
+        $editSettings->display_name = 'Edit Settings';
+        $editSettings->description = 'Edit settings';
+        $editSettings->save();
         
-        // role attach alias
-        $user->attachRole($admin); // parameter can be an Role object, array, or id
+        $clockIn = new Permission();
+        $clockIn->name = 'clock-in';
+        $clockIn->display_name = 'clock-in';
+        $clockIn->description = 'clock-in';
+        $clockIn->save();
         
-        // or eloquent's original technique
-        $user->roles()->attach($admin->id); // id only
+        $editTimeCards = new Permission();
+        $editTimeCards->name = 'edit-time-cards';
+        $editTimeCards->display_name = 'Edit Time Cards';
+        $editTimeCards->description = 'Edit Time Cards';
+        $editTimeCards->save();
         
-        //Now we just need to add permissions to those Roles:
-        
-        $createPost = new Permission();
-        $createPost->name         = 'create-post';
-        $createPost->display_name = 'Create Posts'; // optional
-        // Allow a user to...
-        $createPost->description  = 'create new blog posts'; // optional
-        $createPost->save();
-        
-        $editUser = new Permission();
-        $editUser->name         = 'edit-user';
-        $editUser->display_name = 'Edit Users'; // optional
-        // Allow a user to...
-        $editUser->description  = 'edit existing users'; // optional
-        $editUser->save();
-        
-        $admin->attachPermission($createPost);
-        // equivalent to $admin->perms()->sync(array($createPost->id));
-        
-        $owner->attachPermissions(array($createPost, $editUser));
-        // equivalent to $owner->perms()->sync(array($createPost->id, $editUser->id));
-        
-        //Checking for Roles & Permissions
-        
-        //Now we can check for roles and permissions simply by doing:
-        
-        $user->hasRole('owner');   // false
-        $user->hasRole('admin');   // true
-        $user->can('edit-user');   // false
-        $user->can('create-post'); // true
+        $viewSchedule = new Permission();
+        $viewSchedule->name = 'view-schedule';
+        $viewSchedule->display_name = 'View Schedule';
+        $viewSchedule->description = 'View schedule and tasks.';
+        $viewSchedule->save();
         
         
+        $viewClient = new Permission();
+        $viewClient->name = 'view-client';
+        $viewClient->display_name = 'View Client';
+        $viewClient->description = 'View associated client and related data.';
+        $viewClient->save();
         
+        $editClient = new Permission();
+        $editClient->name = 'edit-client';
+        $editClient->display_name = 'Edit Client';
+        $editClient->description = 'Edit associated client and existing data';
+        $editClient->save();
+        
+        $viewProjects = new Permission();
+        $viewProjects->name = 'view-projects';
+        $viewProjects->display_name = 'View Projects';
+        $viewProjects->description = 'View projects and related data.';
+        $viewProjects->save();
+        
+        $editProjects = new Permission();
+        $editProjects->name = 'edit-projects';
+        $editProjects->display_name = 'Edit Projects';
+        $editProjects->description = 'Edit and create projects, orders, and tasks for associated clients';
+        $editProjects->save();
+        
+        $admin->attachPermissions([$viewClients, $editClients, $editSettings, $clockIn, $editTimeCards, $viewSchedule]);
+        $employee->attachPermissions([$viewClients, $clockIn, $viewSchedule]);
+        $clientAdmin->attachPermissions([$viewClient, $editClient, $viewProjects, $editProjects]);
+        $clientEmployee->attachPermissions([$viewClient, $viewProjects, $editProjects]);        
         
         
         
@@ -706,7 +743,7 @@ Budget and bid information.
         
         //create contact so people can login
         
-        Contact::create([
+        $adminUser = Contact::create([
             'name' => 'Admin',
             'activity_level_id' => 1,
             'login' => 'admin@example.com',
@@ -716,5 +753,6 @@ Budget and bid information.
             'updater_id' => 1 
         ]);
         
+        $adminUser->attachRole($admin);
     }
 }

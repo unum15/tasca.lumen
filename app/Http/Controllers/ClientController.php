@@ -24,9 +24,12 @@ class ClientController extends Controller
 		'referred_by' => 'nullable|string|max:255'
     ];
     
-    public function __construct()
+    public function __construct(Request $request)
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
+        if(!$request->user()->can('view-clients')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
     }
 
     public function index(){
@@ -40,6 +43,9 @@ class ClientController extends Controller
     }
     
     public function create(Request $request){
+        if(!$request->user()->can('edit-clients')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $this->validate($request, ['name' => 'required']);
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
@@ -62,6 +68,9 @@ class ClientController extends Controller
     }
     
     public function update($id, Request $request){
+        if(!$request->user()->can('edit-clients')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $this->validate($request, $this->validation);     
         $item = Client::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
@@ -71,6 +80,9 @@ class ClientController extends Controller
     }
     
     public function delete($id){
+        if(!$request->user()->can('edit-clients')){
+            return response(['Unauthorized(permissions)'], 401);
+        }
         $item = Client::findOrFail($id);
         $item->delete();
         return response([], 204);

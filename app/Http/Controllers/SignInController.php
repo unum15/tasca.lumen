@@ -19,10 +19,10 @@ class SignInController extends Controller
         'sign_out' => 'string|max:255',
         'notes' => 'nullable|string|max:255'
     ];
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(Request $request){

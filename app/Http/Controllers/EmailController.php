@@ -23,10 +23,10 @@ class EmailController extends Controller
 		'email_type_id' => 'integer|exists:email_types,id',		
 		'contact_id' => 'integer|exists:contacts,id'
     ];
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(Request $request){

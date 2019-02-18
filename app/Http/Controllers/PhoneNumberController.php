@@ -19,10 +19,10 @@ class PhoneNumberController extends Controller
 		'phone_number_type_id' => 'integer|exists:phone_number_types,id',		
 		'contact_id' => 'integer|exists:contacts,id'
     ];
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(Request $request){

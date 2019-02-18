@@ -85,6 +85,7 @@ class AuthController extends Controller
 			'pending_days_out',
 			'fluid_containers'
 		])
+		->with('roles', 'roles.perms')
 		->findOrFail($id);
 		return $user->toArray();
 	}

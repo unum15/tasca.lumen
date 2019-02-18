@@ -17,10 +17,10 @@ class GoogleCalendarController extends Controller
         'sort_order' => 'integer',
         'default' => 'boolean'        
     ];
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     function getClient(){

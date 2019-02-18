@@ -19,10 +19,10 @@ class TaskDateController extends Controller
         'date' => 'nullable|date',
         'time' => 'nullable|string|max:255',
     ];
-    
+
     public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     public function index(Request $request){
