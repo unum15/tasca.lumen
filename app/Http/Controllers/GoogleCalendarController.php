@@ -76,7 +76,7 @@ class GoogleCalendarController extends Controller
             return ['status' => 'Not Authorized'];
         }
         $client = $this->getClient();
-        $client->setAccessToken(['access_token' => $token]);
+        $client->setAccessToken($token);
         if ($client->isAccessTokenExpired()) {
             if ($client->getRefreshToken()) {
                 $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
@@ -124,7 +124,7 @@ class GoogleCalendarController extends Controller
             return response(['error' => 'Error communicating with Google.'], 500);
         }
         $client->setAccessToken($accessToken);
-        $user->update(['google_calendar_token' => $accessToken['access_token']]);
+        $user->update(['google_calendar_token' => json_encode($accessToken)]);
         return $this->status($request);
     }
 }
