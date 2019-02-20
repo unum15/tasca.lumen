@@ -724,15 +724,27 @@ Budget and bid information.
             'value' => OrderStatus::where('name', 'Reviewing')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_task_action_id',
+            'name' => 'default_nonbilling_task_action_id',
             'value' => TaskAction::where('name', 'Schedule')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_task_status_id',
-            'value' => TaskStatus::where('name', 'Pending')->first()->id
+            'name' => 'default_billing_task_action_id',
+            'value' => TaskAction::where('name', 'Schedule')->first()->id
         ]);
         Setting::create([
-            'name' => 'default_task_category_id',
+            'name' => 'default_nonbilling_task_status_id',
+            'value' => TaskStatus::where('name', 'In Review')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_billing_task_status_id',
+            'value' => TaskStatus::where('name', 'In Progress')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_nonbilling_task_category_id',
+            'value' => TaskCategory::where('name', 'Site Visit')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_billing_task_category_id',
             'value' => TaskCategory::where('name', 'Service Task')->first()->id
         ]);
         Setting::create([
