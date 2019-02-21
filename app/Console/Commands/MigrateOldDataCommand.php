@@ -77,18 +77,7 @@ class MigrateOldDataCommand extends Command
     public function handle()
     {
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-                $admin = new Role();
+        $admin = new Role();
         $admin->name         = 'admin';
         $admin->display_name = 'Tasca Administrator';
         $admin->description  = 'User is allowed to manage and edit everything';
