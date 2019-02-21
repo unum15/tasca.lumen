@@ -200,20 +200,16 @@ class MigrateOldDataCommand extends Command
         
         Setting::create([
             'name' => 'help_project',
+            'value' =>"" //only wants project help on general tag
+        ]);
+        Setting::create([
+            'name' => 'help_project_general',
             'value' =>
 "
 <h3>Project</h3>
 <p>A project is the end result the customer needs completed. It can be a simple repair of something that is damaged, an ongoing service or a full design build job.</p>
 <p>Project Name: Give the Project a short name.</p>
 <p>Contact: The person who is overseeing the project. This will default to the billing contact.</p>
-<h3>Orders</h3>
-<p>Orders are the actions it will take to get the project completed. There can be a single action like a service call for a simple repair or several actions it will take to complete a design build job. There are 3 types of orders, Servie, Pending, and Work orders. Typically a order can be tied to a work phase or a billing invoice.</p>
-"
-        ]);
-        Setting::create([
-            'name' => 'help_project_general',
-            'value' =>
-"
 <h3>Project General Tab</h3>
 <p>Notes: Place more details about the project here if need.</p>
 <p>Open Date: This is the date the Project was created.</p>
@@ -223,18 +219,12 @@ class MigrateOldDataCommand extends Command
         Setting::create([
             'name' => 'help_order_general',
             'value' => "
+<h3>Orders</h3>
+<p>Orders are the actions it will take to get the project completed. There can be a single action like a service call for a simple repair or several actions it will take to complete a design build job. There are 3 types of orders, Servie, Pending, and Work orders. Typically a order can be tied to a work phase or a billing invoice.</p>
 <h3>Order General Tab</h3>
-<p>Order Name: Give a short name for the type of order</p>
-<p>Description: This is more descriptive of was the customer wants to be done. Keep it short more information can be made under the note tab.</p>
-<p>Category: This is used to group Orders together that are similar it can be customized in the setting. It can be Types of work, crews, or divisions.</p>
-<p>Service: Orders for the Service Crew</p>
-<p>Priority: Use this to keep track of the orders that need to be worked on before others.</p>
-<p>Type:  How is the customer being billed for the work being done. What type of pricing was given to the client?</p>
-<p>Status: Where the order is in the process of being completed.</p>
-<p>Action: This is what needs to be done next in the process.</p>
-<p>Order Date: This is the date the customer made the first contact about the needed service.</p>
-<p>Close Date The date the SO was converted to a PWO or WO</p>
-<p>Expiration Date: A date can be assigned to hide this SO form the Calendar.</p>
+Notes: Place more details about the project here if need. 
+Open Date: This is the date the Project was created.
+Close Date: This is the date the Project was closed. In Order to close a project all orders, and task must be completed, closed or expired, and no renewing SO. Projects will close out automatically after the number of days set in the settings, the default is 30 days.
 "
         ]);
 
