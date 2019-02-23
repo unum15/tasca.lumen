@@ -1022,7 +1022,7 @@ Budget and bid information.
                         'project_id' => $project->id,
                         'description' => !empty($work_order->description) ? $work_order->description : 'Order #' . $work_order->workorder_index,
                         'name' => $work_order->description,
-                        'order_date' => $work_order->workorder_date,
+                        'date' => $work_order->workorder_date,
                         'renewable' => false,
                         'order_status_type_id' => $work_order->approval_date == "" ? $service_order_type_id : $work_order->approval_date > date('Y-m-d', strtotime('+7 days')) ? $pending_work_order_type_id : $work_order_type_id,
                         'completion_date' => $work_order->date_completed,

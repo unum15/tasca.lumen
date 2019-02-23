@@ -15,7 +15,6 @@ class Order extends Model
         'expiration_date',
         'approval_date',
 		'start_date',
-        'order_date',
         'description',
         'order_category_id',
         'order_priority_id',
