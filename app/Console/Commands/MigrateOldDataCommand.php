@@ -203,14 +203,14 @@ class MigrateOldDataCommand extends Command
 <p>Notes: Place more details about the project here if need.</p>
 <p>Open Date: This is the date the Project was created.</p>
 <p>Close Date: This is the date the Project was closed. In Order to close a project all orders, and task must be completed, closed or expired, and no renewing SO. Projects will close out automatically after the number of days set in the settings, the default is 30 days.</p>
+<h3>Orders</h3>
+<p>Orders are the actions it will take to get the project completed. There can be a single action like a service call for a simple repair or several actions it will take to complete a design build job. There are 3 types of orders, Servie, Pending, and Work orders. Typically a order can be tied to a work phase or a billing invoice.</p>
 "
         ]);
         Setting::create([
             'name' => 'help_order_general',
             'value' => "
-<h3>Orders</h3>
-<p>Orders are the actions it will take to get the project completed. There can be a single action like a service call for a simple repair or several actions it will take to complete a design build job. There are 3 types of orders, Servie, Pending, and Work orders. Typically a order can be tied to a work phase or a billing invoice.</p>
-<h3>Order General Tab</h3>
+<h3>Order Details Tab</h3>
 Notes: Place more details about the project here if need. 
 Open Date: This is the date the Project was created.
 Close Date: This is the date the Project was closed. In Order to close a project all orders, and task must be completed, closed or expired, and no renewing SO. Projects will close out automatically after the number of days set in the settings, the default is 30 days.
