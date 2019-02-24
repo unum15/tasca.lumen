@@ -30,7 +30,7 @@ class OrderController extends Controller
         'start_date' => 'nullable|date',
         'recurrences' => 'nullable|integer',
         'service_window' => 'nullable|integer',
-        'indefinite' => 'boolean',
+        'recurring' => 'boolean',
         'location' => 'nullable|string|max:255',
         'instructions' => 'nullable|string|max:255',
         'notes' => 'nullable|string|max:255',
@@ -46,7 +46,7 @@ class OrderController extends Controller
         'renewal_date' => 'nullable|date',
         'notification_lead' => 'nullable|max:255',
         'renewal_message' => 'nullable|string|max:255',
-        'order_interval' => 'nullable|string|max:255',
+        'recurring_interval' => 'nullable|string|max:255',
         'renewal_interval' => 'nullable|string|max:255'
     ];
 
@@ -91,6 +91,7 @@ class OrderController extends Controller
         $this->syncProperties($item, $request);
         return $item;
     }
+    
     
     public function read($id){
         $item = Order::with(
@@ -167,4 +168,33 @@ class OrderController extends Controller
         return response([], 204);
     }    
 
+    public function convert(Request $request){
+        $this->validate($request, $this->validation);
+        $values = $request->only(array_keys($this->validation));
+        $values = $request->input();//need to take this out
+        $new_values = $values;
+        $new_values['creator_id'] = $request->user()->id;
+        $new_values['updater_id'] = $request->user()->id;
+        $new_values['recurring'] = null;
+        $new_values['renewable'] = null;
+        $items = [];
+        $properties = $request->only('properties');
+        if($values['recurring'] == 'true'){
+            for($item_number = 0; $item_number < $values['recurrences']; $item_number++){
+                $start_date = date_create($values['start_date']);
+                $start_date->modify($values['recurring_interval']);
+                $values['start_date'] = $start_date->format('Y-m-d');
+                foreach($properties as $property){
+                    $item = Order::create($new_values);
+                    $this->properties()->attach($property);
+                    //add tasks
+                    array_push($items,Order::findOrFail($item->id));
+                }
+            }
+        }
+        
+        
+        return $items;
+    }
+    
 }

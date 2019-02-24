@@ -46,10 +46,7 @@ class CreateOrdersTable extends Migration
             $table->integer('service_window')->nullable();
             $table->boolean('renewable')->default(false);
             $table->integer('recurrences')->nullable();
-            $table->boolean('indefinite')->default(false);
-            //$table->interval('order_interval')->nullable();
-            $table->integer('frequency')->nullable();
-            //$table->interval('renewal_interval')->nullable();
+            $table->boolean('recurring')->default(false);
             $table->date('renewal_date')->nullable();
             $table->integer('notification_lead')->nullable();
             $table->text('renewal_message')->nullable();
@@ -60,7 +57,7 @@ class CreateOrdersTable extends Migration
         });
         
         
-        DB::statement('ALTER TABLE orders ADD COLUMN order_interval INTERVAL');
+        DB::statement('ALTER TABLE orders ADD COLUMN recurring_interval INTERVAL');
         DB::statement('ALTER TABLE orders ADD COLUMN renewal_interval INTERVAL');
     }
 /*

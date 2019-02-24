@@ -171,6 +171,7 @@ $router->delete('/property/{id:[0-9]+}', 'PropertyController@delete');
 
 $router->get('/orders', 'OrderController@index');
 $router->post('/order', 'OrderController@create');
+$router->post('/order/convert', 'OrderController@convert');
 $router->get('/order/{id:[0-9]+}', 'OrderController@read');
 $router->patch('/order/{id:[0-9]+}', 'OrderController@update');
 $router->delete('/order/{id:[0-9]+}', 'OrderController@delete');

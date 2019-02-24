@@ -23,7 +23,7 @@ class Order extends Model
         'order_action_id',
         'recurrences',
         'service_window',
-        'indefinite',
+        'recurring',
         'location',
         'instructions',
         'notes',
@@ -39,7 +39,7 @@ class Order extends Model
         'renewal_date',
         'notification_lead',
         'renewal_message',
-        'order_interval',
+        'recurring_interval',
         'renewal_interval',
         'creator_id',
         'updater_id'
