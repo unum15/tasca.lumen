@@ -175,25 +175,39 @@ class OrderController extends Controller
         $new_values = $values;
         $new_values['creator_id'] = $request->user()->id;
         $new_values['updater_id'] = $request->user()->id;
-        $new_values['recurring'] = null;
-        $new_values['renewable'] = null;
+        $new_values['recurring'] = false;
+        $new_values['renewable'] = false;
+        unset($new_values['id']);
         $items = [];
         $properties = $request->only('properties');
+        $today = date_create();
         if($values['recurring'] == 'true'){
-            for($item_number = 0; $item_number < $values['recurrences']; $item_number++){
-                $start_date = date_create($values['start_date']);
-                $start_date->modify($values['recurring_interval']);
-                $values['start_date'] = $start_date->format('Y-m-d');
+            $start_date = date_create($values['start_date']);
+            for($item_number = 0; $item_number < $values['recurrences']; $item_number++){    
+                $new_values['start_date'] = $start_date->format('Y-m-d');
+                error_log($today->diff($start_date)->format('d'));
+                if($today->diff($start_date)->format('d') <= $request->user()->pending_days_out){
+                    $new_values['order_status_type_id'] = 3;
+                }
+                else{
+                    $new_values['order_status_type_id'] = 2;
+                }
                 foreach($properties as $property){
                     $item = Order::create($new_values);
-                    $this->properties()->attach($property);
+                    $item->properties()->attach($property);
                     //add tasks
                     array_push($items,Order::findOrFail($item->id));
                 }
+                $start_date->modify('+'.$values['recurring_interval']);
             }
         }
-        
-        
+        if($values['renewable']){
+            
+        }
+        else{
+            $item = Order::findOrFail($values['id']);
+            $item->update(['completion_date' => date('Y-m-d')]);
+        }
         return $items;
     }
     
