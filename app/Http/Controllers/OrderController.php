@@ -128,6 +128,7 @@ class OrderController extends Controller
         $this->validate($request, $this->validation);     
         $item = Order::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
+        $values = $request->input();
         $values['approval_date'] = isset($values['approval_date']) && $values['approval_date'] != "" ? $values['approval_date'] : null;
         $values['start_date'] = isset($values['start_date']) && $values['start_date'] != "" ? $values['start_date'] : null;
         $values['completion_date'] = isset($values['completion_date']) && $values['completion_date'] != "" ? $values['completion_date'] : null;
@@ -182,6 +183,7 @@ class OrderController extends Controller
         $items = [];
         $properties = $request->only('properties');
         $today = date_create();
+        $original_order = Order::findOrFail($values['id']);
         if($values['recurring'] == 'true'){
             $start_date = date_create($values['start_date']);
             for($item_number = 0; $item_number < $values['recurrences']; $item_number++){    
@@ -195,28 +197,27 @@ class OrderController extends Controller
                 foreach($properties as $property){
                     $item = Order::create($new_values);
                     $item->properties()->attach($property);
-                    //add tasks
+                    foreach($original_order->tasks as $task){
+                        $task_values = $task->toArray();
+                        unset($task_values['id']);
+                        $new_task = Task::create($new_task);
+                        $item->tasks()->attach($new_task);
+                    }
                     array_push($items,Order::findOrFail($item->id));
                 }
-                //postgresql uses mons, but php needs moths
-                //$interval = preg_replace('/mons/','months',$values['recurring_interval']);
-                //$start_date->modify('+'.$interval);
-                //error_log($interval);
                 $start_date->modify('+'.$values['recurring_interval']);
             }
         }
-        $item = Order::findOrFail($values['id']);
         if(!empty($values['renewable']) && ($values['renewable'] == 'true')){
             $date = date_create($values['renewal_date']);
             $date->modify('+'.$values['renewal_interval']);
-            $item->update([
+            $original_order->update([
                 'renewal_date' => $date->format('Y-m-d'),
-                'renewal_count' => $item->renewal_count - 1
+                'renewal_count' => $original_order->renewal_count - 1
             ]);
         }
         else{
-
-            $item->update(['completion_date' => date('Y-m-d')]);
+            $original_order->update(['completion_date' => date('Y-m-d')]);
         }
         return $items;
     }
