@@ -48,7 +48,7 @@ class CreateOrdersTable extends Migration
             $table->integer('recurrences')->nullable();
             $table->boolean('recurring')->default(false);
             $table->date('renewal_date')->nullable();
-            $table->interval('renewal_count')->nullable();
+            $table->integer('renewal_count')->nullable();
             $table->integer('notification_lead')->nullable();
             $table->text('renewal_message')->nullable();
             $table->integer('creator_id');
