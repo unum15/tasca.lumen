@@ -18,6 +18,7 @@ class TaskDateController extends Controller
         'day' => 'nullable|string|max:255',
         'date' => 'nullable|date',
         'time' => 'nullable|string|max:255',
+        'notes' => 'nullable|string|max:255',
     ];
 
     public function __construct()

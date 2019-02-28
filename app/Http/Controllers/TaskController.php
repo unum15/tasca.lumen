@@ -27,7 +27,7 @@ class TaskController extends Controller
         'task_hours' => 'nullable|integer',
         'crew_hours' => 'nullable|integer',
         'notes' => 'nullable|string|max:255',
-        'sort_order' => 'nullable|integer',
+        'sort_order' => 'nullable|string|max:255',
         'order_id' => 'integer|exists:orders,id',
         'notes' => 'nullable|string|max:255',
         'group' => 'nullable|string|max:255'
