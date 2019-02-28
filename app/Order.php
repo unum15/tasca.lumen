@@ -35,7 +35,7 @@ class Order extends Model
         'bid_plus_minus',
         'invoice_number',
         'renewable',
-        //'frequency',
+        'renewal_count',
         'renewal_date',
         'notification_lead',
         'renewal_message',

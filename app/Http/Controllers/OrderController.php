@@ -178,6 +178,7 @@ class OrderController extends Controller
         $new_values['recurring'] = false;
         $new_values['renewable'] = false;
         unset($new_values['id']);
+        unset($new_values['completion_date']);
         $items = [];
         $properties = $request->only('properties');
         $today = date_create();
@@ -185,8 +186,7 @@ class OrderController extends Controller
             $start_date = date_create($values['start_date']);
             for($item_number = 0; $item_number < $values['recurrences']; $item_number++){    
                 $new_values['start_date'] = $start_date->format('Y-m-d');
-                error_log($today->diff($start_date)->format('d'));
-                if($today->diff($start_date)->format('d') <= $request->user()->pending_days_out){
+                if($today->diff($start_date)->days <= $request->user()->pending_days_out){
                     $new_values['order_status_type_id'] = 3;
                 }
                 else{
@@ -198,14 +198,24 @@ class OrderController extends Controller
                     //add tasks
                     array_push($items,Order::findOrFail($item->id));
                 }
+                //postgresql uses mons, but php needs moths
+                //$interval = preg_replace('/mons/','months',$values['recurring_interval']);
+                //$start_date->modify('+'.$interval);
+                //error_log($interval);
                 $start_date->modify('+'.$values['recurring_interval']);
             }
         }
-        if($values['renewable']){
-            
+        $item = Order::findOrFail($values['id']);
+        if(!empty($values['renewable']) && ($values['renewable'] == 'true')){
+            $date = date_create($values['renewal_date']);
+            $date->modify('+'.$values['renewal_interval']);
+            $item->update([
+                'renewal_date' => $date->format('Y-m-d'),
+                'renewal_count' => $item->renewal_count - 1
+            ]);
         }
         else{
-            $item = Order::findOrFail($values['id']);
+
             $item->update(['completion_date' => date('Y-m-d')]);
         }
         return $items;
