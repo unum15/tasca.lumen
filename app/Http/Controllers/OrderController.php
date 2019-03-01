@@ -185,6 +185,8 @@ class OrderController extends Controller
         $properties = $request->only('properties');
         $today = date_create();
         $original_order = Order::findOrFail($values['id']);
+        //add number as per Paul
+        $order_number = 1;
         if($values['recurring'] == 'true'){
             $start_date = date_create($values['start_date']);
             for($item_number = 0; $item_number < $values['recurrences']; $item_number++){    
@@ -196,6 +198,8 @@ class OrderController extends Controller
                     $new_values['order_status_type_id'] = 2;
                 }
                 foreach($properties as $property){
+                    $new_values['name'] = $values['name'] . ' ' . $order_number++;
+                    $new_values['description'] = $values['description'] . ' ' . $start_date->format('Y-m-d');
                     $item = Order::create($new_values);
                     $item->properties()->attach($property);
                     foreach($original_order->tasks as $task){
