@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Task;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -200,8 +201,8 @@ class OrderController extends Controller
                     foreach($original_order->tasks as $task){
                         $task_values = $task->toArray();
                         unset($task_values['id']);
-                        $new_task = Task::create($new_task);
-                        $item->tasks()->attach($new_task);
+                        $task_values['order_id'] = $item->id;
+                        Task::create($task_values);
                     }
                     array_push($items,Order::findOrFail($item->id));
                 }
