@@ -33,13 +33,17 @@ class PropertyController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
-        $items = Property::with('client')
+    public function index(Request $request){
+        $items_query = Property::with('client')
         ->with('activityLevel')
         ->with('propertyType')
         ->with('contacts')
-        ->orderBy('name')
-        ->get();
+        ->orderBy('name');
+        $values = $request->only(array_keys($this->validation));
+        foreach($values as $field => $value){
+            $items_query->where($field, $value);
+        }
+        $items = $items_query->get();
         return $items;
     }
     
