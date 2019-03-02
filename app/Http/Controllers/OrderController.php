@@ -14,7 +14,7 @@ class OrderController extends Controller
      * @return void
      */
     private $validation = [
-        'description' => 'string|min:1|max:255',
+        'description' => 'string|min:1|max:1024',
 		'project_id' => 'integer|exists:projects,id',
         'order_status_type_id' => 'integer|exists:order_status_types,id',
         'name' => 'nullable|string|max:255',
@@ -32,9 +32,9 @@ class OrderController extends Controller
         'recurrences' => 'nullable|integer',
         'service_window' => 'nullable|integer',
         'recurring' => 'boolean',
-        'location' => 'nullable|string|max:255',
-        'instructions' => 'nullable|string|max:255',
-        'notes' => 'nullable|string|max:255',
+        'location' => 'nullable|string|max:1024',
+        'instructions' => 'nullable|string|max:1024',
+        'notes' => 'nullable|string|max:1024',
         'purchase_order_number' => 'nullable|string|max:255',
         'budget' => 'nullable|string|max:255',
         'budget_plus_minus' => 'nullable|integer|max:255',

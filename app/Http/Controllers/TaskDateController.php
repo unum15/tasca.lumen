@@ -57,6 +57,10 @@ class TaskDateController extends Controller
                 }
             );
         }
+        $min_date = $request->only('min_date');
+        if(!empty($min_date)){
+            $items_query->where('date', '<=', $min_date['min_date']);
+        }
         return $items_query->get();
     }
     
