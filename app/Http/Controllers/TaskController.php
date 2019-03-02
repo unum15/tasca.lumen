@@ -29,7 +29,7 @@ class TaskController extends Controller
         'notes' => 'nullable|string|max:255',
         'sort_order' => 'nullable|string|max:255',
         'order_id' => 'integer|exists:orders,id',
-        'notes' => 'nullable|string|max:255',
+        'notes' => 'nullable|string|max:1024',
         'group' => 'nullable|string|max:255'
     ];
 
