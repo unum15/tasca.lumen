@@ -187,7 +187,7 @@ class OrderController extends Controller
         $original_order = Order::findOrFail($values['id']);
         //add number as per Paul
         $order_number = 1;
-        if($values['recurring'] == 'true'){
+        if((!empty($values['recurring']))&&($values['recurring'] == 'true')){
             $start_date = date_create($values['start_date']);
             for($item_number = 0; $item_number < $values['recurrences']; $item_number++){    
                 $new_values['start_date'] = $start_date->format('Y-m-d');
@@ -218,7 +218,10 @@ class OrderController extends Controller
             $date->modify('+'.$values['renewal_interval']);
             $original_order->update([
                 'renewal_date' => $date->format('Y-m-d'),
-                'renewal_count' => $original_order->renewal_count - 1
+                'renewal_count' => $original_order->renewal_count - 1,
+                'approval_date' => null,
+                'start_date' => null,
+                'service_window' => $request->user()->default_service_window
             ]);
         }
         else{
