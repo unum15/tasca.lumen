@@ -187,9 +187,11 @@ class OrderController extends Controller
         $original_order = Order::findOrFail($values['id']);
         //add number as per Paul
         $order_number = 1;
-        if((!empty($values['recurring']))&&($values['recurring'] == 'true')){
+        $recurring = ((!empty($values['recurring']))&&($values['recurring'] == 'true'));
+        if(($recurring)||((!empty($values['renewable']))&&($values['renewable'] == 'true'))){
             $start_date = date_create($values['start_date']);
-            for($item_number = 0; $item_number < $values['recurrences']; $item_number++){    
+            $count = $recurring ? $values['recurrences'] : 1;
+            for($item_number = 0; $item_number < $count; $item_number++){    
                 $new_values['start_date'] = $start_date->format('Y-m-d');
                 if($today->diff($start_date)->days <= $request->user()->pending_days_out){
                     $new_values['order_status_type_id'] = 3;
