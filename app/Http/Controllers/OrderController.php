@@ -200,8 +200,10 @@ class OrderController extends Controller
                     $new_values['order_status_type_id'] = 2;
                 }
                 foreach($properties as $property){
-                    $new_values['name'] = $values['name'] . ' ' . $order_number++;
-                    $new_values['description'] = $values['description'] . ' ' . $start_date->format('Y-m-d');
+                    $append = $recurring ? ' ' . $order_number++ : null;
+                    $new_values['name'] = $values['name'] . $append;
+                    $append = $recurring ? ' ' .  $start_date->format('Y-m-d') : null;
+                    $new_values['description'] = $values['description'] . $append;
                     $item = Order::create($new_values);
                     $item->properties()->attach($property);
                     foreach($original_order->tasks as $task){
