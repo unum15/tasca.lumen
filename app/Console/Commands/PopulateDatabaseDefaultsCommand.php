@@ -205,11 +205,12 @@ class PopulateDatabaseDefaultsCommand extends Command
             'value' =>
 "
 <h3>Project</h3>
-<p>A project is the end result the customer needs completed. It can be a simple repair of something that is damaged, an ongoing service or a full design build job.</p>
+<p>A project is the end result the customer needs to be completed. It can be a simple repair of something that is damaged, an ongoing service or a full design-build job.  Project can be left open and new orders can be added. Project that reoccur or renews can not be closed out. A project can not be closed until all  orders have been closed</p>
 <p>Project Name: Give the Project a short name.</p>
 <p>Contact: The person who is overseeing the project. This will default to the billing contact.</p>
 <h3>Orders</h3>
-<p>Orders are the actions it will take to get the project completed. There can be a single action like a service call for a simple repair or several actions it will take to complete a design build job. There are 3 types of orders, Servie, Pending, and Work orders. Typically a order can be tied to a work phase or a billing invoice.</p>
+<p>Orders are the actions it will take to get the project completed. There can be a single action like a service call for a simple repair or several actions it will take to complete a design-build job. There are 3 types of orders, Service, Pending, and Work orders. Typilicy an order can be tied to a work phase or a billing invoice.  Orders can not be closed out until all Task have been completed.</p>
+<p>When creating a PWO or WO from a SO with multiple properties it will create a PWO or WO for each property. When creating a PWO or WO only one property can be selected.When a PWO or WO is created from a SO the SO that does not Renew will be closed. SO that renew will stay open with a new blank Approval and Start Dates. When the Client approves the renew of the order the Start Date will be updated with the Approval date or custom date.</p>
 "
         ]);
         Setting::create([

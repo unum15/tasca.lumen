@@ -214,7 +214,9 @@ class OrderController extends Controller
                     }
                     array_push($items,Order::findOrFail($item->id));
                 }
-                $start_date->modify('+'.$values['recurring_interval']);
+                if($recurring){
+                    $start_date->modify('+'.$values['recurring_interval']);
+                }
             }
         }
         if(!empty($values['renewable']) && ($values['renewable'] == 'true')){
