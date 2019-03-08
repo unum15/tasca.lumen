@@ -199,21 +199,73 @@ class MigrateOldDataCommand extends Command
 <p>A project is the end result the customer needs completed. It can be a simple repair of something that is damaged, an ongoing service or a full design build job.</p>
 <p>Project Name: Give the Project a short name.</p>
 <p>Contact: The person who is overseeing the project. This will default to the billing contact.</p>
+<h3>Orders</h3>
+<p>Orders are the actions it will take to get the project completed. There can be a single action like a service call for a simple repair or several actions it will take to complete a design build job. There are 3 types of orders, Servie, Pending, and Work orders. Typically a order can be tied to a work phase or a billing invoice.</p>
+<p>When creating a PWO or WO from a SO with multiple properties it will create a PWO or WO for each property. When creating a PWO or WO only one property can be selected.When a PWO or WO is created from a SO the SO that does not Renew will be closed. SO that renew will stay open with a new blank Approval and Start Dates. When the Client approves the renew of the order the Start Date will be updated with the Approval date or custom date.</p>
 <h3>Project General Tab</h3>
 <p>Notes: Place more details about the project here if need.</p>
 <p>Open Date: This is the date the Project was created.</p>
 <p>Close Date: This is the date the Project was closed. In Order to close a project all orders, and task must be completed, closed or expired, and no renewing SO. Projects will close out automatically after the number of days set in the settings, the default is 30 days.</p>
-<h3>Orders</h3>
-<p>Orders are the actions it will take to get the project completed. There can be a single action like a service call for a simple repair or several actions it will take to complete a design build job. There are 3 types of orders, Servie, Pending, and Work orders. Typically a order can be tied to a work phase or a billing invoice.</p>
 "
         ]);
         Setting::create([
             'name' => 'help_order_general',
             'value' => "
 <h3>Order Details Tab</h3>
-Notes: Place more details about the project here if need. 
-Open Date: This is the date the Project was created.
-Close Date: This is the date the Project was closed. In Order to close a project all orders, and task must be completed, closed or expired, and no renewing SO. Projects will close out automatically after the number of days set in the settings, the default is 30 days.
+<ul>
+    <li>Order Name: Give a short name for the type of order.</li>
+    <li>Description: This is more descriptive of was the customer wants to be done. Keep it short more information can be made under the note tab.</li>
+    <li>Category: This is used to group Orders together that are similar it can be customized in the setting. It can be Types of work, crews, or divisions.</li>
+    <dl>
+        <dt>Default options are:</dt>
+        <dd>Construction: Orders for the Construction Crew.</dd>
+        <dd>Maintenance: Orders for the Maintenance Crew.</dd>
+        <dd>Service: Orders for the Service Crew.</dd>
+    </dl>
+    <li>Priority: Use this to keep track of the orders that need to be worked on before others.</li>
+    <dl>
+        <dt>Default options are:</dt>
+        <dd>ASAP: Complete before any other client or job.</dd>
+        <dd>Next Action: Complete as scheduled.</dd>
+        <dd>Active: Complete when there is time.</dd>
+        <dd>Non Active: The order has been placed on hold.</dd>
+    </dl>
+    <li>Type:  How is the customer being billed for the work being done. What type of pricing was given to the client?</li>
+    <dl>
+        <dt>Default options are:</dt>
+        <dd>Lead: The client has told you about a job they need to be completed in the future.</dd>
+        <dd>T & M: The work will be charged by the hour.</dd>
+        <dd>Quote: The client has been given a quote for the cost of the order.</dd>
+        <dd>Estimate: The client has been given an estimate for the cost of the order.</dd>
+        <dd>Bid: The client has been given a Bid for the cost of the order.</dd>
+    </dl>
+    <li>Status: Where the order is in the process of being completed.</li>
+    <dl>
+        <dt>Default options are:</dt>
+        <dd>Will Call Back: Client said they will call back.</dd>
+        <dd>Reviewing: The order is being reviewed for  Quote or Bid.</dd>
+        <dd>Renewing: Waiting to be renewed.</dd>
+        <dd>On Hold: Waiting for approval from Client.</dd>
+        <dd>Canceled: The order has be Canceled.</dd>
+        <dd>Approved (only visible on WO tabs after the Approved date is entered.)</dd>
+        <dd>Completed t(only visible on WO tabs after the Closed date is entered.)</dd>
+    </dl>
+    <li>Action: This is what needs to be done next in the process.</li>
+    <dl>
+        <dt>Default options are:</dt>
+        <dd>Contact</dd>
+        <dd>Follow Up</dd>
+        <dd>Site Visit</dd>
+        <dd>Bid</dd>
+        <dd>Get P.O.</dd>
+        <dd>Complete</dd>
+        <dd>Close</dd>
+    </dl>
+</ul>
+
+
+    
+
 "
         ]);
 
@@ -222,10 +274,10 @@ Close Date: This is the date the Project was closed. In Order to close a project
             'value' => "
 <h3>Service Order</h3>
 <p>A service order is when a client inquires about service, this can be a Lead, Estimate, Quote or Bid. This would be work that you have not been authorized to do but may in the future. Use this section to keep track of leads, quotes, or bids you have pending.</p>
-<p>Property: This is the property the work will be done on, each order within a project can be assigned to a single property. When creating a SO multiple properties can be selected. Click on the property select box and hold the CTRL key to select multiple properties. This will allow WOs that include several properties to be created for each property.</p>
-<p>When creating a PWO or WO from a SO with multiple properties it will create a PWO or WO for each property. When creating a PWO or WO only one property can be selected.</p>
-<p>When a PWO or WO is created from a SO the SO that does not Renew will be closed. SO that renew will stay open with a new blank Approval and Start Dates.</p>
 <p>A SO must be assigned to a project with an Open Date, Each SO must have a  Property, Name, Description,  Category, Priority, Type, Status and Action.</p>
+<p>Check “Show Closed” to view the closed Service Orders.</p>
+<p>Check “Show Expired” to view Service Orders that have Expired.</p>
+<p>Property: This is the property the work will be done on, each order within a project can be assigned to a single property. It will default to the billing property. When creating a SO multiple properties can be selected. Click on the drop-down and hold the CTRL key to select multiple properties. This will allow WOs that include several properties to be created for each property</p>
 "
         ]);
         
@@ -252,11 +304,19 @@ Close Date: This is the date the Project was closed. In Order to close a project
             'name' => 'help_order_calendar',
             'value' => "
 <h3>Order Calendar Tab</h3>
-<p>Use the Calendar place the order on the calendar and set up recurring orders. Service orders with date will show up on the order calendar.</p>
-<p>Approval Date: The date the customer approves the order, this will typically be the date the customer calls and ask for the service.</p>
-<p>Start Date: The date the order will start or the date the client is told the order will be started. This will default to the approved date.</p>
-<p>Service Window: This is the time it will take to complete the order. Or it can be used to note the days the client was told the order will be completed.</p>
-<p>Recurrences: Will this order be performed once or several times throughout the contract. Weekly, Biweekly, or Monthly. 1 means this will be done 1 time. 30 means this will be done 30 times.</p>
+<p>Use the Calendar tab to approve an order, set the start date, and set up recurring orders.</p>
+<ul>
+<li>Order Date: This is the date the customer made the first contact about the needed service. This will default to the current date.
+<li>Close Date: The date a Recurring or Renewing SO was closed.<li>
+<li>Expiration Date: A date can be assigned to hide this SO form the Calendar. It also can be the date the Quote, Estimate, or Bid expires. </li>
+<li>Approval Date: The date the customer approves the order, this will typically be the date the customer calls and ask for the service.</li>
+<li>Start Date: The date the order will start or the date the client is told the order will be started. This will default to the approved date.</li>
+<li>Service Window: This is the time it will take to complete the order. Or it can be used to note the days the client was told the order will be completed.</li>
+<li>Recurrences: Will this order be performed once or several times throughout the contract.The Start date will be the first date the order will be first be filled.</li>
+<ul>
+    <li>Times: How many orders will be created.</li>
+    <li>Every: How often will an Order be created.</li>
+    <li>Frequency: Yearly, Monthly, Weekly, Day</li>
 "
         ]);
         
