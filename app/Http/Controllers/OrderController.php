@@ -87,6 +87,9 @@ class OrderController extends Controller
         $values = $request->input();
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
+        if(empty($values['order_status_type_id'])){
+            $values['order_status_type_id'] = $this->orderStatusType($values['start_date']);
+        }
         $item = Order::create($values);
         $item = Order::findOrFail($item->id);
         $this->syncProperties($item, $request);
@@ -183,7 +186,7 @@ class OrderController extends Controller
         unset($new_values['completion_date']);
         $items = [];
         $properties = $request->only('properties');
-        $today = date_create();
+
         $original_order = Order::findOrFail($values['id']);
         //add number as per Paul
         $order_number = 1;
@@ -193,12 +196,7 @@ class OrderController extends Controller
             $count = $recurring ? $values['recurrences'] : 1;
             for($item_number = 0; $item_number < $count; $item_number++){    
                 $new_values['start_date'] = $start_date->format('Y-m-d');
-                if($today->diff($start_date)->days <= $request->user()->pending_days_out){
-                    $new_values['order_status_type_id'] = 3;
-                }
-                else{
-                    $new_values['order_status_type_id'] = 2;
-                }
+                $new_values['order_status_type_id'] = $this->orderStatusType($new_values['start_date']);
                 foreach($properties as $property){
                     $append = $recurring ? ' ' . $order_number++ : null;
                     $new_values['name'] = $values['name'] . $append;
@@ -236,4 +234,18 @@ class OrderController extends Controller
         return $items;
     }
     
+    public function orderStatusType($date){
+        if(empty($date)){
+            return 1;
+        }
+        $today = date_create();
+        $window = Auth::user()->default_service_window;
+        $date_obj = date_create($date);
+        if($today->diff($date_obj)->days <= $window){
+            return 3;
+        }
+        else{
+            return 2;
+        }
+    }
 }
