@@ -183,6 +183,7 @@ $router->patch('/task/{id:[0-9]+}', 'TaskController@update');
 $router->delete('/task/{id:[0-9]+}', 'TaskController@delete');
 
 $router->get('/task_dates', 'TaskDateController@index');
+$router->get('/schedule', 'TaskDateController@schedule');
 $router->post('/task_date', 'TaskDateController@create');
 $router->get('/task_date/{id:[0-9]+}', 'TaskDateController@read');
 $router->patch('/task_date/{id:[0-9]+}', 'TaskDateController@update');
