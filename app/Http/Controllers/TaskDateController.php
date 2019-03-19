@@ -109,42 +109,13 @@ class TaskDateController extends Controller
             )
             ->orderBy('task_dates.id');
             ;
-            
             $items_query->whereNull('orders.completion_date');
             $items_query->whereNull('orders.expiration_date');
             $items_query->whereNotNull('orders.approval_date');
-/*        $items_query = TaskDate::with(
-            'task',
-            'task.order',
-            'task.order.project',
-            'task.order.properties',
-            'task.order.project.contact',
-            'task.order.project.client',
-            'task.TaskCategory',
-            'task.TaskStatus',
-            'task.TaskAppointmentStatus',
-            'task.TaskAction',
-            'task.order.orderPriority',
-            'task.order.orderCategory'
-        )
-        ->orderBy('id');*/
-       /*foreach($values as $field => $value){
-            $items_query->where($field, $value);
-        }
-        $active_only = $request->only('active_only');
-        if((!empty($active_only)) && ($active_only['active_only'] == 'true')){
-            $items_query->whereHas(
-                'task.order' , function($q){
-                    $q->whereNull('completion_date');
-                    $q->whereNull('expiration_date');
-                    $q->whereNotNull('approval_date');
-                }
-            );
-        }
-        $min_date = $request->only('min_date');
-        if(!empty($min_date)){
-            $items_query->where('date', '<=', $min_date['min_date']);
-        }*/
+            $order_status_type_id = $request->only('order_status_type_id');
+            if(!empty($order_status_type_id['order_status_type_id'])){
+                $items_query->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id']);
+            }
         return $items_query->get();
     }
     
