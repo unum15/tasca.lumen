@@ -83,7 +83,10 @@ class TaskDateController extends Controller
             ->leftJoin('task_statuses', 'tasks.task_status_id', '=', 'task_statuses.id')
             ->leftJoin('task_actions', 'tasks.task_action_id', '=', 'task_actions.id')
             ->select('task_dates.id',
-                'task_dates.task_id',
+                'tasks.id AS task_id',
+                'orders.start_date',
+                'orders.service_window',
+                'tasks.name',
                 'orders.approval_date',
                 'orders.expiration_date',
                 'orders.completion_date',
@@ -105,7 +108,8 @@ class TaskDateController extends Controller
                 'task_dates.day',
                 'task_dates.date',
                 'tasks.sort_order',
-                'task_dates.time'
+                'task_dates.time',
+                DB::raw("CASE WHEN start_date + (service_window || 'days')::INTERVAL < NOW()::DATE THEN 'danger' ELSE null END AS \"_rowVariant\" ")
             )
             ->orderBy('task_dates.id');
             ;
