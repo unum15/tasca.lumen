@@ -109,7 +109,9 @@ class TaskDateController extends Controller
                 'task_dates.date',
                 'tasks.sort_order',
                 'task_dates.time',
-                DB::raw("CASE WHEN start_date + (service_window || 'days')::INTERVAL < NOW()::DATE THEN 'danger' ELSE null END AS \"_rowVariant\" ")
+                'tasks.task_type_id',
+                //DB::raw("CASE WHEN start_date + (service_window || 'days')::INTERVAL < NOW()::DATE THEN 'bold' ELSE null END AS \"_rowVariant\" "),
+                DB::raw("CASE WHEN tasks.task_type_id = 1 AND orders.order_status_type_id != 3 THEN 'danger' WHEN tasks.task_type_id = 1 AND orders.order_status_type_id = 3 THEN 'success' ELSE null END AS \"_rowVariant\" ") 
             )
             ->orderBy('task_dates.id');
             ;
@@ -118,7 +120,15 @@ class TaskDateController extends Controller
             $items_query->whereNotNull('orders.approval_date');
             $order_status_type_id = $request->only('order_status_type_id');
             if(!empty($order_status_type_id['order_status_type_id'])){
-                $items_query->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id']);
+                if($order_status_type_id['order_status_type_id'] != 3){
+                    $items_query->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id']);
+                }
+                else{
+                    $items_query->where(function($q) use ($order_status_type_id) {
+                        $q->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id'])
+                        ->orWhere('tasks.task_type_id', 1);
+                    });                   
+                }
             }
         return $items_query->get();
     }
