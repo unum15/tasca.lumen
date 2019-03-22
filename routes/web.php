@@ -43,6 +43,12 @@ $router->get('/contact_type/{id:[0-9]+}', 'ContactTypeController@read');
 $router->patch('/contact_type/{id:[0-9]+}', 'ContactTypeController@update');
 $router->delete('/contact_type/{id:[0-9]+}', 'ContactTypeController@delete');
 
+$router->get('/crews', 'CrewController@index');
+$router->post('/crew', 'CrewController@create');
+$router->get('/crew/{id:[0-9]+}', 'CrewController@read');
+$router->patch('/crew/{id:[0-9]+}', 'CrewController@update');
+$router->delete('/crew/{id:[0-9]+}', 'CrewController@delete');
+
 $router->get('/email_types', 'EmailTypeController@index');
 $router->post('/email_type', 'EmailTypeController@create');
 $router->get('/email_type/{id:[0-9]+}', 'EmailTypeController@read');
