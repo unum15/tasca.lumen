@@ -120,7 +120,6 @@ class TaskDateController extends Controller
                 $q->whereNull('orders.expiration_date')
                 ->orWhere('orders.expiration_date','<=', date('Y-m-d'));
             });
-            $items_query->whereNotNull('orders.approval_date');
             $order_status_type_id = $request->only('order_status_type_id');
             if(!empty($order_status_type_id['order_status_type_id'])){
                 if($order_status_type_id['order_status_type_id'] != 3){
