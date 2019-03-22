@@ -115,8 +115,10 @@ class TaskDateController extends Controller
             ->orderBy('task_dates.id');
             ;
             $items_query->whereNull('orders.completion_date');
-            $items_query->whereNull('orders.expiration_date');
-            $items_query->whereNotNull('orders.approval_date');
+            $items_query->where(function($q){
+                $q->whereNull('orders.expiration_date')
+                ->orWhere('orders.expiration_date','>=', date('Y-m-d'));
+            });
             $order_status_type_id = $request->only('order_status_type_id');
             if(!empty($order_status_type_id['order_status_type_id'])){
                 if($order_status_type_id['order_status_type_id'] != 3){
