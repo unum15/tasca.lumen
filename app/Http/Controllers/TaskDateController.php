@@ -114,8 +114,7 @@ class TaskDateController extends Controller
                 'tasks.sort_order',
                 'task_dates.time',
                 'tasks.task_type_id',
-                //DB::raw("CASE WHEN start_date + (service_window || 'days')::INTERVAL < NOW()::DATE THEN 'bold' ELSE null END AS \"_rowVariant\" "),
-                DB::raw("CASE WHEN tasks.task_type_id = 1 AND orders.order_status_type_id != 3 THEN 'danger' WHEN tasks.task_type_id = 1 AND orders.order_status_type_id = 3 THEN 'success' ELSE null END AS \"_rowVariant\" ") 
+                'orders.order_status_type_id'
             )
             ->orderBy('task_dates.id');
             ;
@@ -123,9 +122,8 @@ class TaskDateController extends Controller
             $items_query->whereNull('tasks.completion_date');
             $items_query->where(function($q){
                 $q->whereNull('orders.expiration_date')
-                ->orWhere('orders.expiration_date','<=', date('Y-m-d'));
+                ->orWhere('orders.expiration_date','>=', date('Y-m-d'));
             });
-            $items_query->whereNotNull('orders.approval_date');
             $order_status_type_id = $request->only('order_status_type_id');
             if(!empty($order_status_type_id['order_status_type_id'])){
                 if($order_status_type_id['order_status_type_id'] != 3){
