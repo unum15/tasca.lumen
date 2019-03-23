@@ -60,7 +60,11 @@ class TaskDateController extends Controller
         }
         $min_date = $request->only('min_date');
         if(!empty($min_date)){
-            $items_query->where('date', '<=', $min_date['min_date']);
+            $items_query->where(function($q) use ($min_date) {
+                $q->whereNull('date')
+                ->orWhere('date', '<=', $min_date['min_date']);
+                
+            });
         }
         return $items_query->get();
     }
@@ -116,6 +120,7 @@ class TaskDateController extends Controller
             ->orderBy('task_dates.id');
             ;
             $items_query->whereNull('orders.completion_date');
+            $items_query->whereNull('tasks.completion_date');
             $items_query->where(function($q){
                 $q->whereNull('orders.expiration_date')
                 ->orWhere('orders.expiration_date','<=', date('Y-m-d'));
