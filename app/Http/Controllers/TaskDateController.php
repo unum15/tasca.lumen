@@ -86,6 +86,7 @@ class TaskDateController extends Controller
             ->leftJoin('task_categories', 'tasks.task_category_id', '=', 'task_categories.id')
             ->leftJoin('task_statuses', 'tasks.task_status_id', '=', 'task_statuses.id')
             ->leftJoin('task_actions', 'tasks.task_action_id', '=', 'task_actions.id')
+            ->leftJoin('crews', 'tasks.crew_id', '=', 'crews.id')
             ->select('task_dates.id',
                 'tasks.id AS task_id',
                 'orders.start_date',
@@ -114,7 +115,9 @@ class TaskDateController extends Controller
                 'tasks.sort_order',
                 'task_dates.time',
                 'tasks.task_type_id',
-                'orders.order_status_type_id'
+                'orders.order_status_type_id',
+                'crew_id',
+                'crews.name AS crew'
             )
             ->orderBy('task_dates.id');
             ;

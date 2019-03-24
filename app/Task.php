@@ -18,6 +18,7 @@ class Task extends Model
       'completion_date',
       'job_hours',
       'crew_hours',
+      'crew_id',
       'notes',
       'sort_order',
       'group',
@@ -51,6 +52,10 @@ class Task extends Model
   
   public function dates(){
     return $this->hasMany('App\TaskDate');
+  }
+  
+  public function crew(){
+    return $this->belongsTo('App\Crew');
   }
   
 }
