@@ -86,6 +86,11 @@ class OrderController extends Controller
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $values = $request->input();
+        $values['approval_date'] = isset($values['approval_date']) && $values['approval_date'] != "" ? $values['approval_date'] : null;
+        $values['start_date'] = isset($values['start_date']) && $values['start_date'] != "" ? $values['start_date'] : null;
+        $values['completion_date'] = isset($values['completion_date']) && $values['completion_date'] != "" ? $values['completion_date'] : null;
+        $values['expiration_date'] = isset($values['expiration_date']) && $values['expiration_date'] != "" ? $values['expiration_date'] : null;
+        $values['renewal_date'] = isset($values['renewal_date']) && $values['renewal_date'] != "" ? $values['renewal_date'] : null;
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         if(empty($values['order_status_type_id'])){
