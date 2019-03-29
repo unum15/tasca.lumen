@@ -19,7 +19,7 @@ class ClientController extends Controller
 		'client_type_id' => 'nullable|integer|exists:client_types,id',
 		'activity_level_id' => 'nullable|integer|exists:activity_levels,id',
 		'billing_contact_id' => 'nullable|integer|exists:contacts,id',
-		'billing_property_id' => 'nullable|integer|exists:properties,id',
+		'main_mailing_property_id' => 'nullable|integer|exists:properties,id',
 		'contact_method_id' => 'nullable|integer|exists:contact_methods,id',
 		'referred_by' => 'nullable|string|max:255'
     ];

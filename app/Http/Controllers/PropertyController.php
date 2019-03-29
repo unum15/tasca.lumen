@@ -55,6 +55,8 @@ class PropertyController extends Controller
         $values['updater_id'] = $request->user()->id;
         $item = Property::create($values);
         $item = Property::findOrFail($item->id);
+        $contacts = $request->only('contacts');
+        $item->contacts()->sync($contacts['contacts']);
         return $item;
     }
     
