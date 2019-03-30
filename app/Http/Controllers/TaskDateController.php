@@ -114,6 +114,7 @@ class TaskDateController extends Controller
                 'task_dates.date',
                 'tasks.sort_order',
                 'task_dates.time',
+                'task_dates.notes',
                 'tasks.task_type_id',
                 'orders.order_status_type_id',
                 'crew_id',
@@ -145,6 +146,15 @@ class TaskDateController extends Controller
     public function create(Request $request){
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
+        $has_value = false;
+        foreach($values as $value){
+            if(!empty($value)){
+                $has_value = true;
+            }
+        }
+        if(!$has_value){
+            return;//quitely return if all values are blank
+        }
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = TaskDate::create($values);

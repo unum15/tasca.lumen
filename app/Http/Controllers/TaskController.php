@@ -36,7 +36,7 @@ class TaskController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request){
@@ -53,7 +53,9 @@ class TaskController extends Controller
             'TaskAppointmentStatus',
             'TaskAction',
             'order.orderPriority',
-            'order.orderCategory'
+            'order.orderCategory',
+            'crew',
+            'dates'
         )
         ->orderBy('id');
         foreach($values as $field => $value){
@@ -64,10 +66,14 @@ class TaskController extends Controller
             $items_query->whereHas(
                 'order' , function($q){
                     $q->whereNull('completion_date');
-                    $q->whereNull('expiration_date');
                     $q->whereNotNull('approval_date');
+                    $q->where(function ($q) {
+                        $q->where('expiration_date','>=',date('Y-m-d'))
+                        ->orWhereNull('expiration_date');
+                    });
                 }
             );
+            $items_query->whereNull('completion_date');
         }
         return $items_query->get();
     }
