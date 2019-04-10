@@ -59,6 +59,7 @@ class TaskDateController extends Controller
             );
         }
         $min_date = $request->only('min_date');
+        error_log($min_date['min_date']);
         if(!empty($min_date)){
             $items_query->where(function($q) use ($min_date) {
                 $q->whereNull('date')
