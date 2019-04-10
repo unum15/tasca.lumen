@@ -62,10 +62,10 @@ class TaskDateController extends Controller
         if(!empty($min_date)){
             $items_query->where(function($q) use ($min_date) {
                 $q->whereNull('date')
-                ->orWhere('date', '<=', $min_date['min_date']);
+                ->orWhere('date', '>=', $min_date['min_date']);
                 
             });
-        }
+	}
         return $items_query->get();
     }
     
@@ -147,17 +147,18 @@ class TaskDateController extends Controller
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $has_value = false;
-        foreach($values as $value){
-            if(!empty($value)){
+	$not_empty = ['date', 'day', 'time', 'notes'];
+        foreach($not_empty as $field){
+            if(!empty($values[$field])){
                 $has_value = true;
             }
         }
         if(!$has_value){
-            return;//quitely return if all values are blank
-        }
+            return;//quitely return
+	}
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
-        $item = TaskDate::create($values);
+	$item = TaskDate::create($values);
         $item = TaskDate::findOrFail($item->id);
         return $item;
     }
