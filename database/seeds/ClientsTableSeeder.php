@@ -92,7 +92,6 @@ class ClientsTableSeeder extends Seeder
                 'city' => $faker->city,
                 'state' => $faker->stateAbbr,
                 'zip' => $faker->postcode,
-                'primary_contact_id' => $contact->id,
                 'work_property' => $faker->boolean,
                 'property_type_id' => $faker->randomElement($property_types),
                 'creator_id' => $admin->id,
@@ -101,7 +100,7 @@ class ClientsTableSeeder extends Seeder
             
             $client->update([
                'billing_contact_id' => $contact->id,
-               'billing_property_id' => $property->id
+               'main_mailing_property_id' => $property->id
             ]);
         }
     }
