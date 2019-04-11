@@ -18,6 +18,8 @@ class TaskDateController extends Controller
         'task_id' => 'integer:exists:tasks,id',
         'day' => 'nullable|string|max:255',
         'date' => 'nullable|date',
+        'completion_date' => 'nullable|date',
+        'billed_date' => 'nullable|date',
         'time' => 'nullable|string|max:255',
         'notes' => 'nullable|string|max:255',
     ];
