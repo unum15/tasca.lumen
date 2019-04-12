@@ -61,7 +61,6 @@ class TaskDateController extends Controller
             );
         }
         $min_date = $request->only('min_date');
-        error_log($min_date['min_date']);
         if(!empty($min_date)){
             $items_query->where(function($q) use ($min_date) {
                 $q->whereNull('date')
@@ -194,6 +193,9 @@ class TaskDateController extends Controller
         $this->validate($request, $this->validation);     
         $item = TaskDate::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
+        $values['date'] = isset($values['date']) && $values['date'] != "" ? $values['date'] : null;
+        $values['completed_date'] = isset($values['completed_date']) && $values['completed_date'] != "" ? $values['completed_date'] : null;
+        $values['billed_date'] = isset($values['billed_date']) && $values['billed_date'] != "" ? $values['billed_date'] : null;
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         return $item;

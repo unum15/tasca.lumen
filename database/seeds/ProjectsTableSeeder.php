@@ -60,13 +60,14 @@ class ProjectsTableSeeder extends Seeder
                 'updater_id' => $faker->randomElement($contacts)
             ]);
             
-            $service_order = Order::create([
+            $order = Order::create([
                 'project_id' => $project->id,
                 'order_status_type_id' => 3,
                 'date' => $faker->date,
                 'approval_date' => $faker->date,
                 'completion_date' => $faker->date,
                 'expiration_date' => $faker->date,
+                'name' => $faker->word,
                 'description' => $faker->text,
                 'order_category_id' => $faker->randomElement($service_order_categories),
                 'order_priority_id' => $faker->randomElement($service_order_priorities),
@@ -94,8 +95,11 @@ class ProjectsTableSeeder extends Seeder
                 'updater_id' => $faker->randomElement($contacts)
             ]);
             
+            $order->properties()->sync([$property->id]);
+            
             Task::create([
-                'order_id' => $service_order->id,
+                'order_id' => $order->id,
+                'name' => $faker->word,
                 'description' => $faker->text,
                 'task_category_id' => $faker->randomElement($task_categories),
                 'task_type_id' => $faker->randomElement($task_types),

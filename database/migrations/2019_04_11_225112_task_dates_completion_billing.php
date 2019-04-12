@@ -17,6 +17,10 @@ class TaskDatesCompletionBilling extends Migration
             $table->date('completion_date')->nullable();
             $table->date('billed_date')->nullable();
         });
+        DB::statement("UPDATE task_dates SET completion_date=\"date\",billed_date=\"date\" WHERE date<'2019-01-01'");
+        DB::statement("UPDATE task_dates SET completion_date=\"date\" WHERE date>='2019-01-01' AND date<NOW()::DATE AND task_id =ANY (SELECT tasks.id FROM orders LEFT JOIN tasks ON (tasks.order_id = orders.id) WHERE approval_date IS NOT NULL);");
+        DB::statement("UPDATE task_dates SET billed_date=\"date\" WHERE date>='2019-01-01' AND date<NOW()::DATE-'1 month'::INTERVAL AND task_id =ANY (SELECT tasks.id FROM orders LEFT JOIN tasks ON (tasks.order_id = orders.id) WHERE approval_date IS NOT NULL);");
+        
     }
 
     /**

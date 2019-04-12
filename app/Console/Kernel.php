@@ -8,6 +8,7 @@ use App\Console\Commands\PopulateDatabaseDefaultsCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
 use App\Console\Commands\MigrateOldDataCommand;
 use App\Console\Commands\ResetHelpCommand;
+use App\Console\Commands\CreateTaskDatesCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -20,7 +21,8 @@ class Kernel extends ConsoleKernel
         PopulateDatabaseDefaultsCommand::class,
         TruncateDatabaseCommand::class,
         MigrateOldDataCommand::class,
-        ResetHelpCommand::class
+        ResetHelpCommand::class,
+        CreateTaskDatesCommand::class
     ];
 
     /**
