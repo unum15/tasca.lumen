@@ -12,6 +12,7 @@ class TaskDate extends Model
 		'time',
         'day',
 		'notes',
+		'sort_order',
 		'completion_date',
 		'billed_date',
 		'creator_id',

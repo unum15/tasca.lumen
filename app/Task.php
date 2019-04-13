@@ -20,7 +20,6 @@ class Task extends Model
       'crew_hours',
       'crew_id',
       'notes',
-      'sort_order',
       'group',
       'creator_id',
       'updater_id'
