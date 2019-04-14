@@ -98,6 +98,7 @@ class TaskDateController extends Controller
                 'orders.approval_date',
                 'orders.expiration_date',
                 'orders.completion_date',
+                'orders.project_id',
                 'projects.client_id',
                 'tasks.order_id',
                 'task_appointment_statuses.name AS task_appointment_status',
