@@ -118,6 +118,8 @@ class TaskDateController extends Controller
                 'task_dates.sort_order',
                 'task_dates.time',
                 'task_dates.notes',
+                'task_dates.completion_date',
+                'task_dates.billed_date',
                 'tasks.task_type_id',
                 'orders.order_status_type_id',
                 'crew_id',
