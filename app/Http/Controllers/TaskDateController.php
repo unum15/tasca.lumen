@@ -74,8 +74,8 @@ class TaskDateController extends Controller
     
     
     public function schedule(Request $request){
-        //$this->validate($request, $this->validation);
-        //$values = $request->only(array_keys($this->validation));
+        $this->validate($request, $this->validation);
+        $date = $request->input('date');
         $items_query = DB::table('tasks')
             ->leftJoin('task_dates', 'tasks.id', '=', 'task_dates.task_id')
             ->leftJoin('orders', 'tasks.order_id', '=', 'orders.id')
@@ -144,6 +144,9 @@ class TaskDateController extends Controller
                         ->orWhere('tasks.task_type_id', 1);
                     });                   
                 }
+            }
+            if(!empty($date)){
+                $items_query->where('task_dates.date', $date);
             }
         return $items_query->get();
     }
