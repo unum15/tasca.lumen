@@ -200,9 +200,13 @@ class TaskDateController extends Controller
         $this->validate($request, $this->validation);     
         $item = TaskDate::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
-        $values['date'] = isset($values['date']) && $values['date'] != "" ? $values['date'] : null;
-        $values['completion_date'] = isset($values['completion_date']) && $values['completion_date'] != "" ? $values['completion_date'] : null;
-        $values['billed_date'] = isset($values['billed_date']) && $values['billed_date'] != "" ? $values['billed_date'] : null;
+        //should be a better way to set blank to null
+        $dates = ['date', 'completion_date', 'billed_date'];
+        foreach($dates as $date){
+            if(isset($values[$date])){
+                $values[$date] = $values[$date] != "" ? $values[$date] : null;
+            }
+        }
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         return $item;
