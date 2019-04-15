@@ -6,7 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\PopulateDatabaseDefaultsCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
-use App\Console\Commands\MigrateOldDataCommand;
+use App\Console\Commands\FixOldDataCommand;
 use App\Console\Commands\ResetHelpCommand;
 use App\Console\Commands\CreateTaskDatesCommand;
 
@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         PopulateDatabaseDefaultsCommand::class,
         TruncateDatabaseCommand::class,
-        MigrateOldDataCommand::class,
+        FixOldDataCommand::class,
         ResetHelpCommand::class,
         CreateTaskDatesCommand::class
     ];
