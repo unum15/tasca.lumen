@@ -1222,10 +1222,10 @@ Budget and bid information.
         
         $sign_ins = $olddb->select("SELECT * FROM contacts.sign_ins WHERE contact_index IS NOT NULL AND workorder_index IS NOT NULL");
         foreach($sign_ins as $sign_in){
-            if(isset($contacts_map[$sign_in->contact_index]) && isset($contacts_map[$sign_in->workorder_index])){
+            if(isset($contacts_map[$sign_in->contact_index]) && isset($work_orders_map[$sign_in->workorder_index])){
                 SignIn::create([
                    'contact_id' =>  $contacts_map[$sign_in->contact_index],
-                   'order_id' =>  $contacts_map[$sign_in->workorder_index],
+                   'order_id' =>  $work_orders_map[$sign_in->workorder_index],
                    'sign_in' => $sign_in->sign_in_time,
                    'sign_out' => $sign_in->sign_out_time,
                    'creator_id' => $admin->id,
