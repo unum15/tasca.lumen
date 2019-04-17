@@ -72,6 +72,10 @@ class MoveSignInsToTaskDate extends Migration
             }
             echo $sign_in->order_id.":".count($tasks)."\n";
         }
+        Schema::table('sign_ins', function (Blueprint $table) {
+            $table->dropColumn('order_id');
+        });
+
     }
 
     /**
@@ -82,9 +86,29 @@ class MoveSignInsToTaskDate extends Migration
     public function down()
     {
         Schema::table('sign_ins', function (Blueprint $table) {
-            $table->dropColumn('task_date_id');
+            $table->integer('order_id')->default(0);
         });
         $db = DB::connection();
+        $sql="
+            SELECT
+                sign_ins.id,
+                tasks.order_id,
+                sign_in
+            FROM
+                sign_ins
+                LEFT JOIN task_dates ON (sign_ins.task_date_id = task_dates.id)
+                LEFT JOIN tasks ON (task_dates.task_id = tasks.id)
+            ORDER BY
+                sign_ins.id
+        ";
+        
+        $sign_ins = $db->select($sql);
+        foreach($sign_ins as $sign_in){
+            $db->update("UPDATE sign_ins SET order_id = ? WHERE id=?", [$sign_in->order_id, $sign_in->id]);
+        }
+        Schema::table('sign_ins', function (Blueprint $table) {
+            $table->dropColumn('task_date_id');
+        });
         $db->delete("DELETE FROM task_dates WHERE notes='Match Sign In'");
     }
 }
