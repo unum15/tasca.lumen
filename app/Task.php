@@ -21,6 +21,8 @@ class Task extends Model
       'crew_id',
       'notes',
       'group',
+      'closed_date',
+      'billed_date',
       'creator_id',
       'updater_id'
     ];

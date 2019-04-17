@@ -19,8 +19,6 @@ class TaskDateController extends Controller
         'day' => 'nullable|string|max:255',
         'date' => 'nullable|date',
         'sort_order' => 'nullable|string|max:255',
-        'completion_date' => 'nullable|date',
-        'billed_date' => 'nullable|date',
         'time' => 'nullable|string|max:255',
         'notes' => 'nullable|string|max:255',
     ];
@@ -119,8 +117,8 @@ class TaskDateController extends Controller
                 'task_dates.sort_order',
                 'task_dates.time',
                 'task_dates.notes',
-                'task_dates.completion_date',
-                'task_dates.billed_date',
+                'tasks.completion_date',
+                'tasks.billed_date',
                 'tasks.task_type_id',
                 'orders.order_status_type_id',
                 'crew_id',
@@ -129,7 +127,7 @@ class TaskDateController extends Controller
             ->orderBy('task_dates.id');
             ;
             $items_query->whereNull('orders.completion_date');
-            $items_query->whereNull('tasks.completion_date');
+            $items_query->whereNull('tasks.closed_date');
             $items_query->where(function($q){
                 $q->whereNull('orders.expiration_date')
                 ->orWhere('orders.expiration_date','>=', date('Y-m-d'));

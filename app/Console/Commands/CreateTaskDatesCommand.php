@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use App\Task;
 use App\TaskDate;
 
 class CreateTaskDatesCommand extends Command
@@ -39,17 +40,24 @@ class CreateTaskDatesCommand extends Command
     public function handle()
     {
  
-        $oldTaskDates = TaskDate::where('date','<',date('Y-m-d'))
-        ->whereNull('completion_date')
+        $tasks = Task::
+        whereNull('tasks.completion_date')
+        ->doesnthave('Dates', 'and', function ($query) {
+            $query->where('date', '>', date('Y-m-d'));
+        })
         ->get();
        
     
-        foreach($oldTaskDates as $oldTaskDate){
+        foreach($tasks as $task){
+            $notes = null;
+            if(count($task->dates) > 0){
+                $notes=$task->dates->last()->notes;
+            }
             TaskDate::create([
-               'task_id' => $oldTaskDate->task_id,
-               'notes' => $oldTaskDate->notes,
-               'creator_id' => $oldTaskDate->creator_id,
-               'updater_id' => $oldTaskDate->creator_id
+               'task_id' => $task->id,
+               'notes' => $notes,
+               'creator_id' => $task->creator_id,
+               'updater_id' => $task->creator_id
             ]);
         }
     }
