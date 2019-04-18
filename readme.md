@@ -1,21 +1,24 @@
-# Lumen PHP Framework
+# Tasca Lumen
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
-
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
-
+Tascsa Lumen is PHP Lumen based backend for tracking clients and scheduling for small contractors.
 ## Official Documentation
 
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
+Documentation can be found on the [Github Wiki](https://github.com/unum15/tasca.lumen/wiki).
 
-## Security Vulnerabilities
+Tasca Lumen is open-sourced software licensed under the [GPL 3 License](https://opensource.org/licenses/GPL-3.0)
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+#Install
 
-## License
-
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+install php
+install postgresql
+createuser tasca
+psql tasca -c "ALTER ROLE tasca password 'tascapw'"
+createdb tasca -O tasca
+git clone git@github.com:unum15/tasca.lumen.git
+cd tasca.lumen
+composer install
+cp .env.example .env
+./artisan migrate
+./artisan db:init
+sudo cp tasca.conf /etc/nginx/sites-available/
+sudo ln -s /etc/nginx/sites-available/tasca.conf /etc/nginx/sites-enabled

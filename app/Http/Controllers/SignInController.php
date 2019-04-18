@@ -14,7 +14,7 @@ class SignInController extends Controller
      */
     private $validation = [
 		'contact_id' => 'integer|exists:contacts,id',
-        'order_id' => 'integer|exists:orders,id',
+        'task_date_id' => 'integer|exists:task_dates,id',
         'sign_in' => 'string|max:255',
         'sign_out' => 'string|max:255',
         'notes' => 'nullable|string|max:255'
@@ -22,17 +22,19 @@ class SignInController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request){
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $items_query = SignIn::with(
-            'order',
-            'contact',
-            'order.project',
-            'order.project.client'
+            'TaskDate',
+            'TaskDate.Task',
+            'TaskDate.Task.Order',
+            'Contact',
+            'TaskDate.Task.Order.Project',
+            'TaskDate.Task.Order.Project.Client'
         )
         ->orderBy('sign_in');
         foreach($values as $field => $value){
@@ -61,7 +63,7 @@ class SignInController extends Controller
         $values['updater_id'] = $request->user()->id;
         $item = SignIn::create($values);
         $item = SignIn::with(
-            'Order',
+            'TaskDate',
             'Contact'
         )
         ->findOrFail($item->id);
@@ -70,7 +72,7 @@ class SignInController extends Controller
     
     public function read($id){
         $item = SignIn::with(
-            'Order',
+            'TaskDate',
             'Contact'
         )
         ->findOrFail($id);
@@ -84,7 +86,7 @@ class SignInController extends Controller
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         $item = SignIn::with(
-            'Order',
+            'TaskDate',
             'Contact'
         )
         ->findOrFail($id);

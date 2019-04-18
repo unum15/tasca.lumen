@@ -8,7 +8,7 @@ class SignIn extends Model
 {
     protected $fillable = [
         'contact_id',
-		'order_id',
+		'task_date_id',
         'sign_in',
 		'sign_out',
         'notes',
@@ -20,8 +20,8 @@ class SignIn extends Model
        return $this->belongsTo('App\Contact');
     }
     
-    function order(){
-       return $this->belongsTo('App\Order');
+    function taskDate(){
+       return $this->belongsTo('App\TaskDate');
     }
     
     
