@@ -85,12 +85,18 @@ class TaskController extends Controller
             $items_query->whereNull('completion_date');
         }
         $closed = $request->input('closed');
-        
         if((!empty($closed)) && ($closed == 'true')){
             $items_query->whereNotNull('closed_date');
         }
         if((!empty($closed)) && ($closed == 'false')){
             $items_query->whereNull('closed_date');
+        }
+        $min_closed_date = $request->input('min_closed_date');
+        if(!empty($min_closed_date)){
+            $items_query->where(function($q) use ($min_closed_date){
+                $q->where('closed_date', '>=', $min_closed_date)
+                ->orWhereNull('closed_date');
+            });
         }
         return $items_query->get();
     }
