@@ -20,4 +20,8 @@ class TaskDate extends Model
 	public function task(){
 		return $this->belongsTo('App\Task');
 	}
+	
+	public function signIns(){
+		return $this->hasMany('App\SignIn');
+	}
 }

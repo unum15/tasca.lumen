@@ -56,14 +56,15 @@ class TaskController extends Controller
             'order.orderPriority',
             'order.orderCategory',
             'crew',
-            'dates'
+            'dates',
+            'dates.signIns'
         )
         ->orderBy('id');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
-        $active_only = $request->only('active_only');
-        if((!empty($active_only)) && ($active_only['active_only'] == 'true')){
+        $active_only = $request->input('active_only');
+        if((!empty($active_only)) && ($active_only == 'true')){
             $items_query->whereHas(
                 'order' , function($q){
                     $q->whereNull('completion_date');
@@ -75,6 +76,21 @@ class TaskController extends Controller
                 }
             );
             $items_query->whereNull('completion_date');
+        }
+        $completed = $request->input('completed');
+        if((!empty($completed)) && ($completed == 'true')){
+            $items_query->whereNotNull('completion_date');
+        }
+        if((!empty($completed)) && ($completed == 'false')){
+            $items_query->whereNull('completion_date');
+        }
+        $closed = $request->input('closed');
+        
+        if((!empty($closed)) && ($closed == 'true')){
+            $items_query->whereNotNull('closed_date');
+        }
+        if((!empty($closed)) && ($closed == 'false')){
+            $items_query->whereNull('closed_date');
         }
         return $items_query->get();
     }
