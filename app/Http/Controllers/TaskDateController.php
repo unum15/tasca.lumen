@@ -145,7 +145,16 @@ class TaskDateController extends Controller
                 }
             }
             if(!empty($date)){
-                $items_query->where('task_dates.date', $date);
+                $future = $request->input('future');
+                if(empty($future)){
+                    $items_query->where('task_dates.date', $date);
+                }
+                else{
+                    $items_query->where(function($q) use ($date) {
+                        $q->where('task_dates.date', '>=', $date)
+                        ->orWhereNull('task_dates.date');
+                    });
+                }
             }
         return $items_query->get();
     }
