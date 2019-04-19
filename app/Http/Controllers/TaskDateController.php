@@ -89,6 +89,7 @@ class TaskDateController extends Controller
             ->leftJoin('task_actions', 'tasks.task_action_id', '=', 'task_actions.id')
             ->leftJoin('crews', 'tasks.crew_id', '=', 'crews.id')
             ->select('task_dates.id',
+                DB::raw('row_number() OVER () AS row'),
                 'tasks.id AS task_id',
                 'orders.start_date',
                 'orders.service_window',
