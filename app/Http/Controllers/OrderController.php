@@ -123,8 +123,8 @@ class OrderController extends Controller
             'tasks.taskType',
             'orderPriority',
             'orderCategory',
-            'signIns',
-            'signIns.contact'
+            'tasks.dates.signIns',
+            'tasks.dates.signIns.contact'
         )
         ->where('id', $id)
         ->first();

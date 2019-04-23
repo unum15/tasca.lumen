@@ -43,7 +43,7 @@ class CreateTaskDatesCommand extends Command
         $tasks = Task::
         whereNull('tasks.completion_date')
         ->doesnthave('Dates', 'and', function ($query) {
-            $query->where('date', '>', date('Y-m-d'))
+            $query->where('date', '>=', date('Y-m-d'))
             ->orWhereNull('date');
         })
         ->get();
