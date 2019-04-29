@@ -208,3 +208,23 @@ $router->patch('/settings', 'SettingController@update');
 $router->get('/calendar/status', 'GoogleCalendarController@status');
 $router->get('/calendar/url', 'GoogleCalendarController@url');
 $router->post('/calendar/callback', 'GoogleCalendarController@callback');
+
+
+$router->get('/phree_books/contacts', 'PhreeBooksController@contacts');
+$router->get('/phree_books/addresses', 'PhreeBooksController@addresses');
+$router->get('/phree_books/matches', 'PhreeBooksController@matches');
+$router->get('/phree_books/tasca', 'PhreeBooksController@tasca');
+$router->get('/phree_books/phree_books', 'PhreeBooksController@phreeBooks');
+
+
+$router->post('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@createClient');
+$router->post('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@createContact');
+$router->post('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@createProperty');
+$router->put('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@updateClient');
+$router->put('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@updateContact');
+$router->put('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@updateProperty');
+
+
+$router->get('/info', function () use ($router) {
+    return phpinfo();
+});

@@ -24,7 +24,8 @@ class Property extends Model
 		'property_type_id',
         'notes',
 		'creator_id',
-		'updater_id'
+		'updater_id',
+        'phreebooks_id'
     ];
     
     public function client(){

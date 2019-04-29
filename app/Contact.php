@@ -28,7 +28,8 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
 		'creator_id',
 		'updater_id',
         'google_calendar_token',
-        'google_calendar_id'
+        'google_calendar_id',
+        'phreebooks_id'
     ];
     
      protected $hidden = [
