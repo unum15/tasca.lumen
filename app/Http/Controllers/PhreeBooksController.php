@@ -92,7 +92,56 @@ class PhreeBooksController extends Controller
     }
 
     public function updateClient($id){
-        $client = Client::find($id);
+        $client = Client::with('billingContact')
+        ->with('mainMailingProperty')
+        ->find($id);
+        $phreebooks = DB::connection('phreebooks');
+        $sql="
+			UPDATE
+				contacts
+			SET
+				short_name=:client_name,inactive=:client_status,contact_first=:first_name,contact_last=:last_name,last_update=CURDATE()
+			WHERE
+				id=:ref_id
+		";
+        $first = null;
+        $last = null;
+        if($client->billingContact){
+            $names = preg_split('/\s+/',$client->billingContact->name);
+            $last = array_pop($names);
+            $first = join(' ', $names);
+        }
+        $values = [
+          'client_name'  => $client->name,
+          'client_status' => $client->active_level_index > 1 ? '1' : '0',
+          'first_name' => $first,
+          'last_name' => $last,
+          'ref_id' => $client->phreebooks_id
+        ];
+        $phreebooks->update($sql, $values);
+        $sql = "UPDATE
+				address_book
+			SET
+				primary_name=:bill_to,contact=:attention_to,address1=:address1,address2=:address2,city_town=:city,state_province=:state,postal_code=:zip,telephone1=:telephone1,telephone2=:telephone2,telephone3=:telephone3,telephone4=:telephone4,email=:email
+			WHERE
+				address_id=:property_accounting_id AND type='cm';
+        ";
+        $values = [
+          'bill_to'  => $client->billingContact->name,
+          'attention_to' => $client->billingContact->name,
+          'address1' => $client->mainMailingAddress->address1,
+          'address2' => $client->mainMailingAddress->address2,
+          'city' => $client->mainMailingAddress->city,
+          'state' => $client->mainMailingAddress->state,
+          'zip' => $client->mainMailingAddress->zip,
+          'telephone1' => $telephone1,
+          'telephone2' => $telephone2,
+          'telephone3' => $telephone3,
+          'telephone4' => $telephone4,
+          'email' => $email,
+          'ref_id' => $client->phreebooks_id
+        ];
+        $phreebooks->update($sql, $values);
         return $client;
     }
 
