@@ -122,24 +122,20 @@ class PhreeBooksController extends Controller
         $sql = "UPDATE
 				address_book
 			SET
-				primary_name=:bill_to,contact=:attention_to,address1=:address1,address2=:address2,city_town=:city,state_province=:state,postal_code=:zip,telephone1=:telephone1,telephone2=:telephone2,telephone3=:telephone3,telephone4=:telephone4,email=:email
+				primary_name=:bill_to,contact=:attention_to,address1=:address1,address2=:address2,city_town=:city,state_province=:state,postal_code=:zip,telephone1=:telephone1
 			WHERE
-				address_id=:property_accounting_id AND type='cm';
+				address_id=:address_id AND type='cm';
         ";
         $values = [
           'bill_to'  => $client->billingContact->name,
           'attention_to' => $client->billingContact->name,
-          'address1' => $client->mainMailingAddress->address1,
-          'address2' => $client->mainMailingAddress->address2,
-          'city' => $client->mainMailingAddress->city,
-          'state' => $client->mainMailingAddress->state,
-          'zip' => $client->mainMailingAddress->zip,
-          'telephone1' => $telephone1,
-          'telephone2' => $telephone2,
-          'telephone3' => $telephone3,
-          'telephone4' => $telephone4,
-          'email' => $email,
-          'ref_id' => $client->phreebooks_id
+          'address1' => $client->mainMailingProperty->address1,
+          'address2' => $client->mainMailingProperty->address2,
+          'city' => $client->mainMailingProperty->city,
+          'state' => $client->mainMailingProperty->state,
+          'zip' => $client->mainMailingProperty->zip,
+          'telephone1' => $client->mainMailingProperty->phone_number,
+          'address_id' => $client->mainMailingProperty->phreebooks_id
         ];
         $phreebooks->update($sql, $values);
         return $client;
