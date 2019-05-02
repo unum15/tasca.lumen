@@ -93,6 +93,8 @@ class PhreeBooksController extends Controller
 
     public function updateClient($id){
         $client = Client::find($id);
+        $phreebooks = DB::connection('phreebooks');
+        $phreebooks->update("UPDATE contacts SET WHERE id = ?;", $client->phreebooks_id);
         return $client;
     }
 
