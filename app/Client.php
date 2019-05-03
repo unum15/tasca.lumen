@@ -31,7 +31,7 @@ class Client extends Model
 		return $this->belongsTo('App\Contact');
 	}
 	
-	public function billingProperty(){
+	public function mainMailingProperty(){
 		return $this->belongsTo('App\Property');
 	}
 	
