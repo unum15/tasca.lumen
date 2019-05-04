@@ -142,11 +142,72 @@ class PhreeBooksController extends Controller
     }
 
     public function updateContact($id){
-        
+        $contact = Contact::with('clients')
+        ->with('phoneNumbers')
+        ->with('emails')
+        ->find($id);
+        $phreebooks = DB::connection('phreebooks');
+        $sql="
+            UPDATE contacts SET 
+            	short_name=:name,inactive=:status,contact_first=:first_name,contact_last=:last_name,dept_rep_id=:ref_id,last_update=CURDATE()
+			WHERE
+				id=:accounting_id
+		";
+        $first = null;
+        $last = null;
+        $names = preg_split('/\s+/',$contact->name);
+        $last = array_pop($names);
+        $first = join(' ', $names);
+        $values = [
+          'name'  => $contact->name,
+          'status' => $contact->active_level_index > 1 ? '1' : '0',
+          'first_name' => $first,
+          'last_name' => $last,
+          'ref_id' => $contact->clients[0]->phreebooks_id,
+          'accounting_id' => $contact->phreebooks_id
+        ];
+        $phreebooks->update($sql, $values);
+        $sql="
+            UPDATE address_book
+            SET
+                primary_name=:name,telephone1=:telephone1,telephone2=:telephone2,telephone3=:telephone3,telephone4=:telephone4,email=:email
+            WHERE
+                ref_id=:accounting_id
+            ";
+        $values = [
+            'name'  => $contact->name,
+            'telephone1' => count($contact->phoneNumbers) > 0 ? $contact->phoneNumbers[0]->phone_number : null,
+            'telephone2' => count($contact->phoneNumbers) > 1 ? $contact->phoneNumbers[1]->phone_number : null,
+            'telephone3' => count($contact->phoneNumbers) > 2 ? $contact->phoneNumbers[2]->phone_number : null,
+            'telephone4' => count($contact->phoneNumbers) > 3 ? $contact->phoneNumbers[3]->phone_number : null,
+            'email' => count($contact->emails) > 0 ? $contact->emails[0]->email : null,
+            'accounting_id' => $contact->phreebooks_id
+        ];
+        $phreebooks->update($sql, $values);
+        return $contact;
     }
 
     public function updateProperty($id){
-        
+        $property = Property($id);
+        $sql = "UPDATE
+				address_book
+			SET
+				primary_name=:bill_to,contact=:attention_to,address1=:address1,address2=:address2,city_town=:city,state_province=:state,postal_code=:zip,telephone1=:telephone1
+			WHERE
+				address_id=:address_id AND type='cm';
+        ";
+        $values = [
+          'primary_name' => $property->name,
+          'address1' => $property->address1,
+          'address2' => $property->address2,
+          'city' => $property->city,
+          'state' => $property->state,
+          'zip' => $property->zip,
+          'telephone1' => $property->phone_number,
+          'address_id' => $property->phreebooks_id
+        ];
+        $phreebooks->update($sql, $values);
+        return $property;
     }
 
 
