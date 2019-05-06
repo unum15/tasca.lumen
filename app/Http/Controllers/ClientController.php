@@ -36,7 +36,7 @@ class ClientController extends Controller
         $items = Client::with('clientType')
         ->with('activityLevel')
         ->with('billingContact')
-        ->with('billingProperty')
+        ->with('mainMailingProperty')
         ->orderBy('name')
         ->get();
         return $items;
