@@ -81,6 +81,8 @@ class PhreeBooksController extends Controller
     
     public function createClient($id){
         $client = Client::with('billingContact')
+        ->with('billingContact.phoneNumbers')
+        ->with('billingContact.emails')
         ->with('mainMailingProperty')
         ->find($id);
         $phreebooks = DB::connection('phreebooks');
@@ -106,32 +108,39 @@ class PhreeBooksController extends Controller
         $phreebooks->update($sql, $values);
         $pb_id = $phreebooks->getPdo()->lastInsertId();
         $client->update(['phreebooks_id' => $pb_id]);
-
-        $values = [
-            'ref_id' => $id,
-            'bill_to'  => $client->billingContact->name,
-            'attention_to' => $client->billingContact->name,
-            'address1' => $client->mainMailingProperty->address1,
-            'address2' => $client->mainMailingProperty->address2,
-            'city' => $client->mainMailingProperty->city,
-            'state' => $client->mainMailingProperty->state,
-            'zip' => $client->mainMailingProperty->zip,
-            'email' => count($client->billingContact->emails) > 0 ? $client->billingContact->emails[0]->email : null
-        ];
-        $phone_numbers = $this->_phone_numbers_array($client);
+        $values = $this->_client_address($client);
+        $values['ref_id'] = $pb_id;
+        list($phone_numbers, $columns, $params) = $this->_phone_numbers_array($client);
         $values = array_merge($values, $phone_numbers);
-        $columns = join(',', array_keys($phone_numbers));
-        $params = ",:".join(',:', array_keys($phone_numbers));
         $sql = "
             INSERT INTO address_book
-            	(ref_id,type,primary_name,contact,address1,address2,city_town,state_province,postal_code,country_code,email,$columns)
+            	(ref_id,type,primary_name,contact,address1,address2,city_town,state_province,postal_code,country_code,email$columns)
             VALUES
-                (:ref_id,'cm',:bill_to,:attention_to,:address1,:address2,:city,:state,:zip,'USA',:email,$params)
+                (:ref_id,'cm',:bill_to,:attention_to,:address1,:address2,:city,:state,:zip,'USA',:email$params)
         ";
         $phreebooks->update($sql, $values);
         $pb_id = $phreebooks->getPdo()->lastInsertId();
-        $property = Property::find($client->main_mailing_property_id);
-        $property->update(['phreebooks_id' => $pb_id]);
+        if($client->main_mailing_property_id){
+            $property = Property::find($client->main_mailing_property_id);
+            $property->update(['phreebooks_id' => $pb_id]);
+        }
+        foreach($client->contacts as $contact){
+            if($contact->phreebooks_id){
+                $this->updateContact($contact->id);
+            }
+            else{
+                $this->createContact($contact->id);
+            }
+        }
+        foreach($client->properties as $property){
+            if($property->phreebooks_id){
+                $this->updateProperty($property->id);
+            }
+            else{
+                $this->createProperty($property->id);
+            }
+        }
+        $client = Client::find($id);
         return $client;
     }
 
@@ -233,13 +242,6 @@ class PhreeBooksController extends Controller
           'ref_id' => $client->phreebooks_id
         ];
         $phreebooks->update($sql, $values);
-        $sql = "UPDATE
-				address_book
-			SET
-				primary_name=:bill_to,contact=:attention_to,address1=:address1,address2=:address2,city_town=:city,state_province=:state,postal_code=:zip,telephone1=:telephone1
-			WHERE
-				address_id=:address_id AND type='cm';
-        ";
         $values = [
           'bill_to'  => $client->billingContact->name,
           'attention_to' => $client->billingContact->name,
@@ -248,9 +250,25 @@ class PhreeBooksController extends Controller
           'city' => $client->mainMailingProperty->city,
           'state' => $client->mainMailingProperty->state,
           'zip' => $client->mainMailingProperty->zip,
-          'email' => count($client->billingContact->emails) > 0 ? $contact->emails[0]->email : null,
+          'email' => count($client->billingContact->emails) > 0 ? $client->billingContact->emails[0]->email : null,
           'address_id' => $client->mainMailingProperty->phreebooks_id
         ];
+        list($phone_numbers, $columns, $params) = $this->_phone_numbers_array($client);
+        $numbers_sql = "";
+        if(count($phone_numbers) > 0){
+            $values = array_merge($values, $phone_numbers);
+            foreach($phone_numbers as $column => $number){
+                $numbers_sql .= ",$column=:$column";
+            }
+            
+        }
+        $sql = "UPDATE
+				address_book
+			SET
+				primary_name=:bill_to,contact=:attention_to,address1=:address1,address2=:address2,city_town=:city,state_province=:state,postal_code=:zip,email=:email$numbers_sql
+			WHERE
+				address_id=:address_id AND type='cm';
+        ";
         $phreebooks->update($sql, $values);
         return $client;
     }
@@ -298,6 +316,22 @@ class PhreeBooksController extends Controller
             'accounting_id' => $contact->phreebooks_id
         ];
         $phreebooks->update($sql, $values);
+        foreach($client->contacts as $contact){
+            if($contact->phreebooks_id){
+                $this->updateContact($contact->id);
+            }
+            else{
+                $this->createContact($contact->id);
+            }
+        }
+        foreach($client->properties as $property){
+            if($property->phreebooks_id){
+                $this->updateProperty($property->id);
+            }
+            else{
+                $this->createProperty($property->id);
+            }
+        }
         return $contact;
     }
 
@@ -326,23 +360,41 @@ class PhreeBooksController extends Controller
     }
     
     private function _phone_numbers_array($client){
-        $numbers = [
-          'telephone1'  => null,
-          'telephone2'  => null,
-          'telephone3'  => null,
-          'telephone4'  => null,
-        ];
+        $numbers = [];
         $next = 1;
-        if($client->mainMailingProperty->phone_number){
-            $numbers['telephone' . $next++] = $client->mainMailingProperty->phone_number;
-        }
-        foreach($client->billingContact->phoneNumbers() as $number){
-            $numbers['telephone' . $next++] = $number->phone_number;
-            if($next > 4){
-                break;
+        if($client->mainMailingProperty){
+            if($client->mainMailingProperty->phone_number){
+                $numbers['telephone' . $next++] = $client->mainMailingProperty->phone_number;
             }
         }
-        return $numbers;
+        if($client->billingContact){
+            foreach($client->billingContact->phoneNumbers as $number){
+                $numbers['telephone' . $next++] = $number->phone_number;
+                if($next > 4){
+                    break;
+                }
+            }
+        }
+        $columns = null;
+        $params = null;
+        if(count($numbers) > 0){
+            $columns = ",".join(',', array_keys($numbers));
+            $params = ",:".join(',:', array_keys($numbers));
+        }
+        return [$numbers, $columns, $params];
+    }
+    private function _client_address($client){
+        $values = [
+          'bill_to'  => $client->name,
+          'attention_to' => $client->billingContact ? $client->billingContact->name : null,
+          'address1' => $client->billingContact ?  $client->mainMailingProperty->address1 : null,
+          'address2' => $client->billingContact ?  $client->mainMailingProperty->address2 : null,
+          'city' => $client->billingContact ?  $client->mainMailingProperty->city : null,
+          'state' => $client->billingContact ?  $client->mainMailingProperty->state : null,
+          'zip' => $client->billingContact ?  $client->mainMailingProperty->zip : null,
+          'email' => $client->billingContact ? count($client->billingContact->emails) > 0 ? $client->billingContact->emails[0]->email : null : null,
+        ];
+        return $values;
     }
 
 
