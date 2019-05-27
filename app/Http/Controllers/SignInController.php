@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\SignIn;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SignInController extends Controller
 {
@@ -40,6 +41,18 @@ class SignInController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $task_id = $request->input('task_id');
+        if(!empty($task_id)){
+             $items_query->whereHas('TaskDate', function($q) use ($task_id){
+                $q->where('task_dates.task_id', $task_id);
+             });
+        }
+        $order_id = $request->input('order_id');
+        if(!empty($order_id)){
+             $items_query->whereHas('TaskDate.Task', function($q) use ($order_id){
+                $q->where('tasks.order_id', $order_id);
+             });
+        }
         $start_date = $request->input('start_date');
         if(!empty($start_date)){
             $items_query->where('sign_in::DATE', '>=', $start_date);
@@ -51,6 +64,37 @@ class SignInController extends Controller
         }
         
         
+        return $items_query->get();
+    }
+    
+    public function by_employee(Request $request){
+        $validation = [
+            'task_date_id' => 'integer|exists:task_dates,id',
+            'task_id' => 'integer|exists:tasks,id',
+            'order_id' => 'integer|exists:orders,id',
+            'project_id' => 'integer|exists:projects,id',
+        ];
+        $this->validate($request, $validation);
+        $values = $request->only(array_keys($validation));
+        $items_query = DB::table('sign_ins')
+            ->leftJoin('task_dates', 'sign_ins.task_date_id', '=', 'task_dates.id')
+            ->leftJoin('tasks', 'task_dates.task_id', '=', 'tasks.id')
+            ->leftJoin('orders', 'tasks.order_id', '=', 'orders.id')
+            ->leftJoin('contacts', 'sign_ins.contact_id', '=', 'contacts.id')
+            ->select(
+                DB::raw('SUM(sign_out-sign_in) AS hours'),
+                'contacts.id',
+                'contacts.name'
+            )
+            ->groupBy('contacts.id', 'contacts.name')
+            ->orderBy('contacts.name');
+            ;
+        if(!empty($values['task_id'])){
+             $items_query->where('task_dates.task_id', $values['task_id']);
+        }
+        if(!empty($values['order_id'])){
+             $items_query->where('tasks.order_id', $values['order_id']);
+        }
         return $items_query->get();
     }
     

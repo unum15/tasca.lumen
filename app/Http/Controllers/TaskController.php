@@ -60,6 +60,7 @@ class TaskController extends Controller
             'dates.signIns'
         )
         ->orderBy('id');
+        //->orderByRaw('tasks.closed_date NULLS FIRST');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }

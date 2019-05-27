@@ -66,7 +66,13 @@ class TaskDateController extends Controller
                 ->orWhere('date', '>=', $min_date['min_date']);
                 
             });
-	}
+        }
+        $order_id = $request->input('order_id');
+        if(!empty($order_id)){
+             $items_query->whereHas('Task', function($q) use ($order_id){
+                $q->where('tasks.order_id', $order_id);
+             });
+        }
         return $items_query->get();
     }
     
