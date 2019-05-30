@@ -124,6 +124,8 @@ class TaskController extends Controller
             'order.properties.contacts',
             'order.properties.contacts.phoneNumbers',
             'order.properties.contacts.phoneNumbers.phoneNumberType',
+            'order.properties.contacts.emails',
+            'order.properties.contacts.emails.emailType',
             'TaskCategory',
             'TaskStatus',
             'TaskAppointmentStatus',
