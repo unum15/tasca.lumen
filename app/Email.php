@@ -13,4 +13,8 @@ class Email extends Model
 		'creator_id',
 		'updater_id'
 	];
+	
+	public function emailType(){
+        return $this->belongsTo('App\EmailType');
+    }
 }
