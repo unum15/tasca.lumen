@@ -33,6 +33,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-       $schedule->command('db:createTaskDates')->daily(); 
+       $schedule->command('db:createTaskDates')->timezone(env("TIMEZONE", 'America/Denver'));
     }
 }
