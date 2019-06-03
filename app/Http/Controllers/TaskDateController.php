@@ -221,6 +221,8 @@ class TaskDateController extends Controller
                 $values[$date] = $values[$date] != "" ? $values[$date] : null;
             }
         }
+        
+        error_log(print_r($values, true));
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         return $item;
