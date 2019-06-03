@@ -82,9 +82,10 @@ class SignInController extends Controller
             ->leftJoin('orders', 'tasks.order_id', '=', 'orders.id')
             ->leftJoin('contacts', 'sign_ins.contact_id', '=', 'contacts.id')
             ->select(
-                DB::raw('SUM(sign_out-sign_in) AS hours'),
+                DB::raw('ROUND((EXTRACT(EPOCH FROM SUM(sign_out-sign_in))/3600)::NUMERIC, 2) AS hours'),
                 'contacts.id',
-                'contacts.name'
+                'contacts.name',
+                DB::raw('10.00 AS rate')
             )
             ->groupBy('contacts.id', 'contacts.name')
             ->orderBy('contacts.name');
