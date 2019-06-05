@@ -139,29 +139,36 @@ class TaskDateController extends Controller
                 $q->whereNull('orders.expiration_date')
                 ->orWhere('orders.expiration_date','>=', date('Y-m-d'));
             });
-            $order_status_type_id = $request->only('order_status_type_id');
-            if(!empty($order_status_type_id['order_status_type_id'])){
-                if($order_status_type_id['order_status_type_id'] != 3){
-                    $items_query->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id']);
+            $status = strtolower($request->input('status'));
+            if((!empty($status) && $status!='all')){
+                $date = date('Y-m-d');
+                switch($status){
+                    case 'current':
+                        $items_query->where(function($q) use ($order_status_type_id) {
+                            $q->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id'])
+                            ->orWhere('tasks.task_type_id', 1);
+                        });
+                        if(!empty($date)){
+                            $future = $request->input('future');
+                            if(empty($future)){
+                                $items_query->where('task_dates.date', $date);
+                            }
+                            else{
+                                $items_query->where(function($q) use ($date) {
+                                    $q->where('task_dates.date', '>=', $date)
+                                    ->orWhereNull('task_dates.date');
+                                });
+                            }
+                        }
+                        break;
+                    case 'pending':
+                        $items_query->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id']);
+                        break;
+                    case 'upapproved':
+                        $items_query->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id']);
+                        break;
                 }
-                else{
-                    $items_query->where(function($q) use ($order_status_type_id) {
-                        $q->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id'])
-                        ->orWhere('tasks.task_type_id', 1);
-                    });                   
-                }
-            }
-            if(!empty($date)){
-                $future = $request->input('future');
-                if(empty($future)){
-                    $items_query->where('task_dates.date', $date);
-                }
-                else{
-                    $items_query->where(function($q) use ($date) {
-                        $q->where('task_dates.date', '>=', $date)
-                        ->orWhereNull('task_dates.date');
-                    });
-                }
+
             }
         return $items_query->get();
     }
