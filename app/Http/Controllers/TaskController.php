@@ -26,6 +26,7 @@ class TaskController extends Controller
         'completion_date' => 'nullable|date',
         'closed_date' => 'nullable|date',
         'billed_date' => 'nullable|date',
+        'hold_date' => 'nullable|date',
         'task_hours' => 'nullable|integer',
         'crew_hours' => 'nullable|integer',
         'crew_id' => 'nullable|integer|exists:crews,id',
