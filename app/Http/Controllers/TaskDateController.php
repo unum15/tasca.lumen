@@ -140,6 +140,9 @@ class TaskDateController extends Controller
                 ->orWhere('orders.expiration_date','>=', date('Y-m-d'));
             });
             $status = strtolower($request->input('status'));
+            if(!empty($date)){
+                $items_query->where('task_dates.date',$date);
+            }
             if((!empty($status) && $status!='all')){
                 $date = date('Y-m-d');
                 switch($status){
