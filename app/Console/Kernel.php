@@ -6,11 +6,6 @@ use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\PopulateDatabaseDefaultsCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
-<<<<<<< HEAD
-use App\Console\Commands\MigrateOldDataCommand;
-use App\Console\Commands\ImportPhreeBooksIdsCommand;
-=======
->>>>>>> origin/master
 use App\Console\Commands\ResetHelpCommand;
 use App\Console\Commands\CreateTaskDatesCommand;
 use App\Console\Commands\UpdateOrderStatusCommand;
@@ -25,11 +20,6 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         PopulateDatabaseDefaultsCommand::class,
         TruncateDatabaseCommand::class,
-<<<<<<< HEAD
-        MigrateOldDataCommand::class,
-        ImportPhreeBooksIdsCommand::class,
-=======
->>>>>>> origin/master
         ResetHelpCommand::class,
         CreateTaskDatesCommand::class,
         UpdateOrderStatusCommand::class
