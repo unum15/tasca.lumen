@@ -31,15 +31,15 @@ class TaskLogTable extends Migration
             $table->integer('task_hours')->nullable();
             $table->integer('crew_hours')->nullable();
             $table->text('notes')->nullable();
-            $table->string('sort_order')->nullable();
+            //$table->string('sort_order')->nullable();
             $table->integer('creator_id');
             $table->integer('updater_id');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            $table->integer('crew_id');
-            $table->date('closed_date');
-            $table->date('billed_date');
-            $table->date('hold_date');
+            $table->integer('crew_id')->nullable();
+            $table->date('closed_date')->nullable();
+            $table->date('billed_date')->nullable();
+            $table->date('hold_date')->nullable();
         });
         
         
