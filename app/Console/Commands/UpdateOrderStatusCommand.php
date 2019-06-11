@@ -47,7 +47,7 @@ class UpdateOrderStatusCommand extends Command
         $date->modify('- ' . $pending_days_out . 'days');
         $orders = Order::
         where('order_status_type_id','2')
-        ->where('start_date', '>', $date->format('Y-m-d'))
+        ->where('start_date', '<=', $date->format('Y-m-d'))
         ->get();
        
     

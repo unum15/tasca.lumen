@@ -140,32 +140,37 @@ class TaskDateController extends Controller
                 ->orWhere('orders.expiration_date','>=', date('Y-m-d'));
             });
             $status = strtolower($request->input('status'));
+            if(!empty($date)){
+                $items_query->where('task_dates.date',$date);
+            }
             if((!empty($status) && $status!='all')){
-                $date = date('Y-m-d');
+                $today = date('Y-m-d');
+                $date_obj = date_create();
+                $days = 7; //$request->user()->pending_days_out;
+                $current_date = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
                 switch($status){
                     case 'current':
-                        $items_query->where(function($q) use ($order_status_type_id) {
-                            $q->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id'])
+                        $items_query->where(function($q)use ($current_date) {
+                            $q->whereNull('tasks.hold_date')
+                            ->orWhere('tasks.hold_date', '<=', $current_date);
+                        });
+                        $items_query->where(function($q) use ($current_date) {
+                            $q->where('orders.start_date', '<=', $current_date)
                             ->orWhere('tasks.task_type_id', 1);
                         });
-                        if(!empty($date)){
-                            $future = $request->input('future');
-                            if(empty($future)){
-                                $items_query->where('task_dates.date', $date);
-                            }
-                            else{
-                                $items_query->where(function($q) use ($date) {
-                                    $q->where('task_dates.date', '>=', $date)
-                                    ->orWhereNull('task_dates.date');
-                                });
-                            }
-                        }
+                        $items_query->where(function($q) use ($today) {
+                            $q->where('task_dates.date', '>=', $today)
+                            ->orWhereNull('task_dates.date');
+                        });
                         break;
                     case 'pending':
-                        $items_query->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id']);
+                        $items_query->where('orders.start_date', '>', $current_date);
                         break;
-                    case 'upapproved':
-                        $items_query->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id']);
+                    case 'on hold':
+                        $items_query->where(function($q)use ($current_date) {
+                            $q->whereNull('orders.start_date')
+                            ->orWhere('tasks.hold_date', '>', $current_date);
+                        });
                         break;
                 }
 

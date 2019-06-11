@@ -23,6 +23,7 @@ class Task extends Model
       'group',
       'closed_date',
       'billed_date',
+      'hold_date',
       'creator_id',
       'updater_id'
     ];
