@@ -147,26 +147,23 @@ class TaskDateController extends Controller
                 $current_date = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
                 switch($status){
                     case 'current':
-                        $items_query->where('hold_date', '<=', $today);
+                       /* $items_query->where(function($q){
+                            $q->whereNull('tasks.hold_date')
+                            ->orWhere('tasks.hold_date', '<=', $today);
+                        });
                         $items_query->where(function($q) use ($current_date) {
                             $q->where('orders.start_date', '<=', $current_date)
                             ->orWhere('tasks.task_type_id', 1);
                         });
-                        $future = $request->input('future');
-                        if(empty($future)){
-                            $items_query->where('task_dates.date', $date);
-                        }
-                        else{
-                            $items_query->where(function($q) use ($date) {
-                                $q->where('task_dates.date', '>=', $date)
-                                ->orWhereNull('task_dates.date');
-                            });
-                        }
+                        $items_query->where(function($q) use ($date) {
+                            $q->where('task_dates.date', '>=', $date)
+                            ->orWhereNull('task_dates.date');
+                        });*/
                         break;
                     case 'pending':
                         $items_query->where('orders.start_date', '>', $current_date);
                         break;
-                    case 'upapproved':
+                    case 'on hold':
                         $items_query->whereNull('orders.start_date');
                         break;
                 }
