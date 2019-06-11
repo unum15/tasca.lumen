@@ -120,10 +120,6 @@ class PhreeBooksController extends Controller
         ";
         $phreebooks->update($sql, $values);
         $pb_id = $phreebooks->getPdo()->lastInsertId();
-        if($client->main_mailing_property_id){
-            $property = Property::find($client->main_mailing_property_id);
-            $property->update(['phreebooks_id' => $pb_id]);
-        }
         foreach($client->contacts as $contact){
             if($contact->phreebooks_id){
                 $this->updateContact($contact->id);
@@ -251,7 +247,7 @@ class PhreeBooksController extends Controller
           'state' => $client->mainMailingProperty->state,
           'zip' => $client->mainMailingProperty->zip,
           'email' => count($client->billingContact->emails) > 0 ? $client->billingContact->emails[0]->email : null,
-          'address_id' => $client->mainMailingProperty->phreebooks_id
+          'ref_id' => $client->mainMailingProperty->phreebooks_id
         ];
         list($phone_numbers, $columns, $params) = $this->_phone_numbers_array($client);
         $numbers_sql = "";
@@ -267,9 +263,26 @@ class PhreeBooksController extends Controller
 			SET
 				primary_name=:bill_to,contact=:attention_to,address1=:address1,address2=:address2,city_town=:city,state_province=:state,postal_code=:zip,email=:email$numbers_sql
 			WHERE
-				address_id=:address_id AND type='cm';
+				ref_id=:ref_id AND type='cm';
         ";
         $phreebooks->update($sql, $values);
+        foreach($client->contacts as $contact){
+            if($contact->phreebooks_id){
+                $this->updateContact($contact->id);
+            }
+            else{
+                $this->createContact($contact->id);
+            }
+        }
+        foreach($client->properties as $property){
+            if($property->phreebooks_id){
+                $this->updateProperty($property->id);
+            }
+            else{
+                $this->createProperty($property->id);
+            }
+        }
+        $client = Client::find($id);
         return $client;
     }
 
@@ -316,22 +329,6 @@ class PhreeBooksController extends Controller
             'accounting_id' => $contact->phreebooks_id
         ];
         $phreebooks->update($sql, $values);
-        foreach($client->contacts as $contact){
-            if($contact->phreebooks_id){
-                $this->updateContact($contact->id);
-            }
-            else{
-                $this->createContact($contact->id);
-            }
-        }
-        foreach($client->properties as $property){
-            if($property->phreebooks_id){
-                $this->updateProperty($property->id);
-            }
-            else{
-                $this->createProperty($property->id);
-            }
-        }
         return $contact;
     }
 
@@ -364,6 +361,7 @@ class PhreeBooksController extends Controller
         $next = 1;
         if($client->mainMailingProperty){
             if($client->mainMailingProperty->phone_number){
+                echo $client->mainMailingProperty->phone_number;
                 $numbers['telephone' . $next++] = $client->mainMailingProperty->phone_number;
             }
         }
