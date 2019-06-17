@@ -79,7 +79,7 @@ class TaskDateController extends Controller
     
     public function schedule(Request $request){
         $this->validate($request, $this->validation);
-        $date = $request->input('date');
+        $date = $request->input('date', date('Y-m-d'));
         $items_query = DB::table('tasks')
             ->leftJoin('task_dates', 'tasks.id', '=', 'task_dates.task_id')
             ->leftJoin('orders', 'tasks.order_id', '=', 'orders.id')
@@ -140,12 +140,9 @@ class TaskDateController extends Controller
                 ->orWhere('orders.expiration_date','>=', date('Y-m-d'));
             });
             $status = strtolower($request->input('status'));
-            if(!empty($date)){
-                $items_query->where('task_dates.date',$date);
-            }
+            
             if((!empty($status) && $status!='all')){
-                $today = date('Y-m-d');
-                $date_obj = date_create();
+                $date_obj = date_create($date);
                 $days = 7; //$request->user()->pending_days_out;
                 $current_date = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
                 switch($status){
@@ -158,8 +155,8 @@ class TaskDateController extends Controller
                             $q->where('orders.start_date', '<=', $current_date)
                             ->orWhere('tasks.task_type_id', 1);
                         });
-                        $items_query->where(function($q) use ($today) {
-                            $q->where('task_dates.date', '>=', $today)
+                        $items_query->where(function($q) use ($date) {
+                            $q->where('task_dates.date', '>=', $date)
                             ->orWhereNull('task_dates.date');
                         });
                         break;
