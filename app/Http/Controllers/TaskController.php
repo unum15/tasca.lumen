@@ -20,7 +20,6 @@ class TaskController extends Controller
         'billable' => 'nullable|boolean',
         'task_type_id' => 'nullable|integer|exists:task_types,id',
         'task_status_id' => 'nullable|integer|exists:task_statuses,id',
-        'task_appointment_status_id' => 'nullable|integer:exists:task_appointment_statuses,id',
         'task_action_id' => 'nullable|integer|exists:task_actions,id',
         'task_category_id' => 'nullable|integer|exists:task_categories,id',
         'completion_date' => 'nullable|date',
@@ -52,13 +51,13 @@ class TaskController extends Controller
             'order.project.client',
             'TaskCategory',
             'TaskStatus',
-            'TaskAppointmentStatus',
             'TaskAction',
             'order.orderPriority',
             'order.orderCategory',
             'crew',
             'dates',
-            'dates.signIns'
+            'dates.signIns',
+            'dates.AppointmentStatus'
         )
         ->orderBy('id');
         //->orderByRaw('tasks.closed_date NULLS FIRST');

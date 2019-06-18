@@ -13,9 +13,7 @@ class RenameAppointmentStatusTable extends Migration
      */
     public function up()
     {
-        Schema::table('TaskAppointmentStatus', function (Blueprint $table) {
-            //
-        });
+        Schema::rename('task_appointment_statuses', 'appointment_statuses');
     }
 
     /**
@@ -25,8 +23,6 @@ class RenameAppointmentStatusTable extends Migration
      */
     public function down()
     {
-        Schema::table('TaskAppointmentStatus', function (Blueprint $table) {
-            //
-        });
+        Schema::rename('appointment_statuses', 'task_appointment_statuses');
     }
 }

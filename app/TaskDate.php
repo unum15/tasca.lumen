@@ -13,6 +13,7 @@ class TaskDate extends Model
         'day',
 		'notes',
 		'sort_order',
+		'appointment_status_id',
 		'creator_id',
 		'updater_id'
 	];
@@ -23,5 +24,9 @@ class TaskDate extends Model
 	
 	public function signIns(){
 		return $this->hasMany('App\SignIn');
+	}
+	
+	public function appointmentStatus(){
+	  return $this->belongsTo('App\AppointmentStatus');
 	}
 }

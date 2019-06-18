@@ -21,6 +21,7 @@ class TaskDateController extends Controller
         'sort_order' => 'nullable|string|max:255',
         'time' => 'nullable|string|max:255',
         'notes' => 'nullable|string|max:255',
+        'appointment_status_id' => 'nullable|integer:exists:appointment_statuses,id'        
     ];
 
     public function __construct()
@@ -40,7 +41,6 @@ class TaskDateController extends Controller
             'task.order.project.client',
             'task.TaskCategory',
             'task.TaskStatus',
-            'task.TaskAppointmentStatus',
             'task.TaskAction',
             'task.order.orderPriority',
             'task.order.orderCategory'
@@ -88,7 +88,7 @@ class TaskDateController extends Controller
             ->leftJoin('properties', 'order_property.property_id', '=', 'properties.id')
             ->leftJoin('contacts', 'projects.contact_id', '=', 'contacts.id')
             ->leftJoin('clients', 'projects.client_id', '=', 'clients.id')
-            ->leftJoin('task_appointment_statuses', 'tasks.task_appointment_status_id', '=', 'task_appointment_statuses.id')
+            ->leftJoin('appointment_statuses', 'task_dates.appointment_status_id', '=', 'appointment_statuses.id')
             ->leftJoin('order_priorities', 'orders.order_priority_id', '=', 'order_priorities.id')
             ->leftJoin('task_categories', 'tasks.task_category_id', '=', 'task_categories.id')
             ->leftJoin('task_statuses', 'tasks.task_status_id', '=', 'task_statuses.id')
@@ -106,8 +106,8 @@ class TaskDateController extends Controller
                 'orders.project_id',
                 'projects.client_id',
                 'tasks.order_id',
-                'task_appointment_statuses.name AS task_appointment_status',
-                'task_appointment_status_id',
+                'appointment_statuses.name AS appointment_status',
+                'appointment_status_id',
                 'clients.name AS client',
                 'properties.name AS property',
                 'tasks.description',
@@ -210,7 +210,6 @@ class TaskDateController extends Controller
             'task.order.properties.contacts.phoneNumbers.phoneNumberType',
             'task.TaskCategory',
             'task.TaskStatus',
-            'task.TaskAppointmentStatus',
             'task.TaskAction',
             'task.order.orderPriority',
             'task.order.orderCategory'

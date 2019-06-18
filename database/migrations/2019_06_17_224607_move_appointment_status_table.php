@@ -23,13 +23,23 @@ class MoveAppointmentStatusTable extends Migration
             SET
                 appointment_status_id = task_appointment_status_id
             FROM
+                (
+                    SELECT
+                        id,
+                        task_appointment_status_id
+                    FROM
+                        tasks
+                ) AS tasks
             WHERE
                 task_dates.task_id = tasks.id            
         ";
         
         $db->update($sql);
-        Schema::table('Tasks', function (Blueprint $table) {
-            //$table->drop('task_appointment_status_id');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropColumn('task_appointment_status_id');
+        });
+        Schema::table('logs.tasks', function (Blueprint $table) {
+            $table->dropColumn('task_appointment_status_id');
         });
     }
 
@@ -40,11 +50,33 @@ class MoveAppointmentStatusTable extends Migration
      */
     public function down()
     {
-        Schema::table('Tasks', function (Blueprint $table) {
-            //$table->integer('task_appointment_status_id')->nullable();
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->integer('task_appointment_status_id')->nullable();
         });
+        Schema::table('logs.tasks', function (Blueprint $table) {
+            $table->integer('task_appointment_status_id')->nullable();
+        });
+         $sql="
+            UPDATE
+                tasks
+            SET
+                task_appointment_status_id = appointment_status_id
+            FROM
+                (
+                    SELECT
+                        task_id,
+                        appointment_status_id
+                    FROM
+                        task_dates
+                ) AS task_dates
+            WHERE
+                task_dates.task_id = tasks.id            
+        ";
+        
+        $db->update($sql);
+
         Schema::table('task_dates', function (Blueprint $table) {
-            $table->drop('appointment_status_id');
+            $table->dropColumn('appointment_status_id');
         });
     }
 }
