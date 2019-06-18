@@ -169,6 +169,9 @@ class TaskDateController extends Controller
                             ->orWhere('tasks.hold_date', '>', $current_date);
                         });
                         break;
+                    case 'today':
+                        $items_query->where('task_dates.date', '=', $date);
+                        break;
                 }
 
             }
