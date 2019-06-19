@@ -196,6 +196,7 @@ $router->patch('/task_date/{id:[0-9]+}', 'TaskDateController@update');
 $router->delete('/task_date/{id:[0-9]+}', 'TaskDateController@delete');
 
 $router->get('/sign_ins', 'SignInController@index');
+$router->get('/sign_ins/by_employee', 'SignInController@by_employee');
 $router->post('/sign_in', 'SignInController@create');
 $router->get('/sign_in/{id:[0-9]+}', 'SignInController@read');
 $router->patch('/sign_in/{id:[0-9]+}', 'SignInController@update');

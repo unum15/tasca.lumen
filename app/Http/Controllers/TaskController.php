@@ -26,6 +26,7 @@ class TaskController extends Controller
         'completion_date' => 'nullable|date',
         'closed_date' => 'nullable|date',
         'billed_date' => 'nullable|date',
+        'hold_date' => 'nullable|date',
         'task_hours' => 'nullable|integer',
         'crew_hours' => 'nullable|integer',
         'crew_id' => 'nullable|integer|exists:crews,id',
@@ -60,6 +61,7 @@ class TaskController extends Controller
             'dates.signIns'
         )
         ->orderBy('id');
+        //->orderByRaw('tasks.closed_date NULLS FIRST');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
@@ -123,6 +125,8 @@ class TaskController extends Controller
             'order.properties.contacts',
             'order.properties.contacts.phoneNumbers',
             'order.properties.contacts.phoneNumbers.phoneNumberType',
+            'order.properties.contacts.emails',
+            'order.properties.contacts.emails.emailType',
             'TaskCategory',
             'TaskStatus',
             'TaskAppointmentStatus',

@@ -6,10 +6,9 @@ use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\PopulateDatabaseDefaultsCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
-use App\Console\Commands\MigrateOldDataCommand;
-use App\Console\Commands\ImportPhreeBooksIdsCommand;
 use App\Console\Commands\ResetHelpCommand;
 use App\Console\Commands\CreateTaskDatesCommand;
+use App\Console\Commands\UpdateOrderStatusCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -21,10 +20,9 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         PopulateDatabaseDefaultsCommand::class,
         TruncateDatabaseCommand::class,
-        MigrateOldDataCommand::class,
-        ImportPhreeBooksIdsCommand::class,
         ResetHelpCommand::class,
-        CreateTaskDatesCommand::class
+        CreateTaskDatesCommand::class,
+        UpdateOrderStatusCommand::class
     ];
 
     /**
@@ -35,6 +33,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-       $schedule->command('db:createTaskDates')->daily(); 
+       $schedule->command('db:createTaskDates')->timezone(env("TIMEZONE", 'America/Denver'));
+       $schedule->command('db:updateOrderStatus')->timezone(env("TIMEZONE", 'America/Denver'));
     }
 }

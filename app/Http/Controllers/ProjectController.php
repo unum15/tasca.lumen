@@ -60,6 +60,8 @@ class ProjectController extends Controller
         $this->validate($request, $this->validation);
         $item = Project::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
+        $values['open_date'] = isset($values['open_date']) && $values['open_date'] != "" ? $values['open_date'] : null;
+        $values['close_date'] = isset($values['close_date']) && $values['close_date'] != "" ? $values['close_date'] : null;
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         return $item;

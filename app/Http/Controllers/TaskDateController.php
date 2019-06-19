@@ -66,14 +66,20 @@ class TaskDateController extends Controller
                 ->orWhere('date', '>=', $min_date['min_date']);
                 
             });
-	}
+        }
+        $order_id = $request->input('order_id');
+        if(!empty($order_id)){
+             $items_query->whereHas('Task', function($q) use ($order_id){
+                $q->where('tasks.order_id', $order_id);
+             });
+        }
         return $items_query->get();
     }
     
     
     public function schedule(Request $request){
         $this->validate($request, $this->validation);
-        $date = $request->input('date');
+        $date = $request->input('date', date('Y-m-d'));
         $items_query = DB::table('tasks')
             ->leftJoin('task_dates', 'tasks.id', '=', 'task_dates.task_id')
             ->leftJoin('orders', 'tasks.order_id', '=', 'orders.id')
@@ -133,29 +139,41 @@ class TaskDateController extends Controller
                 $q->whereNull('orders.expiration_date')
                 ->orWhere('orders.expiration_date','>=', date('Y-m-d'));
             });
-            $order_status_type_id = $request->only('order_status_type_id');
-            if(!empty($order_status_type_id['order_status_type_id'])){
-                if($order_status_type_id['order_status_type_id'] != 3){
-                    $items_query->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id']);
+            $status = strtolower($request->input('status'));
+            
+            if((!empty($status) && $status!='all')){
+                $date_obj = date_create($date);
+                $days = 7; //$request->user()->pending_days_out;
+                $current_date = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
+                switch($status){
+                    case 'current':
+                        $items_query->where(function($q)use ($current_date) {
+                            $q->whereNull('tasks.hold_date')
+                            ->orWhere('tasks.hold_date', '<=', $current_date);
+                        });
+                        $items_query->where(function($q) use ($current_date) {
+                            $q->where('orders.start_date', '<=', $current_date)
+                            ->orWhere('tasks.task_type_id', 1);
+                        });
+                        $items_query->where(function($q) use ($date) {
+                            $q->where('task_dates.date', '>=', $date)
+                            ->orWhereNull('task_dates.date');
+                        });
+                        break;
+                    case 'pending':
+                        $items_query->where('orders.start_date', '>', $current_date);
+                        break;
+                    case 'on hold':
+                        $items_query->where(function($q)use ($current_date) {
+                            $q->whereNull('orders.start_date')
+                            ->orWhere('tasks.hold_date', '>', $current_date);
+                        });
+                        break;
+                    case 'today':
+                        $items_query->where('task_dates.date', '=', $date);
+                        break;
                 }
-                else{
-                    $items_query->where(function($q) use ($order_status_type_id) {
-                        $q->where('orders.order_status_type_id', $order_status_type_id['order_status_type_id'])
-                        ->orWhere('tasks.task_type_id', 1);
-                    });                   
-                }
-            }
-            if(!empty($date)){
-                $future = $request->input('future');
-                if(empty($future)){
-                    $items_query->where('task_dates.date', $date);
-                }
-                else{
-                    $items_query->where(function($q) use ($date) {
-                        $q->where('task_dates.date', '>=', $date)
-                        ->orWhereNull('task_dates.date');
-                    });
-                }
+
             }
         return $items_query->get();
     }
@@ -215,6 +233,8 @@ class TaskDateController extends Controller
                 $values[$date] = $values[$date] != "" ? $values[$date] : null;
             }
         }
+        
+        error_log(print_r($values, true));
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         return $item;
