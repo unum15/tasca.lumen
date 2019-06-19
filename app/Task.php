@@ -14,7 +14,6 @@ class Task extends Model
       'task_status_id',
       'task_action_id',
       'task_category_id',
-      'task_appointment_status_id',
       'completion_date',
       'job_hours',
       'crew_hours',
@@ -42,10 +41,6 @@ class Task extends Model
   
   public function taskStatus(){
     return $this->belongsTo('App\TaskStatus');
-  }
-  
-  public function taskAppointmentStatus(){
-    return $this->belongsTo('App\TaskAppointmentStatus');
   }
   
   public function taskType(){
