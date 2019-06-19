@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\TaskAppointmentStatus;
+use App\AppointmentStatus;
 use Illuminate\Http\Request;
 
-class TaskAppointmentStatusController extends Controller
+class AppointmentStatusController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -24,32 +24,32 @@ class TaskAppointmentStatusController extends Controller
     }
 
     public function index(){
-        $items = TaskAppointmentStatus::All();
+        $items = AppointmentStatus::All();
         return $items;
     }
     
     public function create(Request $request){
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
-        $item = TaskAppointmentStatus::create($request->input());
+        $item = AppointmentStatus::create($request->input());
         return $item;
     }
     
     public function read($id){
-        $item = TaskAppointmentStatus::findOrFail($id);
+        $item = AppointmentStatus::findOrFail($id);
         return $item;
     }
     
     public function update($id, Request $request){
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
-        $item = TaskAppointmentStatus::findOrFail($id);
+        $item = AppointmentStatus::findOrFail($id);
         $item->update($request->input());
         return $item;
     }
     
     public function delete($id){
-        $item = TaskAppointmentStatus::findOrFail($id);
+        $item = AppointmentStatus::findOrFail($id);
         $item->delete();
         return response([], 204);
     }
@@ -58,7 +58,7 @@ class TaskAppointmentStatusController extends Controller
         $sort_order = $request->input('sort_order');
         $default = $request->input('default');
         if($sort_order){
-            TaskAppointmentStatus::where('sort_order', $sort_order)
+            AppointmentStatus::where('sort_order', $sort_order)
                 ->update(['sort_order' => null]);
         }
     }

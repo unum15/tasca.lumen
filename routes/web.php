@@ -115,11 +115,11 @@ $router->get('/task_status/{id:[0-9]+}', 'TaskStatusController@read');
 $router->patch('/task_status/{id:[0-9]+}', 'TaskStatusController@update');
 $router->delete('/task_status/{id:[0-9]+}', 'TaskStatusController@delete');
 
-$router->get('/task_appointment_statuses', 'TaskAppointmentStatusController@index');
-$router->post('/task_appointment_status', 'TaskAppointmentStatusController@create');
-$router->get('/task_appointment_status/{id:[0-9]+}', 'TaskAppointmentStatusController@read');
-$router->patch('/task_appointment_status/{id:[0-9]+}', 'TaskAppointmentStatusController@update');
-$router->delete('/task_appointment_status/{id:[0-9]+}', 'TaskAppointmentStatusController@delete');
+$router->get('/appointment_statuses', 'AppointmentStatusController@index');
+$router->post('/appointment_status', 'AppointmentStatusController@create');
+$router->get('/appointment_status/{id:[0-9]+}', 'AppointmentStatusController@read');
+$router->patch('/appointment_status/{id:[0-9]+}', 'AppointmentStatusController@update');
+$router->delete('/appointment_status/{id:[0-9]+}', 'AppointmentStatusController@delete');
 
 $router->get('/task_categories', 'TaskCategoryController@index');
 $router->post('/task_category', 'TaskCategoryController@create');
