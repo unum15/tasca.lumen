@@ -190,10 +190,16 @@ class TaskDateController extends Controller
         }
         if(!$has_value){
             return;//quitely return
-	}
+        }
+        $dates = ['date', 'completion_date', 'billed_date'];
+        foreach($dates as $date){
+            if(isset($values[$date])){
+                $values[$date] = $values[$date] != "" ? $values[$date] : null;
+            }
+        }
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
-	$item = TaskDate::create($values);
+        $item = TaskDate::create($values);
         $item = TaskDate::findOrFail($item->id);
         return $item;
     }
@@ -235,7 +241,7 @@ class TaskDateController extends Controller
         
         error_log(print_r($values, true));
         $values['updater_id'] = $request->user()->id;
-        $item->update($values);
+        error_log($item->update($values));
         return $item;
     }
     

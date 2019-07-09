@@ -56,6 +56,7 @@ class MoveAppointmentStatusTable extends Migration
         Schema::table('logs.tasks', function (Blueprint $table) {
             $table->integer('task_appointment_status_id')->nullable();
         });
+        $db = DB::connection();
          $sql="
             UPDATE
                 tasks
