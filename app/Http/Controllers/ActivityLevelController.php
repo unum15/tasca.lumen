@@ -22,10 +22,7 @@ class ActivityLevelController extends Controller
     
     public function __construct(Request $request)
     {
-        $this->middleware('auth');
-        if(!$request->user()->can('edit-settings')){
-            return response(['Unauthorized(permissions)'], 401);
-        }
+        //$this->middleware('auth');
     }
 
     public function index(){

@@ -1,28 +1,20 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 use App\ActivityLevel;
 
 class ActivityLevelControllerTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+    
+    use RefreshDatabase;
+    
     public function testIndex()
     {
-        $items = [
-                  ['name' => 'Test 1'],
-                  ['name' => 'Test 2']
-                ];
-        $response0 = $this->post('/activity_level',$items[0]);
-        $response0->seeStatusCode(200);                
-        $response1 = $this->post('/activity_level',$items[1]);
-        $response1->seeStatusCode(200);                
-        $response = $this->get('/activity_levels');
+        $user = factory('App\Contact')->create();
+        factory('App\ActivityLevel', 2)->create();
+        $response = $this->actingAs($user)->get('/activity_levels');
         $response->seeStatusCode(200);
         $response->seeJson($items[0]);
         $response->seeJson($items[1]);
