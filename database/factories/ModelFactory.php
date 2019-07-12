@@ -14,7 +14,8 @@
 $factory->define(App\Contact::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
-        'email' => $faker->email,
+        'creator_id' => 0,
+        'updater_id' =>0
     ];
 });
 

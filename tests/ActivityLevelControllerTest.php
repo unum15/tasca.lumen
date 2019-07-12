@@ -1,14 +1,15 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Laravel\Lumen\Testing\DatabaseMigrations;
+use Laravel\Lumen\Testing\DatabaseTransactions;
+//use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 use App\ActivityLevel;
 
 class ActivityLevelControllerTest extends TestCase
 {
     
-    use RefreshDatabase;
+    use DatabaseTransactions;
     
     public function testIndex()
     {

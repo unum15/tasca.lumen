@@ -40,10 +40,11 @@ class ClientsTableSeeder extends Seeder
                 'notes' => $faker->text,
                 'activity_level_id' => $faker->randomElement($activity_levels),
                 'contact_method_id' => $faker->randomElement($contact_methods),
-                'login' => 'admin@truecomputing.biz',
+                'contact_type_id' => $faker->randomElement($contact_types),
+                'login' => 'admin@example.com',
                 'password' => password_hash("testpass", PASSWORD_DEFAULT),
-                'creator_id' => $faker->numberBetween(1,100000),
-                'updater_id' => $faker->numberBetween(1,100000)
+                'creator_id' => 0,
+                'updater_id' => 0
         ]);
 
         
@@ -51,7 +52,7 @@ class ClientsTableSeeder extends Seeder
             $client = Client::create([
                 'name' => $faker->lastName." Household",
                 'notes' => $faker->realText,
-                'activity_level_id' => 1,
+                'activity_level_id' => $faker->randomElement($activity_levels),
                 'referred_by' => $faker->name,
                 'client_type_id' => $faker->randomElement($client_types),
                 'contact_method_id' => $faker->randomElement($contact_methods),                
