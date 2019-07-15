@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+Use App\PhoneNumberType;
 
 class PhoneNumberTypesTableSeeder extends Seeder
 {
@@ -11,6 +12,6 @@ class PhoneNumberTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        PhoneNumberType::create(['name' => 'Owner']);
     }
 }

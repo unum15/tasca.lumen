@@ -22,7 +22,7 @@ class ActivityLevelController extends Controller
     
     public function __construct(Request $request)
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function index(){
@@ -56,7 +56,7 @@ class ActivityLevelController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete(Request $request, $id){
         if(!$request->user()->can('edit-settings')){
             return response(['Unauthorized(permissions)'], 401);
         }

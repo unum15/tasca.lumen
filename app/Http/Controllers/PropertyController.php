@@ -49,14 +49,15 @@ class PropertyController extends Controller
     
     public function create(Request $request){
         $this->validate($request, $this->validation);
+        $this->validate($request, ['name' => 'required']);
         $values = $request->only(array_keys($this->validation));
         $values = $request->input();
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = Property::create($values);
         $item = Property::findOrFail($item->id);
-        $contacts = $request->only('contacts');
-        $item->contacts()->sync($contacts['contacts']);
+        $contacts = $request->input('contacts');
+        $item->contacts()->sync($contacts);
         return $item;
     }
     
@@ -71,8 +72,8 @@ class PropertyController extends Controller
         $values = $request->only(array_keys($this->validation));
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
-        $contacts = $request->only('contacts');
-        $item->contacts()->sync($contacts['contacts']);
+        $contacts = $request->input('contacts');
+        $item->contacts()->sync($contacts);
         return $item;
     }
     

@@ -12,7 +12,6 @@ class ContactTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('contact_types')->delete();
         ContactType::create(['name' => 'Owner']);
     }
 }

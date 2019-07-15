@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\PropertyType;
 
 class PropertyTypesTableSeeder extends Seeder
 {
@@ -11,6 +12,6 @@ class PropertyTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        PropertyType::create(['name' => 'Home']);
     }
 }

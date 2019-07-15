@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\ContactMethod;
 
 class ContactMethodsTableSeeder extends Seeder
 {
@@ -11,6 +12,6 @@ class ContactMethodsTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        ContactMethod::create(['name' => 'Text']);
     }
 }

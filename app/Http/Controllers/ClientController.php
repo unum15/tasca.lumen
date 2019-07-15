@@ -27,7 +27,7 @@ class ClientController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('auth');
-        if(!$request->user()->can('view-clients')){
+        if(($request->user())&&(!$request->user()->can('view-clients'))){
             return response(['Unauthorized(permissions)'], 401);
         }
     }
@@ -79,7 +79,7 @@ class ClientController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete(Request $request, $id){
         if(!$request->user()->can('edit-clients')){
             return response(['Unauthorized(permissions)'], 401);
         }

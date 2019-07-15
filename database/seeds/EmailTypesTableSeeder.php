@@ -12,7 +12,6 @@ class EmailTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('email_types')->delete();
-        ContactType::create(['name' => 'Owner']);
+        EmailType::create(['name' => 'Owner']);
     }
 }
