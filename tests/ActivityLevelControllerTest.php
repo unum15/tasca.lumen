@@ -72,6 +72,12 @@ class ActivityLevelControllerTest extends TestCase
         $response->seeStatusCode(404);        
     }
     
+    public function testReadNotFound()
+    {        
+        $response = $this->actingAs($this->getAdminUser())->get('/activity_level/0');
+        $response->seeStatusCode(404);        
+    }
+    
     public function testUpdate()
     {
         $level = ActivityLevel::first();

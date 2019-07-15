@@ -161,7 +161,7 @@ class PropertyControllerTest extends TestCase
 
     public function testAuth()
     {
-        $response = $this->get('/phone_numbers');
+        $response = $this->get('/properties');
         $response->seeStatusCode(401);
     }
 }

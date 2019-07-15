@@ -54,7 +54,7 @@ class PropertyTypeController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete(Request $request, $id){
         if(!$request->user()->can('edit-settings')){
             return response(['Unauthorized(permissions)'], 401);
         }

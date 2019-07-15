@@ -116,3 +116,9 @@ $factory->define(App\Property::class, function (Faker\Generator $faker) {
         'updater_id' => $contact->id,
     ];
 });
+
+$factory->define(App\PropertyType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
