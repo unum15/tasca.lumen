@@ -122,3 +122,9 @@ $factory->define(App\PropertyType::class, function (Faker\Generator $faker) {
         'name' => $faker->word,
     ];
 });
+
+$factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
