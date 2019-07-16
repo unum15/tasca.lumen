@@ -9,7 +9,8 @@ use App\OrderStatus;
 class OrderActionControllerTest extends TestCase
 {
     public function testIndex()
-    {        
+    {
+        $status = factory('App\OrderAction')->create();
         $response = $this->actingAs($this->getAdminUser())->get('/order_actions');
         $response->seeStatusCode(200);
         $dbitems = OrderAction::all();

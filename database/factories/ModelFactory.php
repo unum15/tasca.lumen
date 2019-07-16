@@ -128,3 +128,11 @@ $factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
         'name' => $faker->word,
     ];
 });
+
+$factory->define(App\OrderAction::class, function (Faker\Generator $faker) {
+    $status = factory('App\OrderStatus')->create();
+    return [
+        'name' => $faker->word,
+        'order_status_id' => $status->id
+    ];
+});
