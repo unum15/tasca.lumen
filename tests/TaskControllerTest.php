@@ -1,8 +1,5 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
-
 use App\ActivityLevel;
 use App\PropertyType;
 use App\Client;
@@ -12,12 +9,6 @@ use App\Property;
 
 class TaskControllerTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    
     public function setUp(){
         parent::setUp();
         $this->contact = Contact::create(['name' => 'Test Contact', 'creator_id' => 1, 'updater_id' => 1]);

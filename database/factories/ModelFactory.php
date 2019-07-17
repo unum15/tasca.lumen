@@ -130,9 +130,37 @@ $factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\OrderAction::class, function (Faker\Generator $faker) {
-    $status = factory('App\OrderStatus')->create();
     return [
         'name' => $faker->word,
-        'order_status_id' => $status->id
+    ];
+});
+
+$factory->define(App\OrderPriority::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(App\TaskAction::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(App\TaskType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(App\WorkType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
     ];
 });

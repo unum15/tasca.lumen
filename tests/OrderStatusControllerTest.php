@@ -1,66 +1,48 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
+use App\OrderStatus;
 
-use App\ServiceOrderStatus;
-
-class ServiceOrderStatusControllerTest extends TestCase
+class OrderStatusControllerTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
     public function testIndex()
     {
-        $items = [
-                  ['name' => 'Test 1'],
-                  ['name' => 'Test 2']
-                ];
-        $response0 = $this->post('/service_order_status',$items[0]);
-        $response0->seeStatusCode(200);                
-        $response1 = $this->post('/service_order_status',$items[1]);
-        $response1->seeStatusCode(200);                
-        $response = $this->get('/service_order_statuses');
+        $item = factory('App\OrderStatus')->create();
+        $response = $this->actingAs($this->getAdminUser())->get('/order_statuses');
         $response->seeStatusCode(200);
-        $response->seeJson($items[0]);
-        $response->seeJson($items[1]);
-        $dbitems = ServiceOrderStatus::all();
+        $response->seeJson($item->toArray());
+        $dbitems = OrderStatus::all();
         $response->seeJsonEquals($dbitems->toArray());
     }    
     
     public function testCreate()
     {
-        $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => true];
-        $response = $this->post('/service_order_status',$item);
+        $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1];
+        $response = $this->actingAs($this->getAdminUser())->post('/order_status',$item);
         $response->seeStatusCode(200);                
         $response->seeJson($item);
         $response_array = json_decode($response->response->getContent());
-        $dbitem = ServiceOrderStatus::find($response_array->id);
+        $dbitem = OrderStatus::find($response_array->id);
         $response->seeJsonEquals($dbitem->toArray());
-        $dbitem->delete();
     }
     
     
     public function testCreateBad()
     {
-        $item = ['name' => '', 'sort_order' => 'a', 'default' => 'a'];
-        $response = $this->post('/service_order_status',$item);
+        $item = ['name' => '', 'sort_order' => 'a'];
+        $response = $this->actingAs($this->getAdminUser())->post('/order_status',$item);
         $response->seeStatusCode(422);                
-        $response->seeJson(["default" => ["The default field must be true or false."],"name" => ["The name field is required."],"sort_order" => ["The sort order must be an integer."]]);
+        $response->seeJson(["name" => ["The name field is required."],"sort_order" => ["The sort order must be an integer."]]);
     }
     
     public function testCreateInjection()
     {
-        $item = ['name' => "a'; DROP TABLE service_order_statuss CASCADE; --", 'notes' => "a'; DROP TABLE activity_levels CASCADE; --"];
-        $response = $this->post('/service_order_status',$item);
+        $item = ['name' => "a'; DROP TABLE order_statuss CASCADE; --", 'notes' => "a'; DROP TABLE activity_levels CASCADE; --"];
+        $response = $this->actingAs($this->getAdminUser())->post('/order_status',$item);
         $response->seeStatusCode(200);                
         $response->seeJson($item);
         $response_array = json_decode($response->response->getContent());        
-        $dbitem = ServiceOrderStatus::find($response_array->id);
+        $dbitem = OrderStatus::find($response_array->id);
         $response->assertNotNull($dbitem);
-        $dbitem->delete();
     }
     
     public function testCreateLong()
@@ -69,72 +51,52 @@ class ServiceOrderStatusControllerTest extends TestCase
             'name' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
             'notes' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         ];
-        $response = $this->post('/service_order_status',$item);
+        $response = $this->actingAs($this->getAdminUser())->post('/order_status',$item);
         $response->seeStatusCode(422);                
         $response->seeJson(["name" => ["The name may not be greater than 255 characters."],"notes" => ["The notes may not be greater than 255 characters."]]);
     }
     
     public function testRead()
     {
-        $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => true];
-        $response = $this->post('/service_order_status',$item);
+        $item = factory('App\OrderStatus')->create();
+        $response = $this->actingAs($this->getAdminUser())->get('/order_status/' . $item->id);
         $response->seeStatusCode(200);
-        $response_array = json_decode($response->response->getContent());
-        $response = $this->get('/service_order_status/' . $response_array->id);
-        $response->seeStatusCode(200);
-        $response->seeJson($item);        
-        $dbitem = ServiceOrderStatus::find($response_array->id);
+        $response->seeJson($item->toArray());
+        $dbitem = OrderStatus::find($item->id);
         $response->seeJsonEquals($dbitem->toArray());
         $dbitem->delete();
     }
     
     
     public function testReadBad()
-    {        
-        $response = $this->get('/service_order_status/a');
+    {
+        $response = $this->actingAs($this->getAdminUser())->get('/order_status/a');
         $response->seeStatusCode(404);        
     }
-    
-    public function testCreateDoubleDefault()
-    {
-        $items = [
-                  ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => true],
-                  ['name' => 'Test 2', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => true]
-                ];
-        $response = $this->post('/service_order_status',$items[0]);
-        $response->seeStatusCode(200);
-        $response_array = json_decode($response->response->getContent());        
-        $response = $this->post('/service_order_status',$items[1]);
-        $response->seeStatusCode(200);                
-        $dbitem = ServiceOrderStatus::find($response_array->id);
-        $this->assertEquals(false, $dbitem->default);
-        $this->assertEquals(null, $dbitem->sort_order);
-    }
-    
+
     public function testUpdate()
     {
-        $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => true];
-        $response = $this->post('/service_order_status',$item);
-        $response->seeStatusCode(200);
-        $response_array = json_decode($response->response->getContent());
+        $item = factory('App\OrderStatus')->create();
         $patch = ['name' => 'Test 2'];
-        $response = $this->patch('/service_order_status/' . $response_array->id, $patch);
+        $response = $this->actingAs($this->getAdminUser())->patch('/order_status/' . $item->id, $patch);
         $response->seeStatusCode(200);
         $response->seeJson($patch);
-        $dbitem = ServiceOrderStatus::find($response_array->id);
+        $dbitem = OrderStatus::find($item->id);
         $response->seeJsonEquals($dbitem->toArray());
     }
     
     public function testDelete()
     {
-        $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => true];
-        $response = $this->post('/service_order_status',$item);
-        $response->seeStatusCode(200);
-        $response_array = json_decode($response->response->getContent());
-        $response = $this->delete('/service_order_status/' . $response_array->id);
+        $item = factory('App\OrderStatus')->create();
+        $response = $this->actingAs($this->getAdminUser())->delete('/order_status/' . $item->id);
         $response->seeStatusCode(204);        
         $response->seeJsonEquals([]);
     }
-    
-    
+
+    public function testAuth()
+    {
+        $response = $this->get('/order_statuses/');
+        $response->seeStatusCode(401);
+    }
+
 }

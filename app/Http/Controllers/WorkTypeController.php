@@ -54,7 +54,7 @@ class WorkTypeController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete(Request $request, $id){
         if(!$request->user()->can('edit-settings')){
             return response(['Unauthorized(permissions)'], 401);
         }
@@ -65,14 +65,9 @@ class WorkTypeController extends Controller
     
     public function removeConflict(Request $request){
         $sort_order = $request->input('sort_order');
-        $default = $request->input('default');
         if($sort_order){
             WorkType::where('sort_order', $sort_order)
                 ->update(['sort_order' => null]);
-        }
-        if($default){
-            WorkType::where('default', true)
-            ->update(['default' => false]);
-        }        
+        }    
     }
 }

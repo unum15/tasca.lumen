@@ -7,12 +7,6 @@ use Illuminate\Http\Request;
 
 class OrderActionController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */    
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -30,9 +24,7 @@ class OrderActionController extends Controller
         $validation = [
             'name' => 'string|required|min:1|max:255',
             'notes' => 'string|max:255',
-            'sort_order' => 'integer',
-            'default' => 'boolean',
-            'service_order_status_id' => 'required|integer|exists:service_order_statuses,id'
+            'sort_order' => 'integer'
         ];
         $this->validate($request, $validation);
         $this->removeConflict($request);
@@ -53,7 +45,6 @@ class OrderActionController extends Controller
             'name' => 'string|min:1|max:255',
             'notes' => 'string|max:255|nullable',
             'sort_order' => 'integer|nullable',
-            'service_order_status_id' => 'integer|exists:service_order_statuses,id'
         ];
         $this->validate($request, $validation);
         $this->removeConflict($request);
@@ -70,7 +61,7 @@ class OrderActionController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete(Request $request, $id){
         if(!$request->user()->can('edit-settings')){
             return response(['Unauthorized(permissions)'], 401);
         }
@@ -81,14 +72,9 @@ class OrderActionController extends Controller
     
     public function removeConflict(Request $request){
         $sort_order = $request->input('sort_order');
-        $default = $request->input('default');
         if($sort_order){
             OrderAction::where('sort_order', $sort_order)
                 ->update(['sort_order' => null]);
-        }
-        if($default){
-            OrderAction::where('default', true)
-            ->update(['default' => false]);
-        }        
+        } 
     }
 }

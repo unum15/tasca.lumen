@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class TaskTypeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     private $validation = [
         'name' => 'string|required|min:1|max:255',
         'notes' => 'string|max:255|nullable',
@@ -54,7 +49,7 @@ class TaskTypeController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete(Request $request, $id){
         if(!$request->user()->can('edit-settings')){
             return response(['Unauthorized(permissions)'], 401);
         }
@@ -65,14 +60,10 @@ class TaskTypeController extends Controller
     
     public function removeConflict(Request $request){
         $sort_order = $request->input('sort_order');
-        $default = $request->input('default');
-        if($sort_order){
+         if($sort_order){
             TaskType::where('sort_order', $sort_order)
                 ->update(['sort_order' => null]);
         }
-        if($default){
-            TaskType::where('default', true)
-            ->update(['default' => false]);
-        }        
+      
     }
 }

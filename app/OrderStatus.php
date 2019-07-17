@@ -9,9 +9,7 @@ class OrderStatus extends Model
     protected $fillable = [
 		'name',
 		'notes',
-		'sort_order',
-        'allow_work_order',
-        'allow_pending_work_order'
+		'sort_order'
 	];
 	
 	public function orderActions(){

@@ -1,7 +1,5 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseTransactions;
-
 use App\ContactMethod;
 
 class ContactMethodControllerTest extends TestCase
