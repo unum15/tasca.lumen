@@ -16,8 +16,8 @@ class PhoneNumberController extends Controller
     private $validation = [
         //'phone_number' => 'string|min:10|max:10|regex:/^\d+$/',
         'phone_number' => 'string|min:10|max:64',
-		'phone_number_type_id' => 'integer|exists:phone_number_types,id',		
-		'contact_id' => 'integer|exists:contacts,id'
+    'phone_number_type_id' => 'integer|exists:phone_number_types,id',        
+    'contact_id' => 'integer|exists:contacts,id'
     ];
 
     public function __construct()
@@ -25,17 +25,19 @@ class PhoneNumberController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $items_query = PhoneNumber::orderBy('phone_number_type_id');
         $contact_id = $request->input('contact_id');
-        if($contact_id != ''){
+        if($contact_id != '') {
             $items_query = $items_query->where('contact_id', $contact_id);
         }
         $items = $items_query->get();
         return $items;
     }
     
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $this->validate($request, $this->validation);
         $this->validate($request, ['phone_number' => 'required', 'phone_number_type_id' => 'required', 'contact_id' => 'required']);
         $values = $request->only(array_keys($this->validation));
@@ -46,12 +48,14 @@ class PhoneNumberController extends Controller
         return $item;
     }
     
-    public function read($id){
+    public function read($id)
+    {
         $item = PhoneNumber::findOrFail($id);
         return $item;
     }
     
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $this->validate($request, $this->validation);     
         $item = PhoneNumber::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
@@ -60,7 +64,8 @@ class PhoneNumberController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete($id)
+    {
         $item = PhoneNumber::findOrFail($id);
         $item->delete();
         return response([], 204);

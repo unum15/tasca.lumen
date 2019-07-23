@@ -14,9 +14,9 @@ class ProjectController extends Controller
      */
     private $validation = [
         'name' => 'string|min:1|max:255',
-		'client_id' => 'integer|exists:clients,id',
+    'client_id' => 'integer|exists:clients,id',
         'open_date' => 'date',
-		'contact_id' => 'integer|exists:contacts,id',
+    'contact_id' => 'integer|exists:contacts,id',
         'close_date' => 'nullable|date',
         'notes' => 'nullable|string|max:255'
     ];
@@ -26,13 +26,14 @@ class ProjectController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $items_query = Project::with('contact', 'client')
         ->orderBy('name');
         $completed = $request->input('completed');
-        if($completed == 'false'){
+        if($completed == 'false') {
             $items_query->whereNull('close_date');
         }
         foreach($values as $field => $value){
@@ -41,7 +42,8 @@ class ProjectController extends Controller
         return $items_query->get();
     }
     
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $this->validate($request, $this->validation);
         $this->validate($request, ['name' => 'required','client_id' => 'required']);
         $values = $request->only(array_keys($this->validation));
@@ -52,12 +54,14 @@ class ProjectController extends Controller
         return $item;
     }
     
-    public function read($id){
+    public function read($id)
+    {
         $item = Project::findOrFail($id);
         return $item;
     }
     
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $this->validate($request, $this->validation);
         $item = Project::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
@@ -68,7 +72,8 @@ class ProjectController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete($id)
+    {
         $item = Project::findOrFail($id);
         $item->delete();
         return response([], 204);

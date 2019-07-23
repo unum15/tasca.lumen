@@ -12,13 +12,15 @@ class OrderActionController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index()
+    {
         $items = OrderAction::with('orderStatuses')->get();
         return $items;
     }
     
-    public function create(Request $request){
-        if(!$request->user()->can('edit-settings')){
+    public function create(Request $request)
+    {
+        if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $validation = [
@@ -32,13 +34,15 @@ class OrderActionController extends Controller
         return $item;
     }
     
-    public function read($id){
+    public function read($id)
+    {
         $item = OrderAction::findOrFail($id);
         return $item;
     }
     
-    public function update($id, Request $request){
-        if(!$request->user()->can('edit-settings')){
+    public function update($id, Request $request)
+    {
+        if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $validation = [
@@ -49,20 +53,21 @@ class OrderActionController extends Controller
         $this->validate($request, $validation);
         $this->removeConflict($request);
         $item = OrderAction::findOrFail($id);
-        if($item == null){
+        if($item == null) {
             return response(['success' => false, 'status' => 404, 'message' => 'HTTP_FILE_NOT_FOUND'], 404);
         }
         $values = $request->only(array_keys($validation));
         //$values = $request->input();
-        if(!$values){
+        if(!$values) {
             return response(['success' => false, 'status' => 422, 'message' => 'No valid fields given'], 422);
         }
         $item->update($values);
         return $item;
     }
     
-    public function delete(Request $request, $id){
-        if(!$request->user()->can('edit-settings')){
+    public function delete(Request $request, $id)
+    {
+        if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $item = OrderAction::findOrFail($id);
@@ -70,9 +75,10 @@ class OrderActionController extends Controller
         return response([], 204);
     }
     
-    public function removeConflict(Request $request){
+    public function removeConflict(Request $request)
+    {
         $sort_order = $request->input('sort_order');
-        if($sort_order){
+        if($sort_order) {
             OrderAction::where('sort_order', $sort_order)
                 ->update(['sort_order' => null]);
         } 

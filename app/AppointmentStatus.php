@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class AppointmentStatus extends Model
 {
-	protected $fillable = [
-		'name',
-		'notes',
-		'sort_order'
-	];
+    protected $fillable = [
+    'name',
+    'notes',
+    'sort_order'
+    ];
 }

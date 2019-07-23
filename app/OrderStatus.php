@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class OrderStatus extends Model
 {
     protected $fillable = [
-		'name',
-		'notes',
-		'sort_order'
-	];
-	
-	public function orderActions(){
+    'name',
+    'notes',
+    'sort_order'
+    ];
+    
+    public function orderActions()
+    {
         return $this->hasMany('App\OrderAction');
-    }	
+    }    
 }
