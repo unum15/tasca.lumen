@@ -9,11 +9,7 @@ use Auth;
 
 class OrderController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
     private $validation = [
         'description' => 'string|min:1|max:1024',
 		'project_id' => 'integer|exists:projects,id',
@@ -84,6 +80,7 @@ class OrderController extends Controller
     
     public function create(Request $request){
         $this->validate($request, $this->validation);
+        $this->validate($request, ['name' => 'required', 'project_id' => 'required']);
         $values = $request->only(array_keys($this->validation));
         $values = $request->input();
         $values['approval_date'] = isset($values['approval_date']) && $values['approval_date'] != "" ? $values['approval_date'] : null;

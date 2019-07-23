@@ -37,7 +37,7 @@ class TaskController extends Controller
 
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function index(Request $request){
@@ -104,6 +104,7 @@ class TaskController extends Controller
     
     public function create(Request $request){
         $this->validate($request, $this->validation);
+        $this->validate($request, ['name' => 'required']);
         $values = $request->only(array_keys($this->validation));
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;

@@ -70,6 +70,48 @@ $factory->define(App\EmailType::class, function (Faker\Generator $faker) {
         'name' => $faker->word,
     ];
 });
+$factory->define(App\Order::class, function (Faker\Generator $faker) {
+    $contact = factory(App\Contact::class)->create();
+    $project = factory(App\Project::class)->create();
+    $order_status_type = factory(App\OrderStatusType::class)->create();
+    return [
+        'name' => $faker->word,
+        'project_id' => $project->id,
+        'order_status_type_id' => $order_status_type->id,
+        'creator_id' => $contact->id,
+        'updater_id' => $contact->id,
+    ];
+});
+
+$factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(App\OrderStatusType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(App\OrderAction::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(App\OrderPriority::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
 
 $factory->define(App\PhoneNumber::class, function (Faker\Generator $faker) {
     $contact = App\Contact::first();
@@ -86,19 +128,6 @@ $factory->define(App\PhoneNumber::class, function (Faker\Generator $faker) {
 $factory->define(App\PhoneNumberType::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
-    ];
-});
-
-$factory->define(App\Project::class, function (Faker\Generator $faker) {
-    $contact = App\Contact::first();
-    $client = App\Client::first();
-    return [
-        'name' => $faker->word,
-        'contact_id' => $contact->id,
-        'client_id' => $client->id,
-        'open_date' => date('Y-m-d'),
-        'creator_id' => $contact->id,
-        'updater_id' => $contact->id,
     ];
 });
 
@@ -123,27 +152,25 @@ $factory->define(App\PropertyType::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
+
+$factory->define(App\Project::class, function (Faker\Generator $faker) {
+    $contact = factory(App\Contact::class)->create();
+    $client = factory(App\Client::class)->create();
     return [
         'name' => $faker->word,
+        'client_id' => $client->id,
+        'creator_id' => $contact->id,
+        'updater_id' => $contact->id
     ];
 });
 
-$factory->define(App\OrderAction::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->word,
-    ];
-});
 
-$factory->define(App\OrderPriority::class, function (Faker\Generator $faker) {
+$factory->define(App\Task::class, function (Faker\Generator $faker) {
+    $contact = App\Contact::first();
     return [
         'name' => $faker->word,
-    ];
-});
-
-$factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->word,
+        'creator_id' => $contact->id,
+        'updater_id' => $contact->id,
     ];
 });
 
