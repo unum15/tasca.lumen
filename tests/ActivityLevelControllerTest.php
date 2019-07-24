@@ -93,8 +93,7 @@ class ActivityLevelControllerTest extends TestCase
     {
         $level = factory('App\ActivityLevel')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/activity_level/' . $level->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
     
     public function testAuth()

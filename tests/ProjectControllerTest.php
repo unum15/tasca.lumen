@@ -143,8 +143,7 @@ class ProjectControllerTest extends TestCase
     {
         $item = factory('App\Project')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/project/' . $item->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
 
     public function testAuth()

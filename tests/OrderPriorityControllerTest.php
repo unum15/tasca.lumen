@@ -86,8 +86,7 @@ class OrderPriorityControllerTest extends TestCase
     {
         $item = factory('App\OrderPriority')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/order_priority/' . $item->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
 
     public function testAuth()

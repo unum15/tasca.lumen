@@ -98,8 +98,7 @@ class ClientControllerTest extends TestCase
     {
         $client = factory('App\Client')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/client/' . $client->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
     
     public function testAuth()

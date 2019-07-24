@@ -84,8 +84,7 @@ class PropertyTypeControllerTest extends TestCase
     {
         $item = factory('App\PropertyType')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/property_type/' . $item->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
     
     public function testAuth()

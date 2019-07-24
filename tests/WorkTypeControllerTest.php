@@ -87,8 +87,7 @@ class WorkTypeControllerTest extends TestCase
     {
         $item = factory('App\WorkType')->create();         
         $response = $this->actingAs($this->getAdminUser())->delete('/work_type/' . $item->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
     
     public function testAuth()
