@@ -15,7 +15,18 @@ class PropertyControllerTest extends TestCase
         $dbitems = Property::first();
         $response->seeJson($dbitems->toArray());        
     }
-    
+
+    public function testIndexWithActivityLevel()
+    {
+        $activity_levels = factory('App\ActivityLevel', 5)->create();
+        $property0 = factory('App\Property')->create(['activity_level_id' => $activity_levels[0]->id]);
+        $property1 = factory('App\Property')->create(['activity_level_id' => $activity_levels[4]->id]);
+        $response = $this->actingAs($this->getAdminUser())->get('/properties?maximium_activity_level_id=' . $activity_levels[0]->id);
+        $response->seeStatusCode(200);
+        $response->seeJson($property0->toArray());
+        $response->dontSeeJson(['name' => $property1->name]);
+    }
+
     public function testCreate()
     {
         $activity_level = ActivityLevel::first();

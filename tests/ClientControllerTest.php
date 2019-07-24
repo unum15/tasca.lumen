@@ -13,6 +13,18 @@ class ClientControllerTest extends TestCase
         $response->seeJson($client->toArray());
     }
     
+    public function testIndexWithActivityLevel()
+    {
+        $activity_levels = factory('App\ActivityLevel', 5)->create();
+        $client0 = factory('App\Client')->create(['activity_level_id' => $activity_levels[0]->id]);
+        $client1 = factory('App\Client')->create(['activity_level_id' => $activity_levels[4]->id]);
+        $response = $this->actingAs($this->getAdminUser())->get('/clients?maximium_activity_level_id=' . $activity_levels[0]->id);
+        $response->seeStatusCode(200);
+        $response->seeJson($client0->toArray());
+        $response->dontSeeJson(['name' => $client1->name]);
+    }
+
+
     public function testCreate()
     {
         $item = ['name' => 'Test 1'];

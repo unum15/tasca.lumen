@@ -13,6 +13,17 @@ class ContactControllerTest extends TestCase
         $response->seeJson($contact->toArray());
     }
     
+    public function testIndexWithActivityLevel()
+    {
+        $activity_levels = factory('App\ActivityLevel', 5)->create();
+        $contact0 = factory('App\Contact')->create(['activity_level_id' => $activity_levels[0]->id]);
+        $contact1 = factory('App\Contact')->create(['activity_level_id' => $activity_levels[4]->id]);
+        $response = $this->actingAs($this->getAdminUser())->get('/contacts?maximium_activity_level_id=' . $activity_levels[0]->id);
+        $response->seeStatusCode(200);
+        $response->seeJson($contact0->toArray());
+        $response->dontSeeJson(['name' => $contact1->name]);
+    }
+
     public function testCreate()
     {
         $item = ['name' => 'Test 1'];

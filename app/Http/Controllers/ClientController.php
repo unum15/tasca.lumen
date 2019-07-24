@@ -7,21 +7,15 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    
     private $validation = [
         'name' => 'string|min:1|max:255',
         'notes' => 'nullable|string|max:255',
-    'client_type_id' => 'nullable|integer|exists:client_types,id',
-    'activity_level_id' => 'nullable|integer|exists:activity_levels,id',
-    'billing_contact_id' => 'nullable|integer|exists:contacts,id',
-    'main_mailing_property_id' => 'nullable|integer|exists:properties,id',
-    'contact_method_id' => 'nullable|integer|exists:contact_methods,id',
-    'referred_by' => 'nullable|string|max:255'
+        'client_type_id' => 'nullable|integer|exists:client_types,id',
+        'activity_level_id' => 'nullable|integer|exists:activity_levels,id',
+        'billing_contact_id' => 'nullable|integer|exists:contacts,id',
+        'main_mailing_property_id' => 'nullable|integer|exists:properties,id',
+        'contact_method_id' => 'nullable|integer|exists:contact_methods,id',
+        'referred_by' => 'nullable|string|max:255'
     ];
     
     public function __construct(Request $request)
@@ -32,14 +26,20 @@ class ClientController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $items = Client::with('clientType')
+        $this->validate($request, $this->validation);
+        $this->validate($request, ['maximium_activity_level_id' => 'nullable|integer|exists:activity_levels,id']);
+        $query = Client::with('clientType')
             ->with('activityLevel')
             ->with('billingContact')
             ->with('billingProperty')
-            ->orderBy('name')
-            ->get();
+            ->orderBy('name');
+        $max_activity_level = $request->input('maximium_activity_level_id');
+        if(!empty($max_activity_level)) {
+            $query->where('activity_level_id','<=',$max_activity_level);
+        }
+        $items = $query->get();
         return $items;
     }
     

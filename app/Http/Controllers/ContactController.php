@@ -31,6 +31,8 @@ class ContactController extends Controller
 
     public function index(Request $request)
     {
+        $this->validate($request, $this->validation);
+        $this->validate($request, ['maximium_activity_level_id' => 'nullable|integer|exists:activity_levels,id']);
         $items_query = Contact::with('clients')
             ->with('activityLevel')
             ->with('contactMethod')
@@ -44,6 +46,10 @@ class ContactController extends Controller
                     $q->where('client_id', $client_id);
                 }
             );
+        }
+        $max_activity_level = $request->input('maximium_activity_level_id');
+        if(!empty($max_activity_level)) {
+            $items_query->where('activity_level_id','<=',$max_activity_level);
         }
         $items = $items_query->get();
         return $items;
