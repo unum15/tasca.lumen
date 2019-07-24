@@ -14,14 +14,14 @@ class EmailController extends Controller
      */
     private $validation_create = [
         'email' => 'string|required|min:1|max:255',
-		'email_type_id' => 'integer|required|exists:email_types,id',		
-		'contact_id' => 'integer|required|exists:contacts,id'
+    'email_type_id' => 'integer|required|exists:email_types,id',        
+    'contact_id' => 'integer|required|exists:contacts,id'
     ];
     
     private $validation = [
         'email' => 'string|min:1|max:255',
-		'email_type_id' => 'integer|exists:email_types,id',		
-		'contact_id' => 'integer|exists:contacts,id'
+    'email_type_id' => 'integer|exists:email_types,id',        
+    'contact_id' => 'integer|exists:contacts,id'
     ];
 
     public function __construct()
@@ -29,7 +29,8 @@ class EmailController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $this->validate($request, $this->validation);
         $filters = $request->only(array_keys($this->validation));
         $items_query = Email::orderBy('id');
@@ -40,7 +41,8 @@ class EmailController extends Controller
         return $items;
     }
     
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $this->validate($request, $this->validation_create);
         $values = $request->only(array_keys($this->validation));
         $values['creator_id'] = $request->user()->id;
@@ -50,12 +52,14 @@ class EmailController extends Controller
         return $item;
     }
     
-    public function read($id){
+    public function read($id)
+    {
         $item = Email::findOrFail($id);
         return $item;
     }
     
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $this->validate($request, $this->validation);
         $item = Email::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
@@ -64,7 +68,8 @@ class EmailController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete($id)
+    {
         $item = Email::findOrFail($id);
         $item->delete();
         return response([], 204);

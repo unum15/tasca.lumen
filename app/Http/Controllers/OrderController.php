@@ -9,14 +9,10 @@ use Auth;
 
 class OrderController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
     private $validation = [
         'description' => 'string|min:1|max:1024',
-		'project_id' => 'integer|exists:projects,id',
+        'project_id' => 'integer|exists:projects,id',
         'order_status_type_id' => 'integer|exists:order_status_types,id',
         'name' => 'nullable|string|max:255',
         'date' => 'date',
@@ -57,7 +53,8 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $items_query = Order::with('project', 'project.contact', 'project.client', 'properties')
@@ -66,24 +63,28 @@ class OrderController extends Controller
             $items_query->where($field, $value);
         }
         $completed = $request->input('completed');
-        if($completed == 'false'){
+        if($completed == 'false') {
             
             $items_query->whereNull('completion_date');
         }
         
         $expired = $request->input('expired');
-        if($completed == 'false'){
-            $items_query->where(function ($q) {
-                $q->where('expiration_date','>=',date('Y-m-d'))
-                ->orWhereNull('expiration_date');
-            });
+        if($completed == 'false') {
+            $items_query->where(
+                function ($q) {
+                    $q->where('expiration_date', '>=', date('Y-m-d'))
+                        ->orWhereNull('expiration_date');
+                }
+            );
         }
         
         return $items_query->get();
     }
     
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $this->validate($request, $this->validation);
+        $this->validate($request, ['name' => 'required', 'project_id' => 'required']);
         $values = $request->only(array_keys($this->validation));
         $values = $request->input();
         $values['approval_date'] = isset($values['approval_date']) && $values['approval_date'] != "" ? $values['approval_date'] : null;
@@ -93,7 +94,7 @@ class OrderController extends Controller
         $values['renewal_date'] = isset($values['renewal_date']) && $values['renewal_date'] != "" ? $values['renewal_date'] : null;
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
-        if(empty($values['order_status_type_id'])){
+        if(empty($values['order_status_type_id'])) {
             $values['order_status_type_id'] = $this->orderStatusType($values['start_date']);
         }
         $item = Order::create($values);
@@ -103,7 +104,8 @@ class OrderController extends Controller
     }
     
     
-    public function read($id){
+    public function read($id)
+    {
         $item = Order::with(
             'project',
             'project.contact',
@@ -126,15 +128,16 @@ class OrderController extends Controller
             'tasks.dates.signIns',
             'tasks.dates.signIns.contact'
         )
-        ->where('id', $id)
-        ->first();
-        if(empty($item)){
+            ->where('id', $id)
+            ->first();
+        if(empty($item)) {
             return response([], 404);
         }
         return $item;
     }
     
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $this->validate($request, $this->validation);     
         $item = Order::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
@@ -150,10 +153,11 @@ class OrderController extends Controller
         return $item;
     }
     
-    public function syncProperties($item, $request){
-        if($item->order_status_type_id == 1){
+    public function syncProperties($item, $request)
+    {
+        if($item->order_status_type_id == 1) {
             $properties = $request->only('properties');
-            if(!empty($properties)){
+            if(!empty($properties)) {
                 $properties = $properties['properties'];
             }
             else{
@@ -162,7 +166,7 @@ class OrderController extends Controller
         }
         else{
             $property = $request->only('property');
-            if(!empty($property)){
+            if(!empty($property)) {
                 $properties = [$property['property']];
             }
             else{
@@ -173,13 +177,15 @@ class OrderController extends Controller
         $item->properties()->sync($properties);
     }
     
-    public function delete($id){
+    public function delete($id)
+    {
         $item = Order::findOrFail($id);
         $item->delete();
         return response([], 204);
     }    
 
-    public function convert(Request $request){
+    public function convert(Request $request)
+    {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $values = $request->input();//need to take this out
@@ -197,7 +203,7 @@ class OrderController extends Controller
         //add number as per Paul
         $order_number = 1;
         $recurring = ((!empty($values['recurring']))&&($values['recurring'] == 'true'));
-        if(($recurring)||((!empty($values['renewable']))&&($values['renewable'] == 'true'))){
+        if(($recurring)||((!empty($values['renewable']))&&($values['renewable'] == 'true'))) {
             $start_date = date_create($values['start_date']);
             $count = $recurring ? $values['recurrences'] : 1;
             for($item_number = 0; $item_number < $count; $item_number++){    
@@ -216,23 +222,25 @@ class OrderController extends Controller
                         $task_values['order_id'] = $item->id;
                         Task::create($task_values);
                     }
-                    array_push($items,Order::findOrFail($item->id));
+                    array_push($items, Order::findOrFail($item->id));
                 }
-                if($recurring){
+                if($recurring) {
                     $start_date->modify('+'.$values['recurring_interval']);
                 }
             }
         }
-        if(!empty($values['renewable']) && ($values['renewable'] == 'true')){
+        if(!empty($values['renewable']) && ($values['renewable'] == 'true')) {
             $date = date_create($values['renewal_date']);
             $date->modify('+'.$values['renewal_interval']);
-            $original_order->update([
+            $original_order->update(
+                [
                 'renewal_date' => $date->format('Y-m-d'),
                 'renewal_count' => $original_order->renewal_count - 1,
                 'approval_date' => null,
                 'start_date' => null,
                 'service_window' => $request->user()->default_service_window
-            ]);
+                ]
+            );
         }
         else{
             $original_order->update(['completion_date' => date('Y-m-d')]);
@@ -240,14 +248,15 @@ class OrderController extends Controller
         return $items;
     }
     
-    public function orderStatusType($date){
-        if(empty($date)){
+    public function orderStatusType($date)
+    {
+        if(empty($date)) {
             return 1;
         }
         $today = date_create();
         $window = Auth::user()->default_service_window;
         $date_obj = date_create($date);
-        if($today->diff($date_obj)->days <= $window){
+        if($today->diff($date_obj)->days <= $window) {
             return 3;
         }
         else{

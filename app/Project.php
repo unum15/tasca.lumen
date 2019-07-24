@@ -10,18 +10,20 @@ class Project extends Model
         'client_id',
         'name',
         'notes',
-		'contact_id',
+    'contact_id',
         'open_date',
         'close_date', 
         'creator_id',
         'updater_id'
     ];
     
-    public function contact(){
+    public function contact()
+    {
         return $this->belongsTo('App\Contact');
     }
     
-    public function client(){
+    public function client()
+    {
         return $this->belongsTo('App\Client');
     }
 }

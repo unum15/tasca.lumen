@@ -8,13 +8,13 @@ class Order extends Model
 {
     protected $fillable = [
         'project_id',
-		'order_status_type_id',
+    'order_status_type_id',
         'name',
-		'date',
+    'date',
         'completion_date',
         'expiration_date',
         'approval_date',
-		'start_date',
+    'start_date',
         'description',
         'order_category_id',
         'order_priority_id',
@@ -43,45 +43,55 @@ class Order extends Model
         'renewal_interval',
         'creator_id',
         'updater_id'
-	];
+    ];
     
-    function project(){
-       return $this->belongsTo('App\Project');
+    function project()
+    {
+        return $this->belongsTo('App\Project');
     }
     
-    function orderAction(){
-       return $this->belongsTo('App\OrderAction');
+    function orderAction()
+    {
+        return $this->belongsTo('App\OrderAction');
     }
     
-    function orderStatusType(){
-       return $this->belongsTo('App\OrderStatusType');
+    function orderStatusType()
+    {
+        return $this->belongsTo('App\OrderStatusType');
     }
     
-    function orderCategory(){
-       return $this->belongsTo('App\OrderCategory');
+    function orderCategory()
+    {
+        return $this->belongsTo('App\OrderCategory');
     }
     
-    function orderPriority(){
-       return $this->belongsTo('App\OrderPriority');
+    function orderPriority()
+    {
+        return $this->belongsTo('App\OrderPriority');
     }
     
-    function orderStatus(){
-       return $this->belongsTo('App\OrderStatus');
+    function orderStatus()
+    {
+        return $this->belongsTo('App\OrderStatus');
     }
     
-    function orderType(){
-       return $this->belongsTo('App\OrderType');
+    function orderType()
+    {
+        return $this->belongsTo('App\OrderType');
     }
     
-    function tasks(){
+    function tasks()
+    {
         return $this->hasMany('App\Task');
     }
     
-    function approver(){
+    function approver()
+    {
         return $this->belongsTo('App\Contact');
     }
     
-    public function properties(){
+    public function properties()
+    {
         return $this->belongsToMany('App\Property')
             ->withTimestamps();
     }

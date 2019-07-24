@@ -1,44 +1,33 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
-
 use App\Contact;
 
 class ContactControllerTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    
-    public function setUp(){
-      parent::setUp();
-      $this->item = Contact::create(['name' => 'Test Contact', 'creator_id' => 1, 'updater_id' => 1]);
-    }
-    
-    public function tearDown(){
-      parent::tearDown();
-      if(isset($this->item)){
-        $this->item->delete();
-      }      
-    }
-    
-    
+
     public function testIndex()
     {
-        $response = $this->get('/contacts');
+        $response = $this->actingAs($this->getAdminUser())->get('/contacts');
         $response->seeStatusCode(200);
-        $response->seeJson($this->item->toArray());        
-        $dbitems = Contact::all();
-        $response->seeJsonEquals($dbitems->toArray());        
+        $contact = Contact::first();
+        $response->seeJson($contact->toArray());
     }
     
+    public function testIndexWithActivityLevel()
+    {
+        $activity_levels = factory('App\ActivityLevel', 5)->create();
+        $contact0 = factory('App\Contact')->create(['activity_level_id' => $activity_levels[0]->id]);
+        $contact1 = factory('App\Contact')->create(['activity_level_id' => $activity_levels[4]->id]);
+        $response = $this->actingAs($this->getAdminUser())->get('/contacts?maximium_activity_level_id=' . $activity_levels[0]->id);
+        $response->seeStatusCode(200);
+        $response->seeJson($contact0->toArray());
+        $response->dontSeeJson(['name' => $contact1->name]);
+    }
+
     public function testCreate()
     {
         $item = ['name' => 'Test 1'];
-        $response = $this->actingAs($this->item)->post('/contact', $item);
+        $response = $this->actingAs($this->getAdminUser())->post('/contact', $item);
         $response->seeStatusCode(200);
         $response->seeJson($item);
         $response_array = json_decode($response->response->getContent());
@@ -51,7 +40,7 @@ class ContactControllerTest extends TestCase
     public function testCreateBad()
     {
         $item = ['name' => ''];
-        $response = $this->actingAs($this->item)->post('/contact', $item);
+        $response = $this->actingAs($this->getAdminUser())->post('/contact', $item);
         $response->seeStatusCode(422);                
         $response->seeJson(["name" => ["The name field is required."]]);
     }
@@ -59,7 +48,7 @@ class ContactControllerTest extends TestCase
     public function testCreateInjection()
     {
         $item = ['name' => "a'; DROP TABLE contacts CASCADE; --"];
-        $response = $this->actingAs($this->item)->post('/contact', $item);
+        $response = $this->actingAs($this->getAdminUser())->post('/contact', $item);
         $response->seeStatusCode(200);                
         $response->seeJson($item);
         $response_array = json_decode($response->response->getContent());        
@@ -73,44 +62,48 @@ class ContactControllerTest extends TestCase
         $item = [
             'name' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'        
         ];
-        $response = $this->actingAs($this->item)->post('/contact', $item);
-        $response->seeStatusCode(422);                
+        $response = $this->actingAs($this->getAdminUser())->post('/contact', $item);
+        $response->seeStatusCode(422);
         $response->seeJson(["name" => ["The name may not be greater than 255 characters."]]);
     }
     
     public function testRead()
-    {        
-        $response = $this->actingAs($this->item)->get('/contact/' . $this->item->id);
+    {
+        $contact = Contact::first();
+        $response = $this->actingAs($this->getAdminUser())->get('/contact/' . $contact->id);
         $response->seeStatusCode(200);
-        $response->seeJson($this->item->toArray());        
-        $dbitem = Contact::find($this->item->id);
-        $response->seeJsonEquals($dbitem->toArray());
-        $dbitem->delete();
+        $response->seeJson($contact->toArray());
     }
     
     
     public function testReadBad()
     {        
-        $response = $this->actingAs($this->item)->get('/contact/a');
+        $response = $this->actingAs($this->getAdminUser())->get('/contact/a');
         $response->seeStatusCode(404);        
     }    
     
     public function testUpdate()
-    {        
+    {
+        $contact = Contact::first();
         $patch = ['name' => 'Test 2'];
-        $response = $this->actingAs($this->item)->patch('/contact/' . $this->item->id, $patch);
+        $response = $this->actingAs($this->getAdminUser())->patch('/contact/' . $contact->id, $patch);
         $response->seeStatusCode(200);
         $response->seeJson($patch);
-        $dbitem = Contact::find($this->item->id);
+        $dbitem = Contact::find($contact->id);
         $response->seeJsonEquals($dbitem->toArray());
     }
     
     public function testDelete()
-    {        
-        $response = $this->actingAs($this->item)->delete('/contact/' . $this->item->id);
+    {
+        $contact = factory('App\Contact')->create();
+        $response = $this->actingAs($this->getAdminUser())->delete('/contact/' . $contact->id);
         $response->seeStatusCode(204);        
         $response->seeJsonEquals([]);
     }
     
-    
+    public function testAuth()
+    {
+        $response = $this->get('/contacts');
+        $response->seeStatusCode(401);
+    }
 }

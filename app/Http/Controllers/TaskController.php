@@ -37,10 +37,11 @@ class TaskController extends Controller
 
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $items_query = Task::with(
@@ -65,45 +66,51 @@ class TaskController extends Controller
             $items_query->where($field, $value);
         }
         $active_only = $request->input('active_only');
-        if((!empty($active_only)) && ($active_only == 'true')){
+        if((!empty($active_only)) && ($active_only == 'true')) {
             $items_query->whereHas(
-                'order' , function($q){
+                'order', function ($q) {
                     $q->whereNull('completion_date');
                     $q->whereNotNull('approval_date');
-                    $q->where(function ($q) {
-                        $q->where('expiration_date','>=',date('Y-m-d'))
-                        ->orWhereNull('expiration_date');
-                    });
+                    $q->where(
+                        function ($q) {
+                            $q->where('expiration_date', '>=', date('Y-m-d'))
+                                ->orWhereNull('expiration_date');
+                        }
+                    );
                 }
             );
             $items_query->whereNull('completion_date');
         }
         $completed = $request->input('completed');
-        if((!empty($completed)) && ($completed == 'true')){
+        if((!empty($completed)) && ($completed == 'true')) {
             $items_query->whereNotNull('completion_date');
         }
-        if((!empty($completed)) && ($completed == 'false')){
+        if((!empty($completed)) && ($completed == 'false')) {
             $items_query->whereNull('completion_date');
         }
         $closed = $request->input('closed');
-        if((!empty($closed)) && ($closed == 'true')){
+        if((!empty($closed)) && ($closed == 'true')) {
             $items_query->whereNotNull('closed_date');
         }
-        if((!empty($closed)) && ($closed == 'false')){
+        if((!empty($closed)) && ($closed == 'false')) {
             $items_query->whereNull('closed_date');
         }
         $min_closed_date = $request->input('min_closed_date');
-        if(!empty($min_closed_date)){
-            $items_query->where(function($q) use ($min_closed_date){
-                $q->where('closed_date', '>=', $min_closed_date)
-                ->orWhereNull('closed_date');
-            });
+        if(!empty($min_closed_date)) {
+            $items_query->where(
+                function ($q) use ($min_closed_date) {
+                    $q->where('closed_date', '>=', $min_closed_date)
+                        ->orWhereNull('closed_date');
+                }
+            );
         }
         return $items_query->get();
     }
     
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $this->validate($request, $this->validation);
+        $this->validate($request, ['name' => 'required']);
         $values = $request->only(array_keys($this->validation));
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
@@ -112,7 +119,8 @@ class TaskController extends Controller
         return $item;
     }
     
-    public function read($id){
+    public function read($id)
+    {
         $item = Task::with(
             'order',
             'order.project',
@@ -137,13 +145,14 @@ class TaskController extends Controller
         return $item;
     }
     
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $this->validate($request, $this->validation);     
         $item = Task::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
         $dates = ['completion_date', 'billed_date', 'closed_date'];
         foreach($dates as $date){
-            if(isset($values[$date])){
+            if(isset($values[$date])) {
                 $values[$date] = $values[$date] != "" ? $values[$date] : null;
             }
         }
@@ -152,7 +161,8 @@ class TaskController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete($id)
+    {
         $item = Task::findOrFail($id);
         $item->delete();
         return response([], 204);

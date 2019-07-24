@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-  protected $fillable =  [
+    protected $fillable =  [
       'order_id',
       'name',
       'description',
@@ -27,32 +27,39 @@ class Task extends Model
       'updater_id'
     ];
   
-  public function order(){
-    return $this->belongsTo('App\Order');
-  }
+    public function order()
+    {
+        return $this->belongsTo('App\Order');
+    }
   
-  public function taskAction(){
-    return $this->belongsTo('App\TaskAction');
-  }
+    public function taskAction()
+    {
+        return $this->belongsTo('App\TaskAction');
+    }
   
-  public function taskCategory(){
-    return $this->belongsTo('App\TaskCategory');
-  }
+    public function taskCategory()
+    {
+        return $this->belongsTo('App\TaskCategory');
+    }
   
-  public function taskStatus(){
-    return $this->belongsTo('App\TaskStatus');
-  }
+    public function taskStatus()
+    {
+        return $this->belongsTo('App\TaskStatus');
+    }
   
-  public function taskType(){
-    return $this->belongsTo('App\TaskType');
-  }
+    public function taskType()
+    {
+        return $this->belongsTo('App\TaskType');
+    }
   
-  public function dates(){
-    return $this->hasMany('App\TaskDate');
-  }
+    public function dates()
+    {
+        return $this->hasMany('App\TaskDate');
+    }
   
-  public function crew(){
-    return $this->belongsTo('App\Crew');
-  }
+    public function crew()
+    {
+        return $this->belongsTo('App\Crew');
+    }
   
 }

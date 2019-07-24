@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class ActivityLevel extends Model
 {
     protected $fillable =[
-		'name',
-		'notes',
+    'name',
+    'notes',
         'sort_order',
         'default'
-	];
+    ];
 }

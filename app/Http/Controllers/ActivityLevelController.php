@@ -23,18 +23,17 @@ class ActivityLevelController extends Controller
     public function __construct(Request $request)
     {
         $this->middleware('auth');
-        if(!$request->user()->can('edit-settings')){
-            return response(['Unauthorized(permissions)'], 401);
-        }
     }
 
-    public function index(){
+    public function index()
+    {
         $items = ActivityLevel::orderBy('sort_order')->get();
         return $items;
     }
     
-    public function create(Request $request){
-        if(!$request->user()->can('edit-settings')){
+    public function create(Request $request)
+    {
+        if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $this->validate($request, $this->validation);
@@ -43,13 +42,15 @@ class ActivityLevelController extends Controller
         return $item;
     }
     
-    public function read($id){
+    public function read($id)
+    {
         $item = ActivityLevel::findOrFail($id);
         return $item;
     }
     
-    public function update($id, Request $request){
-        if(!$request->user()->can('edit-settings')){
+    public function update($id, Request $request)
+    {
+        if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $this->validate($request, $this->validation);
@@ -59,8 +60,9 @@ class ActivityLevelController extends Controller
         return $item;
     }
     
-    public function delete($id){
-        if(!$request->user()->can('edit-settings')){
+    public function delete(Request $request, $id)
+    {
+        if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $item = ActivityLevel::findOrFail($id);
@@ -68,14 +70,15 @@ class ActivityLevelController extends Controller
         return response([], 204);
     }
     
-    public function removeConflict(Request $request){
+    public function removeConflict(Request $request)
+    {
         $sort_order = $request->input('sort_order');
         $default = $request->input('default');
-        if($sort_order){
+        if($sort_order) {
             ActivityLevel::where('sort_order', $sort_order)
                 ->update(['sort_order' => null]);
         }
-        if($default){
+        if($default) {
             ActivityLevel::where('default', true)
             ->update(['default' => false]);
         }        

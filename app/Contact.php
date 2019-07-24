@@ -15,9 +15,9 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
 
     protected $fillable = [
         'name',
-		'notes',
-		'activity_level_id',
-		'contact_method_id',
+    'notes',
+    'activity_level_id',
+    'contact_method_id',
         'login',
         'password',
         'api_token',
@@ -25,45 +25,52 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
         'show_maximium_activity_level_id',
         'default_service_window',
         'pending_days_out',
-		'creator_id',
-		'updater_id',
+    'creator_id',
+    'updater_id',
         'google_calendar_token',
         'google_calendar_id',
         'phreebooks_id'
     ];
     
-     protected $hidden = [
+    protected $hidden = [
         'password','google_calendar_token','google_calendar_id','remember_token','api_token'
     ];
     
-	public function activityLevel(){
-		return $this->belongsTo('App\ActivityLevel');
-	}
+    public function activityLevel()
+    {
+        return $this->belongsTo('App\ActivityLevel');
+    }
     
-    public function clients(){
+    public function clients()
+    {
         return $this->belongsToMany('App\Client')
             ->withTimestamps()
             ->withPivot('contact_type_id');
     }
     
-    public function contactMethod(){
-		return $this->belongsTo('App\ContactMethod');
-	}
-    
-	public function emails(){
-        return $this->hasMany('App\Email')->orderBy('email_type_id');;
+    public function contactMethod()
+    {
+        return $this->belongsTo('App\ContactMethod');
     }
     
-	public function phoneNumbers(){
+    public function emails()
+    {
+        return $this->hasMany('App\Email')->orderBy('email_type_id');
+    }
+    
+    public function phoneNumbers()
+    {
         return $this->hasMany('App\PhoneNumber')->orderBy('phone_number_type_id');
     }
-	
-	public function properties(){
+    
+    public function properties()
+    {
         return $this->belongsToMany('App\Property')->orderBy('name')
             ->withTimestamps();
     }
     
-    public function logIns(){
+    public function logIns()
+    {
         return $this->hasMany('App\LogIn');
     }
     

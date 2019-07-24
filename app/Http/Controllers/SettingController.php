@@ -21,13 +21,15 @@ class SettingController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index()
+    {
         $items = Setting::pluck('value', 'name');
         return $items;
     }
     
-    public function create(Request $request){
-        if(!$request->user()->can('edit-settings')){
+    public function create(Request $request)
+    {
+        if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $this->validate($request, $this->validation);
@@ -35,20 +37,22 @@ class SettingController extends Controller
         return $item;
     }
     
-    public function read($id){
+    public function read($id)
+    {
         $item = Setting::findOrFail($id);
         return $item;
     }
-/*    
+    /*    
     public function update($id, Request $request){
         $this->validate($request, $this->validation);
         $item = Setting::findOrFail($id);
         $item->update($request->input());
         return $item;
     }
-*/
-    public function update(Request $request){
-        if(!$request->user()->can('edit-settings')){
+    */
+    public function update(Request $request)
+    {
+        if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $settings = $request->all();
@@ -58,8 +62,9 @@ class SettingController extends Controller
         }
     }
     
-    public function delete($id){
-        if(!$request->user()->can('edit-settings')){
+    public function delete($id)
+    {
+        if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $item = Setting::findOrFail($id);

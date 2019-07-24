@@ -29,7 +29,8 @@ class TaskDateController extends Controller
         //$this->middleware('auth');
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $items_query = TaskDate::with(
@@ -46,13 +47,13 @@ class TaskDateController extends Controller
             'task.order.orderCategory'
         )
         ->orderBy('id');
-       foreach($values as $field => $value){
+        foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
         $active_only = $request->only('active_only');
-        if((!empty($active_only)) && ($active_only['active_only'] == 'true')){
+        if((!empty($active_only)) && ($active_only['active_only'] == 'true')) {
             $items_query->whereHas(
-                'task.order' , function($q){
+                'task.order', function ($q) {
                     $q->whereNull('completion_date');
                     $q->whereNull('expiration_date');
                     $q->whereNotNull('approval_date');
@@ -60,24 +61,29 @@ class TaskDateController extends Controller
             );
         }
         $min_date = $request->only('min_date');
-        if(!empty($min_date)){
-            $items_query->where(function($q) use ($min_date) {
-                $q->whereNull('date')
-                ->orWhere('date', '>=', $min_date['min_date']);
+        if(!empty($min_date)) {
+            $items_query->where(
+                function ($q) use ($min_date) {
+                    $q->whereNull('date')
+                        ->orWhere('date', '>=', $min_date['min_date']);
                 
-            });
+                }
+            );
         }
         $order_id = $request->input('order_id');
-        if(!empty($order_id)){
-             $items_query->whereHas('Task', function($q) use ($order_id){
-                $q->where('tasks.order_id', $order_id);
-             });
+        if(!empty($order_id)) {
+            $items_query->whereHas(
+                'Task', function ($q) use ($order_id) {
+                    $q->where('tasks.order_id', $order_id);
+                }
+            );
         }
         return $items_query->get();
     }
     
     
-    public function schedule(Request $request){
+    public function schedule(Request $request)
+    {
         $this->validate($request, $this->validation);
         $date = $request->input('date', date('Y-m-d'));
         $items_query = DB::table('tasks')
@@ -94,7 +100,8 @@ class TaskDateController extends Controller
             ->leftJoin('task_statuses', 'tasks.task_status_id', '=', 'task_statuses.id')
             ->leftJoin('task_actions', 'tasks.task_action_id', '=', 'task_actions.id')
             ->leftJoin('crews', 'tasks.crew_id', '=', 'crews.id')
-            ->select('task_dates.id',
+            ->select(
+                'task_dates.id',
                 DB::raw('row_number() OVER () AS row'),
                 'tasks.id AS task_id',
                 'orders.start_date',
@@ -135,65 +142,76 @@ class TaskDateController extends Controller
             ;
             $items_query->whereNull('orders.completion_date');
             $items_query->whereNull('tasks.closed_date');
-            $items_query->where(function($q){
-                $q->whereNull('orders.expiration_date')
-                ->orWhere('orders.expiration_date','>=', date('Y-m-d'));
-            });
+            $items_query->where(
+                function ($q) {
+                    $q->whereNull('orders.expiration_date')
+                        ->orWhere('orders.expiration_date', '>=', date('Y-m-d'));
+                }
+            );
             $status = strtolower($request->input('status'));
             
-            if((!empty($status) && $status!='all')){
-                $date_obj = date_create($date);
-                $days = 7; //$request->user()->pending_days_out;
-                $current_date = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
-                switch($status){
-                    case 'current':
-                        $items_query->where(function($q)use ($current_date) {
+        if((!empty($status) && $status!='all')) {
+            $date_obj = date_create($date);
+            $days = 7; //$request->user()->pending_days_out;
+            $current_date = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
+            switch($status){
+            case 'current':
+                $items_query->where(
+                    function ($q) use ($current_date) {
                             $q->whereNull('tasks.hold_date')
-                            ->orWhere('tasks.hold_date', '<=', $current_date);
-                        });
-                        $items_query->where(function($q) use ($current_date) {
+                                ->orWhere('tasks.hold_date', '<=', $current_date);
+                    }
+                );
+                $items_query->where(
+                    function ($q) use ($current_date) {
                             $q->where('orders.start_date', '<=', $current_date)
-                            ->orWhere('tasks.task_type_id', 1);
-                        });
-                        $items_query->where(function($q) use ($date) {
+                                ->orWhere('tasks.task_type_id', 1);
+                    }
+                );
+                $items_query->where(
+                    function ($q) use ($date) {
                             $q->where('task_dates.date', '>=', $date)
-                            ->orWhereNull('task_dates.date');
-                        });
-                        break;
-                    case 'pending':
-                        $items_query->where('orders.start_date', '>', $current_date);
-                        break;
-                    case 'on hold':
-                        $items_query->where(function($q)use ($current_date) {
+                                ->orWhereNull('task_dates.date');
+                    }
+                );
+                break;
+            case 'pending':
+                $items_query->where('orders.start_date', '>', $current_date);
+                break;
+            case 'on hold':
+                $items_query->where(
+                    function ($q) use ($current_date) {
                             $q->whereNull('orders.start_date')
-                            ->orWhere('tasks.hold_date', '>', $current_date);
-                        });
-                        break;
-                    case 'today':
-                        $items_query->where('task_dates.date', '=', $date);
-                        break;
-                }
-
+                                ->orWhere('tasks.hold_date', '>', $current_date);
+                    }
+                );
+                break;
+            case 'today':
+                $items_query->where('task_dates.date', '=', $date);
+                break;
             }
+
+        }
         return $items_query->get();
     }
     
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $has_value = false;
         $not_empty = ['date', 'day', 'time', 'notes'];
         foreach($not_empty as $field){
-            if(!empty($values[$field])){
+            if(!empty($values[$field])) {
                 $has_value = true;
             }
         }
-        if(!$has_value){
+        if(!$has_value) {
             return;//quitely return
         }
         $dates = ['date', 'completion_date', 'billed_date'];
         foreach($dates as $date){
-            if(isset($values[$date])){
+            if(isset($values[$date])) {
                 $values[$date] = $values[$date] != "" ? $values[$date] : null;
             }
         }
@@ -204,7 +222,8 @@ class TaskDateController extends Controller
         return $item;
     }
     
-    public function read($id){
+    public function read($id)
+    {
         $item = TaskDate::with(
             'task',
             'task.order',
@@ -227,14 +246,15 @@ class TaskDateController extends Controller
         return $item;
     }
     
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $this->validate($request, $this->validation);     
         $item = TaskDate::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
         //should be a better way to set blank to null
         $dates = ['date', 'completion_date', 'billed_date'];
         foreach($dates as $date){
-            if(isset($values[$date])){
+            if(isset($values[$date])) {
                 $values[$date] = $values[$date] != "" ? $values[$date] : null;
             }
         }
@@ -245,7 +265,8 @@ class TaskDateController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete($id)
+    {
         $item = TaskDate::findOrFail($id);
         $item->delete();
         return response([], 204);

@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class ClientType extends Model
 {
     protected $fillable = [
-		'name',		
-		'notes',
-		'sort_order',
+    'name',        
+    'notes',
+    'sort_order',
         'default'
-	];
+    ];
 }

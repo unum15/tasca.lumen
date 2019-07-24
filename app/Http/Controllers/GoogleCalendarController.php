@@ -23,7 +23,8 @@ class GoogleCalendarController extends Controller
         $this->middleware('auth');
     }
 
-    function getClient(){
+    function getClient()
+    {
         $client = new \Google_Client();
         $client->setApplicationName('Tasca');
         $client->setScopes("https://www.googleapis.com/auth/calendar.events");
@@ -36,12 +37,13 @@ class GoogleCalendarController extends Controller
         $client->setDeveloperKey(env('GOOGLE_API_KEY'));
         $client->setClientId(env('GOOGLE_CLIENT_ID'));
         $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
-        $client->setRedirectUri('http://'.env('GOOGLE_CLIENT_HOST',$_SERVER['HTTP_HOST']).'/calendar');
+        $client->setRedirectUri('http://'.env('GOOGLE_CLIENT_HOST', $_SERVER['HTTP_HOST']).'/calendar');
         return $client;
     }
 
 
-    function index(){
+    function index()
+    {
         $client = getClient();
         $service = new Google_Service_Calendar($client);
         
@@ -70,9 +72,10 @@ class GoogleCalendarController extends Controller
         }
     }
     
-    function status(Request $request){
+    function status(Request $request)
+    {
         $token = $request->user()->google_calendar_token;
-        if(empty($token)){
+        if(empty($token)) {
             return ['status' => 'Not Authorized'];
         }
         $client = $this->getClient();
@@ -89,7 +92,8 @@ class GoogleCalendarController extends Controller
         return ['status' => 'Valid'];
     }
     
-    function url(){
+    function url()
+    {
         $client = $this->getClient();
         $authUrl = $client->createAuthUrl();
         return ['url' => $authUrl];
@@ -113,14 +117,15 @@ class GoogleCalendarController extends Controller
         */
     }
     
-    function callback(Request $request){
+    function callback(Request $request)
+    {
         $user = $request->user();
         $code = $request->only('code');
         $client = $this->getClient();
         $accessToken = $client->fetchAccessTokenWithAuthCode($code['code']);
-        if(isset($accessToken['error'])){
+        if(isset($accessToken['error'])) {
             error_log($code['code']);
-            error_log(print_r($accessToken,true));
+            error_log(print_r($accessToken, true));
             return response(['error' => 'Error communicating with Google.'], 500);
         }
         $client->setAccessToken($accessToken);

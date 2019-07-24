@@ -7,43 +7,45 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    
     private $validation = [
         'name' => 'string|min:1|max:255',
         'notes' => 'nullable|string|max:255',
-		'client_type_id' => 'nullable|integer|exists:client_types,id',
-		'activity_level_id' => 'nullable|integer|exists:activity_levels,id',
-		'billing_contact_id' => 'nullable|integer|exists:contacts,id',
-		'main_mailing_property_id' => 'nullable|integer|exists:properties,id',
-		'contact_method_id' => 'nullable|integer|exists:contact_methods,id',
-		'referred_by' => 'nullable|string|max:255'
+        'client_type_id' => 'nullable|integer|exists:client_types,id',
+        'activity_level_id' => 'nullable|integer|exists:activity_levels,id',
+        'billing_contact_id' => 'nullable|integer|exists:contacts,id',
+        'main_mailing_property_id' => 'nullable|integer|exists:properties,id',
+        'contact_method_id' => 'nullable|integer|exists:contact_methods,id',
+        'referred_by' => 'nullable|string|max:255'
     ];
     
     public function __construct(Request $request)
     {
         $this->middleware('auth');
-        if(!$request->user()->can('view-clients')){
+        if(($request->user())&&(!$request->user()->can('view-clients'))) {
             return response(['Unauthorized(permissions)'], 401);
         }
     }
 
-    public function index(){
-        $items = Client::with('clientType')
-        ->with('activityLevel')
-        ->with('billingContact')
-        ->with('mainMailingProperty')
-        ->orderBy('name')
-        ->get();
+    public function index(Request $request)
+    {
+        $this->validate($request, $this->validation);
+        $this->validate($request, ['maximium_activity_level_id' => 'nullable|integer|exists:activity_levels,id']);
+        $query = Client::with('clientType')
+            ->with('activityLevel')
+            ->with('billingContact')
+            ->with('billingProperty')
+            ->orderBy('name');
+        $max_activity_level = $request->input('maximium_activity_level_id');
+        if(!empty($max_activity_level)) {
+            $query->where('activity_level_id','<=',$max_activity_level);
+        }
+        $items = $query->get();
         return $items;
     }
     
-    public function create(Request $request){
-        if(!$request->user()->can('edit-clients')){
+    public function create(Request $request)
+    {
+        if(!$request->user()->can('edit-clients')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $this->validate($request, ['name' => 'required']);
@@ -56,7 +58,8 @@ class ClientController extends Controller
         return $item;
     }
     
-    public function read($id){
+    public function read($id)
+    {
         $item = Client::with(
             'contacts',
             'contacts.properties',
@@ -67,8 +70,9 @@ class ClientController extends Controller
         return $item;
     }
     
-    public function update($id, Request $request){
-        if(!$request->user()->can('edit-clients')){
+    public function update($id, Request $request)
+    {
+        if(!$request->user()->can('edit-clients')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $this->validate($request, $this->validation);     
@@ -79,8 +83,9 @@ class ClientController extends Controller
         return $item;
     }
     
-    public function delete($id){
-        if(!$request->user()->can('edit-clients')){
+    public function delete(Request $request, $id)
+    {
+        if(!$request->user()->can('edit-clients')) {
             return response(['Unauthorized(permissions)'], 401);
         }
         $item = Client::findOrFail($id);

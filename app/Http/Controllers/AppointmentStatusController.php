@@ -23,24 +23,28 @@ class AppointmentStatusController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index()
+    {
         $items = AppointmentStatus::All();
         return $items;
     }
     
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
         $item = AppointmentStatus::create($request->input());
         return $item;
     }
     
-    public function read($id){
+    public function read($id)
+    {
         $item = AppointmentStatus::findOrFail($id);
         return $item;
     }
     
-    public function update($id, Request $request){
+    public function update($id, Request $request)
+    {
         $this->validate($request, $this->validation);
         $this->removeConflict($request);
         $item = AppointmentStatus::findOrFail($id);
@@ -48,16 +52,18 @@ class AppointmentStatusController extends Controller
         return $item;
     }
     
-    public function delete($id){
+    public function delete($id)
+    {
         $item = AppointmentStatus::findOrFail($id);
         $item->delete();
         return response([], 204);
     }
     
-    public function removeConflict(Request $request){
+    public function removeConflict(Request $request)
+    {
         $sort_order = $request->input('sort_order');
         $default = $request->input('default');
-        if($sort_order){
+        if($sort_order) {
             AppointmentStatus::where('sort_order', $sort_order)
                 ->update(['sort_order' => null]);
         }
