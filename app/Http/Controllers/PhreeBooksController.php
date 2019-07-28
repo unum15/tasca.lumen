@@ -211,9 +211,7 @@ class PhreeBooksController extends Controller
     }
 
     public function updateClient($id){
-        $client = Client::with('billingContact')
-        ->with('mainMailingProperty')
-        ->find($id);
+        $client = Client::find($id);
         $phreebooks = DB::connection('phreebooks');
         $sql="
 			UPDATE
@@ -241,13 +239,13 @@ class PhreeBooksController extends Controller
         $values = [
           'bill_to'  => $client->billingContact->name,
           'attention_to' => $client->billingContact->name,
-          'address1' => $client->mainMailingProperty->address1,
-          'address2' => $client->mainMailingProperty->address2,
-          'city' => $client->mainMailingProperty->city,
-          'state' => $client->mainMailingProperty->state,
-          'zip' => $client->mainMailingProperty->zip,
+          'address1' => $client->billingProperty->address1,
+          'address2' => $client->billingProperty->address2,
+          'city' => $client->billingProperty->city,
+          'state' => $client->billingProperty->state,
+          'zip' => $client->billingProperty->zip,
           'email' => count($client->billingContact->emails) > 0 ? $client->billingContact->emails[0]->email : null,
-          'ref_id' => $client->mainMailingProperty->phreebooks_id
+          'ref_id' => $client->billingProperty->phreebooks_id
         ];
         list($phone_numbers, $columns, $params) = $this->_phone_numbers_array($client);
         $numbers_sql = "";

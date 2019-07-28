@@ -35,7 +35,7 @@ class Client extends Model
     
     public function billingProperty()
     {
-        return $this->belongsTo('App\Property');
+        return $this->belongsTo('App\Property', 'main_mailing_property_id');
     }
     
     public function clientType()
