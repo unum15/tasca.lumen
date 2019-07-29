@@ -89,8 +89,7 @@ class OrderStatusControllerTest extends TestCase
     {
         $item = factory('App\OrderStatus')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/order_status/' . $item->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
 
     public function testAuth()

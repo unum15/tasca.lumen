@@ -84,8 +84,7 @@ class PhoneNumberTypeControllerTest extends TestCase
     {
         $item = factory('App\PhoneNumberType')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/phone_number_type/' . $item->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
     public function testAuth()
     {

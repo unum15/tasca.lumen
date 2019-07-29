@@ -105,8 +105,7 @@ class TaskControllerTest extends TestCase
     {
         $item = factory('App\Task')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/task/' . $item->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
     
     public function testAuth()
