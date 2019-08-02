@@ -83,7 +83,7 @@ class PhreeBooksController extends Controller
         $client = Client::with('billingContact')
         ->with('billingContact.phoneNumbers')
         ->with('billingContact.emails')
-        ->with('mainMailingProperty')
+        ->with('billingProperty')
         ->find($id);
         $phreebooks = DB::connection('phreebooks');
         $sql="
