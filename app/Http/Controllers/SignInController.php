@@ -8,13 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class SignInController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     private $validation = [
-    'contact_id' => 'integer|exists:contacts,id',
+        'contact_id' => 'integer|exists:contacts,id',
         'task_date_id' => 'integer|exists:task_dates,id',
         'sign_in' => 'string|max:255',
         'sign_out' => 'string|max:255',
@@ -23,7 +18,7 @@ class SignInController extends Controller
 
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -60,15 +55,14 @@ class SignInController extends Controller
         }
         $start_date = $request->input('start_date');
         if(!empty($start_date)) {
-            $items_query->where('sign_in::DATE', '>=', $start_date);
+            $items_query->where(DB::raw('sign_in::DATE'), '>=', $start_date);
         }
-        
         $stop_date = $request->input('stop_date');
         if(!empty($stop_date)) {
-            $items_query->where('sign_out::DATE', '>=', $stop_date);
+            $items_query->where(DB::raw('sign_out::DATE'), '<=', $stop_date);
         }
-        
-        
+
+
         return $items_query->get();
     }
     
