@@ -62,7 +62,7 @@ class Handler extends ExceptionHandler
                     'trace' => $e->getTrace()
                 ];
             }
-            return response()->json(['error' => $response], $response['status']);
+            //return response()->json(['error' => $response], $response['status']);
         }
         return parent::render($request, $e);
     }

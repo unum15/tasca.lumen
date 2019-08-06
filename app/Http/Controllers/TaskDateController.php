@@ -26,7 +26,7 @@ class TaskDateController extends Controller
 
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -252,16 +252,15 @@ class TaskDateController extends Controller
         $item = TaskDate::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
         //should be a better way to set blank to null
-        $dates = ['date', 'completion_date', 'billed_date'];
+        $dates = ['date', 'completion_date', 'billed_date', 'time'];
         foreach($dates as $date){
             if(isset($values[$date])) {
-                $values[$date] = $values[$date] != "" ? $values[$date] : null;
+                $values[$date] = empty($values[$date]) ? null : $values[$date];
             }
         }
         
-        error_log(print_r($values, true));
         $values['updater_id'] = $request->user()->id;
-        error_log($item->update($values));
+        $item->update($values);
         return $item;
     }
     
