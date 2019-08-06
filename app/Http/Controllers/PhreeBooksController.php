@@ -207,6 +207,8 @@ class PhreeBooksController extends Controller
           'ref_id' => $property->client->phreebooks_id
         ];
         $phreebooks->update($sql, $values);
+        $pb_id = $phreebooks->getPdo()->lastInsertId();
+	$property->update(['phreebooks_id' => $pb_id]);
         return $property;
     }
 
@@ -383,11 +385,11 @@ class PhreeBooksController extends Controller
         $values = [
           'bill_to'  => $client->name,
           'attention_to' => $client->billingContact ? $client->billingContact->name : null,
-          'address1' => $client->billingContact ?  $client->mainMailingProperty->address1 : null,
-          'address2' => $client->billingContact ?  $client->mainMailingProperty->address2 : null,
-          'city' => $client->billingContact ?  $client->mainMailingProperty->city : null,
-          'state' => $client->billingContact ?  $client->mainMailingProperty->state : null,
-          'zip' => $client->billingContact ?  $client->mainMailingProperty->zip : null,
+          'address1' => $client->billingContact ?  $client->billingProperty->address1 : null,
+          'address2' => $client->billingContact ?  $client->billingProperty->address2 : null,
+          'city' => $client->billingContact ?  $client->billingProperty->city : null,
+          'state' => $client->billingContact ?  $client->billingProperty->state : null,
+          'zip' => $client->billingContact ?  $client->billingProperty->zip : null,
           'email' => $client->billingContact ? count($client->billingContact->emails) > 0 ? $client->billingContact->emails[0]->email : null : null,
         ];
         return $values;
