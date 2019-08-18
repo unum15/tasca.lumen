@@ -97,8 +97,7 @@ class ContactControllerTest extends TestCase
     {
         $contact = factory('App\Contact')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/contact/' . $contact->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
     
     public function testAuth()

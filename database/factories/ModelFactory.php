@@ -166,7 +166,7 @@ $factory->define(App\Project::class, function (Faker\Generator $faker) {
 
 
 $factory->define(App\Task::class, function (Faker\Generator $faker) {
-    $contact = App\Contact::first();
+    $contact = factory(App\Contact::class)->create();
     return [
         'name' => $faker->word,
         'creator_id' => $contact->id,
@@ -174,11 +174,36 @@ $factory->define(App\Task::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\SignIn::class, function (Faker\Generator $faker) {
+    $contact = factory(App\Contact::class)->create();
+    return [
+        'contact_id' => $contact->id,
+//        'task_date_id',
+//        'sign_in',
+        'notes' => 'Factory created!',
+        'creator_id' => $contact->id,
+        'updater_id' => $contact->id,
+    ];
+});
+
+
 $factory->define(App\TaskAction::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
     ];
 });
+
+$factory->define(App\TaskDate::class, function (Faker\Generator $faker) {
+    $contact = factory(App\Contact::class)->create();
+    $task = factory(App\Task::class)->create();
+    return [
+        'task_id' => $task->id,
+        'notes' => 'Factory created!',
+        'creator_id' => $contact->id,
+        'updater_id' => $contact->id,
+    ];
+});
+
 
 $factory->define(App\TaskType::class, function (Faker\Generator $faker) {
     return [

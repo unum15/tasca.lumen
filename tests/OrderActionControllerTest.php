@@ -95,8 +95,7 @@ class OrderActionControllerTest extends TestCase
     {
         $item = factory('App\OrderAction')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/order_action/' . $item->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
 
     public function testAuth()

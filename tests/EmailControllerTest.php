@@ -90,8 +90,7 @@ class EmailControllerTest extends TestCase
     {
         $item = factory('App\Email')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/email/' . $item->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
     
     public function testAuth()

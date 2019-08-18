@@ -10,7 +10,7 @@ class TaskDate extends Model
     'task_id',
     'date',
     'time',
-        'day',
+    'day',
     'notes',
     'sort_order',
     'appointment_status_id',

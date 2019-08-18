@@ -85,8 +85,7 @@ class ContactMethodControllerTest extends TestCase
     {
         $contact_method = factory('App\ContactMethod')->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/contact_method/' . $contact_method->id);
-        $response->seeStatusCode(204);        
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
     }
     
     public function testAuth()
