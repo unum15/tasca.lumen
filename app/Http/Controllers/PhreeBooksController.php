@@ -83,7 +83,7 @@ class PhreeBooksController extends Controller
         $client = Client::with('billingContact')
         ->with('billingContact.phoneNumbers')
         ->with('billingContact.emails')
-        ->with('mainMailingProperty')
+        ->with('billingProperty')
         ->find($id);
         $phreebooks = DB::connection('phreebooks');
         $sql="
@@ -207,13 +207,13 @@ class PhreeBooksController extends Controller
           'ref_id' => $property->client->phreebooks_id
         ];
         $phreebooks->update($sql, $values);
+        $pb_id = $phreebooks->getPdo()->lastInsertId();
+	$property->update(['phreebooks_id' => $pb_id]);
         return $property;
     }
 
     public function updateClient($id){
-        $client = Client::with('billingContact')
-        ->with('mainMailingProperty')
-        ->find($id);
+        $client = Client::find($id);
         $phreebooks = DB::connection('phreebooks');
         $sql="
 			UPDATE
@@ -241,13 +241,13 @@ class PhreeBooksController extends Controller
         $values = [
           'bill_to'  => $client->billingContact->name,
           'attention_to' => $client->billingContact->name,
-          'address1' => $client->mainMailingProperty->address1,
-          'address2' => $client->mainMailingProperty->address2,
-          'city' => $client->mainMailingProperty->city,
-          'state' => $client->mainMailingProperty->state,
-          'zip' => $client->mainMailingProperty->zip,
+          'address1' => $client->billingProperty->address1,
+          'address2' => $client->billingProperty->address2,
+          'city' => $client->billingProperty->city,
+          'state' => $client->billingProperty->state,
+          'zip' => $client->billingProperty->zip,
           'email' => count($client->billingContact->emails) > 0 ? $client->billingContact->emails[0]->email : null,
-          'ref_id' => $client->mainMailingProperty->phreebooks_id
+          'ref_id' => $client->billingProperty->phreebooks_id
         ];
         list($phone_numbers, $columns, $params) = $this->_phone_numbers_array($client);
         $numbers_sql = "";
@@ -385,11 +385,11 @@ class PhreeBooksController extends Controller
         $values = [
           'bill_to'  => $client->name,
           'attention_to' => $client->billingContact ? $client->billingContact->name : null,
-          'address1' => $client->billingContact ?  $client->mainMailingProperty->address1 : null,
-          'address2' => $client->billingContact ?  $client->mainMailingProperty->address2 : null,
-          'city' => $client->billingContact ?  $client->mainMailingProperty->city : null,
-          'state' => $client->billingContact ?  $client->mainMailingProperty->state : null,
-          'zip' => $client->billingContact ?  $client->mainMailingProperty->zip : null,
+          'address1' => $client->billingContact ?  $client->billingProperty->address1 : null,
+          'address2' => $client->billingContact ?  $client->billingProperty->address2 : null,
+          'city' => $client->billingContact ?  $client->billingProperty->city : null,
+          'state' => $client->billingContact ?  $client->billingProperty->state : null,
+          'zip' => $client->billingContact ?  $client->billingProperty->zip : null,
           'email' => $client->billingContact ? count($client->billingContact->emails) > 0 ? $client->billingContact->emails[0]->email : null : null,
         ];
         return $values;
