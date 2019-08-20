@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClientTypesTable extends Migration
+class CreateVehiclesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,19 @@ class CreateClientTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('client_types', function (Blueprint $table) {
+        Schema::create('vehicles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->integer('vehicle_type_id');
+            $table->integer('year')->nullable();
+            $table->string('make')->nullable();
+            $table->string('model')->nullable();
+            $table->string('trim')->nullable();
+            $table->string('vin')->nullable();
             $table->text('notes')->nullable();
-            $table->integer('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-        });        
+        });
     }
 
     /**
@@ -30,6 +35,6 @@ class CreateClientTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('client_types');
+        Schema::dropIfExists('vehicles');
     }
 }

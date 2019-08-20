@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClientTypesTable extends Migration
+class CreateServicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,20 @@ class CreateClientTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('client_types', function (Blueprint $table) {
+        Schema::create('services', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->integer('vehicle_id');
+            $table->integer('service_type_id');
+            $table->text('description');
+            $table->integer('quantity');
+            $table->integer('usage_type_id');
+            $table->integer('usage_interval');
+            $table->string('part_number')->nullable();
             $table->text('notes')->nullable();
-            $table->integer('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-        });        
+        });
+        DB::statement('ALTER TABLE services ADD COLUMN time_interval INTERVAL');
     }
 
     /**
@@ -30,6 +36,6 @@ class CreateClientTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('client_types');
+        Schema::dropIfExists('services');
     }
 }
