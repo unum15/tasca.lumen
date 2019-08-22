@@ -9,7 +9,8 @@
         "laravel/lumen-framework": "5.8.*",
         "vlucas/phpdotenv": "^3.0",
         "google/apiclient": "^2.0",
-        "proshore/entrust-lumen": "^1.0"
+        "proshore/entrust-lumen": "^1.0",
+        "doctrine/dbal": "^2.9"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -18,7 +19,8 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Unum\\Maker\\": "packages/unum/maker/src/"
         }
     },
     "autoload-dev": {
