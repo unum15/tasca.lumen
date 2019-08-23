@@ -5,6 +5,25 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Setting;
 
+use App\ActivityLevel;
+use App\ClientType;
+use App\ContactMethod;
+use App\ContactType;
+use App\EmailType;
+use App\PhoneNumberType;
+use App\PropertyType;
+use App\OrderAction;
+use App\OrderStatusType;
+use App\OrderCategory;
+use App\OrderPriority;
+use App\OrderStatus;
+use App\OrderType;
+use App\TaskAction;
+use App\AppointmentStatus;
+use App\TaskStatus;
+use App\TaskType;
+use App\TaskCategory;
+
 
 class InitSettingsCommand extends Command
 {
@@ -250,4 +269,79 @@ Budget and bid information.
             'name' => 'help_show',
             'value' => 'true'
         ]);
+    
+    //set defaults for forms
+        Setting::create([
+            'name' => 'default_activity_level_id',
+            'value' => ActivityLevel::where('name', 'Level 1')->first()->id
+        ]);        
+        Setting::create([
+            'name' => 'default_client_type_id',
+            'value' => ClientType::where('name', 'Residential')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_contact_method_id',
+            'value' => ContactMethod::where('name', 'Text')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_contact_type_id',
+            'value' => ContactType::where('name', 'Owner')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_email_type_id',
+            'value' => EmailType::where('name', 'Personal')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_phone_number_type_id',
+            'value' => PhoneNumberType::where('name', 'Mobile')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_property_type_id',
+            'value' => PropertyType::where('name', 'Home')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_order_action_id',
+            'value' => OrderAction::where('name', 'Site Visit')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_order_category_id',
+            'value' => OrderCategory::where('name', 'Irrigation')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_order_priority_id',
+            'value' => OrderPriority::where('name', 'Next Action')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_order_status_id',
+            'value' => OrderStatus::where('name', 'Reviewing')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_nonbilling_task_action_id',
+            'value' => TaskAction::where('name', 'Schedule')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_billing_task_action_id',
+            'value' => TaskAction::where('name', 'Schedule')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_nonbilling_task_status_id',
+            'value' => TaskStatus::where('name', 'In Review')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_billing_task_status_id',
+            'value' => TaskStatus::where('name', 'In Progress')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_nonbilling_task_category_id',
+            'value' => TaskCategory::where('name', 'Site Visit')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_billing_task_category_id',
+            'value' => TaskCategory::where('name', 'Service Task')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_order_type_id',
+            'value' => OrderType::where('name', 'Estimate')->first()->id
+        ]);
+    }
 }

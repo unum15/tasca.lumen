@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Contact;
+use App\Role;
 
 class InitAdminCommand extends Command
 {
@@ -47,7 +48,7 @@ class InitAdminCommand extends Command
             'creator_id' => 1,
             'updater_id' => 1 
         ]);
-        
+        $admin = Role::where('name', 'admin')->first();
         $adminUser->attachRole($admin);
     }
 }

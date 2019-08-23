@@ -130,4 +130,5 @@ class InitRolesCommand extends Command
         $employee->attachPermissions([$viewClients, $clockIn, $viewSchedule]);
         $clientAdmin->attachPermissions([$viewClient, $editClient, $viewProjects, $editProjects]);
         $clientEmployee->attachPermissions([$viewClient, $viewProjects, $editProjects]);
+    }
 }

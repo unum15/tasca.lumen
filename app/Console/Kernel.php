@@ -10,6 +10,7 @@ use App\Console\Commands\InitAllCommand;
 use App\Console\Commands\InitRolesCommand;
 use App\Console\Commands\InitSettingsCommand;
 use App\Console\Commands\InitTypesCommand;
+use App\Console\Commands\InitVTypesCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
 use App\Console\Commands\ResetHelpCommand;
 use App\Console\Commands\CreateTaskDatesCommand;
@@ -28,6 +29,7 @@ class Kernel extends ConsoleKernel
         InitRolesCommand::class,
         InitSettingsCommand::class,
         InitTypesCommand::class,
+        InitVTypesCommand::class,
         CreateTaskDatesCommand::class,
         UpdateOrderStatusCommand::class
     ];
