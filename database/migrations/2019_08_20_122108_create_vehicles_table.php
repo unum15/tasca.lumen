@@ -16,7 +16,7 @@ class CreateVehiclesTable extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->integer('vehicle_type_id');
+            $table->integer('vehicle_type_id')->unsigned();
             $table->integer('year')->nullable();
             $table->string('make')->nullable();
             $table->string('model')->nullable();
@@ -25,6 +25,11 @@ class CreateVehiclesTable extends Migration
             $table->text('notes')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
+            
+            $table->foreign('vehicle_type_id')
+                ->references('id')
+                ->on('vehicle_types')
+                ->onDelete('cascade');
         });
     }
 

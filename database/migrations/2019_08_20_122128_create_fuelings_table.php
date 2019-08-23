@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFuelingssTable extends Migration
+class CreateFuelingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateFuelingssTable extends Migration
     {
         Schema::create('fuelings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('vehicle_id');
+            $table->integer('vehicle_id')->unsigned();
             $table->integer('beginning_reading')->nullable();
             $table->integer('ending_reading')->nullable();
             $table->date('date')->nullable();
@@ -24,6 +24,11 @@ class CreateFuelingssTable extends Migration
             $table->text('notes')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
+            
+            $table->foreign('vehicle_id')
+                ->references('id')
+                ->on('vehicles')
+                ->onDelete('cascade');
         });
     }
 

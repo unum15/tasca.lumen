@@ -15,7 +15,7 @@ class CreateRepairsTable extends Migration
     {
         Schema::create('repairs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('vehicle_id');
+            $table->integer('vehicle_id')->unsigned();
             $table->string('repair');
             $table->integer('ending_reading')->nullable();
             $table->date('date')->nullable();
@@ -24,6 +24,11 @@ class CreateRepairsTable extends Migration
             $table->text('notes')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
+            
+            $table->foreign('vehicle_id')
+                ->references('id')
+                ->on('vehicles')
+                ->onDelete('cascade');
         });
     }
 
