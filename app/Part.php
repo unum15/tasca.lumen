@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ClientType extends Model
+class Part extends Model
 {
     protected $fillable = [
-        'name',        
-        'notes',
-        'sort_order'
+        'name',
+        'on_hand',
+        'notes'
     ];
 }

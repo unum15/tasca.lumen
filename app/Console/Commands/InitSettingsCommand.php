@@ -3,55 +3,43 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Setting;
+
 use App\ActivityLevel;
-use App\Client;
 use App\ClientType;
-use App\Contact;
 use App\ContactMethod;
 use App\ContactType;
-use App\Email;
 use App\EmailType;
-use App\PhoneNumber;
 use App\PhoneNumberType;
-use App\Project;
 use App\PropertyType;
-use App\Property;
-use App\Order;
 use App\OrderAction;
 use App\OrderStatusType;
 use App\OrderCategory;
-use App\OrderDate;
 use App\OrderPriority;
 use App\OrderStatus;
 use App\OrderType;
-use App\Permission;
-use App\Role;
-use App\Setting;
-use App\SignIn;
-use App\Task;
 use App\TaskAction;
-use App\TaskAppointmentStatus;
-use App\TaskDate;
+use App\AppointmentStatus;
 use App\TaskStatus;
 use App\TaskType;
 use App\TaskCategory;
 
 
-class PopulateDatabaseDefaultsCommand extends Command
+class InitSettingsCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'db:defaults';
+    protected $signature = 'init:settings';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Populate default data for Tasca.';
+    protected $description = 'Create initial settings for Tasca.';
 
     /**
      * Create a new command instance.
@@ -70,121 +58,6 @@ class PopulateDatabaseDefaultsCommand extends Command
      */
     public function handle()
     {
-        
-        $admin = new Role();
-        $admin->name         = 'admin';
-        $admin->display_name = 'Tasca Administrator';
-        $admin->description  = 'User is allowed to manage and edit everything';
-        $admin->save();
-
-        $employee = new Role();
-        $employee->name         = 'employee';
-        $employee->display_name = 'Employee';
-        $employee->description  = 'User is an employee of this company.';
-        $employee->save();
-
-        $clientAdmin = new Role();
-        $clientAdmin->name         = 'client-admin';
-        $clientAdmin->display_name = 'Client Administrator';
-        $clientAdmin->description  = 'User is allowed to manage and edit everything for specified client.';
-        $clientAdmin->save();
-
-        $clientEmployee = new Role();
-        $clientEmployee->name         = 'client-employee';
-        $clientEmployee->display_name = 'Client Employee';
-        $clientEmployee->description  = 'User is an employee of specified client.';
-        $clientEmployee->save();
-
-        $viewClients = new Permission();
-        $viewClients->name = 'view-clients';
-        $viewClients->display_name = 'View Clients';
-        $viewClients->description = 'View clients and related data.';
-        $viewClients->save();
-        
-        $editClients = new Permission();
-        $editClients->name = 'edit-clients';
-        $editClients->display_name = 'Edit Clients';
-        $editClients->description = 'Edit and create clients and existing data';
-        $editClients->save();
-        
-        $editSettings = new Permission();
-        $editSettings->name = 'edit-settings';
-        $editSettings->display_name = 'Edit Settings';
-        $editSettings->description = 'Edit settings';
-        $editSettings->save();
-        
-        $clockIn = new Permission();
-        $clockIn->name = 'clock-in';
-        $clockIn->display_name = 'clock-in';
-        $clockIn->description = 'clock-in';
-        $clockIn->save();
-        
-        $editTimeCards = new Permission();
-        $editTimeCards->name = 'edit-time-cards';
-        $editTimeCards->display_name = 'Edit Time Cards';
-        $editTimeCards->description = 'Edit Time Cards';
-        $editTimeCards->save();
-        
-        $viewSchedule = new Permission();
-        $viewSchedule->name = 'view-schedule';
-        $viewSchedule->display_name = 'View Schedule';
-        $viewSchedule->description = 'View schedule and tasks.';
-        $viewSchedule->save();
-        
-        
-        $viewClient = new Permission();
-        $viewClient->name = 'view-client';
-        $viewClient->display_name = 'View Client';
-        $viewClient->description = 'View associated client and related data.';
-        $viewClient->save();
-        
-        $editClient = new Permission();
-        $editClient->name = 'edit-client';
-        $editClient->display_name = 'Edit Client';
-        $editClient->description = 'Edit associated client and existing data';
-        $editClient->save();
-        
-        $viewProjects = new Permission();
-        $viewProjects->name = 'view-projects';
-        $viewProjects->display_name = 'View Projects';
-        $viewProjects->description = 'View projects and related data.';
-        $viewProjects->save();
-        
-        $editProjects = new Permission();
-        $editProjects->name = 'edit-projects';
-        $editProjects->display_name = 'Edit Projects';
-        $editProjects->description = 'Edit and create projects, orders, and tasks for associated clients';
-        $editProjects->save();
-        
-        $admin->attachPermissions([$viewClients, $editClients, $editSettings, $clockIn, $editTimeCards, $viewSchedule]);
-        $employee->attachPermissions([$viewClients, $clockIn, $viewSchedule]);
-        $clientAdmin->attachPermissions([$viewClient, $editClient, $viewProjects, $editProjects]);
-        $clientEmployee->attachPermissions([$viewClient, $viewProjects, $editProjects]);        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         Setting::create([
             'name' => 'help_client',
             'value' => 'A client represents a household or organization that you do business with. Contact information for individuals and properties should be store on their respective pages.'
@@ -396,339 +269,8 @@ Budget and bid information.
             'name' => 'help_show',
             'value' => 'true'
         ]);
-
-
-        $activity_levels = [
-            [
-                'name' => 'Level 1',
-                'notes' =>  'Customers that have called in the last three years.',
-                'sort_order' => 1
-            ],
-            [
-                'name' => 'Level 2',
-                'notes' =>  'Customers that have not called in the past three years.',
-                'sort_order' => 2
-            ],        
-            [
-                'name' => 'Level 3',
-                'notes' =>  'Customers that have not called in the past five years.',
-                'sort_order' => 3
-            ],        
-            [
-                'name' => 'Level 4',
-                'notes' =>  'Customers that have moved, but the location is still good.',
-                'sort_order' => 4
-            ],        
-            [
-                'name' => 'Level 5',
-                'notes' =>  'Customers have moved and location is gone.',
-                'sort_order' => 5
-            ]
-        ];        
-        
-        foreach($activity_levels as $activity_level){
-            ActivityLevel::create($activity_level);
-        };
-        
-        
-        $names = [
-                'None',
-                'Mail',
-                'Email',
-                'Text'
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            ContactMethod::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-        
-        
-        $names = [
-            'Residential',
-            'Commercial',
-            'Contractor',
-            'Government',
-            'Management',
-            'HOA',
-            'Other',
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            ClientType::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-        
-        $names = [
-            "Owner",
-            "Manager",
-            "Maintenance",
-            "Billing",
-            "Contract Manager",
-            "Project Manager",
-            "Contractor",
-            "Renter",
-            "Family Member",
-            "President",
-            "Foreman"
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            ContactType::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-
-        $names = [
-            'Home',
-            'Office',
-            'Shop',
-            'Store',
-            'Rental',
-            'Apartments',
-            'Retail',
-            'Restaurant',
-            'Park',
-            'Job Site',
-            'Condo',
-            'HOA',
-            'Wharehouse'            
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            PropertyType::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-        
-        $names = [
-            'Personal',
-            'Office',
-            'Home'            
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            EmailType::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-        
-        $names = [
-            'Mobile',
-            'Home',
-            'Office',
-            'Work',
-            'Extension',
-            'Unknown'            
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            PhoneNumberType::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-        
-        $names = [
-            "Next Action",
-            "Active",
-            "Planning",
-            "Pending",
-            "On Hold",
-            "Postponed",
-            "Waiting",
-            "Someday",
-            "Reference",
-            "Canceled"
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            OrderPriority::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-        
-        $names = [
-            "Irrigation",
-            "Landscape",
-            "Renovation",
-            "Consulting",
-            "Backflow",
-            "Lighting",
-            "Planting",
-            "Water Feature",
-            "Other Projects",
-            "Weekly Lawn Care",
-            "Landscape Care",
-            "Annual Lawn Care"
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            OrderCategory::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-        
-        
-        $names = [
-            "Will Call Back",
-            "Reviewing",
-            "Renewing",
-            "On Hold",
-            "Canceled"
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            $status = OrderStatus::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-        
-        
-        $actions = [
-                    "Contact" => [3],
-                    "Site Visit" => [2],
-                    "Bid/Price" => [2],
-                    "Get P.O." => [4],
-                    "Follow Up" => [1,2,4],
-                    "Close Out" => [1,4,5]
-                ];
-        
-        $sort = 1;
-        foreach($actions as $name => $statuses){
-            $action = OrderAction::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-            
-            $action->orderStatuses()->sync($statuses);
-        }
-                
-       $names = [
-            "Service Order",
-            "Pending Work Order",
-            "Work Order"
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            OrderStatusType::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-
-        $names = [
-            "No Appointment",
-            "Contact for Appointment",
-            "Confirmed Appointment",
-            "Message",
-            "Text",
-            "Email"
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            TaskAppointmentStatus::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-
-        
-        $service_order_type_id = OrderStatusType::where('name', 'Service Order')->first()->id;
-        $pending_work_order_type_id = OrderStatusType::where('name', 'Pending Work Order')->first()->id;
-        $work_order_type_id = OrderStatusType::where('name', 'Work Order')->first()->id;
-        
-        $names = [
-            "T & M",
-            "Lead",
-            "Quote",
-            "Estimate",
-            "Bid"
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            OrderType::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-
-        $names = [
-            "Non Billing",
-            "Billing"
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            TaskType::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-
-        $names = [
-            "In Review" => [1],
-            "Completed" => [1],
-            "Call Off" => [1],
-            "Pending" => [2],
-            "In Progress" => [2],
-            "Done" => [2],
-            "On Hold" => [2],
-            "Cancelled" => [2],
-        ];
-
-        
-        $sort = 1;
-        foreach($names as $name => $types){
-            $status = TaskStatus::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-            $status->taskTypes()->sync($types);
-        }
-        $actions = [
-            "Call/Email" => [1],
-            "Schedule" => [1, 2],
-            "Bill" => [2],
-            "Close Out" => [1],
-            "Report" => [1, 2],
-        ];
-        $sort = 1;
-        foreach($actions as $name => $types){
-            $action = TaskAction::create([
-               'name' => $name,
-               'sort_order' => $sort++
-            ]);
-            $action->taskTypes()->sync($types);
-        }
-        $names = [
-            "Site Visit" => [1],
-            "Appointment" => [1],
-            "Office" => [1],
-            "Errand" => [1],
-            "Evaluation" => [2],
-            "Day Task" => [2],
-            "Service Task" => [2]
-        ];
-        $sort = 1;
-        foreach($names as $name => $types){
-            $category = TaskCategory::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-            $category->taskTypes()->sync($types);
-        }
-        
-        //set defaults for forms
+    
+    //set defaults for forms
         Setting::create([
             'name' => 'default_activity_level_id',
             'value' => ActivityLevel::where('name', 'Level 1')->first()->id
@@ -801,21 +343,5 @@ Budget and bid information.
             'name' => 'default_order_type_id',
             'value' => OrderType::where('name', 'Estimate')->first()->id
         ]);
-        
-        
-        
-        //create contact so people can login
-        
-        $adminUser = Contact::create([
-            'name' => 'Admin',
-            'activity_level_id' => 1,
-            'login' => 'admin@example.com',
-            'show_maximium_activity_level_id' => 5,
-            'password' => password_hash("adminpass", PASSWORD_DEFAULT),
-            'creator_id' => 1,
-            'updater_id' => 1 
-        ]);
-        
-        $adminUser->attachRole($admin);
     }
 }

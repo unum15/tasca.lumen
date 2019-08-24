@@ -226,6 +226,56 @@ $router->put('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@updateCon
 $router->put('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@updateProperty');
 
 
-$router->get('/info', function () use ($router) {
-    return phpinfo();
-});
+$router->get('/vehicles', ['uses' => 'VehicleController@index', 'as' => 'vehicle.index']);
+$router->post('/vehicle', ['uses' => 'VehicleController@create', 'as' => 'vehicle.create']);
+$router->get('/vehicle/{id:[0-9]+}', ['uses' => 'VehicleController@read', 'as' => 'vehicle.read']);
+$router->patch('/vehicle/{id:[0-9]+}', ['uses' => 'VehicleController@update', 'as' => 'vehicle.update']);
+$router->delete('/vehicle/{id:[0-9]+}', ['uses' => 'VehicleController@delete', 'as' => 'vehicle.delete']);
+
+$router->get('/vehicle_types', ['uses' => 'VehicleTypeController@index', 'as' => 'vehicle_type.index']);
+$router->post('/vehicle_type', ['uses' => 'VehicleTypeController@create', 'as' => 'vehicle_type.create']);
+$router->get('/vehicle_type/{id:[0-9]+}', ['uses' => 'VehicleTypeController@read', 'as' => 'vehicle_type.read']);
+$router->patch('/vehicle_type/{id:[0-9]+}', ['uses' => 'VehicleTypeController@update', 'as' => 'vehicle_type.update']);
+$router->delete('/vehicle_type/{id:[0-9]+}', ['uses' => 'VehicleTypeController@delete', 'as' => 'vehicle_type.delete']);
+
+$router->get('/fuelings', ['uses' => 'FuelingController@index', 'as' => 'fueling.index']);
+$router->post('/fueling', ['uses' => 'FuelingController@create', 'as' => 'fueling.create']);
+$router->get('/fueling/{id:[0-9]+}', ['uses' => 'FuelingController@read', 'as' => 'fueling.read']);
+$router->patch('/fueling/{id:[0-9]+}', ['uses' => 'FuelingController@update', 'as' => 'fueling.update']);
+$router->delete('/fueling/{id:[0-9]+}', ['uses' => 'FuelingController@delete', 'as' => 'fueling.delete']);
+
+$router->get('/parts', ['uses' => 'PartController@index', 'as' => 'part.index']);
+$router->post('/part', ['uses' => 'PartController@create', 'as' => 'part.create']);
+$router->get('/part/{id:[0-9]+}', ['uses' => 'PartController@read', 'as' => 'part.read']);
+$router->patch('/part/{id:[0-9]+}', ['uses' => 'PartController@update', 'as' => 'part.update']);
+$router->delete('/part/{id:[0-9]+}', ['uses' => 'PartController@delete', 'as' => 'part.delete']);
+
+$router->get('/repairs', ['uses' => 'RepairController@index', 'as' => 'repair.index']);
+$router->post('/repair', ['uses' => 'RepairController@create', 'as' => 'repair.create']);
+$router->get('/repair/{id:[0-9]+}', ['uses' => 'RepairController@read', 'as' => 'repair.read']);
+$router->patch('/repair/{id:[0-9]+}', ['uses' => 'RepairController@update', 'as' => 'repair.update']);
+$router->delete('/repair/{id:[0-9]+}', ['uses' => 'RepairController@delete', 'as' => 'repair.delete']);
+
+$router->get('/service_types', ['uses' => 'ServiceTypeController@index', 'as' => 'service_type.index']);
+$router->post('/service_type', ['uses' => 'ServiceTypeController@create', 'as' => 'service_type.create']);
+$router->get('/service_type/{id:[0-9]+}', ['uses' => 'ServiceTypeController@read', 'as' => 'service_type.read']);
+$router->patch('/service_type/{id:[0-9]+}', ['uses' => 'ServiceTypeController@update', 'as' => 'service_type.update']);
+$router->delete('/service_type/{id:[0-9]+}', ['uses' => 'ServiceTypeController@delete', 'as' => 'service_type.delete']);
+
+$router->get('/services', ['uses' => 'ServiceController@index', 'as' => 'service.index']);
+$router->post('/service', ['uses' => 'ServiceController@create', 'as' => 'service.create']);
+$router->get('/service/{id:[0-9]+}', ['uses' => 'ServiceController@read', 'as' => 'service.read']);
+$router->patch('/service/{id:[0-9]+}', ['uses' => 'ServiceController@update', 'as' => 'service.update']);
+$router->delete('/service/{id:[0-9]+}', ['uses' => 'ServiceController@delete', 'as' => 'service.delete']);
+
+$router->get('/usage_types', ['uses' => 'UsageTypeController@index', 'as' => 'usage_type.index']);
+$router->post('/usage_type', ['uses' => 'UsageTypeController@create', 'as' => 'usage_type.create']);
+$router->get('/usage_type/{id:[0-9]+}', ['uses' => 'UsageTypeController@read', 'as' => 'usage_type.read']);
+$router->patch('/usage_type/{id:[0-9]+}', ['uses' => 'UsageTypeController@update', 'as' => 'usage_type.update']);
+$router->delete('/usage_type/{id:[0-9]+}', ['uses' => 'UsageTypeController@delete', 'as' => 'usage_type.delete']);
+
+$router->get('/maintenances', ['uses' => 'MaintenanceController@index', 'as' => 'maintenance.index']);
+$router->post('/maintenance', ['uses' => 'MaintenanceController@create', 'as' => 'maintenance.create']);
+$router->get('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@read', 'as' => 'maintenance.read']);
+$router->patch('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@update', 'as' => 'maintenance.update']);
+$router->delete('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@delete', 'as' => 'maintenance.delete']);

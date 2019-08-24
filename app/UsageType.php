@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ClientType extends Model
+class UsageType extends Model
 {
     protected $fillable = [
-        'name',        
+        'name',
         'notes',
         'sort_order'
     ];
