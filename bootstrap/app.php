@@ -89,7 +89,10 @@ $app->singleton(
  $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
  $app->register(Zizaco\Entrust\EntrustServiceProvider::class);
- $app->register(Unum\Maker\MakerServiceProvider::class);
+ $env = env('env', '');
+ if($env == 'dev'){
+  $app->register(Unum\Maker\MakerServiceProvider::class);
+ }
 // $app->register(App\Providers\EventServiceProvider::class);
 
 $app->configure('permission');
