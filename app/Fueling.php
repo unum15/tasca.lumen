@@ -15,4 +15,9 @@ class Fueling extends Model
         'amount',
         'notes'
     ];
+
+    public function vehicle()
+    {
+        return $this->belongsTo('App\Vehicle');
+    }
 }

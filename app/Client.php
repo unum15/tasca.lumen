@@ -45,7 +45,7 @@ class Client extends Model
     public function contactMethod()
     {
         return $this->belongsTo('App\ContactMethod');
-    }    
+    }
     
     public function contacts()
     {

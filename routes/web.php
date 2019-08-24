@@ -228,12 +228,6 @@ $router->get('/fueling/{id:[0-9]+}', ['uses' => 'FuelingController@read', 'as' =
 $router->patch('/fueling/{id:[0-9]+}', ['uses' => 'FuelingController@update', 'as' => 'fueling.update']);
 $router->delete('/fueling/{id:[0-9]+}', ['uses' => 'FuelingController@delete', 'as' => 'fueling.delete']);
 
-$router->get('/maintence', ['uses' => 'MaintenceController@index', 'as' => 'maintence.index']);
-$router->post('/maintence', ['uses' => 'MaintenceController@create', 'as' => 'maintence.create']);
-$router->get('/maintence/{id:[0-9]+}', ['uses' => 'MaintenceController@read', 'as' => 'maintence.read']);
-$router->patch('/maintence/{id:[0-9]+}', ['uses' => 'MaintenceController@update', 'as' => 'maintence.update']);
-$router->delete('/maintence/{id:[0-9]+}', ['uses' => 'MaintenceController@delete', 'as' => 'maintence.delete']);
-
 $router->get('/parts', ['uses' => 'PartController@index', 'as' => 'part.index']);
 $router->post('/part', ['uses' => 'PartController@create', 'as' => 'part.create']);
 $router->get('/part/{id:[0-9]+}', ['uses' => 'PartController@read', 'as' => 'part.read']);
@@ -263,3 +257,9 @@ $router->post('/usage_type', ['uses' => 'UsageTypeController@create', 'as' => 'u
 $router->get('/usage_type/{id:[0-9]+}', ['uses' => 'UsageTypeController@read', 'as' => 'usage_type.read']);
 $router->patch('/usage_type/{id:[0-9]+}', ['uses' => 'UsageTypeController@update', 'as' => 'usage_type.update']);
 $router->delete('/usage_type/{id:[0-9]+}', ['uses' => 'UsageTypeController@delete', 'as' => 'usage_type.delete']);
+
+$router->get('/maintenances', ['uses' => 'MaintenanceController@index', 'as' => 'maintenance.index']);
+$router->post('/maintenance', ['uses' => 'MaintenanceController@create', 'as' => 'maintenance.create']);
+$router->get('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@read', 'as' => 'maintenance.read']);
+$router->patch('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@update', 'as' => 'maintenance.update']);
+$router->delete('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@delete', 'as' => 'maintenance.delete']);

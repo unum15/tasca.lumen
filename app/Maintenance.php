@@ -4,11 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Repair extends Model
+class Maintenance extends Model
 {
     protected $fillable = [
-        'vehicle_id',
-        'repair',
+        'service_id',
         'ending_reading',
         'date',
         'amount',
@@ -16,8 +15,8 @@ class Repair extends Model
         'notes'
     ];
 
-    public function vehicle()
+    public function service()
     {
-        return $this->belongsTo('App\Vehicle');
+        return $this->belongsTo('App\Service');
     }
 }

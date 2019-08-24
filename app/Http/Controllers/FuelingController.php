@@ -7,33 +7,37 @@ use Illuminate\Http\Request;
 
 class FuelingController extends Controller
 {
-    public function __construct(Request $request)
+    public function __construct()
     {
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $items = Fueling::all();
+        $includes = $this->validateIncludes($request->input('includes'));
+        $items = Fueling::with($includes)->get();
         return ['data' => $items];
     }
 
     public function create(Request $request)
     {
-        $item = Fueling::create($request->input());
+        $values = $this->validateModel($request, true);
+        $item = Fueling::create($values);
         return response(['data' => $item], 201, ['Location' => route('fueling.read', ['id' => $item->id])]);
     }
 
-    public function read($id)
+    public function read($id, Request $request)
     {
-        $item = Fueling::findOrFail($id);
+        $includes = $this->validateIncludes($request->input('includes'));
+        $item = Fueling::find($id)->with($includes)->firstOrFail();
         return ['data' => $item];
     }
 
     public function update($id, Request $request)
     {
         $item = Fueling::findOrFail($id);
-        $item->update($request->input());
+        $values = $this->validateModel($request);
+        $item->update($values);
         return ['data' => $item];
     }
 
@@ -43,5 +47,23 @@ class FuelingController extends Controller
         $item->delete();
         return response([], 401);
     }
-}
+    
+    protected $model_validation = [
+       'vehicle_id' => 'integer|exists:vehicles,id',
+       'beginning_reading' => 'integer|nullable',
+       'ending_reading' => 'integer|nullable',
+       'date' => 'date|nullable',
+       'gallons' => 'double precision|nullable',
+       'amount' => 'double precision|nullable',
+       'notes' => 'string|max:1073741824|nullable',
+    ];
+    
+    protected $model_validation_required = [
+       'vehicle_id' => 'required',
+    ];
 
+    protected $model_includes = [
+       'vehicle'
+    ];
+    
+}

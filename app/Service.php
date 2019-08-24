@@ -17,4 +17,19 @@ class Service extends Model
         'notes',
         'time_interval'
     ];
+
+    public function vehicle()
+    {
+        return $this->belongsTo('App\Vehicle');
+    }
+
+    public function service_type()
+    {
+        return $this->belongsTo('App\ServiceType');
+    }
+
+    public function usage_type()
+    {
+        return $this->belongsTo('App\UsageType');
+    }
 }

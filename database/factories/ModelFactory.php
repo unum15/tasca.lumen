@@ -250,11 +250,6 @@ $factory->define(App\Fueling::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Maintence::class, function (Faker\Generator $faker) {
-    return 
-    ];
-});
-
 $factory->define(App\Part::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
@@ -302,5 +297,16 @@ $factory->define(App\UsageType::class, function (Faker\Generator $faker) {
         'name' => $faker->word,
         'notes' => $faker->text,
         'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\Maintenance::class, function (Faker\Generator $faker) {
+    return [
+        'service_id' => $faker->randomDigitNotNull,
+        'ending_reading' => $faker->randomDigitNotNull,
+        'date' => $faker->word,
+        'amount' => $faker->word,
+        'where' => $faker->word,
+        'notes' => $faker->text
     ];
 });

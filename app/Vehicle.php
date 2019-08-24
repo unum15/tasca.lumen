@@ -16,4 +16,9 @@ class Vehicle extends Model
         'vin',
         'notes'
     ];
+
+    public function vehicle_type()
+    {
+        return $this->belongsTo('App\VehicleType');
+    }
 }
