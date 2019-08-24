@@ -9,7 +9,7 @@ use App\VehicleType;
 
 
 
-class InitVTypesCommand extends Command
+class InitVehicleTypesCommand extends Command
 {
     /**
      * The name and signature of the console command.
