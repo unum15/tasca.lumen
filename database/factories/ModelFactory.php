@@ -310,3 +310,20 @@ $factory->define(App\Maintenance::class, function (Faker\Generator $faker) {
         'notes' => $faker->text
     ];
 });
+
+$factory->define(App\Backflow::class, function (Faker\Generator $faker) {
+    return 
+    ];
+});
+
+$factory->define(App\BackflowStyle::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_style_index' => $faker->randomDigitNotNull,
+        'backflow_style' => $faker->word
+    ];
+});
+
+$factory->define(App\BackflowInstallationStatute::class, function (Faker\Generator $faker) {
+    return 
+    ];
+});

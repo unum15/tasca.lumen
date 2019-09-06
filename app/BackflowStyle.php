@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class BackflowStyle extends Model
 {
-    protected $table = 'backflows.backflow_styles';
-    protected $primaryKey = 'backflow_style_index';
+    protected $fillable = [
+        'backflow_style_index',
+        'backflow_style'
+    ];
 }
