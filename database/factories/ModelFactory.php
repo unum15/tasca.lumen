@@ -327,3 +327,58 @@ $factory->define(App\BackflowInstallationStatute::class, function (Faker\Generat
     return 
     ];
 });
+
+$factory->define(App\Backflow::class, function (Faker\Generator $faker) {
+    return 
+    ];
+});
+
+$factory->define(App\BackflowsAssembly::class, function (Faker\Generator $faker) {
+    return 
+    ];
+});
+
+$factory->define(App\BackflowAssembly::class, function (Faker\Generator $faker) {
+    return [
+        'property_id' => $faker->randomDigitNotNull,
+        'contact_id' => $faker->randomDigitNotNull,
+        'water_system' => $faker->word,
+        'use' => $faker->word,
+        'placement' => $faker->word,
+        'backflow_style_id' => $faker->randomDigitNotNull,
+        'manufacturer' => $faker->word,
+        'size' => $faker->word,
+        'model_number' => $faker->word,
+        'serial_number' => $faker->word,
+        'notes' => $faker->word
+    ];
+});
+
+$factory->define(App\BackflowStyle::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\BackflowInstallationStatus::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\BackflowTestStatus::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\BackflowTest::class, function (Faker\Generator $faker) {
+    return 
+    ];
+});
