@@ -26,7 +26,7 @@ $factory->define(App\ActivityLevel::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Client::class, function (Faker\Generator $faker) {
-    $contact = App\Contact::first();
+    $contact = factory(App\Contact::class)->create();
     return [
         'name' => $faker->name,
         'creator_id' => $contact->id,
@@ -54,8 +54,8 @@ $factory->define(App\ContactType::class, function (Faker\Generator $faker) {
 
 
 $factory->define(App\Email::class, function (Faker\Generator $faker) {
-    $contact = App\Contact::first();
-    $type = App\EmailType::first();
+    $contact = factory(App\Contact::class)->create();
+    $type = factory(App\EmailType::class)->create();
     return [
         'contact_id' => $contact->id,
         'email_type_id' => $type->id,
@@ -114,8 +114,8 @@ $factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\PhoneNumber::class, function (Faker\Generator $faker) {
-    $contact = App\Contact::first();
-    $type = App\PhoneNumberType::first();
+    $contact = factory(App\Contact::class)->create();
+    $type = factory(App\PhoneNumberType::class)->create();
     return [
         'contact_id' => $contact->id,
         'phone_number_type_id' => $type->id,
@@ -132,10 +132,10 @@ $factory->define(App\PhoneNumberType::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Property::class, function (Faker\Generator $faker) {
-    $activity_level = App\ActivityLevel::first();
-    $contact = App\Contact::first();
-    $client = App\Client::first();
-    $property_type = App\PropertyType::first();
+    $activity_level = factory(App\ActivityLevel::class)->create();
+    $contact = factory(App\Contact::class)->create();
+    $client = factory(App\Client::class)->create();
+    $property_type = factory(App\PropertyType::class)->create();
     return [
         'name' => $faker->word,
         'activity_level_id' => $activity_level->id,
@@ -218,9 +218,10 @@ $factory->define(App\WorkType::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Vehicle::class, function (Faker\Generator $faker) {
+    $type = factory('App\VehicleType')->create();
     return [
         'name' => $faker->word,
-        'vehicle_type_id' => $faker->randomDigitNotNull,
+        'vehicle_type_id' => $type->id,
         'year' => $faker->randomDigitNotNull,
         'make' => $faker->word,
         'model' => $faker->word,
@@ -239,13 +240,14 @@ $factory->define(App\VehicleType::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Fueling::class, function (Faker\Generator $faker) {
+    $vehicle = factory('App\Vehicle')->create();
     return [
-        'vehicle_id' => $faker->randomDigitNotNull,
+        'vehicle_id' => $vehicle->id,
         'beginning_reading' => $faker->randomDigitNotNull,
         'ending_reading' => $faker->randomDigitNotNull,
-        'date' => $faker->word,
-        'gallons' => $faker->word,
-        'amount' => $faker->word,
+        'date' => $faker->date,
+        'gallons' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 10000) . "",
+        'amount' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 10000) . "",
         'notes' => $faker->text
     ];
 });
@@ -259,12 +261,13 @@ $factory->define(App\Part::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Repair::class, function (Faker\Generator $faker) {
+    $vehicle = factory('App\Vehicle')->create();
     return [
-        'vehicle_id' => $faker->randomDigitNotNull,
+        'vehicle_id' => $vehicle->id,
         'repair' => $faker->word,
         'ending_reading' => $faker->randomDigitNotNull,
-        'date' => $faker->word,
-        'amount' => $faker->word,
+        'date' => $faker->date,
+        'amount' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 10000) . "",
         'where' => $faker->word,
         'notes' => $faker->text
     ];
@@ -279,16 +282,19 @@ $factory->define(App\ServiceType::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Service::class, function (Faker\Generator $faker) {
+    $vehicle = factory('App\Vehicle')->create();
+    $serviceType = factory('App\ServiceType')->create();
+    $usageType = factory('App\UsageType')->create();
     return [
-        'vehicle_id' => $faker->randomDigitNotNull,
-        'service_type_id' => $faker->randomDigitNotNull,
+        'vehicle_id' => $vehicle->id,
+        'service_type_id' => $serviceType->id,
         'description' => $faker->text,
         'quantity' => $faker->randomDigitNotNull,
-        'usage_type_id' => $faker->randomDigitNotNull,
+        'usage_type_id' => $usageType->id,
         'usage_interval' => $faker->randomDigitNotNull,
         'part_number' => $faker->word,
         'notes' => $faker->text,
-        'time_interval' => $faker->word
+        'time_interval' => '00:15:00'
     ];
 });
 
@@ -301,11 +307,12 @@ $factory->define(App\UsageType::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Maintenance::class, function (Faker\Generator $faker) {
+    $service = factory('App\Service')->create();
     return [
-        'service_id' => $faker->randomDigitNotNull,
+        'service_id' => $service->id,
         'ending_reading' => $faker->randomDigitNotNull,
-        'date' => $faker->word,
-        'amount' => $faker->word,
+        'date' => $faker->date,
+        'amount' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 10000) . "",
         'where' => $faker->word,
         'notes' => $faker->text
     ];

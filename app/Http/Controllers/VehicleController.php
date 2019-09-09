@@ -29,7 +29,7 @@ class VehicleController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = Vehicle::find($id)->with($includes)->firstOrFail();
+        $item = Vehicle::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 

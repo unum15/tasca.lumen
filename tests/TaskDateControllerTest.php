@@ -2,7 +2,7 @@
 
 use App\TaskDate;
 
-class TaskControllerTest extends TestCase
+class TaskDateControllerTest extends TestCase
 {    
     public function testIndex()
     {

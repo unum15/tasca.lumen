@@ -13,9 +13,8 @@ class ServiceControllerTest extends TestCase
         $items = factory('App\Service', 2)->create();
         $response = $this->get('/services');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('services', $items[0]->toArray());
-        $this->seeInDatabase('services', $items[1]->toArray());
+        $response->seeJson($items[0]->toArray());
+        $response->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()
@@ -39,7 +38,7 @@ class ServiceControllerTest extends TestCase
     public function testUpdate()
     {
         $item = factory('App\Service')->create();
-        $update = ['name' => 'test'];
+        $update = ['description' => 'test'];
         $response = $this->patch('/service/' . $item->id, $update);
         $response->seeStatusCode(200);
         $updated_array = array_merge($item->toArray(), $update);

@@ -29,7 +29,7 @@ class ServiceController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = Service::find($id)->with($includes)->firstOrFail();
+        $item = Service::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 

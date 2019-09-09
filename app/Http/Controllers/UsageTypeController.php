@@ -29,7 +29,7 @@ class UsageTypeController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = UsageType::find($id)->with($includes)->firstOrFail();
+        $item = UsageType::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 
