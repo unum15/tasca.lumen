@@ -13,9 +13,8 @@ class MaintenanceControllerTest extends TestCase
         $items = factory('App\Maintenance', 2)->create();
         $response = $this->get('/maintenances');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('maintenances', $items[0]->toArray());
-        $this->seeInDatabase('maintenances', $items[1]->toArray());
+        $response->seeJson($items[0]->toArray());
+        $response->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()
@@ -33,13 +32,12 @@ class MaintenanceControllerTest extends TestCase
         $response = $this->get('/maintenance/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJsonEquals(['data' => $item->toArray()]);
-        $this->seeInDatabase('maintenances', $item->toArray());
     }
     
     public function testUpdate()
     {
         $item = factory('App\Maintenance')->create();
-        $update = ['name' => 'test'];
+        $update = ['notes' => 'test'];
         $response = $this->patch('/maintenance/' . $item->id, $update);
         $response->seeStatusCode(200);
         $updated_array = array_merge($item->toArray(), $update);

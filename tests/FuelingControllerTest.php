@@ -13,9 +13,8 @@ class FuelingControllerTest extends TestCase
         $items = factory('App\Fueling', 2)->create();
         $response = $this->get('/fuelings');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('fuelings', $items[0]->toArray());
-        $this->seeInDatabase('fuelings', $items[1]->toArray());
+        $response->seeJson($items[0]->toArray());
+        $response->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()
@@ -33,13 +32,12 @@ class FuelingControllerTest extends TestCase
         $response = $this->get('/fueling/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJsonEquals(['data' => $item->toArray()]);
-        $this->seeInDatabase('fuelings', $item->toArray());
     }
     
     public function testUpdate()
     {
         $item = factory('App\Fueling')->create();
-        $update = ['name' => 'test'];
+        $update = ['notes' => 'test'];
         $response = $this->patch('/fueling/' . $item->id, $update);
         $response->seeStatusCode(200);
         $updated_array = array_merge($item->toArray(), $update);

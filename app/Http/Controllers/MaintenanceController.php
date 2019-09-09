@@ -29,7 +29,7 @@ class MaintenanceController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = Maintenance::find($id)->with($includes)->firstOrFail();
+        $item = Maintenance::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 
@@ -52,7 +52,7 @@ class MaintenanceController extends Controller
        'service_id' => 'integer|exists:services,id',
        'ending_reading' => 'integer|nullable',
        'date' => 'date|nullable',
-       'amount' => 'double precision|nullable',
+       'amount' => 'numeric|nullable',
        'where' => 'string|max:1020|nullable',
        'notes' => 'string|max:1073741824|nullable',
     ];

@@ -29,7 +29,7 @@ class PartController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = Part::find($id)->with($includes)->firstOrFail();
+        $item = Part::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 

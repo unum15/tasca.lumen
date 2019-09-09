@@ -13,9 +13,8 @@ class PartControllerTest extends TestCase
         $items = factory('App\Part', 2)->create();
         $response = $this->get('/parts');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('parts', $items[0]->toArray());
-        $this->seeInDatabase('parts', $items[1]->toArray());
+        $response->seeJson($items[0]->toArray());
+        $response->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()
@@ -33,7 +32,6 @@ class PartControllerTest extends TestCase
         $response = $this->get('/part/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJsonEquals(['data' => $item->toArray()]);
-        $this->seeInDatabase('parts', $item->toArray());
     }
     
     public function testUpdate()
