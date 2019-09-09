@@ -7,10 +7,11 @@ class ClientControllerTest extends TestCase
 
     public function testIndex()
     {
+        $items = factory('App\Client', 2)->create();
         $response = $this->actingAs($this->getAdminUser())->get('/clients');
         $response->seeStatusCode(200);
-        $client = Client::first();
-        $response->seeJson($client->toArray());
+        $response->seeJson($items[0]->toArray());
+        $response->seeJson($items[1]->toArray());
     }
     
     public function testIndexWithActivityLevel()
@@ -27,71 +28,29 @@ class ClientControllerTest extends TestCase
 
     public function testCreate()
     {
-        $item = ['name' => 'Test 1'];
-        $response = $this->actingAs($this->getAdminUser())->post('/client', $item);
+        $admin = $this->getAdminUser();
+        $item = factory('App\Client')->make(['creator_id' => $admin->id, 'updater_id' => $admin->id]);
+        $response = $this->actingAs($admin)->post('/client', $item->toArray());
         $response->seeStatusCode(200);
-        $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
-        $dbitem = Client::find($response_array->id);
-        $response->seeJson($dbitem->toArray());
-        $dbitem->delete();
+        $response->seeJson($item->toArray());
     }
-    
-    
-    public function testCreateBad()
-    {
-        $item = ['name' => ''];
-        $response = $this->actingAs($this->getAdminUser())->post('/client', $item);
-        $response->seeStatusCode(422);                
-        $response->seeJson(["name" => ["The name field is required."]]);
-    }
-    
-    public function testCreateInjection()
-    {
-        $item = ['name' => "a'; DROP TABLE clients CASCADE; --"];
-        $response = $this->actingAs($this->getAdminUser())->post('/client', $item);
-        $response->seeStatusCode(200);                
-        $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());        
-        $dbitem = Client::find($response_array->id);
-        $response->assertNotNull($dbitem);
-        $dbitem->delete();
-    }
-    
-    public function testCreateLong()
-    {
-        $item = [
-            'name' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'        
-        ];
-        $response = $this->actingAs($this->getAdminUser())->post('/client', $item);
-        $response->seeStatusCode(422);                
-        $response->seeJson(["name" => ["The name may not be greater than 255 characters."]]);
-    }
-    
+
     public function testRead()
     {
+        $item = factory('App\Client')->create();
         $client = Client::first();
         $response = $this->actingAs($this->getAdminUser())->get('/client/' . $client->id);
         $response->seeStatusCode(200);
         $response->seeJson($client->toArray());
     }
-    
-    
-    public function testReadBad()
-    {        
-        $response = $this->actingAs($this->getAdminUser())->get('/client/a');
-        $response->seeStatusCode(404);        
-    }    
-    
+
     public function testUpdate()
     {
-        $client = Client::first();
+        $item = factory('App\Client')->create();
         $patch = ['name' => 'Test 2'];
-        $response = $this->actingAs($this->getAdminUser())->patch('/client/' . $client->id, $patch);
+        $response = $this->actingAs($this->getAdminUser())->patch('/client/' . $item->id, $patch);
         $response->seeStatusCode(200);
         $response->seeJson($patch);
-        $client = Client::find($client->id);
-        $response->seeJsonEquals($client->toArray());
     }
     
     public function testDelete()
