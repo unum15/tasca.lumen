@@ -263,26 +263,13 @@ $router->post('/maintenance', ['uses' => 'MaintenanceController@create', 'as' =>
 $router->get('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@read', 'as' => 'maintenance.read']);
 $router->patch('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@update', 'as' => 'maintenance.update']);
 $router->delete('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@delete', 'as' => 'maintenance.delete']);
-$router->get('/backflows', ['uses' => 'BackflowController@index', 'as' => 'backflow.index']);
-$router->post('/backflow', ['uses' => 'BackflowController@create', 'as' => 'backflow.create']);
-$router->get('/backflow/{id:[0-9]+}', ['uses' => 'BackflowController@read', 'as' => 'backflow.read']);
-$router->patch('/backflow/{id:[0-9]+}', ['uses' => 'BackflowController@update', 'as' => 'backflow.update']);
-$router->delete('/backflow/{id:[0-9]+}', ['uses' => 'BackflowController@delete', 'as' => 'backflow.delete']);
+
 $router->get('/backflow_styles', ['uses' => 'BackflowStyleController@index', 'as' => 'backflow_style.index']);
 $router->post('/backflow_style', ['uses' => 'BackflowStyleController@create', 'as' => 'backflow_style.create']);
 $router->get('/backflow_style/{id:[0-9]+}', ['uses' => 'BackflowStyleController@read', 'as' => 'backflow_style.read']);
 $router->patch('/backflow_style/{id:[0-9]+}', ['uses' => 'BackflowStyleController@update', 'as' => 'backflow_style.update']);
 $router->delete('/backflow_style/{id:[0-9]+}', ['uses' => 'BackflowStyleController@delete', 'as' => 'backflow_style.delete']);
-$router->get('/backflow_installation_statutes', ['uses' => 'BackflowInstallationStatuteController@index', 'as' => 'backflow_installation_statute.index']);
-$router->post('/backflow_installation_statute', ['uses' => 'BackflowInstallationStatuteController@create', 'as' => 'backflow_installation_statute.create']);
-$router->get('/backflow_installation_statute/{id:[0-9]+}', ['uses' => 'BackflowInstallationStatuteController@read', 'as' => 'backflow_installation_statute.read']);
-$router->patch('/backflow_installation_statute/{id:[0-9]+}', ['uses' => 'BackflowInstallationStatuteController@update', 'as' => 'backflow_installation_statute.update']);
-$router->delete('/backflow_installation_statute/{id:[0-9]+}', ['uses' => 'BackflowInstallationStatuteController@delete', 'as' => 'backflow_installation_statute.delete']);
-$router->get('/backflows', ['uses' => 'BackflowController@index', 'as' => 'backflow.index']);
-$router->post('/backflow', ['uses' => 'BackflowController@create', 'as' => 'backflow.create']);
-$router->get('/backflow/{id:[0-9]+}', ['uses' => 'BackflowController@read', 'as' => 'backflow.read']);
-$router->patch('/backflow/{id:[0-9]+}', ['uses' => 'BackflowController@update', 'as' => 'backflow.update']);
-$router->delete('/backflow/{id:[0-9]+}', ['uses' => 'BackflowController@delete', 'as' => 'backflow.delete']);
+
 $router->get('/backflows_assemblies', ['uses' => 'BackflowsAssemblyController@index', 'as' => 'backflows_assembly.index']);
 $router->post('/backflows_assembly', ['uses' => 'BackflowsAssemblyController@create', 'as' => 'backflows_assembly.create']);
 $router->get('/backflows_assembly/{id:[0-9]+}', ['uses' => 'BackflowsAssemblyController@read', 'as' => 'backflows_assembly.read']);
@@ -313,3 +300,8 @@ $router->post('/backflow_test', ['uses' => 'BackflowTestController@create', 'as'
 $router->get('/backflow_test/{id:[0-9]+}', ['uses' => 'BackflowTestController@read', 'as' => 'backflow_test.read']);
 $router->patch('/backflow_test/{id:[0-9]+}', ['uses' => 'BackflowTestController@update', 'as' => 'backflow_test.update']);
 $router->delete('/backflow_test/{id:[0-9]+}', ['uses' => 'BackflowTestController@delete', 'as' => 'backflow_test.delete']);
+$router->get('/backflow_assembly_tests', ['uses' => 'BackflowAssemblyTestController@index', 'as' => 'backflow_assembly_test.index']);
+$router->post('/backflow_assembly_test', ['uses' => 'BackflowAssemblyTestController@create', 'as' => 'backflow_assembly_test.create']);
+$router->get('/backflow_assembly_test/{id:[0-9]+}', ['uses' => 'BackflowAssemblyTestController@read', 'as' => 'backflow_assembly_test.read']);
+$router->patch('/backflow_assembly_test/{id:[0-9]+}', ['uses' => 'BackflowAssemblyTestController@update', 'as' => 'backflow_assembly_test.update']);
+$router->delete('/backflow_assembly_test/{id:[0-9]+}', ['uses' => 'BackflowAssemblyTestController@delete', 'as' => 'backflow_assembly_test.delete']);
