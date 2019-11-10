@@ -244,21 +244,23 @@ class InitTypesCommand extends Command
             "Canceled"
         ];
         $sort = 1;
+        $statuses = [];
         foreach($names as $name){
             $status = OrderStatus::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
+            $statuses[$name] = $status->id;
         }
         
         
         $actions = [
-                    "Contact" => [3],
-                    "Site Visit" => [2],
-                    "Bid/Price" => [2],
-                    "Get P.O." => [4],
-                    "Follow Up" => [1,2,4],
-                    "Close Out" => [1,4,5]
+                    "Contact" => [$statuses['Renewing']],
+                    "Site Visit" => [$statuses['Reviewing']],
+                    "Bid/Price" => [$statuses['Reviewing']],
+                    "Get P.O." => [$statuses['On Hold']],
+                    "Follow Up" => [$statuses['Will Call Back'],$statuses['Reviewing'],$statuses['On Hold']],
+                    "Close Out" => [$statuses['Will Call Back'],$statuses['On Hold'],$statuses['Canceled']]
                 ];
         
         $sort = 1;

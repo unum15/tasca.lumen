@@ -318,41 +318,17 @@ $factory->define(App\Maintenance::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Backflow::class, function (Faker\Generator $faker) {
-    return 
-    ];
-});
-
-$factory->define(App\BackflowStyle::class, function (Faker\Generator $faker) {
-    return [
-        'backflow_style_index' => $faker->randomDigitNotNull,
-        'backflow_style' => $faker->word
-    ];
-});
-
-$factory->define(App\BackflowInstallationStatute::class, function (Faker\Generator $faker) {
-    return 
-    ];
-});
-
-$factory->define(App\Backflow::class, function (Faker\Generator $faker) {
-    return 
-    ];
-});
-
-$factory->define(App\BackflowsAssembly::class, function (Faker\Generator $faker) {
-    return 
-    ];
-});
-
 $factory->define(App\BackflowAssembly::class, function (Faker\Generator $faker) {
+    $property = factory('App\Property')->create();
+    $contact = factory('App\Contact')->create();
+    $style = factory('App\BackflowStyle')->create();
     return [
-        'property_id' => $faker->randomDigitNotNull,
-        'contact_id' => $faker->randomDigitNotNull,
+        'property_id' => $property->id,
+        'contact_id' => $contact->id,
         'water_system' => $faker->word,
         'use' => $faker->word,
         'placement' => $faker->word,
-        'backflow_style_id' => $faker->randomDigitNotNull,
+        'backflow_style_id' => $style->id,
         'manufacturer' => $faker->word,
         'size' => $faker->word,
         'model_number' => $faker->word,
@@ -363,7 +339,7 @@ $factory->define(App\BackflowAssembly::class, function (Faker\Generator $faker) 
 
 $factory->define(App\BackflowStyle::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->word,
+        'name' => 'aaaa',
         'notes' => $faker->text,
         'sort_order' => $faker->randomDigitNotNull
     ];
@@ -382,10 +358,5 @@ $factory->define(App\BackflowTestStatus::class, function (Faker\Generator $faker
         'name' => $faker->word,
         'notes' => $faker->text,
         'sort_order' => $faker->randomDigitNotNull
-    ];
-});
-
-$factory->define(App\BackflowTest::class, function (Faker\Generator $faker) {
-    return 
     ];
 });

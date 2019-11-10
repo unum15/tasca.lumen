@@ -39,7 +39,7 @@ class BackflowAssemblyControllerTest extends TestCase
     public function testUpdate()
     {
         $item = factory('App\BackflowAssembly')->create();
-        $update = ['name' => 'test'];
+        $update = ['notes' => 'test'];
         $response = $this->patch('/backflow_assembly/' . $item->id, $update);
         $response->seeStatusCode(200);
         $updated_array = array_merge($item->toArray(), $update);
