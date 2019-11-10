@@ -339,7 +339,7 @@ $factory->define(App\BackflowAssembly::class, function (Faker\Generator $faker) 
 
 $factory->define(App\BackflowStyle::class, function (Faker\Generator $faker) {
     return [
-        'name' => 'aaaa',
+        'name' => substr($faker->word,0,4),
         'notes' => $faker->text,
         'sort_order' => $faker->randomDigitNotNull
     ];
@@ -358,5 +358,48 @@ $factory->define(App\BackflowTestStatus::class, function (Faker\Generator $faker
         'name' => $faker->word,
         'notes' => $faker->text,
         'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\BackflowAssemblyTest::class, function (Faker\Generator $faker) {
+    $installStatus = factory('App\BackflowInstallationStatus')->create();
+    $testStatus = factory('App\BackflowTestStatus')->create();
+    return [
+        'visual_inspection_notes' => $faker->word,
+        'backflow_installation_status_id' => $installStatus->id,
+        'valve_1_psi_across' => $faker->randomDigitNotNull,
+        'valve_1_test_status_id' => $testStatus->id,
+        'valve_2_psi_across' => $faker->randomDigitNotNull,
+        'valve_2_test_status_id' => $testStatus->id,
+        'differential_pressure_relief_valve_opened_at' => $faker->randomDigitNotNull,
+        'opened_under_2_status_id' => $testStatus->id,
+        'pressure_vacuum_breaker_opened_at' => $faker->randomDigitNotNull,
+        'opened_under_1_status_id' => $testStatus->id
+    ];
+});
+
+
+$factory->define(App\BackflowStyleValf::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_style_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'test_name' => $faker->word,
+        'success_label' => $faker->word,
+        'fail_label' => $faker->word
+    ];
+});
+
+$factory->define(App\BackflowCertification::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_assembly_id' => $faker->randomDigitNotNull,
+        'visual_inspection_notes' => $faker->word,
+        'backflow_installation_status_id' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\BackflowValvePart::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_style_valve_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word
     ];
 });
