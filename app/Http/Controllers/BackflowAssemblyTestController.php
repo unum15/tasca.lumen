@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Backflow;
+use App\BackflowAssemblyTest;
 use Illuminate\Http\Request;
 
-class BackflowController extends Controller
+class BackflowAssemblyTestController extends Controller
 {
     public function __construct(Request $request)
     {
@@ -14,32 +14,32 @@ class BackflowController extends Controller
 
     public function index()
     {
-        $items = Backflow::all();
+        $items = BackflowAssemblyTest::all();
         return ['data' => $items];
     }
 
     public function create(Request $request)
     {
-        $item = Backflow::create($request->input());
-        return response(['data' => $item], 201, ['Location' => route('backflow.read', ['id' => $item->id])]);
+        $item = BackflowAssemblyTest::create($request->input());
+        return response(['data' => $item], 201, ['Location' => route('backflow_assembly_test.read', ['id' => $item->id])]);
     }
 
     public function read($id)
     {
-        $item = Backflow::findOrFail($id);
+        $item = BackflowAssemblyTest::findOrFail($id);
         return ['data' => $item];
     }
 
     public function update($id, Request $request)
     {
-        $item = Backflow::findOrFail($id);
+        $item = BackflowAssemblyTest::findOrFail($id);
         $item->update($request->input());
         return ['data' => $item];
     }
 
     public function delete(Request $request, $id)
     {
-        $item = Backflow::findOrFail($id);
+        $item = BackflowAssemblyTest::findOrFail($id);
         $item->delete();
         return response([], 401);
     }

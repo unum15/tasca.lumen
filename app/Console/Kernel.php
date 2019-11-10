@@ -11,6 +11,7 @@ use App\Console\Commands\InitRolesCommand;
 use App\Console\Commands\InitSettingsCommand;
 use App\Console\Commands\InitTypesCommand;
 use App\Console\Commands\InitVehicleTypesCommand;
+use App\Console\Commands\InitBackflowTypesCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
 use App\Console\Commands\ResetHelpCommand;
 use App\Console\Commands\CreateTaskDatesCommand;
@@ -30,6 +31,7 @@ class Kernel extends ConsoleKernel
         InitSettingsCommand::class,
         InitTypesCommand::class,
         InitVehicleTypesCommand::class,
+        InitBackflowTypesCommand::class,
         CreateTaskDatesCommand::class,
         UpdateOrderStatusCommand::class
     ];

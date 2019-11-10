@@ -37,6 +37,12 @@ class CreateBackflowTable extends Migration
                 ->references('id')
                 ->on('contacts')
                 ->onDelete('cascade');
+                
+            $table->foreign('backflow_style_id')
+                ->references('id')
+                ->on('backflow_styles')
+                ->onDelete('cascade');
+
         });
     }
 
