@@ -11,6 +11,8 @@ services:
         depends_on:
             - php
             - db
+        volumes_from:
+            - php
     php:
         build: .docker
         restart: always
