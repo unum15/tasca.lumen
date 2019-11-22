@@ -3,9 +3,13 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\BackflowStyle;
-use App\BackflowStyleValve;
+use App\BackflowType;
+use App\BackflowTypeValve;
 use App\BackflowValvePart;
+use App\BackflowManufacturer;
+use App\BackflowModel;
+use App\BackflowUse;
+use App\BackflowWaterSystem;
 
 
 class InitBackflowTypesCommand extends Command
@@ -133,21 +137,69 @@ class InitBackflowTypesCommand extends Command
         
         $sort = 1;
         foreach($names as $name => $valves){
-            $style = BackflowStyle::create([
+            $type = BackflowType::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
             
             foreach($valves as $valvea){
-                $valvea['backflow_style_id'] = $style->id;
-                $valve = BackflowStyleValve::create($valvea);
+                $valvea['backflow_type_id'] = $type->id;
+                $valve = BackflowTypeValve::create($valvea);
                 if(isset($valvea['parts'])){
                     foreach($valvea['parts'] as $part){
-                        BackflowValvePart::create(['backflow_style_valve_id' => $valve->id,'name' => $part]);
+                        BackflowValvePart::create(['backflow_type_valve_id' => $valve->id,'name' => $part]);
                     }
                 }
             }
         }
+
+        $names = [
+            
+        ];
         
+        $sort = 1;
+        foreach($names as $name){
+            BackflowManufacturer::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+        
+        $names = [
+            
+        ];
+        
+        $sort = 1;
+        foreach($names as $name){
+            BackflowModel::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+        
+        
+        $names = [
+            
+        ];
+        
+        $sort = 1;
+        foreach($names as $name){
+            BackflowUse::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+        
+        $names = [
+            
+        ];
+        
+        $sort = 1;
+        foreach($names as $name){
+            BackflowWaterSystem::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
     }
 }

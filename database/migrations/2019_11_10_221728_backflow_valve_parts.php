@@ -15,13 +15,13 @@ class BackflowValveParts extends Migration
     {
         Schema::create('backflow_valve_parts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('backflow_style_valve_id');
+            $table->integer('backflow_type_valve_id');
             $table->string('name');
             $table->timestamps();
             
-            $table->foreign('backflow_style_valve_id')
+            $table->foreign('backflow_type_valve_id')
                 ->references('id')
-                ->on('backflow_style_valves')
+                ->on('backflow_type_valves')
                 ->onDelete('cascade');
 
         });

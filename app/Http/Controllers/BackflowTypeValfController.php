@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\BackflowValvePart;
+use App\BackflowTypeValf;
 use Illuminate\Http\Request;
 
-class BackflowValvePartController extends Controller
+class BackflowTypeValfController extends Controller
 {
     public function __construct()
     {
@@ -15,27 +15,27 @@ class BackflowValvePartController extends Controller
     public function index(Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $items = BackflowValvePart::with($includes)->get();
+        $items = BackflowTypeValf::with($includes)->get();
         return ['data' => $items];
     }
 
     public function create(Request $request)
     {
         $values = $this->validateModel($request, true);
-        $item = BackflowValvePart::create($values);
-        return response(['data' => $item], 201, ['Location' => route('backflow_valve_part.read', ['id' => $item->id])]);
+        $item = BackflowTypeValf::create($values);
+        return response(['data' => $item], 201, ['Location' => route('backflow_type_valf.read', ['id' => $item->id])]);
     }
 
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowValvePart::find($id)->with($includes)->firstOrFail();
+        $item = BackflowTypeValf::find($id)->with($includes)->firstOrFail();
         return ['data' => $item];
     }
 
     public function update($id, Request $request)
     {
-        $item = BackflowValvePart::findOrFail($id);
+        $item = BackflowTypeValf::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
         return ['data' => $item];
@@ -43,23 +43,29 @@ class BackflowValvePartController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $item = BackflowValvePart::findOrFail($id);
+        $item = BackflowTypeValf::findOrFail($id);
         $item->delete();
         return response([], 401);
     }
     
     protected $model_validation = [
-       'backflow_type_valve_id' => 'integer|exists:backflow_type_valves,id',
+       'backflow_type_id' => 'integer|exists:backflow_types,id',
        'name' => 'string|max:1020',
+       'test_name' => 'string|max:1020',
+       'success_label' => 'string|max:1020',
+       'fail_label' => 'string|max:1020',
     ];
     
     protected $model_validation_required = [
-       'backflow_type_valve_id' => 'required',
+       'backflow_type_id' => 'required',
        'name' => 'required',
+       'test_name' => 'required',
+       'success_label' => 'required',
+       'fail_label' => 'required',
     ];
 
     protected $model_includes = [
-       'backflow_type_valf'
+       'backflow_type'
     ];
     
 }

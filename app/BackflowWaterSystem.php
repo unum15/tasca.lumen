@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BackflowStyle extends Model
+class BackflowWaterSystem extends Model
 {
     protected $fillable = [
         'name',

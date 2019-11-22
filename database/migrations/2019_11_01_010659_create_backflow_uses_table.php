@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBackflowStylesTable extends Migration
+class CreateBackflowUsesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateBackflowStylesTable extends Migration
      */
     public function up()
     {
-        Schema::create('backflow_styles', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name',4);
+        Schema::create('backflow_uses', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();            
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 
@@ -30,6 +30,6 @@ class CreateBackflowStylesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('backflow_styles');
+        Schema::dropIfExists('backflow_uses');
     }
 }
