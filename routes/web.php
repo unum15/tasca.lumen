@@ -330,3 +330,4 @@ $router->post('/backflow_assembly', ['uses' => 'BackflowAssemblyController@creat
 $router->get('/backflow_assembly/{id:[0-9]+}', ['uses' => 'BackflowAssemblyController@read', 'as' => 'backflow_assembly.read']);
 $router->patch('/backflow_assembly/{id:[0-9]+}', ['uses' => 'BackflowAssemblyController@update', 'as' => 'backflow_assembly.update']);
 $router->delete('/backflow_assembly/{id:[0-9]+}', ['uses' => 'BackflowAssemblyController@delete', 'as' => 'backflow_assembly.delete']);
+$router->get('/backflow_assembly/unique/{field:\w+}', ['uses' => 'BackflowAssemblyController@unique', 'as' => 'backflow_assembly.unique']);

@@ -77,4 +77,16 @@ class BackflowAssemblyController extends Controller
        'property'
     ];
     
+    
+    public function unique($field)
+    {
+        if(!in_array($field,array_keys($this->model_validation))){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'field' => ['Field is not a valid field for Backflow Assembly'],
+            ]);
+            throw $error;
+        }
+        $items = BackflowAssembly::whereNotNull($field)->distinct()->get($field);
+        return ['data' => $items];
+    }
 }
