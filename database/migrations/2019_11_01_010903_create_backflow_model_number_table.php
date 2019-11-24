@@ -13,7 +13,7 @@ class CreateBackflowModelNumberTable extends Migration
      */
     public function up()
     {
-        Schema::create('backflow_model', function (Blueprint $table) {
+        Schema::create('backflow_models', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('notes')->nullable();
@@ -30,6 +30,6 @@ class CreateBackflowModelNumberTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('backflow_model');
+        Schema::dropIfExists('backflow_models');
     }
 }

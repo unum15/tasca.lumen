@@ -49,8 +49,12 @@ class BackflowModelController extends Controller
     }
     
     protected $model_validation = [
+       'name' => 'string|max:1020',
+       'notes' => 'string|max:1073741824|nullable',
+       'sort_order' => 'integer|nullable',
     ];
     
     protected $model_validation_required = [
+       'name' => 'required',
     ];
 }

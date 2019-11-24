@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\BackflowTypeValf;
+use App\BackflowTypeValve;
 use Illuminate\Http\Request;
 
-class BackflowTypeValfController extends Controller
+class BackflowTypeValveController extends Controller
 {
     public function __construct()
     {
@@ -15,27 +15,27 @@ class BackflowTypeValfController extends Controller
     public function index(Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $items = BackflowTypeValf::with($includes)->get();
+        $items = BackflowTypeValve::with($includes)->get();
         return ['data' => $items];
     }
 
     public function create(Request $request)
     {
         $values = $this->validateModel($request, true);
-        $item = BackflowTypeValf::create($values);
+        $item = BackflowTypeValve::create($values);
         return response(['data' => $item], 201, ['Location' => route('backflow_type_valf.read', ['id' => $item->id])]);
     }
 
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowTypeValf::find($id)->with($includes)->firstOrFail();
+        $item = BackflowTypeValve::find($id)->with($includes)->firstOrFail();
         return ['data' => $item];
     }
 
     public function update($id, Request $request)
     {
-        $item = BackflowTypeValf::findOrFail($id);
+        $item = BackflowTypeValve::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
         return ['data' => $item];
@@ -43,7 +43,7 @@ class BackflowTypeValfController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $item = BackflowTypeValf::findOrFail($id);
+        $item = BackflowTypeValve::findOrFail($id);
         $item->delete();
         return response([], 401);
     }

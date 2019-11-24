@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\BackflowUs;
+use App\BackflowUse;
 use Illuminate\Http\Request;
 
-class BackflowUsController extends Controller
+class BackflowUseController extends Controller
 {
     public function __construct()
     {
@@ -15,27 +15,27 @@ class BackflowUsController extends Controller
     public function index(Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $items = BackflowUs::with($includes)->get();
+        $items = BackflowUse::with($includes)->get();
         return ['data' => $items];
     }
 
     public function create(Request $request)
     {
         $values = $this->validateModel($request, true);
-        $item = BackflowUs::create($values);
+        $item = BackflowUse::create($values);
         return response(['data' => $item], 201, ['Location' => route('backflow_us.read', ['id' => $item->id])]);
     }
 
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowUs::find($id)->with($includes)->firstOrFail();
+        $item = BackflowUse::find($id)->with($includes)->firstOrFail();
         return ['data' => $item];
     }
 
     public function update($id, Request $request)
     {
-        $item = BackflowUs::findOrFail($id);
+        $item = BackflowUse::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
         return ['data' => $item];
@@ -43,7 +43,7 @@ class BackflowUsController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $item = BackflowUs::findOrFail($id);
+        $item = BackflowUse::findOrFail($id);
         $item->delete();
         return response([], 401);
     }

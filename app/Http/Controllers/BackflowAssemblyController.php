@@ -9,7 +9,7 @@ class BackflowAssemblyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -29,7 +29,7 @@ class BackflowAssemblyController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowAssembly::find($id)->with($includes)->firstOrFail();
+        $item = BackflowAssembly::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 
@@ -55,7 +55,7 @@ class BackflowAssemblyController extends Controller
        'backflow_water_system_id' => 'integer|nullable|exists:backflow_water_systems,id',
        'backflow_use_id' => 'integer|nullable|exists:backflow_uses,id',
        'backflow_manufacturer_id' => 'integer|nullable|exists:backflow_manufacturers,id',
-       'backflow_model_id' => 'integer|nullable|exists:backflow_model,id',
+       'backflow_model_id' => 'integer|nullable|exists:backflow_models,id',
        'placement' => 'string|max:4096|nullable',
        'size' => 'string|max:128|nullable',
        'serial_number' => 'string|max:512|nullable',
@@ -70,7 +70,7 @@ class BackflowAssemblyController extends Controller
     protected $model_includes = [
        'backflow_model',
        'backflow_manufacturer',
-       'backflow_us',
+       'backflow_use',
        'backflow_water_system',
        'backflow_type',
        'contact',

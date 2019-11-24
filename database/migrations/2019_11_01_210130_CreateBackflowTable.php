@@ -60,7 +60,7 @@ class CreateBackflowTable extends Migration
                 
             $table->foreign('backflow_model_id')
                 ->references('id')
-                ->on('backflow_model')
+                ->on('backflow_models')
                 ->onDelete('cascade');
 
         });

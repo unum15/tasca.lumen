@@ -40,9 +40,9 @@ class BackflowAssembly extends Model
         return $this->belongsTo('App\BackflowWaterSystem');
     }
 
-    public function backflow_us()
+    public function backflow_use()
     {
-        return $this->belongsTo('App\BackflowUs');
+        return $this->belongsTo('App\BackflowUse');
     }
 
     public function backflow_manufacturer()
