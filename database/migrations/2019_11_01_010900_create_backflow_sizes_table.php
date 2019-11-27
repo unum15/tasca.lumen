@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBackflowUsesTable extends Migration
+class CreateBackflowSizesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateBackflowUsesTable extends Migration
      */
     public function up()
     {
-        Schema::create('backflow_uses', function (Blueprint $table) {
+        Schema::create('backflow_sizes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('notes')->nullable();
@@ -30,6 +30,6 @@ class CreateBackflowUsesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('backflow_uses');
+        Schema::dropIfExists('backflow_sizes');
     }
 }

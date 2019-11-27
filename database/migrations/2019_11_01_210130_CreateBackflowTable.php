@@ -19,11 +19,11 @@ class CreateBackflowTable extends Migration
             $table->integer('contact_id');
             $table->integer('backflow_type_id')->nullable();            
             $table->integer('backflow_water_system_id')->nullable();
-            $table->integer('backflow_use_id')->nullable();
+            $table->integer('backflow_size_id')->nullable();
             $table->integer('backflow_manufacturer_id')->nullable();
             $table->integer('backflow_model_id')->nullable();
+            $table->string('use',1024)->nullable();
             $table->string('placement',1024)->nullable();
-            $table->string('size',32)->nullable();            
             $table->string('serial_number',128)->nullable();
             $table->string('notes',1024)->nullable();            
             $table->timestamps();
@@ -48,9 +48,9 @@ class CreateBackflowTable extends Migration
                 ->on('backflow_water_systems')
                 ->onDelete('cascade');
                 
-            $table->foreign('backflow_use_id')
+            $table->foreign('backflow_size_id')
                 ->references('id')
-                ->on('backflow_uses')
+                ->on('backflow_sizes')
                 ->onDelete('cascade');
                 
             $table->foreign('backflow_manufacturer_id')

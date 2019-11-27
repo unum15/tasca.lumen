@@ -29,7 +29,7 @@ class BackflowAssemblyController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowAssembly::with($includes)->findOrFail($id);
+        $item = BackflowAssembly::with($includes)->find($id);
         return ['data' => $item];
     }
 
@@ -48,16 +48,28 @@ class BackflowAssemblyController extends Controller
         return response([], 401);
     }
     
+    public function unique($field)
+    {
+        if(!in_array($field,array_keys($this->model_validation))){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'field' => ['Field is not a valid field for Backflow Assembly'],
+            ]);
+            throw $error;
+        }
+        $items = BackflowAssembly::whereNotNull($field)->distinct()->get($field);
+        return ['data' => $items];
+    }
+    
     protected $model_validation = [
        'property_id' => 'integer|exists:properties,id',
        'contact_id' => 'integer|exists:contacts,id',
        'backflow_type_id' => 'integer|nullable|exists:backflow_types,id',
        'backflow_water_system_id' => 'integer|nullable|exists:backflow_water_systems,id',
-       'backflow_use_id' => 'integer|nullable|exists:backflow_uses,id',
+       'backflow_size_id' => 'integer|nullable|exists:backflow_sizes,id',
        'backflow_manufacturer_id' => 'integer|nullable|exists:backflow_manufacturers,id',
        'backflow_model_id' => 'integer|nullable|exists:backflow_models,id',
+       'use' => 'string|max:4096|nullable',
        'placement' => 'string|max:4096|nullable',
-       'size' => 'string|max:128|nullable',
        'serial_number' => 'string|max:512|nullable',
        'notes' => 'string|max:4096|nullable',
     ];
@@ -70,23 +82,11 @@ class BackflowAssemblyController extends Controller
     protected $model_includes = [
        'backflow_model',
        'backflow_manufacturer',
-       'backflow_use',
+       'backflow_size',
        'backflow_water_system',
        'backflow_type',
        'contact',
        'property'
     ];
     
-    
-    public function unique($field)
-    {
-        if(!in_array($field,array_keys($this->model_validation))){
-            $error = \Illuminate\Validation\ValidationException::withMessages([
-                'field' => ['Field is not a valid field for Backflow Assembly'],
-            ]);
-            throw $error;
-        }
-        $items = BackflowAssembly::whereNotNull($field)->distinct()->get($field);
-        return ['data' => $items];
-    }
 }

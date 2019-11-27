@@ -15,6 +15,8 @@ class CreateBackflowModelNumberTable extends Migration
     {
         Schema::create('backflow_models', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('backflow_manufacturer_id');
+            $table->integer('backflow_type_id');
             $table->string('name');
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();

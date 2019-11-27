@@ -11,11 +11,11 @@ class BackflowAssembly extends Model
         'contact_id',
         'backflow_type_id',
         'backflow_water_system_id',
-        'backflow_use_id',
+        'backflow_size_id',
         'backflow_manufacturer_id',
         'backflow_model_id',
+        'use',
         'placement',
-        'size',
         'serial_number',
         'notes'
     ];
@@ -40,9 +40,9 @@ class BackflowAssembly extends Model
         return $this->belongsTo('App\BackflowWaterSystem');
     }
 
-    public function backflow_use()
+    public function backflow_size()
     {
-        return $this->belongsTo('App\BackflowUse');
+        return $this->belongsTo('App\BackflowSize');
     }
 
     public function backflow_manufacturer()
