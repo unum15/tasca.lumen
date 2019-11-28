@@ -20,10 +20,10 @@ class ClientController extends Controller
     
     public function __construct(Request $request)
     {
-        $this->middleware('auth');
+        /*$this->middleware('auth');
         if(($request->user())&&(!$request->user()->can('view-clients'))) {
             return response(['Unauthorized(permissions)'], 401);
-        }
+        }*/
     }
 
     public function index(Request $request)
@@ -38,6 +38,10 @@ class ClientController extends Controller
         $max_activity_level = $request->input('maximium_activity_level_id');
         if(!empty($max_activity_level)) {
             $query->where('activity_level_id','<=',$max_activity_level);
+        }
+        $backflow_only = $request->input('backflow_only');
+        if(!empty($backflow_only)&&$backflow_only=='true') {
+            $query->has('properties.backflow_assemblies');
         }
         $items = $query->get();
         return $items;

@@ -21,10 +21,10 @@ class Property extends Model
         'client_id',
         'address_type_id', 
         'activity_level_id',
-    'property_type_id',
+        'property_type_id',
         'notes',
-    'creator_id',
-    'updater_id'
+        'creator_id',
+        'updater_id'
     ];
     
     public function client()
@@ -46,5 +46,10 @@ class Property extends Model
     {
         return $this->belongsToMany('App\Contact')
             ->withTimestamps();
+    }
+    
+    public function backflow_assemblies()
+    {
+        return $this->hasMany('App\BackflowAssembly');
     }
 }
