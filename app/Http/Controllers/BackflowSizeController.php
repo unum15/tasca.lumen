@@ -57,4 +57,8 @@ class BackflowSizeController extends Controller
     protected $model_validation_required = [
        'name' => 'required',
     ];
+    
+    protected $model_includes = [
+       'backflow_models'
+    ];
 }

@@ -13,4 +13,19 @@ class BackflowModel extends Model
         'notes',
         'sort_order'
     ];
+
+    public function backflow_type()
+    {
+        return $this->belongsTo('App\BackflowType');
+    }
+
+    public function backflow_manufacturer()
+    {
+        return $this->belongsTo('App\BackflowManufacturer');
+    }
+
+    public function backflow_sizes()
+    {
+        return $this->belongsToMany('App\BackflowSize');
+    }
 }

@@ -324,3 +324,16 @@ $router->post('/backflow_size', ['uses' => 'BackflowSizeController@create', 'as'
 $router->get('/backflow_size/{id:[0-9]+}', ['uses' => 'BackflowSizeController@read', 'as' => 'backflow_size.read']);
 $router->patch('/backflow_size/{id:[0-9]+}', ['uses' => 'BackflowSizeController@update', 'as' => 'backflow_size.update']);
 $router->delete('/backflow_size/{id:[0-9]+}', ['uses' => 'BackflowSizeController@delete', 'as' => 'backflow_size.delete']);
+
+
+$router->get('/backflow_old', ['uses' => 'BackflowOldController@index', 'as' => 'backflow_old.index']);
+$router->post('/backflow_old', ['uses' => 'BackflowOldController@create', 'as' => 'backflow_old.create']);
+$router->get('/backflow_old/{id:[0-9]+}', ['uses' => 'BackflowOldController@read', 'as' => 'backflow_old.read']);
+$router->patch('/backflow_old/{id:[0-9]+}', ['uses' => 'BackflowOldController@update', 'as' => 'backflow_old.update']);
+$router->delete('/backflow_old/{id:[0-9]+}', ['uses' => 'BackflowOldController@delete', 'as' => 'backflow_old.delete']);
+
+$router->get('/backflow_models', ['uses' => 'BackflowModelController@index', 'as' => 'backflow_model.index']);
+$router->post('/backflow_model', ['uses' => 'BackflowModelController@create', 'as' => 'backflow_model.create']);
+$router->get('/backflow_model/{id:[0-9]+}', ['uses' => 'BackflowModelController@read', 'as' => 'backflow_model.read']);
+$router->patch('/backflow_model/{id:[0-9]+}', ['uses' => 'BackflowModelController@update', 'as' => 'backflow_model.update']);
+$router->delete('/backflow_model/{id:[0-9]+}', ['uses' => 'BackflowModelController@delete', 'as' => 'backflow_model.delete']);

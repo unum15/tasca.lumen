@@ -15,7 +15,12 @@ class BackflowTypeValveController extends Controller
     public function index(Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $items = BackflowTypeValve::with($includes)->get();
+        $values = $this->validateModel($request);
+        $items_query = BackflowTypeValve::with($includes);
+        foreach($values as $field => $value){
+            $items_query->where($field,'=', $value);
+        }
+        $items = $items_query->get();
         return ['data' => $items];
     }
 
@@ -23,13 +28,13 @@ class BackflowTypeValveController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = BackflowTypeValve::create($values);
-        return response(['data' => $item], 201, ['Location' => route('backflow_type_valf.read', ['id' => $item->id])]);
+        return response(['data' => $item], 201, ['Location' => route('backflow_type_valve.read', ['id' => $item->id])]);
     }
 
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowTypeValve::find($id)->with($includes)->firstOrFail();
+        $item = BackflowTypeValve::with($includes)->find($id);
         return ['data' => $item];
     }
 

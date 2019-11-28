@@ -11,4 +11,9 @@ class BackflowSize extends Model
         'notes',
         'sort_order'
     ];
+    
+    public function backflow_models()
+    {
+        return $this->belongsToMany('App\BackflowModel');
+    }
 }

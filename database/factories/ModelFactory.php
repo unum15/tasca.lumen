@@ -420,3 +420,45 @@ $factory->define(App\BackflowAssembly::class, function (Faker\Generator $faker) 
         'notes' => $faker->word
     ];
 });
+
+$factory->define(App\BackflowOld::class, function (Faker\Generator $faker) {
+    return [
+        'active' => $faker->word,
+        'prt' => $faker->word,
+        'month' => $faker->word,
+        'reference' => $faker->word,
+        'water_system' => $faker->word,
+        'account' => $faker->word,
+        'owner' => $faker->word,
+        'contact' => $faker->word,
+        'email' => $faker->word,
+        'phone' => $faker->word,
+        'address' => $faker->word,
+        'city' => $faker->word,
+        'state' => $faker->word,
+        'zip' => $faker->word,
+        'location' => $faker->word,
+        'laddress' => $faker->word,
+        'lcity' => $faker->word,
+        'lstate' => $faker->word,
+        'lzip' => $faker->word,
+        'gps' => $faker->word,
+        'use' => $faker->word,
+        'placement' => $faker->word,
+        'style' => $faker->word,
+        'manufacturer' => $faker->word,
+        'size' => $faker->word,
+        'model' => $faker->word,
+        'serial' => $faker->word
+    ];
+});
+
+$factory->define(App\BackflowModel::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_manufacturer_id' => $faker->randomDigitNotNull,
+        'backflow_type_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});

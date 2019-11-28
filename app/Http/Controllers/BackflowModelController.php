@@ -9,13 +9,18 @@ class BackflowModelController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $items = BackflowModel::with($includes)->get();
+        $values = $this->validateModel($request);
+        $items_query = BackflowModel::with($includes);
+        foreach($values as $field => $value){
+            $items_query->where($field, $value);
+        }
+        $items = $items_query->get();
         return ['data' => $items];
     }
 
@@ -49,8 +54,8 @@ class BackflowModelController extends Controller
     }
     
     protected $model_validation = [
-       'backflow_manufacturer_id' => 'integer',
-       'backflow_type_id' => 'integer',
+       'backflow_manufacturer_id' => 'integer|exists:backflow_manufacturers,id',
+       'backflow_type_id' => 'integer|exists:backflow_types,id',
        'name' => 'string|max:1020',
        'notes' => 'string|max:1073741824|nullable',
        'sort_order' => 'integer|nullable',
@@ -61,4 +66,11 @@ class BackflowModelController extends Controller
        'backflow_type_id' => 'required',
        'name' => 'required',
     ];
+
+    protected $model_includes = [
+       'backflow_manufacturer',
+       'backflow_type',
+       'backflow_sizes'
+    ];
+    
 }
