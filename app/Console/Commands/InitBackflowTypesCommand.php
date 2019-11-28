@@ -60,8 +60,7 @@ class InitBackflowTypesCommand extends Command
                         'Pin Feather',
                         'Hinge Pin',
                         'Seat',
-                        'Diaphragm',
-                        'Other'
+                        'Diaphragm'
                     ]
                 ],
                 [
@@ -111,19 +110,43 @@ class InitBackflowTypesCommand extends Command
                     'name' => 'Check Valve #1',
                     'test_name' => 'Held at',
                     'success_label' => 'Closed tight',
-                    'fail_label' => 'Leaked'
+                    'fail_label' => 'Leaked',
+                    'parts' => [
+                        'Disc',
+                        'Spring',
+                        'Guide',
+                        'Pin Feather',
+                        'Hinge Pin',
+                        'Seat',
+                        'Diaphragm'
+                    ]
                 ],
                 [
                     'name' => 'Check Valve #2',
                     'test_name' => 'Held at',
                     'success_label' => 'Closed tight',
-                    'fail_label' => 'Leaked'
+                    'fail_label' => 'Leaked',
+                    'parts' => [
+                        'Disc',
+                        'Spring',
+                        'Guide',
+                        'Pin Feather',
+                        'Hinge Pin',
+                        'Seat',
+                        'Diaphragm'
+                    ]
                 ],
                 [
                     'name' => 'Pressure Vacuum Breaker',
                     'test_name' => 'Check Valve',
                     'success_label' => 'Opened Under 1#',
-                    'fail_label' => 'Did not open'
+                    'fail_label' => 'Did not open',
+                    'parts' => [
+                        'Air Inlet Disc',
+                        'Air Inlet Spring',
+                        'Check Disc',
+                        'Check Spring'
+                    ]
                 ],
             ],
             'PVB' => [],

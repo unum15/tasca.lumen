@@ -9,7 +9,7 @@ class BackflowTypeValveController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -65,7 +65,8 @@ class BackflowTypeValveController extends Controller
     ];
 
     protected $model_includes = [
-       'backflow_type'
+       'backflow_type',
+       'backflow_valve_parts'
     ];
     
 }

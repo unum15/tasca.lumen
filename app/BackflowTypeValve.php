@@ -18,4 +18,9 @@ class BackflowTypeValve extends Model
     {
         return $this->belongsTo('App\BackflowType');
     }
+    
+    public function backflow_valve_parts()
+    {
+        return $this->hasMany('App\BackflowValvePart');
+    }
 }

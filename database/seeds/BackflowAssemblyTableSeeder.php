@@ -538,7 +538,7 @@ class BackflowAssemblyTableSeeder extends Seeder
                 'backflow_model_id' => $faker->randomElement($backflow_models),
                 'placement' => $faker->randomElement($placements),
                 'backflow_size_id' => $faker->randomElement($backflow_sizes),
-                'serial_number' => $faker->regexify('[\w-]{3-9}'),
+                'serial_number' => $faker->regexify('[\w-]{3,9}'),
                 'notes' => $faker->text
             ]);
         }

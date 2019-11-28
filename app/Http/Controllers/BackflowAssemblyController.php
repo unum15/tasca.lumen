@@ -15,7 +15,12 @@ class BackflowAssemblyController extends Controller
     public function index(Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $items = BackflowAssembly::with($includes)->get();
+        $values = $this->validateModel($request);
+        $items_query = BackflowAssembly::with($includes);
+        foreach($values as $field => $value){
+            $items_query->where($field, $value);
+        }
+        $items = $items_query->get();
         return ['data' => $items];
     }
 

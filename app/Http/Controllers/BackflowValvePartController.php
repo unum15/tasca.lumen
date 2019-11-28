@@ -59,7 +59,7 @@ class BackflowValvePartController extends Controller
     ];
 
     protected $model_includes = [
-       'backflow_type_valf'
+       'backflow_type_valve'
     ];
     
 }
