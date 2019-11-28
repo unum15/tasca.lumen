@@ -4,19 +4,20 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BackflowTypeValve extends Model
+class BackflowValve extends Model
 {
     protected $fillable = [
-        'backflow_type_id',
         'name',
-        'test_name',
+        'test_label',
+        'test_value',
         'success_label',
-        'fail_label'
+        'fail_label',
+        'store_value'
     ];
-
-    public function backflow_type()
+    
+    public function backflow_types()
     {
-        return $this->belongsTo('App\BackflowType');
+        return $this->belongsToMany('App\BackflowType');
     }
     
     public function backflow_valve_parts()

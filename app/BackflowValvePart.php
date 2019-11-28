@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class BackflowValvePart extends Model
 {
     protected $fillable = [
-        'backflow_type_valve_id',
+        'backflow_valve_id',
         'name'
     ];
 
-    public function backflow_type_valf()
+    public function backflow_valf()
     {
-        return $this->belongsTo('App\BackflowTypeValf');
+        return $this->belongsTo('App\BackflowValf');
     }
 }

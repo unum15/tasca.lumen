@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBackflowTypeValvesTable extends Migration
+class CreateBackflowValves extends Migration
 {
     /**
      * Run the migrations.
@@ -13,23 +13,17 @@ class CreateBackflowTypeValvesTable extends Migration
      */
     public function up()
     {
-        Schema::create('backflow_type_valves', function (Blueprint $table) {
+        Schema::create('backflow_valves', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('backflow_type_id');
             $table->string('name');
-            $table->string('test_name');
+            $table->string('test_label');
+            $table->string('test_value');
             $table->string('success_label');
             $table->string('fail_label');
-            $table->timestamps();
-            
-            $table->foreign('backflow_type_id')
-                ->references('id')
-                ->on('backflow_types')
-                ->onDelete('cascade');
-
+            $table->boolean('store_value');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
-        
-        
     }
 
     /**
@@ -39,6 +33,6 @@ class CreateBackflowTypeValvesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('backflow_type_valves');
+        Schema::dropIfExists('backflow_valves');
     }
 }

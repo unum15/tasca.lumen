@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\BackflowTypeValve;
+use App\BackflowTest;
 use Illuminate\Http\Request;
 
-class BackflowTypeValveController extends Controller
+class BackflowTestController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function index(Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
-        $items_query = BackflowTypeValve::with($includes);
+        $items_query = BackflowTest::with($includes);
         foreach($values as $field => $value){
-            $items_query->where($field,'=', $value);
+            $items_query->where($field, $value);
         }
         $items = $items_query->get();
         return ['data' => $items];
@@ -27,20 +27,20 @@ class BackflowTypeValveController extends Controller
     public function create(Request $request)
     {
         $values = $this->validateModel($request, true);
-        $item = BackflowTypeValve::create($values);
-        return response(['data' => $item], 201, ['Location' => route('backflow_type_valve.read', ['id' => $item->id])]);
+        $item = BackflowTest::create($values);
+        return response(['data' => $item], 201, ['Location' => route('backflow_test.read', ['id' => $item->id])]);
     }
 
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowTypeValve::with($includes)->find($id);
+        $item = BackflowTest::with($includes)->find($id);
         return ['data' => $item];
     }
 
     public function update($id, Request $request)
     {
-        $item = BackflowTypeValve::findOrFail($id);
+        $item = BackflowTest::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
         return ['data' => $item];
@@ -48,30 +48,22 @@ class BackflowTypeValveController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $item = BackflowTypeValve::findOrFail($id);
+        $item = BackflowTest::findOrFail($id);
         $item->delete();
         return response([], 401);
     }
     
     protected $model_validation = [
-       'backflow_type_id' => 'integer|exists:backflow_types,id',
-       'name' => 'string|max:1020',
-       'test_name' => 'string|max:1020',
-       'success_label' => 'string|max:1020',
-       'fail_label' => 'string|max:1020',
+       'backflow_test_report_id' => 'integer',
+       'backflow_valve_id' => 'integer',
+       'passed' => 'boolean',
+       'pressure' => 'integer',
     ];
     
     protected $model_validation_required = [
-       'backflow_type_id' => 'required',
-       'name' => 'required',
-       'test_name' => 'required',
-       'success_label' => 'required',
-       'fail_label' => 'required',
+       'backflow_test_report_id' => 'required',
+       'backflow_valve_id' => 'required',
+       'passed' => 'required',
+       'pressure' => 'required',
     ];
-
-    protected $model_includes = [
-       'backflow_type',
-       'backflow_valve_parts'
-    ];
-    
 }

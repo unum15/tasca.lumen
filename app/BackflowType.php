@@ -11,4 +11,9 @@ class BackflowType extends Model
         'notes',
         'sort_order'
     ];
+    
+    public function backflow_valves()
+    {
+        return $this->belongsToMany('App\BackflowValve');
+    }
 }

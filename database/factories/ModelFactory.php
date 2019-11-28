@@ -462,3 +462,47 @@ $factory->define(App\BackflowModel::class, function (Faker\Generator $faker) {
         'sort_order' => $faker->randomDigitNotNull
     ];
 });
+
+$factory->define(App\BackflowValf::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'test_name' => $faker->word,
+        'success_label' => $faker->word,
+        'fail_label' => $faker->word
+    ];
+});
+
+$factory->define(App\BackflowValvePart::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_valve_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word
+    ];
+});
+
+$factory->define(App\BackflowTestReport::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_assembly_id' => $faker->randomDigitNotNull,
+        'visual_inspection_notes' => $faker->word,
+        'backflow_installed_to_code' => $faker->word
+    ];
+});
+
+$factory->define(App\BackflowTest::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_test_report_id' => $faker->randomDigitNotNull,
+        'backflow_valve_id' => $faker->randomDigitNotNull,
+        'passed' => $faker->word,
+        'pressure' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\BackflowValf::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'test_label' => $faker->word,
+        'test_value' => $faker->word,
+        'success_label' => $faker->word,
+        'fail_label' => $faker->word,
+        'store_value' => $faker->word
+    ];
+});
