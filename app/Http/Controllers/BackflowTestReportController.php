@@ -61,12 +61,14 @@ class BackflowTestReportController extends Controller
     
     protected $model_validation_required = [
        'backflow_assembly_id' => 'required',
-       'visual_inspection_notes' => 'required',
        'backflow_installed_to_code' => 'required',
     ];
 
     protected $model_includes = [
-       'backflow_assembly'
+       'backflow_assembly',
+       'backflow_assembly.property',
+       'backflow_assembly.backflow_type',
+       'backflow_tests'
     ];
     
 }

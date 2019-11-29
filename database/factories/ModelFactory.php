@@ -506,3 +506,12 @@ $factory->define(App\BackflowValf::class, function (Faker\Generator $faker) {
         'store_value' => $faker->word
     ];
 });
+
+$factory->define(App\BackflowTest::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_test_report_id' => $faker->randomDigitNotNull,
+        'contact_id' => $faker->randomDigitNotNull,
+        'reading_1' => $faker->word,
+        'reading_2' => $faker->word
+    ];
+});

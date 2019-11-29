@@ -16,4 +16,9 @@ class BackflowTestReport extends Model
     {
         return $this->belongsTo('App\BackflowAssembly');
     }
+    
+    public function backflow_tests()
+    {
+        return $this->hasMany('App\BackflowTest');
+    }
 }

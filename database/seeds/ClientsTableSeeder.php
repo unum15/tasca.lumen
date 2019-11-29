@@ -8,6 +8,7 @@ use App\Contact;
 use App\ContactMethod;
 use App\ContactType;
 Use App\PropertyType;
+Use App\Setting;
 
 
 class ClientsTableSeeder extends Seeder
@@ -65,5 +66,8 @@ class ClientsTableSeeder extends Seeder
                'main_mailing_property_id' => $property->id
             ]);
         }
+        
+        $admin = Contact::where('login','admin@example.com')->first();
+        Setting::create(['name' => 'operating_company_client_id', 'value' => $admin->clients()->first()->id]);
     }
 }

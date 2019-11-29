@@ -7,6 +7,8 @@ use App\BackflowWaterSystem;
 use App\BackflowSize;
 use App\BackflowManufacturer;
 use App\BackflowModel;
+use App\BackflowTestReport;
+use App\BackflowTest;
 use App\Contact;
 use App\Project;
 use App\Property;
@@ -540,6 +542,18 @@ class BackflowAssemblyTableSeeder extends Seeder
                 'backflow_size_id' => $faker->randomElement($backflow_sizes),
                 'serial_number' => $faker->regexify('[\w-]{3,9}'),
                 'notes' => $faker->text
+            ]);
+            $report = BackflowTestReport::create([
+                'backflow_assembly_id' => $assembly->id,
+                'visual_inspection_notes' => $faker->text,
+                'backflow_installed_to_code' => true
+            ]);
+            $test = BackflowTest::create([
+                'backflow_test_report_id' => $report->id,
+                'contact_id' => $faker->randomElement($client_contacts),
+                'reading_1' => $faker->randomFloat(1,0,4),
+                'reading_2' => $faker->randomFloat(1,0,4),
+                'tested_on' => date('Y-m-d')
             ]);
         }
     }

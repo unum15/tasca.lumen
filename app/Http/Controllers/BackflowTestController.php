@@ -54,16 +54,22 @@ class BackflowTestController extends Controller
     }
     
     protected $model_validation = [
-       'backflow_test_report_id' => 'integer',
-       'backflow_valve_id' => 'integer',
-       'passed' => 'boolean',
-       'pressure' => 'integer',
+       'backflow_test_report_id' => 'integer|exists:backflow_test_reports,id',
+       'contact_id' => 'integer|exists:contacts,id',
+       'reading_1' => 'numeric',
+       'reading_2' => 'numeric',
+       'tested_on' => 'date',
     ];
     
     protected $model_validation_required = [
        'backflow_test_report_id' => 'required',
-       'backflow_valve_id' => 'required',
-       'passed' => 'required',
-       'pressure' => 'required',
+       'contact_id' => 'required',
+       'tested_on' => 'required',
     ];
+
+    protected $model_includes = [
+       'contact',
+       'backflow_test_report'
+    ];
+    
 }

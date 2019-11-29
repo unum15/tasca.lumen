@@ -16,8 +16,8 @@ class CreateBackflowTestReportsTable extends Migration
         Schema::create('backflow_test_reports', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('backflow_assembly_id');
-            $table->string('visual_inspection_notes');
-            $table->boolean('backflow_installed_to_code');
+            $table->string('visual_inspection_notes')->nullable();
+            $table->boolean('backflow_installed_to_code')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->foreign('backflow_assembly_id')
