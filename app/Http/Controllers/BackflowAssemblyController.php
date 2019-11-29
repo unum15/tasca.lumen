@@ -91,7 +91,8 @@ class BackflowAssemblyController extends Controller
        'backflow_water_system',
        'backflow_type',
        'contact',
-       'property'
+       'property',
+       'backflow_type.backflow_valves'
     ];
     
 }
