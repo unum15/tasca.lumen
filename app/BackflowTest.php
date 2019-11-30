@@ -11,7 +11,8 @@ class BackflowTest extends Model
         'contact_id',
         'reading_1',
         'reading_2',
-        'tested_on'
+        'tested_on',
+        'notes'
     ];
 
     public function backflow_test_report()

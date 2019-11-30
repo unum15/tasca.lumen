@@ -20,6 +20,7 @@ class CreateBackflowTests extends Migration
             $table->decimal('reading_1')->nullable();
             $table->decimal('reading_2')->nullable();
             $table->date('tested_on');
+            $table->string('notes')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             

@@ -17,6 +17,7 @@ class CreateBackflowTestReportsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('backflow_assembly_id');
             $table->string('visual_inspection_notes')->nullable();
+            $table->string('notes')->nullable();
             $table->boolean('backflow_installed_to_code')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
