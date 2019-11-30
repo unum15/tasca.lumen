@@ -56,6 +56,7 @@ class BackflowTestReportController extends Controller
     protected $model_validation = [
        'backflow_assembly_id' => 'integer|exists:backflow_assemblies,id',
        'visual_inspection_notes' => 'string|max:1020',
+       'notes' => 'string|max:1020',
        'backflow_installed_to_code' => 'boolean',
     ];
     

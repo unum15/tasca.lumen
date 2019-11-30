@@ -59,6 +59,7 @@ class BackflowTestController extends Controller
        'reading_1' => 'numeric',
        'reading_2' => 'numeric',
        'tested_on' => 'date',
+       'notes' => 'string|max:1020'
     ];
     
     protected $model_validation_required = [
