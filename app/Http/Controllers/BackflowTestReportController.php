@@ -68,6 +68,7 @@ class BackflowTestReportController extends Controller
     protected $model_includes = [
        'backflow_assembly',
        'backflow_assembly.property',
+       'backflow_assembly.property.client',
        'backflow_assembly.backflow_type',
        'backflow_tests'
     ];
