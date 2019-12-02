@@ -86,9 +86,13 @@ $app->singleton(
 |
 */
 
+ $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
  $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
  $app->register(Zizaco\Entrust\EntrustServiceProvider::class);
+ $app->register(niklasravnsborg\LaravelPdf\PdfServiceProvider::class);
+ 
+ class_alias('Illuminate\Support\Facades\Config', 'Config');
  $env = env('APP_ENV', '');
  if($env == 'local'){
   $app->register(Unum\Maker\MakerServiceProvider::class);
