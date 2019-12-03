@@ -14,6 +14,7 @@ class BackflowValveParts extends Migration
     public function up()
     {
         Schema::create('backflow_valve_parts', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->string('name');
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();

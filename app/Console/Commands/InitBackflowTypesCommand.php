@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\BackflowType;
+use App\BackflowSuperType;
 use App\BackflowValve;
 use App\BackflowValvePart;
 use App\BackflowManufacturer;
@@ -72,7 +73,7 @@ class InitBackflowTypesCommand extends Command
     
         $valves = [
             [
-                'name' => 'Valve 1',
+                'name' => 'First',
                 'parts' => [
                     'Disc',
                     'Spring',
@@ -84,7 +85,7 @@ class InitBackflowTypesCommand extends Command
                 ]
             ],
             [
-                'name' => 'Valve 2',
+                'name' => 'Second',
                 'parts' => [
                     'Disc',
                     'Spring',
@@ -107,7 +108,7 @@ class InitBackflowTypesCommand extends Command
                 ]
             ],
             [
-                'name' => 'Air Inlet',
+                'name' => 'Pressure Vacuum Breaker',
                 'parts' => [
                     'Air Inlet Disc',
                     'Air Inlet Spring',
@@ -115,8 +116,8 @@ class InitBackflowTypesCommand extends Command
                     'Check Spring'
                 ]
             ],
-            [
-                'name' => 'Pressure Vacuum Breaker',
+                        [
+                'name' => 'Air Inlet',
                 'parts' => [
                     'Air Inlet Disc',
                     'Air Inlet Spring',
@@ -131,7 +132,6 @@ class InitBackflowTypesCommand extends Command
             $valveo = BackflowValve::create($valve);
             if(isset($valve['parts'])){
                 foreach($valve['parts'] as $part){
-                    BackflowValvePart::create(['backflow_valve_id' => $valveo->id,'name' => $part]);
                     $parto = BackflowValvePart::where('name',$part)->first();
                     $valveo->backflow_valve_parts()->attach([$parto->id]);
                 }
@@ -139,22 +139,17 @@ class InitBackflowTypesCommand extends Command
 
         }
 
-    
         $names = [
-            'RP' => ['RP_1','RP_2','differential_pressure_relief_valve'],
-            'DC' => ['DC_1','DC_2'],
-            'PVB' => ['air_inlet','pressure_vacuum_breaker'],
-            'SVB' => ['air_inlet','pressure_vacuum_breaker'],
-            'DCDA' => ['DC_1','DC_2'],
-            'RPDA' => ['RP_1','RP_2','differential_pressure_relief_valve'],
-            'AVB' => ['air_inlet','pressure_vacuum_breaker'],
+            'RP' => ['First','Second','Differential Pressure Relief'],
+            'DC' => ['First','Second'],
+            'PVB' => ['Pressure Vacuum Breaker', 'Air Inlet'],
         ];
         
         
         
         $sort = 1;
         foreach($names as $name => $valves){
-            $type = BackflowType::create([
+            $type = BackflowSuperType::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);
@@ -163,6 +158,30 @@ class InitBackflowTypesCommand extends Command
                 $valve = BackflowValve::where('name',$valvea)->first();
                 $type->backflow_valves()->attach([$valve->id]);
             }
+        }
+
+        
+        $names = [
+            'RP' => 'RP',
+            'DC' => 'DC',
+            'PVB' => 'PVB',
+            'SVB' => 'PVB',
+            'DCDA' => 'DC',
+            'RPDA' => 'RP',
+            'AVB' => 'PVB',
+        ];
+        
+        
+        
+        $sort = 1;
+        foreach($names as $name => $super_type){
+            $super_type = BackflowSuperType::where('name',$super_type)->first();
+            $type = BackflowType::create([
+                'backflow_super_type_id' => $super_type->id,
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+
         }
 
         $names = [

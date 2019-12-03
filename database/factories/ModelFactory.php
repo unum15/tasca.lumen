@@ -515,3 +515,11 @@ $factory->define(App\BackflowTest::class, function (Faker\Generator $faker) {
         'reading_2' => $faker->word
     ];
 });
+
+$factory->define(App\BackflowSuperType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});

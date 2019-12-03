@@ -8,11 +8,8 @@ class BackflowValve extends Model
 {
     protected $fillable = [
         'name',
-        'test_label',
-        'test_value',
-        'success_label',
-        'fail_label',
-        'store_value'
+        'notes',
+        'sort_order'
     ];
     
     public function backflow_types()
@@ -22,6 +19,6 @@ class BackflowValve extends Model
     
     public function backflow_valve_parts()
     {
-        return $this->hasMany('App\BackflowValvePart');
+        return $this->belongsToMany('App\BackflowValvePart');
     }
 }
