@@ -47,119 +47,83 @@ class InitBackflowTypesCommand extends Command
     {
 
     
-            $valves = [
-                [
-                    'name' => 'RP_1',
-                    'test_label' => 'Check Valve #1',
-                    'test_value' => 'PSI Across',
-                    'store_value' => true,
-                    'success_label' => 'Closed tight',
-                    'fail_label' => 'Leaked',
-                    'parts' => [
-                        'Disc',
-                        'Spring',
-                        'Guide',
-                        'Pin Feather',
-                        'Hinge Pin',
-                        'Seat',
-                        'Diaphragm'
-                    ]
-                ],
-                [
-                    'name' => 'RP_2',
-                    'test_label' => 'Check Valve #2',
-                    'test_value' => 'PSI Across',
-                    'store_value' => false,
-                    'success_label' => 'Closed tight',
-                    'fail_label' => 'Leaked',
-                    'parts' => [
-                        'Disc',
-                        'Spring',
-                        'Guide',
-                        'Pin Feather',
-                        'Hinge Pin',
-                        'Seat',
-                        'Diaphragm'
-                    ]
-                ],
-                [
-                    'name' => 'differential_pressure_relief_valve',
-                    'test_label' => 'Differential Pressure Relief Valve',
-                    'test_value' => 'Opened at',
-                    'store_value' => true,
-                    'success_label' => 'Opened Under 2#',
-                    'fail_label' => 'Did not open',
-                    'parts' => [
-                        'Disc',
-                        'Spring',
-                        'Seat(s)',
-                        'Diaphragm',
-                        'O-ring(s)',
-                        'Module'
-                    ]
-                ],
-                [
-                    'name' => 'DC_1',
-                    'test_label' => 'Check Valve #1',
-                    'test_value' => 'Held at',
-                    'store_value' => true,
-                    'success_label' => 'Closed tight',
-                    'fail_label' => 'Leaked',
-                    'parts' => [
-                        'Disc',
-                        'Spring',
-                        'Guide',
-                        'Pin Feather',
-                        'Hinge Pin',
-                        'Seat',
-                        'Diaphragm'
-                    ]
-                ],
-                [
-                    'name' => 'DC_2',
-                    'test_label' => 'Check Valve #2',
-                    'test_value' => 'Held at',
-                    'store_value' => true,
-                    'success_label' => 'Closed tight',
-                    'fail_label' => 'Leaked',
-                    'parts' => [
-                        'Disc',
-                        'Spring',
-                        'Guide',
-                        'Pin Feather',
-                        'Hinge Pin',
-                        'Seat',
-                        'Diaphragm'
-                    ]
-                ],
-                [
-                    'name' => 'air_inlet',
-                    'test_label' => 'Air Inlet',
-                    'test_value' => 'Opened at',
-                    'store_value' => true,
-                    'success_label' => 'Opened Under 1#',
-                    'fail_label' => 'Did not open',
-                    'parts' => [
-                        'Air Inlet Disc',
-                        'Air Inlet Spring',
-                        'Check Disc',
-                        'Check Spring'
-                    ]
-                ],
-                [
-                    'name' => 'pressure_vacuum_breaker',
-                    'test_label' => 'Check Valve',
-                    'test_value' => 'Held at:',
-                    'store_value' => true,
-                    'success_label' => 'Closed tight',
-                    'fail_label' => 'Leaked',
-                    'parts' => [
-                        'Air Inlet Disc',
-                        'Air Inlet Spring',
-                        'Check Disc',
-                        'Check Spring'
-                    ]
+    
+        $parts = [
+            'Disc',
+            'Spring',
+            'Guide',
+            'Pin Feather',
+            'Hinge Pin',
+            'Seat',
+            'Seat(s)',
+            'Diaphragm',
+            'O-ring(s)',
+            'Module',
+            'Air Inlet Disc',
+            'Air Inlet Spring',
+            'Check Disc',
+            'Check Spring'
+        ];
+        $sort = 1;
+        foreach($parts as $part){
+            BackflowValvePart::create(['name' => $part, 'sort_order' => $sort]);
+        }
+    
+    
+        $valves = [
+            [
+                'name' => 'Valve 1',
+                'parts' => [
+                    'Disc',
+                    'Spring',
+                    'Guide',
+                    'Pin Feather',
+                    'Hinge Pin',
+                    'Seat',
+                    'Diaphragm'
                 ]
+            ],
+            [
+                'name' => 'Valve 2',
+                'parts' => [
+                    'Disc',
+                    'Spring',
+                    'Guide',
+                    'Pin Feather',
+                    'Hinge Pin',
+                    'Seat',
+                    'Diaphragm'
+                ]
+            ],
+            [
+                'name' => 'Differential Pressure Relief',
+                'parts' => [
+                    'Disc',
+                    'Spring',
+                    'Seat(s)',
+                    'Diaphragm',
+                    'O-ring(s)',
+                    'Module'
+                ]
+            ],
+            [
+                'name' => 'Air Inlet',
+                'parts' => [
+                    'Air Inlet Disc',
+                    'Air Inlet Spring',
+                    'Check Disc',
+                    'Check Spring'
+                ]
+            ],
+            [
+                'name' => 'Pressure Vacuum Breaker',
+                'parts' => [
+                    'Air Inlet Disc',
+                    'Air Inlet Spring',
+                    'Check Disc',
+                    'Check Spring'
+                ]
+            ]
         ];
         $sort = 1;
         foreach($valves as $valve){
@@ -168,6 +132,8 @@ class InitBackflowTypesCommand extends Command
             if(isset($valve['parts'])){
                 foreach($valve['parts'] as $part){
                     BackflowValvePart::create(['backflow_valve_id' => $valveo->id,'name' => $part]);
+                    $parto = BackflowValvePart::where('name',$part)->first();
+                    $valveo->backflow_valve_parts()->attach([$parto->id]);
                 }
             }
 
