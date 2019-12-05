@@ -20,10 +20,10 @@ class BackflowValveController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
-        $type = $request->input('backflow_type_id');
+        $type = $request->input('backflow_super_type_id');
         if($type){
-            $items_query->whereHas('backflow_types', function ($query) use ($type){
-                $query->where('backflow_types.id',$type);
+            $items_query->whereHas('backflow_super_types', function ($query) use ($type){
+                $query->where('backflow_super_types.id',$type);
             });
         }
         $items = $items_query->get();

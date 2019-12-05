@@ -12,9 +12,9 @@ class BackflowValve extends Model
         'sort_order'
     ];
     
-    public function backflow_types()
+    public function backflow_super_types()
     {
-        return $this->belongsToMany('App\BackflowType');
+        return $this->belongsToMany('App\BackflowSuperType');
     }
     
     public function backflow_valve_parts()
