@@ -10,6 +10,7 @@ class BackflowTestReport extends Model
         'backflow_assembly_id',
         'visual_inspection_notes',
         'backflow_installed_to_code',
+        'report_date',
         'notes'
     ];
 
@@ -21,5 +22,15 @@ class BackflowTestReport extends Model
     public function backflow_tests()
     {
         return $this->hasMany('App\BackflowTest');
+    }
+    
+    public function backflow_repairs()
+    {
+        return $this->hasMany('App\BackflowRepair');
+    }
+    
+    public function backflow_cleanings()
+    {
+        return $this->hasMany('App\BackflowCleaning');
     }
 }

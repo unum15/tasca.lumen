@@ -9,6 +9,9 @@ use App\BackflowManufacturer;
 use App\BackflowModel;
 use App\BackflowTestReport;
 use App\BackflowTest;
+use App\BackflowValvePart;
+use App\BackflowRepair;
+use App\BackflowCleaning;
 use App\Contact;
 use App\Project;
 use App\Property;
@@ -530,31 +533,62 @@ class BackflowAssemblyTableSeeder extends Seeder
             $client_contacts = Contact::whereHas('clients', function($q) use ($property){
                 $q->where('client_id', $property->client_id);
             })->pluck('id')->toArray();
-            $assembly = BackflowAssembly::create([
-                'property_id' => $property->id,
-                'contact_id' => $faker->randomElement($client_contacts),
-                'backflow_type_id' => $faker->randomElement($backflow_types),
-                'backflow_water_system_id' => $faker->randomElement($backflow_water_systems),
-                'use' => $faker->randomElement($uses),
-                'backflow_manufacturer_id' => $faker->randomElement($backflow_manufacturers),
-                'backflow_model_id' => $faker->randomElement($backflow_models),
-                'placement' => $faker->randomElement($placements),
-                'backflow_size_id' => $faker->randomElement($backflow_sizes),
-                'serial_number' => $faker->regexify('[\w-]{3,9}'),
-                'notes' => $faker->text
-            ]);
-            $report = BackflowTestReport::create([
-                'backflow_assembly_id' => $assembly->id,
-                'visual_inspection_notes' => $faker->text,
-                'backflow_installed_to_code' => true
-            ]);
-            $test = BackflowTest::create([
-                'backflow_test_report_id' => $report->id,
-                'contact_id' => $faker->randomElement($client_contacts),
-                'reading_1' => $faker->randomFloat(1,0,4),
-                'reading_2' => $faker->randomFloat(1,0,4),
-                'tested_on' => date('Y-m-d')
-            ]);
+            for($assembly_count = 0;$assembly_count<10;$assembly_count++){
+                $assembly = BackflowAssembly::create([
+                    'property_id' => $property->id,
+                    'contact_id' => $faker->randomElement($client_contacts),
+                    'backflow_type_id' => $faker->randomElement($backflow_types),
+                    'backflow_water_system_id' => $faker->randomElement($backflow_water_systems),
+                    'use' => $faker->randomElement($uses),
+                    'backflow_manufacturer_id' => $faker->randomElement($backflow_manufacturers),
+                    'backflow_model_id' => $faker->randomElement($backflow_models),
+                    'placement' => $faker->randomElement($placements),
+                    'backflow_size_id' => $faker->randomElement($backflow_sizes),
+                    'serial_number' => $faker->regexify('[\w-]{3,9}'),
+                    'notes' => $faker->text
+                ]);
+                $date = date_create();
+                for($report_count = 0;$report_count<5;$report_count++){
+                    $report = BackflowTestReport::create([
+                        'backflow_assembly_id' => $assembly->id,
+                        'visual_inspection_notes' => $faker->text,
+                        'backflow_installed_to_code' => true,
+                        'report_date' => $date->format('Y-m-d')
+                    ]);
+                    for($test_count = 0;$test_count<2;$test_count++){
+                        $test = BackflowTest::create([
+                            'backflow_test_report_id' => $report->id,
+                            'contact_id' => $faker->randomElement($client_contacts),
+                            'reading_1' => $faker->randomFloat(1,0,4),
+                            'reading_2' => $faker->randomFloat(1,0,4),
+                            'tested_on' => $date->format('Y-m-d')
+                        ]);
+                    }
+                    $valves = $assembly->backflow_type->backflow_super_type->backflow_valves;
+                    foreach($valves as $valve){
+                        $valve_parts = $valve->backflow_valve_parts->pluck('id')->toArray();
+                        for($test_count = 0;$test_count<2;$test_count++){
+                            $test = BackflowRepair::create([
+                                'backflow_test_report_id' => $report->id,
+                                'contact_id' => $faker->randomElement($client_contacts),
+                                'backflow_valve_id' => $valve->id,
+                                'backflow_valve_part_id' => $faker->randomElement($valve_parts),
+                                'repaired_on' => $date->format('Y-m-d')
+                            ]);
+                        }
+                        for($test_count = 0;$test_count<2;$test_count++){
+                            $test = BackflowCleaning::create([
+                                'backflow_test_report_id' => $report->id,
+                                'contact_id' => $faker->randomElement($client_contacts),
+                                'backflow_valve_id' => $valve->id,
+                                'backflow_valve_part_id' => $faker->randomElement($valve_parts),
+                                'cleaned_on' => $date->format('Y-m-d')
+                            ]);
+                        }
+                    }
+                    $date->modify('-1 year');
+                }
+            }
         }
     }
             

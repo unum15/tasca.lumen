@@ -523,3 +523,39 @@ $factory->define(App\BackflowSuperType::class, function (Faker\Generator $faker)
         'sort_order' => $faker->randomDigitNotNull
     ];
 });
+
+$factory->define(App\BackflowRepair::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_test_report_id' => $faker->randomDigitNotNull,
+        'contact_id' => $faker->randomDigitNotNull,
+        'backflow_valve_part_id' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\BackflowCleaning::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_test_report_id' => $faker->randomDigitNotNull,
+        'contact_id' => $faker->randomDigitNotNull,
+        'backflow_valve_part_id' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\BackflowCleaning::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_test_report_id' => $faker->randomDigitNotNull,
+        'contact_id' => $faker->randomDigitNotNull,
+        'backflow_valve_id' => $faker->randomDigitNotNull,
+        'backflow_valve_part_id' => $faker->randomDigitNotNull,
+        'cleaned_on' => $faker->word
+    ];
+});
+
+$factory->define(App\BackflowRepair::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_test_report_id' => $faker->randomDigitNotNull,
+        'contact_id' => $faker->randomDigitNotNull,
+        'backflow_valve_id' => $faker->randomDigitNotNull,
+        'backflow_valve_part_id' => $faker->randomDigitNotNull,
+        'repaired_on' => $faker->word
+    ];
+});

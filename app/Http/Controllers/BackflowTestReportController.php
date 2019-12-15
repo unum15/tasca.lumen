@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\BackflowTestReport;
+use App\BackflowRepair;
+use App\BackflowCleaning;
 use Illuminate\Http\Request;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
@@ -44,6 +46,46 @@ class BackflowTestReportController extends Controller
         $item = BackflowTestReport::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+        return ['data' => $item];
+    }
+    
+    public function updateRepairs($id, Request $request)
+    {
+        $item = BackflowTestReport::findOrFail($id);
+        $parts = $request->input('parts');
+        $valve_id = $request->input('valve_id');
+        $contact_id = $request->input('contact_id');
+        $repaired_on = $request->input('repaired_on');
+        BackflowRepair::where('backflow_test_report_id',$item->id)->where('backflow_valve_id',$valve_id)->delete();
+        foreach($parts as $part_id){
+            BackflowRepair::create([
+                'backflow_test_report_id' => $item->id,
+                'contact_id' => $contact_id,
+                'backflow_valve_id' => $valve_id,
+                'backflow_valve_part_id' => $part_id,
+                'repaired_on' => $repaired_on
+            ]);
+        }
+        return ['data' => $item];
+    }
+    
+    public function updateCleanings($id, Request $request)
+    {
+        $item = BackflowTestReport::findOrFail($id);
+        $parts = $request->input('parts');
+        $valve_id = $request->input('valve_id');
+        $contact_id = $request->input('contact_id');
+        $cleaned_on = $request->input('cleaned_on');
+        BackflowCleaning::where('backflow_test_report_id',$item->id)->where('backflow_valve_id',$valve_id)->delete();
+        foreach($parts as $part_id){
+            BackflowCleaning::create([
+                'backflow_test_report_id' => $item->id,
+                'contact_id' => $contact_id,
+                'backflow_valve_id' => $valve_id,
+                'backflow_valve_part_id' => $part_id,
+                'cleaned_on' => $cleaned_on
+            ]);
+        }
         return ['data' => $item];
     }
 
@@ -398,11 +440,13 @@ class BackflowTestReportController extends Controller
        'visual_inspection_notes' => 'string|max:1020',
        'notes' => 'string|max:1020',
        'backflow_installed_to_code' => 'boolean',
+       'report_date' => 'date'
     ];
     
     protected $model_validation_required = [
        'backflow_assembly_id' => 'required',
        'backflow_installed_to_code' => 'required',
+       'report_date' => 'required'
     ];
 
     protected $model_includes = [
@@ -410,7 +454,9 @@ class BackflowTestReportController extends Controller
        'backflow_assembly.property',
        'backflow_assembly.property.client',
        'backflow_assembly.backflow_type',
-       'backflow_tests'
+       'backflow_tests',
+       'backflow_repairs',
+       'backflow_cleanings'
     ];
     
 }
