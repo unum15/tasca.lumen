@@ -278,22 +278,15 @@ class BackflowTestReportController extends Controller
                     font-family: arial;
                 }
                 table {
-                    border: 5px double black;
+                    border: 5px solid black;
                     border-collapse: collapse;
                     width: 100%;
                     vertical-align: top;
                 }
                 tr {
-                    border: 1px double black;
-                }
-                tr + tr {
                     border: 1px solid black;
                 }
                 td {
-                    border: 1px double black;
-                    vertical-align: top;
-                }
-                td + td {
                     border: 1px solid black;
                     vertical-align: top;
                 }
@@ -339,7 +332,7 @@ class BackflowTestReportController extends Controller
                 LAYTON UTAH 84041<br />
                 801-546-0844<br />
                 ' . $final->contact->name  . '<br />
-                CERTIFICATION # ADDTODATABASE<br />
+                CERTIFICATION # '.$final->contact->backflow_certification_number.'<br />
                 WatersContracting1985@gmail.com<br />
             </div>
             <br style="clear:left;"/>
