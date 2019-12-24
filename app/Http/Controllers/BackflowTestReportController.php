@@ -275,6 +275,7 @@ class BackflowTestReportController extends Controller
             <style>
                 body {
                     font-size: 12pt;
+                    font-family: arial;
                 }
                 table {
                     border: 5px double black;
@@ -321,8 +322,10 @@ class BackflowTestReportController extends Controller
                 <div class="info"><span class="header">Owner:</span> ' . $property->client->name . '</div>
                 <div class="info"><span class="header">Contact Person:</span> ' . $report->backflow_assembly->contact->name . '&nbsp;&nbsp;&nbsp;<span class="header">Phone:</span> ' . $billing_property->phone_number . '</div>
                 <div class="info"><span class="header">Address:</span> ' . $billing_property->address1 . ' ' . $billing_property->address_2 . '&nbsp;&nbsp;&nbsp;<span class="header">City:</span> ' . $billing_property->city . '&nbsp;&nbsp;&nbsp;<span class="header">State:</span> ' . $billing_property->state . '&nbsp;&nbsp;&nbsp;<span class="header">Zip:</span> ' . $billing_property->zip . '</div>
+                <br />
                 <div class="info"><span class="header">Assembly Location:</span> ' . $property->name . '</div>
                 <div class="info"><span class="header">Address:</span> ' . $report->backflow_assembly->property->address1 . ' ' . $report->backflow_assembly->property->address_2 . '&nbsp;&nbsp;&nbsp;<span class="header">City:</span> ' . $report->backflow_assembly->property->city . '&nbsp;&nbsp;&nbsp;<span class="header">State:</span> ' . $report->backflow_assembly->property->state . '&nbsp;&nbsp;&nbsp;<span class="header">Zip:</span> ' . $report->backflow_assembly->property->zip . '</div>
+                <br />
                 <div class="info"><span class="header">Assembly Placement:</span> ' . $report->backflow_assembly->placement . '&nbsp;&nbsp;&nbsp;<span class="header">Use:</span> ' . $report->backflow_assembly->use . '</div>
                 <div class="info"><span class="header">Assembly Style:</span> ' . $report->backflow_assembly->backflow_type->name . '&nbsp;&nbsp;&nbsp;<span class="header">Manufacturer:</span> ' . $report->backflow_assembly->backflow_manufacturer->name . '</div>
                 <div class="info"><span class="header">Size:</span> ' . $report->backflow_assembly->backflow_size->name . '"&nbsp;&nbsp;&nbsp;<span class="header">Model:</span> ' . $report->backflow_assembly->backflow_model->name . '&nbsp;&nbsp;&nbsp;<span class="header">Serial No.:</span> ' . $report->backflow_assembly->serial_number . '</div>
