@@ -327,7 +327,7 @@ class BackflowTestReportController extends Controller
                 <span class="header">Visual inspection notes:</span> ' . $report->visual_inspection_notes . ' <br />
             </div>
             <div style="border: 1px solid black;float:right;width:29%;text-align:center;font-size: 8pt;">
-                <img src="api/images/w_logo.jpg" style="width:100%;" />
+                <img src="/api/images/w_logo.jpg" style="width:100%;" />
                 BACKFLOW TESTING<br />
                 98 SOUTH 2200 WEST<br />
                 LAYTON UTAH 84041<br />
@@ -542,9 +542,9 @@ class BackflowTestReportController extends Controller
                     </td>
                 </tr>
             </table>
-            <span class="header">Initial Test By:</span> ' . $initial->contact->name  . ' Certification No. ADDTODATABASE <span class="header">Date:</span> ' . $final->tested_on  . '<br />
-            <span class="header">Repaired By:</span> ' . $final->contact->name  . ' Certification No. ADDTODATABASE <span class="header">Date:</span> ' . $final->tested_on  . '<br />
-            <span class="header">Final Test By:</span> ' . $final->contact->name  . ' Certification No. ADDTODATABASE <span class="header">Date:</span> ' . $final->tested_on  . '<br />
+            <span class="header">Initial Test By:</span> ' . $initial->contact->name  . ' Certification No. ' . $initial->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '<br />
+            <span class="header">Repaired By:</span> ' . $final->contact->name  . ' Certification No. ' . $final->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '<br />
+            <span class="header">Final Test By:</span> ' . $final->contact->name  . ' Certification No. ' . $final->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '<br />
             This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.$initial_passed.'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.$initial_failed.'/><br />
             This assembly\'s <span class="header">FINAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" checked="checked" /> <span class="header">Unsatisfactory</span><input type="checkbox" /><br />
             I certify the above test has been performed and I am aware of the final performance.<br />

@@ -15,9 +15,9 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
 
     protected $fillable = [
         'name',
-    'notes',
-    'activity_level_id',
-    'contact_method_id',
+        'notes',
+        'activity_level_id',
+        'contact_method_id',
         'login',
         'password',
         'api_token',
@@ -25,10 +25,11 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
         'show_maximium_activity_level_id',
         'default_service_window',
         'pending_days_out',
-    'creator_id',
-    'updater_id',
+        'creator_id',
+        'updater_id',
         'google_calendar_token',
-        'google_calendar_id'
+        'google_calendar_id',
+        'backflow_certification_number'
     ];
     
     protected $hidden = [

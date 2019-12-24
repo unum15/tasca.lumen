@@ -41,7 +41,8 @@ class ContactsTableSeeder extends Seeder
                 'password' => password_hash("testpass", PASSWORD_DEFAULT),
                 'show_maximium_activity_level_id' => array_last($activity_levels),
                 'creator_id' => 0,
-                'updater_id' => 0
+                'updater_id' => 0,
+                'backflow_certification_number' => $faker->regexify('\d{6}')
         ]);
         
         
@@ -55,7 +56,8 @@ class ContactsTableSeeder extends Seeder
                 'activity_level_id' => $faker->randomElement($activity_levels),
                 'contact_method_id' => $faker->randomElement($contact_methods),
                 'creator_id' => $admin->id,
-                'updater_id' => $admin->id
+                'updater_id' => $admin->id,
+                'backflow_certification_number' => $faker->regexify('\d{6}')
             ]);
             
             $contact->emails()->create([
