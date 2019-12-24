@@ -24,9 +24,9 @@ class BackflowRepair extends Model
         return $this->belongsTo('App\Contact');
     }
 
-    public function backflow_valf()
+    public function backflow_valve()
     {
-        return $this->belongsTo('App\BackflowValf');
+        return $this->belongsTo('App\BackflowValve');
     }
 
     public function backflow_valve_part()

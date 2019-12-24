@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BackflowTestReport;
 use App\BackflowRepair;
 use App\BackflowCleaning;
+use App\BackflowValvePart;
 use Illuminate\Http\Request;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
@@ -98,7 +99,7 @@ class BackflowTestReportController extends Controller
     
     public function pdf($id, Request $request)
     {
-    $report = BackflowTestReport::with('backflow_tests','backflow_assembly','backflow_assembly.property','backflow_assembly.property.client','backflow_assembly.backflow_water_system')->find($id);
+    $report = BackflowTestReport::with('backflow_tests','backflow_assembly','backflow_assembly.property','backflow_assembly.property.client','backflow_assembly.backflow_water_system')->findOrFail($id);
     $billing_property = $report->backflow_assembly->property->client->billingProperty;
     if(!$billing_property){
         $billing_property = $report->backflow_assembly->property;
@@ -106,6 +107,61 @@ class BackflowTestReportController extends Controller
     $property = $report->backflow_assembly->property;
     $initial = $report->backflow_tests->first();
     $final = $report->backflow_tests->last();
+    $first_parts=BackflowValvePart::whereHas('backflow_valve', function($q){
+        $q->where('name', '=', 'First');
+    })->orderBy('id')->get();
+    $second_parts=BackflowValvePart::whereHas('backflow_valve', function($q){
+        $q->where('name', '=', 'Second');
+    })->orderBy('id')->get();
+    $relief_parts=BackflowValvePart::whereHas('backflow_valve', function($q){
+        $q->where('name', '=', 'Differential Pressure Relief');
+    })->orderBy('id')->get();
+    $breaker_parts=BackflowValvePart::whereHas('backflow_valve', function($q){
+        $q->where('name', '=', 'Pressure Vacuum Breaker');
+    })->orderBy('id')->get();
+    $inlet_parts=BackflowValvePart::whereHas('backflow_valve', function($q){
+        $q->where('name', '=', 'Air Inlet');
+    })->orderBy('id')->get();
+    $first_repairs=BackflowRepair::where('backflow_test_report_id', '=', $id)
+        ->whereHas('backflow_valve', function($q){
+            $q->where('name', '=', 'First');
+        })->pluck('backflow_valve_part_id')->toArray();
+    $second_repairs=BackflowRepair::where('backflow_test_report_id', '=', $id)
+        ->whereHas('backflow_valve', function($q){
+            $q->where('name', '=', 'Second');
+        })->pluck('backflow_valve_part_id')->toArray();
+    $relief_repairs=BackflowRepair::where('backflow_test_report_id', '=', $id)
+        ->whereHas('backflow_valve', function($q){
+            $q->where('name', '=', 'Differential Pressure Relief');
+        })->pluck('backflow_valve_part_id')->toArray();
+    $breaker_repairs=BackflowRepair::where('backflow_test_report_id', '=', $id)
+        ->whereHas('backflow_valve', function($q){
+            $q->where('name', '=', 'Pressure Vacuum Breaker');
+        })->pluck('backflow_valve_part_id')->toArray();
+    $inlet_repairs=BackflowRepair::where('backflow_test_report_id', '=', $id)
+        ->whereHas('backflow_valve', function($q){
+            $q->where('name', '=', 'Air Inlet');
+        })->pluck('backflow_valve_part_id')->toArray();
+    $first_cleanings=BackflowCleaning::where('backflow_test_report_id', '=', $id)
+        ->whereHas('backflow_valve', function($q){
+            $q->where('name', '=', 'First');
+        })->pluck('backflow_valve_part_id')->toArray();
+    $second_cleanings=BackflowCleaning::where('backflow_test_report_id', '=', $id)
+        ->whereHas('backflow_valve', function($q){
+            $q->where('name', '=', 'Second');
+        })->pluck('backflow_valve_part_id')->toArray();
+    $relief_cleanings=BackflowCleaning::where('backflow_test_report_id', '=', $id)
+        ->whereHas('backflow_valve', function($q){
+            $q->where('name', '=', 'Differential Pressure Relief');
+        })->pluck('backflow_valve_part_id')->toArray();
+    $breaker_cleanings=BackflowCleaning::where('backflow_test_report_id', '=', $id)
+        ->whereHas('backflow_valve', function($q){
+            $q->where('name', '=', 'Pressure Vacuum Breaker');
+        })->pluck('backflow_valve_part_id')->toArray();
+    $inlet_cleanings=BackflowCleaning::where('backflow_test_report_id', '=', $id)
+        ->whereHas('backflow_valve', function($q){
+            $q->where('name', '=', 'Air Inlet');
+        })->pluck('backflow_valve_part_id')->toArray();
     $rp_reading_1 = '';
     $rp_reading_2 = ''; 
     $rp_1_pass = '';
@@ -207,6 +263,8 @@ class BackflowTestReportController extends Controller
                 $initial_passed = '';
                 $initial_failed = 'checked="checked"';
             }
+            $pvb_reading_1 = $initial->reading_1;
+            $pvb_reading_2 = $initial->reading_2;
             $pvb_final_1 = $final->reading_1;
             $pvb_final_2 = $final->reading_2;
             $pvb_final_closed = 'checked="checked"';
@@ -351,50 +409,92 @@ class BackflowTestReportController extends Controller
                     </td>
                     <td >
                     </td>
-                    <td>
-                        Cleaned: <input type="checkbox"><br />
-                        Replaced:<br />
-                        Disc <input type="checkbox"><br />
-                        Spring <input type="checkbox"><br />
-                        Guide <input type="checkbox"><br />
-                        Pin Feather <input type="checkbox"><br />
-                        Hinge pin <input type="checkbox"><br />
-                        Seat <input type="checkbox"><br />
-                        Diaphragm <input type="checkbox"><br />
-                        Other (describe)<input type="checkbox"><br />
-                    </td>
-                    <td>
-                        Cleaned: <input type="checkbox"><br />
-                        Replaced:<br />
-                        &nbsp;Disc <input type="checkbox"><br />
-                        &nbsp;Spring <input type="checkbox"><br />
-                        &nbsp;Guide <input type="checkbox"><br />
-                        &nbsp;Pin Feather <input type="checkbox"><br />
-                        &nbsp;Hinge pin <input type="checkbox"><br />
-                        &nbsp;Seat <input type="checkbox"><br />
-                        &nbsp;Diaphragm <input type="checkbox"><br />
+                    <td style="font-size:10pt;">
+    ';
+    $checked="";
+    if(count($first_cleanings)){
+        $checked='checked="checked"';
+    }
+    $html .= 'Cleaned: <input type="checkbox" '.$checked.'><br />';
+    $checked="";
+    if(count($first_repairs)){
+        $checked='checked="checked"';
+    }
+    $html .= 'Replaced: <input type="checkbox" '.$checked.'><br />';
+    foreach($first_parts as $first_part){
+        $checked="";
+        if((in_array($first_part->id,$first_repairs))||(in_array($first_part->id,$first_cleanings))){
+            $checked='checked="checked"';
+        }
+        $html .= '<div><span style="float:left;">&nbsp;'.$first_part->name. '</span><input type="checkbox" style="float:right;" '.$checked.'></div>';
+    }
+    $html .='
                         &nbsp;Other (describe)<input type="checkbox"><br />
                     </td>
-                    <td>
-                        Cleaned: <input type="checkbox"><br />
-                        Replaced:<br />
-                        &nbsp;Disc <input type="checkbox"><br />
-                        &nbsp;Spring <input type="checkbox"><br />
-                        &nbsp;Diaphragm <input type="checkbox"><br />
-                        <br />
-                        &nbsp;Seat(s) <input type="checkbox"><br />
-                        &nbsp;O-ring(s) <input type="checkbox"><br />
-                        &nbsp;Module <input type="checkbox"><br />
-                        <br />
+                    <td style="font-size:10pt;">
+    ';
+    $checked="";
+    if(count($second_cleanings)){
+        $checked='checked="checked"';
+    }
+    $html .= 'Cleaned: <input type="checkbox" '.$checked.'><br />';
+    $checked="";
+    if(count($second_repairs)){
+        $checked='checked="checked"';
+    }
+    $html .= 'Replaced: <input type="checkbox" '.$checked.'><br />';
+    foreach($second_parts as $second_part){
+        $checked="";
+        if((in_array($second_part->id,$second_repairs))||(in_array($second_part->id,$second_cleanings))){
+            $checked='checked="checked"';
+        }
+        $html .= '&nbsp;'.$second_part->name. '<input type="checkbox" '.$checked.'><br />';
+    }
+    $html .='
+                        &nbsp;Other (describe)<input type="checkbox"><br />
+                    </td>
+                    <td style="font-size:10pt;">
+    ';
+    $checked="";
+    if(count($relief_cleanings)){
+        $checked='checked="checked"';
+    }
+    $html .= 'Cleaned: <input type="checkbox" '.$checked.'><br />';
+    $checked="";
+    if(count($relief_repairs)){
+        $checked='checked="checked"';
+    }
+    $html .= 'Replaced: <input type="checkbox" '.$checked.'><br />';
+    foreach($relief_parts as $relief_part){
+        $checked="";
+        if((in_array($relief_part->id,$relief_repairs))||(in_array($relief_part->id,$relief_cleanings))){
+            $checked='checked="checked"';
+        }
+        $html .= '&nbsp;'.$relief_part->name. '<input type="checkbox" '.$checked.'><br />';
+    }
+    $html .='
                         &nbsp;Other (describe) <input type="checkbox"><br />
                     </td>
-                    <td>
-                        Cleaned: <input type="checkbox"><br />
-                        Replaced:<br />
-                        &nbsp;Air Inlet Disc <input type="checkbox"><br />
-                        &nbsp;Air Inlet Spring <input type="checkbox"><br />
-                        &nbsp;Check Disc <input type="checkbox"><br />
-                        &nbsp;Check Spring <input type="checkbox"><br />
+                    <td style="font-size:10pt;">
+    ';
+    $checked="";
+    if(count($breaker_cleanings)){
+        $checked='checked="checked"';
+    }
+    $html .= 'Cleaned: <input type="checkbox" '.$checked.'><br />';
+    $checked="";
+    if(count($breaker_repairs)){
+        $checked='checked="checked"';
+    }
+    $html .= 'Replaced: <input type="checkbox" '.$checked.'><br />';
+    foreach($breaker_parts as $breaker_part){
+        $checked="";
+        if(in_array($breaker_part->id,$breaker_repairs) || in_array($breaker_part->id,$breaker_cleanings)){
+            $checked='checked="checked"';
+        }
+        $html .= '&nbsp;'.$breaker_part->name. '<input type="checkbox" '.$checked.'><br />';
+    }
+    $html .='
                         &nbsp;Other (describe) <input type="checkbox"><br />
                     </td>
                 </tr>
