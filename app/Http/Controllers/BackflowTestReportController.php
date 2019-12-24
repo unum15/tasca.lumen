@@ -270,6 +270,11 @@ class BackflowTestReportController extends Controller
             $pvb_final_closed = 'checked="checked"';
             break;
     }
+    $number = "";
+    $numbers = $report->backflow_assembly->contact->phoneNumbers;
+    if($numbers->first()){
+        $number = $numbers->first()->phone_number;
+    }
     $html = '
         <head>
             <style>
@@ -313,7 +318,7 @@ class BackflowTestReportController extends Controller
             <div style="float:left;width:68%;font-size:11px;padding:5px;">
                 <div class="info"><span class="header">Water System:</span> ' . $report->backflow_assembly->backflow_water_system->name . '</div>
                 <div class="info"><span class="header">Owner:</span> ' . $property->client->name . '</div>
-                <div class="info"><span class="header">Contact Person:</span> ' . $report->backflow_assembly->contact->name . '&nbsp;&nbsp;&nbsp;<span class="header">Phone:</span> ' . $billing_property->phone_number . '</div>
+                <div class="info"><span class="header">Contact Person:</span> ' . $report->backflow_assembly->contact->name . '&nbsp;&nbsp;&nbsp;<span class="header">Phone:</span> ' . $number . '</div>
                 <div class="info"><span class="header">Address:</span> ' . $billing_property->address1 . ' ' . $billing_property->address_2 . '&nbsp;&nbsp;&nbsp;<span class="header">City:</span> ' . $billing_property->city . '&nbsp;&nbsp;&nbsp;<span class="header">State:</span> ' . $billing_property->state . '&nbsp;&nbsp;&nbsp;<span class="header">Zip:</span> ' . $billing_property->zip . '</div>
                 <br />
                 <div class="info"><span class="header">Assembly Location:</span> ' . $property->name . '</div>
@@ -541,9 +546,11 @@ class BackflowTestReportController extends Controller
                     </td>
                 </tr>
             </table>
-            <div class="info"><span class="header">Initial Test By:</span> ' . $initial->contact->name  . ' <span class="header">Certification No.</span> ' . $initial->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '</div>
-            <div class="info"><span class="header">Repaired By:</span> ' . $final->contact->name  . ' <span class="header">Certification No.</span> ' . $final->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '</div>
-            <div class="info"><span class="header">Final Test By:</span> ' . $final->contact->name  . ' <span class="header">Certification No.</span> ' . $final->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '</div>
+            <table class="plain" style="font-size:12pt;">
+                <tr><td class="header">Initial Test By:</td><td>' . $initial->contact->name  . '</td><td class="header">Certification No.</td><td>' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td>' . $final->tested_on  . '</td></tr>
+                <tr><td class="header">Repaired By:</td><td>' . $final->contact->name  . '</td><td class="header">Certification No.</td><td>' . $final->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td>' . $final->tested_on  . '</td></tr>
+                <tr><td class="header">Final Test By:</td><td>' . $final->contact->name  . '</td><td class="header">Certification No.</td><td>' . $final->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td>' . $final->tested_on  . '</td></tr>
+            </table>
             <br />
             <div class="info">This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.$initial_passed.'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.$initial_failed.'/></div>
             <div class="info">This assembly\'s <span class="header">FINAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" checked="checked" /> <span class="header">Unsatisfactory</span><input type="checkbox" /></div>
