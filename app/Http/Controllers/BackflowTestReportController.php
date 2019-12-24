@@ -306,25 +306,28 @@ class BackflowTestReportController extends Controller
                 .plain td{
                     border: 0px solid black;
                 }
+                .header {
+                    font-weight: bold;
+                }
             </style>
         <head>
         <body>
             <div style="text-align:center"><h3>Backflow Assembly Test Report</h3></div>
             <div style="border: 1px solid black;float:left;width:70%;">
-                Water System: ' . $report->backflow_assembly->backflow_water_system->name . '<br />
-                Owner: ' . $property->client->name . '<br />
-                Contact Person: ' . $report->backflow_assembly->contact->name . ' Phone: ' . $billing_property->phone_number . '<br />
-                Address: ' . $billing_property->address_1 . ' ' . $billing_property->address_2 . ' City: ' . $billing_property->city . ' State: ' . $billing_property->state . ' Zip: ' . $billing_property->zip . '<br />
-                Assembly Location: ' . $property->name . '<br />
-                Address: ' . $billing_property->address_1 . ' ' . $billing_property->address_2 . ' City: ' . $billing_property->city . ' State: ' . $billing_property->state . ' Zip: ' . $billing_property->zip . '<br />
-                Assembly Placement: ' . $report->backflow_assembly->placement . ' Use: ' . $report->backflow_assembly->use . '<br />
-                Assembly Style: ' . $report->backflow_assembly->backflow_type->name . '<br />
-                Size: ' . $report->backflow_assembly->backflow_size->name . '" Model: ' . $report->backflow_assembly->backflow_model->name . ' Serial No.: ' . $report->backflow_assembly->serial_number . '<br />
-                Proper installation and use: ' . ($report->backflow_installed_to_code ? 'To Code' : 'Not To Code') . '<br />
-                Visual inspection notes: ' . $report->visual_inspection_notes . ' <br />
+                <span class="header">Water System:</span> ' . $report->backflow_assembly->backflow_water_system->name . '<br />
+                <span class="header">Owner:</span> ' . $property->client->name . '<br />
+                <span class="header">Contact Person:</span> ' . $report->backflow_assembly->contact->name . ' Phone: ' . $billing_property->phone_number . '<br />
+                <span class="header">Address:</span> ' . $billing_property->address_1 . ' ' . $billing_property->address_2 . ' City: ' . $billing_property->city . ' State: ' . $billing_property->state . ' Zip: ' . $billing_property->zip . '<br />
+                <span class="header">Assembly Location:</span> ' . $property->name . '<br />
+                <span class="header">Address:</span> ' . $billing_property->address_1 . ' ' . $billing_property->address_2 . ' City: ' . $billing_property->city . ' State: ' . $billing_property->state . ' Zip: ' . $billing_property->zip . '<br />
+                <span class="header">Assembly Placement:</span> ' . $report->backflow_assembly->placement . ' Use: ' . $report->backflow_assembly->use . '<br />
+                <span class="header">Assembly Style:</span> ' . $report->backflow_assembly->backflow_type->name . '<br />
+                <span class="header">Size:</span> ' . $report->backflow_assembly->backflow_size->name . '" Model: ' . $report->backflow_assembly->backflow_model->name . ' Serial No.: ' . $report->backflow_assembly->serial_number . '<br />
+                <span class="header">Proper installation and use:</span> ' . ($report->backflow_installed_to_code ? 'To Code' : 'Not To Code') . '<br />
+                <span class="header">Visual inspection notes:</span> ' . $report->visual_inspection_notes . ' <br />
             </div>
             <div style="border: 1px solid black;float:right;width:29%;text-align:center;font-size: 8pt;">
-                <img src="/images/w_logo.jpg" style="width:100%;" />
+                <img src="api/images/w_logo.jpg" style="width:100%;" />
                 BACKFLOW TESTING<br />
                 98 SOUTH 2200 WEST<br />
                 LAYTON UTAH 84041<br />
@@ -539,11 +542,11 @@ class BackflowTestReportController extends Controller
                     </td>
                 </tr>
             </table>
-            Initial Test By: ' . $initial->contact->name  . ' Certification No. ADDTODATABASE Date: ' . $final->tested_on  . '<br />
-            Repaired By: ' . $final->contact->name  . ' Certification No. ADDTODATABASE Date: ' . $final->tested_on  . '<br />
-            Final Test By: ' . $final->contact->name  . ' Certification No. ADDTODATABASE Date: ' . $final->tested_on  . '<br />
-            This assembly\'s INITIAL TEST performance was: Satisfactory <input type="checkbox" '.$initial_passed.'/> Unsatisfactory <input type="checkbox" '.$initial_failed.'/><br />
-            This assembly\'s FINAL TEST performance was: Satisfactory <input type="checkbox" checked="checked" /> Unsatisfactory<input type="checkbox" /><br />
+            <span class="header">Initial Test By:</span> ' . $initial->contact->name  . ' Certification No. ADDTODATABASE <span class="header">Date:</span> ' . $final->tested_on  . '<br />
+            <span class="header">Repaired By:</span> ' . $final->contact->name  . ' Certification No. ADDTODATABASE <span class="header">Date:</span> ' . $final->tested_on  . '<br />
+            <span class="header">Final Test By:</span> ' . $final->contact->name  . ' Certification No. ADDTODATABASE <span class="header">Date:</span> ' . $final->tested_on  . '<br />
+            This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.$initial_passed.'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.$initial_failed.'/><br />
+            This assembly\'s <span class="header">FINAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" checked="checked" /> <span class="header">Unsatisfactory</span><input type="checkbox" /><br />
             I certify the above test has been performed and I am aware of the final performance.<br />
             BY: ________________________________________ Assembly Owner Representative Assembly<br />
         </body>
