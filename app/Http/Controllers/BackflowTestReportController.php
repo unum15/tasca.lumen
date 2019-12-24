@@ -296,6 +296,16 @@ class BackflowTestReportController extends Controller
                     border: 1px solid black;
                     vertical-align: top;
                 }
+                .plain {
+                    border: 0px solid black;
+                    font-size: 10pt;
+                }
+                .plain tr{
+                    border: 0px solid black;
+                }
+                .plain td{
+                    border: 0px solid black;
+                }
             </style>
         <head>
         <body>
@@ -409,93 +419,101 @@ class BackflowTestReportController extends Controller
                     </td>
                     <td >
                     </td>
-                    <td style="font-size:10pt;">
+                    <td>
+                        <table class="plain">
     ';
     $checked="";
     if(count($first_cleanings)){
         $checked='checked="checked"';
     }
-    $html .= 'Cleaned: <input type="checkbox" '.$checked.'><br />';
+    $html .= '<tr><td>Cleaned: </td><td><input type="checkbox" '.$checked.'></td></tr>';
     $checked="";
     if(count($first_repairs)){
         $checked='checked="checked"';
     }
-    $html .= 'Replaced: <input type="checkbox" '.$checked.'><br />';
+    $html .= '<tr><td>Replaced: </td><td><input type="checkbox" '.$checked.'></td></tr>';
     foreach($first_parts as $first_part){
         $checked="";
         if((in_array($first_part->id,$first_repairs))||(in_array($first_part->id,$first_cleanings))){
             $checked='checked="checked"';
         }
-        $html .= '<div><span style="float:left;">&nbsp;'.$first_part->name. '</span><input type="checkbox" style="float:right;" '.$checked.'></div>';
+        $html .= '<tr><td>&nbsp;'.$first_part->name. '</td><td><input type="checkbox" style="float:right;" '.$checked.'></span></td></tr>';
     }
     $html .='
-                        &nbsp;Other (describe)<input type="checkbox"><br />
+                        <tr><td>&nbsp;Other (describe)</td><td><input type="checkbox"></td></tr>
+                        </table>
                     </td>
-                    <td style="font-size:10pt;">
+                    <td>
+                        <table class="plain">
     ';
     $checked="";
     if(count($second_cleanings)){
         $checked='checked="checked"';
     }
-    $html .= 'Cleaned: <input type="checkbox" '.$checked.'><br />';
+    $html .= '<tr><td>Cleaned: </td><td><input type="checkbox" '.$checked.'></td></tr>';
     $checked="";
     if(count($second_repairs)){
         $checked='checked="checked"';
     }
-    $html .= 'Replaced: <input type="checkbox" '.$checked.'><br />';
+    $html .= '<tr><td>Replaced: </td><td><input type="checkbox" '.$checked.'></td></tr>';
     foreach($second_parts as $second_part){
         $checked="";
         if((in_array($second_part->id,$second_repairs))||(in_array($second_part->id,$second_cleanings))){
             $checked='checked="checked"';
         }
-        $html .= '&nbsp;'.$second_part->name. '<input type="checkbox" '.$checked.'><br />';
+        $html .= '<tr><td>&nbsp;'.$second_part->name. '</td><td><input type="checkbox" '.$checked.'></td></tr>';
     }
     $html .='
-                        &nbsp;Other (describe)<input type="checkbox"><br />
+                        <tr><td>&nbsp;Other (describe)</td><td><input type="checkbox"></td></tr>
+                        </table>
                     </td>
-                    <td style="font-size:10pt;">
+                    <td>
+                        <table class="plain">
     ';
     $checked="";
     if(count($relief_cleanings)){
         $checked='checked="checked"';
     }
-    $html .= 'Cleaned: <input type="checkbox" '.$checked.'><br />';
+    $html .= '<tr><td>Cleaned: </td><td><input type="checkbox" '.$checked.'></td></tr>';
     $checked="";
     if(count($relief_repairs)){
         $checked='checked="checked"';
     }
-    $html .= 'Replaced: <input type="checkbox" '.$checked.'><br />';
+    $html .= '<tr><td>Replaced: </td><td><input type="checkbox" '.$checked.'></td></tr>';
     foreach($relief_parts as $relief_part){
         $checked="";
         if((in_array($relief_part->id,$relief_repairs))||(in_array($relief_part->id,$relief_cleanings))){
             $checked='checked="checked"';
         }
-        $html .= '&nbsp;'.$relief_part->name. '<input type="checkbox" '.$checked.'><br />';
+        $html .= '<tr><td>&nbsp;'.$relief_part->name. '</td><td><input type="checkbox" '.$checked.'></td></tr>';
     }
     $html .='
-                        &nbsp;Other (describe) <input type="checkbox"><br />
+                        <tr><td>&nbsp;Other (describe) </td><td><input type="checkbox"></td></tr>
+                        </table>
                     </td>
-                    <td style="font-size:10pt;">
+                    <td>
+                        <table class="plain">
     ';
     $checked="";
     if(count($breaker_cleanings)){
         $checked='checked="checked"';
     }
-    $html .= 'Cleaned: <input type="checkbox" '.$checked.'><br />';
+    $html .= '<tr><td>Cleaned: </td><td><input type="checkbox" '.$checked.'></td></tr>';
     $checked="";
     if(count($breaker_repairs)){
         $checked='checked="checked"';
     }
-    $html .= 'Replaced: <input type="checkbox" '.$checked.'><br />';
+    $html .= '<tr><td>Replaced: </td><td><input type="checkbox" '.$checked.'></td></tr>';
     foreach($breaker_parts as $breaker_part){
         $checked="";
         if(in_array($breaker_part->id,$breaker_repairs) || in_array($breaker_part->id,$breaker_cleanings)){
             $checked='checked="checked"';
         }
-        $html .= '&nbsp;'.$breaker_part->name. '<input type="checkbox" '.$checked.'><br />';
+        $html .= '<tr><td>&nbsp;'.$breaker_part->name. '</td><td><input type="checkbox" '.$checked.'></td></tr>';
     }
     $html .='
-                        &nbsp;Other (describe) <input type="checkbox"><br />
+                        <tr><td>&nbsp;Other (describe) </td><td><input type="checkbox"></td></tr>
+                        </table>
                     </td>
                 </tr>
                 <tr>
