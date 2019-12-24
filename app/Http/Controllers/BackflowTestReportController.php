@@ -547,9 +547,9 @@ class BackflowTestReportController extends Controller
                 </tr>
             </table>
             <table class="plain" style="font-size:12pt;">
-                <tr><td class="header">Initial Test By:</td><td>' . $initial->contact->name  . '</td><td class="header">Certification No.</td><td>' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td>' . $final->tested_on  . '</td></tr>
-                <tr><td class="header">Repaired By:</td><td>' . $final->contact->name  . '</td><td class="header">Certification No.</td><td>' . $final->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td>' . $final->tested_on  . '</td></tr>
-                <tr><td class="header">Final Test By:</td><td>' . $final->contact->name  . '</td><td class="header">Certification No.</td><td>' . $final->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td>' . $final->tested_on  . '</td></tr>
+                <tr><td class="header">Initial Test By:</td><td style="text-align:left">' . $initial->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final->tested_on  . '</td></tr>
+                <tr><td class="header">Repaired By:</td><td style="text-align:left">' . $final->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $final->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final->tested_on  . '</td></tr>
+                <tr><td class="header">Final Test By:</td><td style="text-align:left">' . $final->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $final->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final->tested_on  . '</td></tr>
             </table>
             <br />
             <div class="info">This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.$initial_passed.'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.$initial_failed.'/></div>
