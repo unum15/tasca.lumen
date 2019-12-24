@@ -99,7 +99,7 @@ class BackflowTestReportController extends Controller
     
     public function pdf($id, Request $request)
     {
-    $report = BackflowTestReport::with('backflow_tests','backflow_assembly','backflow_assembly.property','backflow_assembly.property.client','backflow_assembly.backflow_water_system')->findOrFail($id);
+    $report = BackflowTestReport::with('backflow_tests','backflow_assembly','backflow_assembly.property','backflow_assembly.property.client','backflow_assembly.backflow_water_system', 'backflow_assembly.backflow_manufacturer')->findOrFail($id);
     $billing_property = $report->backflow_assembly->property->client->billingProperty;
     if(!$billing_property){
         $billing_property = $report->backflow_assembly->property;
@@ -309,24 +309,27 @@ class BackflowTestReportController extends Controller
                 .header {
                     font-weight: bold;
                 }
+                .info {
+                    padding: 2px;
+                }
             </style>
         <head>
         <body>
             <div style="text-align:center"><h3>Backflow Assembly Test Report</h3></div>
-            <div style="border: 2px solid black;float:left;width:67%;font-size:11px;padding:5px;">
-                <span class="header">Water System:</span> ' . $report->backflow_assembly->backflow_water_system->name . '<br />
-                <span class="header">Owner:</span> ' . $property->client->name . '<br />
-                <span class="header">Contact Person:</span> ' . $report->backflow_assembly->contact->name . ' <span class="header">Phone:</span> ' . $billing_property->phone_number . '<br />
-                <span class="header">Address:</span> ' . $billing_property->address_1 . ' ' . $billing_property->address_2 . ' <span class="header">City:</span> ' . $billing_property->city . ' <span class="header">State:</span> ' . $billing_property->state . ' <span class="header">Zip:</span> ' . $billing_property->zip . '<br />
-                <span class="header">Assembly Location:</span> ' . $property->name . '<br />
-                <span class="header">Address:</span> ' . $billing_property->address_1 . ' ' . $billing_property->address_2 . ' <span class="header">City:</span> ' . $billing_property->city . ' <span class="header">State:</span> ' . $billing_property->state . ' <span class="header">Zip:</span> ' . $billing_property->zip . '<br />
-                <span class="header">Assembly Placement:</span> ' . $report->backflow_assembly->placement . ' <span class="header">Use:</span> ' . $report->backflow_assembly->use . '<br />
-                <span class="header">Assembly Style:</span> ' . $report->backflow_assembly->backflow_type->name . '<br />
-                <span class="header">Size:</span> ' . $report->backflow_assembly->backflow_size->name . '" <span class="header">Model:</span> ' . $report->backflow_assembly->backflow_model->name . ' <span class="header">Serial No.:</span> ' . $report->backflow_assembly->serial_number . '<br />
-                <span class="header">Proper installation and use:</span> ' . ($report->backflow_installed_to_code ? 'To Code' : 'Not To Code') . '<br />
-                <span class="header">Visual inspection notes:</span> ' . $report->visual_inspection_notes . ' <br />
+            <div style="float:left;width:68%;font-size:11px;padding:5px;">
+                <div class="info"><span class="header">Water System:</span> ' . $report->backflow_assembly->backflow_water_system->name . '</div>
+                <div class="info"><span class="header">Owner:</span> ' . $property->client->name . '</div>
+                <div class="info"><span class="header">Contact Person:</span> ' . $report->backflow_assembly->contact->name . ' <span class="header">Phone:</span> ' . $billing_property->phone_number . '</div>
+                <div class="info"><span class="header">Address:</span> ' . $billing_property->address_1 . ' ' . $billing_property->address_2 . ' <span class="header">City:</span> ' . $billing_property->city . ' <span class="header">State:</span> ' . $billing_property->state . ' <span class="header">Zip:</span> ' . $billing_property->zip . '</div>
+                <div class="info"><span class="header">Assembly Location:</span> ' . $property->name . '</div>
+                <div class="info"><span class="header">Address:</span> ' . $billing_property->address_1 . ' ' . $billing_property->address_2 . ' <span class="header">City:</span> ' . $billing_property->city . ' <span class="header">State:</span> ' . $billing_property->state . ' <span class="header">Zip:</span> ' . $billing_property->zip . '</div>
+                <div class="info"><span class="header">Assembly Placement:</span> ' . $report->backflow_assembly->placement . ' <span class="header">Use:</span> ' . $report->backflow_assembly->use . '</div>
+                <div class="info"><span class="header">Assembly Style:</span> ' . $report->backflow_assembly->backflow_type->name . ' <span class="header">Manufacturer:</span> ' . $report->backflow_assembly->backflow_manufacturer->name . '</div>
+                <div class="info"><span class="header">Size:</span> ' . $report->backflow_assembly->backflow_size->name . '" <span class="header">Model:</span> ' . $report->backflow_assembly->backflow_model->name . ' <span class="header">Serial No.:</span> ' . $report->backflow_assembly->serial_number . '</div>
+                <div class="info"><span class="header">Proper installation and use:</span> ' . ($report->backflow_installed_to_code ? 'To Code' : 'Not To Code') . '</div>
+                <div class="info"><span class="header">Visual inspection notes:</span> ' . $report->visual_inspection_notes . ' </div>
             </div>
-            <div style="border: 1px solid black;float:right;width:29%;text-align:center;font-size: 8pt;padding:5px;">
+            <div style="float:right;width:29%;text-align:center;font-size: 8pt;padding:5px;">
                 <img src="/api/images/w_logo.jpg" style="width:100%;" />
                 BACKFLOW TESTING<br />
                 98 SOUTH 2200 WEST<br />
@@ -542,14 +545,14 @@ class BackflowTestReportController extends Controller
                     </td>
                 </tr>
             </table>
-            <span class="header">Initial Test By:</span> ' . $initial->contact->name  . ' <span class="header">Certification No.</span> ' . $initial->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '<br />
-            <span class="header">Repaired By:</span> ' . $final->contact->name  . ' <span class="header">Certification No.</span> ' . $final->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '<br />
-            <span class="header">Final Test By:</span> ' . $final->contact->name  . ' <span class="header">Certification No.</span> ' . $final->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '<br />
+            <div class="info"><span class="header">Initial Test By:</span> ' . $initial->contact->name  . ' <span class="header">Certification No.</span> ' . $initial->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '</div>
+            <div class="info"><span class="header">Repaired By:</span> ' . $final->contact->name  . ' <span class="header">Certification No.</span> ' . $final->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '</div>
+            <div class="info"><span class="header">Final Test By:</span> ' . $final->contact->name  . ' <span class="header">Certification No.</span> ' . $final->contact->backflow_certification_number  . ' <span class="header">Date:</span> ' . $final->tested_on  . '</div>
             <br />
-            This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.$initial_passed.'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.$initial_failed.'/><br />
-            This assembly\'s <span class="header">FINAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" checked="checked" /> <span class="header">Unsatisfactory</span><input type="checkbox" /><br />
-            I certify the above test has been performed and I am aware of the final performance.<br />
-            BY: ________________________________________ Assembly Owner Representative Assembly<br />
+            <div class="info">This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.$initial_passed.'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.$initial_failed.'/></div>
+            <div class="info">This assembly\'s <span class="header">FINAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" checked="checked" /> <span class="header">Unsatisfactory</span><input type="checkbox" /></div>
+            <div class="info">I certify the above test has been performed and I am aware of the final performance.</div>
+            <div class="info">BY: ________________________________________ Assembly Owner Representative Assembly</div>
         </body>
         </html> 
     ';
