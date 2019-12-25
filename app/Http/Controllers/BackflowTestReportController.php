@@ -307,6 +307,7 @@ class BackflowTestReportController extends Controller
                 }
                 .header {
                     font-weight: bold;
+                    text-align: right;
                 }
                 .info {
                     padding: 2px;
