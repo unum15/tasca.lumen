@@ -11,6 +11,7 @@ class BackflowTest extends Model
         'contact_id',
         'reading_1',
         'reading_2',
+        'passed',
         'tested_on',
         'notes'
     ];

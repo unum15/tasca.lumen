@@ -20,7 +20,7 @@ class BackflowCleaningController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
-        $items = $items_query->get();
+        $items = $items_query->orderBy('id')->get();
         return ['data' => $items];
     }
 

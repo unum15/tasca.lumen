@@ -20,7 +20,7 @@ class BackflowValvePartController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
-        $items = $items_query->get();
+        $items = $items_query->orderBy('id')->get();
         return ['data' => $items];
     }
 
@@ -64,7 +64,7 @@ class BackflowValvePartController extends Controller
     ];
 
     protected $model_includes = [
-       'backflow_valf'
+       'backflow_valve'
     ];
     
 }

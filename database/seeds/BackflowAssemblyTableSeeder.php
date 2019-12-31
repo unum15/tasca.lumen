@@ -561,6 +561,7 @@ class BackflowAssemblyTableSeeder extends Seeder
                             'contact_id' => $faker->randomElement($client_contacts),
                             'reading_1' => $faker->randomFloat(1,0,4),
                             'reading_2' => $faker->randomFloat(1,0,4),
+                            'passed' => true,
                             'tested_on' => $date->format('Y-m-d')
                         ]);
                     }

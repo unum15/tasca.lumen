@@ -20,7 +20,7 @@ class BackflowTestController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
-        $items = $items_query->get();
+        $items = $items_query->orderBy('id')->get();
         return ['data' => $items];
     }
 
@@ -56,10 +56,11 @@ class BackflowTestController extends Controller
     protected $model_validation = [
        'backflow_test_report_id' => 'integer|exists:backflow_test_reports,id',
        'contact_id' => 'integer|exists:contacts,id',
-       'reading_1' => 'numeric',
-       'reading_2' => 'numeric',
+       'reading_1' => 'numeric|nullable',
+       'reading_2' => 'numeric|nullable',
        'tested_on' => 'date',
-       'notes' => 'string|max:1020'
+       'passed' => 'boolean|nullable',
+       'notes' => 'string|max:1020|nullable'
     ];
     
     protected $model_validation_required = [

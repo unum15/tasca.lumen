@@ -197,8 +197,8 @@ class BackflowTestReportController extends Controller
     switch($report->backflow_assembly->backflow_type->name){
         case 'RP' :
         case 'RPDA' :
-            $rp_reading_1 = $initial->reading_1;
-            $rp_reading_2 = $initial->reading_2;
+            $rp_reading_1 = round($initial->reading_1,1);
+            $rp_reading_2 = round($initial->reading_2,1);
             $diff = $initial->reading_2 - $initial->reading_1;
             if($diff >= 2){
                 $rp_1_pass = 'checked="checked"';
@@ -213,17 +213,17 @@ class BackflowTestReportController extends Controller
                 $rp_3_fail = 'checked="checked"';
                 $initial_failed = 'checked="checked"';
             }
-            $final_1 = $final->reading_1;
+            $final_1 = round($final->reading_2,1);
             $final_2 = 'OK';
-            $final_3 = $final->reading_2;
+            $final_3 = round($final->reading_1,1);
             $final_1_closed = 'checked="checked"';
             $final_2_closed = 'checked="checked"';
             $final_3_closed = 'checked="checked"';
             break;
         case 'DC' :
         case 'DCDA' :
-            $dc_reading_1 = $initial->reading_1;
-            $dc_reading_2 = $initial->reading_2;
+            $dc_reading_1 = round($initial->reading_1,1);
+            $dc_reading_2 = round($initial->reading_2,1);
             if($initial->reading_1 > 1){
                 $dc_1_pass = 'checked="checked"';
                 $initial_passed = 'checked="checked"';
@@ -240,8 +240,8 @@ class BackflowTestReportController extends Controller
                 $initial_passed = '';
                 $initial_failed = 'checked="checked"';
             }
-            $final_1 = $final->reading_1;
-            $final_2 = $final->reading_2;
+            $final_1 = round($final->reading_1,1);
+            $final_2 = round($final->reading_2,1);
             $final_1_closed = 'checked="checked"';
             $final_2_closed = 'checked="checked"';
             break;
@@ -263,10 +263,10 @@ class BackflowTestReportController extends Controller
                 $initial_passed = '';
                 $initial_failed = 'checked="checked"';
             }
-            $pvb_reading_1 = $initial->reading_1;
-            $pvb_reading_2 = $initial->reading_2;
-            $pvb_final_1 = $final->reading_1;
-            $pvb_final_2 = $final->reading_2;
+            $pvb_reading_1 = round($initial->reading_1,1);
+            $pvb_reading_2 = round($initial->reading_2,1);
+            $pvb_final_1 = round($final->reading_1,1);
+            $pvb_final_2 = round($final->reading_2,1);
             $pvb_final_closed = 'checked="checked"';
             break;
     }
@@ -371,7 +371,7 @@ class BackflowTestReportController extends Controller
                         RP
                     </td>
                     <td>
-                        PSI Across #' . $rp_reading_1 . '<br />
+                        PSI Across #' . $rp_reading_2 . '<br />
                         Closed tight <input type="checkbox" '.$rp_1_pass.'><br />
                         Leaked <input type="checkbox" '.$rp_1_fail.' />
                     </td>
@@ -381,7 +381,7 @@ class BackflowTestReportController extends Controller
                         Leaked <input type="checkbox" '.$rp_2_fail.'>
                     </td>
                     <td>
-                        Opened At #'.$rp_reading_2.'<br />
+                        Opened At #'.$rp_reading_1.'<br />
                         Opened Under 2# <input type="checkbox" '.$rp_3_pass.'><br />
                         or did not open <input type="checkbox" '.$rp_3_fail.'>
                     </td>
