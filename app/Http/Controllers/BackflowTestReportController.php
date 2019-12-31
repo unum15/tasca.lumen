@@ -194,13 +194,11 @@ class BackflowTestReportController extends Controller
     $final_1_closed = '';
     $final_2_closed = '';
     $final_3_closed = '';
-    switch($report->backflow_assembly->backflow_type->name){
+    switch($report->backflow_assembly->backflow_type->backflow_super_type->name){
         case 'RP' :
-        case 'RPDA' :
             $rp_reading_1 = round($initial->reading_1,1);
             $rp_reading_2 = round($initial->reading_2,1);
-            $diff = $initial->reading_2 - $initial->reading_1;
-            if($diff >= 2){
+            if($initial->passed){
                 $rp_1_pass = 'checked="checked"';
                 $rp_2_pass = 'checked="checked"';
                 $rp_3_pass = 'checked="checked"';
@@ -221,23 +219,24 @@ class BackflowTestReportController extends Controller
             $final_3_closed = 'checked="checked"';
             break;
         case 'DC' :
-        case 'DCDA' :
             $dc_reading_1 = round($initial->reading_1,1);
             $dc_reading_2 = round($initial->reading_2,1);
             if($initial->reading_1 > 1){
                 $dc_1_pass = 'checked="checked"';
-                $initial_passed = 'checked="checked"';
             }
             else{
                 $dc_1_fail = 'checked="checked"';
-                $initial_failed = 'checked="checked"';
             }
             if($initial->reading_2 > 1){
                 $dc_2_pass = 'checked="checked"';
             }
             else{
                 $dc_2_fail = 'checked="checked"';
-                $initial_passed = '';
+            }
+            if($initial->passed){
+                $initial_passed = 'checked="checked"';
+            }
+            else{
                 $initial_failed = 'checked="checked"';
             }
             $final_1 = round($final->reading_1,1);
@@ -246,21 +245,22 @@ class BackflowTestReportController extends Controller
             $final_2_closed = 'checked="checked"';
             break;
         case 'PVB' :
-        case 'SVB' :
             if($initial->reading_1){
                 $pvb_1_pass = 'checked="checked"';
-                $initial_passed = 'checked="checked"';
             }
             else{
                 $pvb_1_fail = 'checked="checked"';
-                $initial_failed = 'checked="checked"';
             }
             if($initial->reading_2){
                 $pvb_2_pass = 'checked="checked"';
             }
             else{
                 $pvb_2_fail = 'checked="checked"';
-                $initial_passed = '';
+            }
+            if($initial->passed){
+                $initial_passed = 'checked="checked"';
+            }
+            else{
                 $initial_failed = 'checked="checked"';
             }
             $pvb_reading_1 = round($initial->reading_1,1);
@@ -561,7 +561,8 @@ class BackflowTestReportController extends Controller
         </html> 
     ';
 	$pdf = Pdf::loadHtml($html);
-	return $pdf->stream('backflow-report.pdf');
+    $filename = $report->backflow_assembly->property->name . '-' . $report->backflow_assembly->backflow_water_system->name;
+	return $pdf->stream($filename . '.pdf');
     }
     
     protected $model_validation = [
