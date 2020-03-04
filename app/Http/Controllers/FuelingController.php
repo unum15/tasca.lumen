@@ -29,7 +29,7 @@ class FuelingController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = Fueling::find($id)->with($includes)->firstOrFail();
+        $item = Fueling::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 
@@ -53,8 +53,8 @@ class FuelingController extends Controller
        'beginning_reading' => 'integer|nullable',
        'ending_reading' => 'integer|nullable',
        'date' => 'date|nullable',
-       'gallons' => 'double precision|nullable',
-       'amount' => 'double precision|nullable',
+       'gallons' => 'numeric|nullable',
+       'amount' => 'numeric|nullable',
        'notes' => 'string|max:1073741824|nullable',
     ];
     

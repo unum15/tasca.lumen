@@ -89,8 +89,8 @@ $app->singleton(
  $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
  $app->register(Zizaco\Entrust\EntrustServiceProvider::class);
- $env = env('env', '');
- if($env == 'dev'){
+ $env = env('APP_ENV', '');
+ if($env == 'local'){
   $app->register(Unum\Maker\MakerServiceProvider::class);
  }
 // $app->register(App\Providers\EventServiceProvider::class);

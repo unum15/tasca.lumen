@@ -13,9 +13,8 @@ class UsageTypeControllerTest extends TestCase
         $items = factory('App\UsageType', 2)->create();
         $response = $this->get('/usage_types');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('usage_types', $items[0]->toArray());
-        $this->seeInDatabase('usage_types', $items[1]->toArray());
+        $response->seeJson($items[0]->toArray());
+        $response->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()

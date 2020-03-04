@@ -14,7 +14,7 @@ class ClientTypeControllerTest extends TestCase
     
     public function testCreate()
     {
-        $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => true];
+        $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1];
         $response = $this->actingAs($this->getAdminUser())->post('/client_type',$item);
         $response->seeStatusCode(200);                
         $response->seeJson($item);
@@ -26,7 +26,7 @@ class ClientTypeControllerTest extends TestCase
     
     public function testCreateBad()
     {
-        $item = ['name' => '', 'sort_order' => 'a', 'default' => 'a'];
+        $item = ['name' => '', 'sort_order' => 'a'];
         $response = $this->actingAs($this->getAdminUser())->post('/client_type',$item);
         $response->seeStatusCode(422);                
         $response->seeJson(["name" => ["The name field is required."],"sort_order" => ["The sort order must be an integer."]]);

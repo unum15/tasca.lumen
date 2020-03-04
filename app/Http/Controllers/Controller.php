@@ -13,7 +13,6 @@ class Controller extends BaseController
     
     public function validateModel($request, $validate_required = false){
         $this->validate($request, $this->model_validation);
-        error_log(print_r($this->model_validation,true));
         if($validate_required){
             $this->validate($request, $this->model_validation_required);
         }

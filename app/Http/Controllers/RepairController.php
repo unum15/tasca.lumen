@@ -29,7 +29,7 @@ class RepairController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = Repair::find($id)->with($includes)->firstOrFail();
+        $item = Repair::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 
@@ -53,7 +53,7 @@ class RepairController extends Controller
        'repair' => 'string|max:1020',
        'ending_reading' => 'integer|nullable',
        'date' => 'date|nullable',
-       'amount' => 'double precision|nullable',
+       'amount' => 'numeric|nullable',
        'where' => 'string|max:1020|nullable',
        'notes' => 'string|max:1073741824|nullable',
     ];

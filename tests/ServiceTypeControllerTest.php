@@ -13,9 +13,8 @@ class ServiceTypeControllerTest extends TestCase
         $items = factory('App\ServiceType', 2)->create();
         $response = $this->get('/service_types');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('service_types', $items[0]->toArray());
-        $this->seeInDatabase('service_types', $items[1]->toArray());
+        $response->seeJson($items[0]->toArray());
+        $response->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()
@@ -33,7 +32,6 @@ class ServiceTypeControllerTest extends TestCase
         $response = $this->get('/service_type/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJsonEquals(['data' => $item->toArray()]);
-        $this->seeInDatabase('service_types', $item->toArray());
     }
     
     public function testUpdate()

@@ -11,7 +11,7 @@ class OrderPriorityControllerTest extends TestCase
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
         $dbitems = OrderPriority::all();
-        $response->seeJson($dbitems->toArray());
+        $response->seeJson($dbitems[0]->toArray());
     }    
     
     public function testCreate()

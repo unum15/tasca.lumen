@@ -13,9 +13,7 @@ class VehicleControllerTest extends TestCase
         $items = factory('App\Vehicle', 2)->create();
         $response = $this->get('/vehicles');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('vehicles', $items[0]->toArray());
-        $this->seeInDatabase('vehicles', $items[1]->toArray());
+        $response->seeJson($items[0]->toArray());
     }    
     
     public function testCreate()
@@ -33,7 +31,15 @@ class VehicleControllerTest extends TestCase
         $response = $this->get('/vehicle/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJsonEquals(['data' => $item->toArray()]);
-        $this->seeInDatabase('vehicles', $item->toArray());
+    }
+    
+    public function testReadIncludes()
+    {
+        $item = factory('App\Vehicle')->create();
+        $response = $this->get('/vehicle/' . $item->id . '?includes=vehicle_type');
+        $response->seeStatusCode(200);
+        $item->vehicle_type;
+        $response->seeJsonEquals(['data' => $item->toArray()]);
     }
     
     public function testUpdate()
