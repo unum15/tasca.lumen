@@ -20,11 +20,13 @@ services:
             - ./.docker/conf/php/php.ini:/usr/local/etc/php/conf.d/php.ini
             - ./.docker/conf/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
             - .:/var/www/html
+        depends_on:
+            - db
     composer:
         image: composer
         volumes:
             - .:/app
-        command: install
+        command: install --ignore-platform-reqs --no-scripts
     db:
         image: postgres:10.1
         restart: always
@@ -33,6 +35,6 @@ services:
             - POSTGRES_USER=${DB_USER}
             - POSTGRES_PASSWORD=${DB_PASSWORD}
         ports:
-            - 5432:5432
+            - 0.0.0.0:5432:5432
         volumes:
             - ./.docker/conf/postgres/:/docker-entrypoint-initdb.d/
