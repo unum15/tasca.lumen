@@ -29,7 +29,7 @@ class BackflowWaterSystemController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowWaterSystem::find($id)->with($includes)->firstOrFail();
+        $item = BackflowWaterSystem::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 

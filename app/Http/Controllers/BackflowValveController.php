@@ -61,20 +61,12 @@ class BackflowValveController extends Controller
     
     protected $model_validation = [
        'name' => 'string|max:1020',
-       'test_label' => 'string|max:1020',
-       'test_value' => 'string|max:1020',
-       'success_label' => 'string|max:1020',
-       'fail_label' => 'string|max:1020',
-       'store_value' => 'boolean'
+       'notes' => 'string|max:1020',
+       'sort_order' => 'integer'
     ];
     
     protected $model_validation_required = [
-       'name' => 'required',
-       'test_label' => 'required',
-       'test_value' => 'required',
-       'success_label' => 'required',
-       'fail_label' => 'required',
-       'store_value' => 'required',
+       'name' => 'required'
     ];
     
     protected $model_includes = [

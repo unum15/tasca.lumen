@@ -13,9 +13,8 @@ class BackflowAssemblyControllerTest extends TestCase
         $items = factory('App\BackflowAssembly', 2)->create();
         $response = $this->get('/backflow_assemblies');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('backflow_assemblies', $items[0]->toArray());
-        $this->seeInDatabase('backflow_assemblies', $items[1]->toArray());
+        $this->seeJson($items[0]->toArray());
+        $this->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()
@@ -39,7 +38,7 @@ class BackflowAssemblyControllerTest extends TestCase
     public function testUpdate()
     {
         $item = factory('App\BackflowAssembly')->create();
-        $update = ['name' => 'test'];
+        $update = ['notes' => 'test'];
         $response = $this->patch('/backflow_assembly/' . $item->id, $update);
         $response->seeStatusCode(200);
         $updated_array = array_merge($item->toArray(), $update);

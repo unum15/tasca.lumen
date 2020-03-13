@@ -13,7 +13,6 @@ class BackflowTypeControllerTest extends TestCase
         $items = factory('App\BackflowType', 2)->create();
         $response = $this->get('/backflow_types');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
         $this->seeInDatabase('backflow_types', $items[0]->toArray());
         $this->seeInDatabase('backflow_types', $items[1]->toArray());
     }    

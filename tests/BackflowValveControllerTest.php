@@ -1,27 +1,26 @@
 <?php
 
-use App\BackflowValf;
+use App\BackflowValve;
 use Laravel\Lumen\Testing\WithoutMiddleware;
 
-class BackflowValfControllerTest extends TestCase
+class BackflowValveControllerTest extends TestCase
 {
 
     use WithoutMiddleware;
    
     public function testIndex()
     {
-        $items = factory('App\BackflowValf', 2)->create();
+        $items = factory('App\BackflowValve', 2)->create();
         $response = $this->get('/backflow_valves');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('backflow_valves', $items[0]->toArray());
-        $this->seeInDatabase('backflow_valves', $items[1]->toArray());
+        $this->seeJson($items[0]->toArray());
+        $this->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()
     {
-        $item = factory('App\BackflowValf')->make();
-        $response = $this->post('/backflow_valf', $item->toArray());
+        $item = factory('App\BackflowValve')->make();
+        $response = $this->post('/backflow_valve', $item->toArray());
         $response->seeStatusCode(201);
         $response->seeJson($item->toArray());
         $this->seeInDatabase('backflow_valves', $item->toArray());
@@ -29,8 +28,8 @@ class BackflowValfControllerTest extends TestCase
     
     public function testRead()
     {
-        $item = factory('App\BackflowValf')->create();
-        $response = $this->get('/backflow_valf/' . $item->id);
+        $item = factory('App\BackflowValve')->create();
+        $response = $this->get('/backflow_valve/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJsonEquals(['data' => $item->toArray()]);
         $this->seeInDatabase('backflow_valves', $item->toArray());
@@ -38,9 +37,9 @@ class BackflowValfControllerTest extends TestCase
     
     public function testUpdate()
     {
-        $item = factory('App\BackflowValf')->create();
+        $item = factory('App\BackflowValve')->create();
         $update = ['name' => 'test'];
-        $response = $this->patch('/backflow_valf/' . $item->id, $update);
+        $response = $this->patch('/backflow_valve/' . $item->id, $update);
         $response->seeStatusCode(200);
         $updated_array = array_merge($item->toArray(), $update);
         $response->seeJsonEquals(['data' => $updated_array]);
@@ -49,8 +48,8 @@ class BackflowValfControllerTest extends TestCase
     
     public function testDelete()
     {
-        $item = factory('App\BackflowValf')->create();
-        $response = $this->delete('/backflow_valf/' . $item->id);
+        $item = factory('App\BackflowValve')->create();
+        $response = $this->delete('/backflow_valve/' . $item->id);
         $response->seeStatusCode(401);
         $response->seeJsonEquals([]);
         $this->notSeeInDatabase('backflow_valves', $item->toArray());

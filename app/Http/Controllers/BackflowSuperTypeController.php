@@ -34,7 +34,7 @@ class BackflowSuperTypeController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowSuperType::with($includes)->find($id);
+        $item = BackflowSuperType::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 

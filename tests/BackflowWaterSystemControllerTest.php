@@ -13,7 +13,6 @@ class BackflowWaterSystemControllerTest extends TestCase
         $items = factory('App\BackflowWaterSystem', 2)->create();
         $response = $this->get('/backflow_water_systems');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
         $this->seeInDatabase('backflow_water_systems', $items[0]->toArray());
         $this->seeInDatabase('backflow_water_systems', $items[1]->toArray());
     }    

@@ -13,9 +13,8 @@ class BackflowRepairControllerTest extends TestCase
         $items = factory('App\BackflowRepair', 2)->create();
         $response = $this->get('/backflow_repairs');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('backflow_repairs', $items[0]->toArray());
-        $this->seeInDatabase('backflow_repairs', $items[1]->toArray());
+        $this->seeJson($items[0]->toArray());
+        $this->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()
@@ -39,7 +38,7 @@ class BackflowRepairControllerTest extends TestCase
     public function testUpdate()
     {
         $item = factory('App\BackflowRepair')->create();
-        $update = ['name' => 'test'];
+        $update = ['repaired_on' => date('Y-m-d', strtotime('yesterday'))];
         $response = $this->patch('/backflow_repair/' . $item->id, $update);
         $response->seeStatusCode(200);
         $updated_array = array_merge($item->toArray(), $update);

@@ -13,9 +13,8 @@ class BackflowManufacturerControllerTest extends TestCase
         $items = factory('App\BackflowManufacturer', 2)->create();
         $response = $this->get('/backflow_manufacturers');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('backflow_manufacturers', $items[0]->toArray());
-        $this->seeInDatabase('backflow_manufacturers', $items[1]->toArray());
+        $this->seeJson($items[0]->toArray());
+        $this->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()

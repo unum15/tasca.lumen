@@ -29,7 +29,7 @@ class BackflowManufacturerController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowManufacturer::find($id)->with($includes)->firstOrFail();
+        $item = BackflowManufacturer::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 

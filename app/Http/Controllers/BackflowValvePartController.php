@@ -54,17 +54,17 @@ class BackflowValvePartController extends Controller
     }
     
     protected $model_validation = [
-       'backflow_valve_id' => 'integer|exists:backflow_valves,id',
        'name' => 'string|max:1020',
+       'notes' => 'string|max:1020',
+       'sort_order' => 'integer'
     ];
-    
+
     protected $model_validation_required = [
-       'backflow_valve_id' => 'required',
        'name' => 'required',
     ];
 
     protected $model_includes = [
        'backflow_valve'
     ];
-    
+
 }

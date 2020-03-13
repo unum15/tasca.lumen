@@ -13,9 +13,8 @@ class BackflowSuperTypeControllerTest extends TestCase
         $items = factory('App\BackflowSuperType', 2)->create();
         $response = $this->get('/backflow_super_types');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('backflow_super_types', $items[0]->toArray());
-        $this->seeInDatabase('backflow_super_types', $items[1]->toArray());
+        $response->seeJson($items[0]->toArray());
+        $response->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()

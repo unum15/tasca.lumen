@@ -13,9 +13,8 @@ class BackflowSizeControllerTest extends TestCase
         $items = factory('App\BackflowSize', 2)->create();
         $response = $this->get('/backflow_sizes');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('backflow_sizes', $items[0]->toArray());
-        $this->seeInDatabase('backflow_sizes', $items[1]->toArray());
+        $this->seeJson($items[0]->toArray());
+        $this->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()

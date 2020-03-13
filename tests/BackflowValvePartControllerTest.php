@@ -13,7 +13,6 @@ class BackflowValvePartControllerTest extends TestCase
         $items = factory('App\BackflowValvePart', 2)->create();
         $response = $this->get('/backflow_valve_parts');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
         $this->seeInDatabase('backflow_valve_parts', $items[0]->toArray());
         $this->seeInDatabase('backflow_valve_parts', $items[1]->toArray());
     }    

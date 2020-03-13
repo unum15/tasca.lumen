@@ -29,7 +29,7 @@ class BackflowTypeController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowType::find($id)->with($includes)->firstOrFail();
+        $item = BackflowType::with($includes)->findOrFail($id);
         return ['data' => $item];
     }
 
@@ -49,12 +49,13 @@ class BackflowTypeController extends Controller
     }
     
     protected $model_validation = [
-       'name' => 'string|max:16',
-       'notes' => 'string|max:1073741824|nullable',
-       'sort_order' => 'integer|nullable',
+        'backflow_super_type_id' => 'integer|exists:backflow_super_types,id',
+        'name' => 'string|max:16',
+        'notes' => 'string|max:1073741824|nullable',
+        'sort_order' => 'integer|nullable',
     ];
     
     protected $model_validation_required = [
-       'name' => 'required',
+        'name' => 'required',
     ];
 }
