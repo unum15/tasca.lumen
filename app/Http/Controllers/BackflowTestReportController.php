@@ -163,32 +163,32 @@ class BackflowTestReportController extends Controller
             ->whereHas('backflow_valve', function($q){
                 $q->where('name', '=', 'Air Inlet');
             })->pluck('backflow_valve_part_id')->toArray();
-        $rp_reading_1 = '';
-        $rp_reading_2 = ''; 
+        $rp_reading_1 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        $rp_reading_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'; 
         $rp_1_pass = '';
         $rp_2_pass = '';
         $rp_3_pass = '';
         $rp_1_fail = '';
         $rp_2_fail = '';
         $rp_3_fail = '';
-        $rp_2_value = '';
-        $dc_reading_1 = '';
-        $dc_reading_2 = '';
+        $rp_2_value = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        $dc_reading_1 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        $dc_reading_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $dc_1_pass = '';
         $dc_2_pass = '';
         $dc_1_fail = '';
         $dc_2_fail = '';
-        $pvb_reading_1 = '';
-        $pvb_reading_2 = '';
+        $pvb_reading_1 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        $pvb_reading_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $pvb_1_pass = '';
         $pvb_2_pass = '';
         $pvb_1_fail = '';
         $pvb_2_fail = '';
-        $final_1 = '';
-        $final_2 = '';
-        $final_3 = '';
-        $pvb_final_1 = '';
-        $pvb_final_2 = '';
+        $final_1 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        $final_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        $final_3 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        $pvb_final_1 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        $pvb_final_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $initial_passed = '';
         $initial_failed = '';
         $pvb_final_closed = '';
@@ -196,9 +196,9 @@ class BackflowTestReportController extends Controller
         $final_2_closed = '';
         $final_3_closed = '';
         $final_passed = '';
-        $final_contact_name = '';
-        $final_contact_backflow_certification_number = '';
-        $final_tested_on = '';
+        $final_contact_name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        $final_contact_backflow_certification_number = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        $final_tested_on = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         if($initial != $final){
             $final_contact_name = $final->contact->name;
             $final_contact_backflow_certification_number = $final->contact->backflow_certification_number;
@@ -329,6 +329,9 @@ class BackflowTestReportController extends Controller
                     .info {
                         padding: 2px;
                     }
+                    .underline {
+                        text-decoration: underline;
+                    }
                 </style>
             <head>
             <body>
@@ -388,23 +391,23 @@ class BackflowTestReportController extends Controller
                             RP
                         </td>
                         <td>
-                            PSI Across #' . $rp_reading_2 . '<br />
+                            PSI Across <span class="underline">' . $rp_reading_2 . '</span>#<br />
                             Closed tight <input type="checkbox" '.$rp_1_pass.'><br />
                             Leaked <input type="checkbox" '.$rp_1_fail.' />
                         </td>
                         <td>
-                            PSI Across #'.$rp_2_value.'<br />
+                            PSI Across <span class="underline">'.$rp_2_value.'</span>#<br />
                             Closed tight <input type="checkbox" '.$rp_2_pass.'><br />
                             Leaked <input type="checkbox" '.$rp_2_fail.'>
                         </td>
                         <td>
-                            Opened At #'.$rp_reading_1.'<br />
+                            Opened At <span class="underline">'.$rp_reading_1.'</span>#<br />
                             Opened Under 2# <input type="checkbox" '.$rp_3_pass.'><br />
                             or did not open <input type="checkbox" '.$rp_3_fail.'>
                         </td>
                         <td>
                             AIR INLET:<br />
-                            Opened at ' . $pvb_reading_1 . '<br />
+                            Opened at <span class="underline">' . $pvb_reading_1 . '</span>#<br />
                             Opened Under 1# <input type="checkbox" ' . $pvb_1_pass . '><br />
                             or did not open <input type="checkbox" ' . $pvb_1_fail . '>
                         </td>
@@ -414,19 +417,19 @@ class BackflowTestReportController extends Controller
                             DC
                         </td>
                         <td>
-                            Held at #' . $dc_reading_1 . '<br />
+                            Held at <span class="underline">' . $dc_reading_1 . '</span>#<br />
                             Closed tight <input type="checkbox" ' . $dc_1_pass . '><br />
                             Leaked <input type="checkbox" ' . $dc_1_fail . '>
                         </td>
                         <td>
-                            Held at #' . $dc_reading_2 . '<br />
+                            Held at <span class="underline">' . $dc_reading_2 . '</span>#<br />
                             Closed tight <input type="checkbox" ' . $dc_2_pass . '><br />
                             Leaked <input type="checkbox" ' . $dc_2_fail . '>
                         </td>
                         <td>
                         </td>
                         <td>
-                            CHECK VALVE:_#:' . $pvb_reading_2 . '<br />
+                            CHECK VALVE:<span class="underline">' . $pvb_reading_2 . '</span>#<br />
                             Closed tight <input type="checkbox" ' . $pvb_2_pass . '><br />
                             Leaked <input type="checkbox" ' . $pvb_2_fail . '>
                         </td>
@@ -546,28 +549,28 @@ class BackflowTestReportController extends Controller
                            FINAL TEST
                         </td>
                         <td>
-                            PSI Across ' . $final_1 . '<br />
+                            PSI Across <span class="underline">' . $final_1 . '</span>#<br />
                             Closed Tight <input type="checkbox" ' . $final_1_closed . '><br />
                         </td>
                         <td>
-                            PSI Across ' . $final_2 . '<br />
+                            PSI Across <span class="underline">' . $final_2 . '</span>#<br />
                             Closed Tight <input type="checkbox" ' . $final_1_closed . '><br />
                         </td>
                         <td>
-                            Opened at ' . $final_3 . '#<br />
+                            Opened at <span class="underline">' . $final_3 . '</span>#<br />
                             Reduced Pressure <input type="checkbox" ' . $final_1_closed . '><br />
                         </td>
                         <td>
-                            INLET Opened At ' . $pvb_final_1 . '#<br />
-                            CHECK VALVE: ' . $pvb_final_2 . '#<br />
+                            INLET Opened At <span class="underline">' . $pvb_final_1 . '</span>#<br />
+                            CHECK VALVE: <span class="underline">' . $pvb_final_2 . '</span>#<br />
                             Closed tight <input type="checkbox" ' . $pvb_final_closed . '><br />
                         </td>
                     </tr>
                 </table>
-                <table class="plain" style="font-size:12pt;">
-                    <tr><td class="header">Initial Test By:</td><td style="text-align:left">' . $initial->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . date('m-d-Y',strtotime($initial->tested_on))  . '</td></tr>
-                    <tr><td class="header">Repaired By:</td><td style="text-align:left">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final_tested_on  . '</td></tr>
-                    <tr><td class="header">Final Test By:</td><td style="text-align:left">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final_tested_on  . '</td></tr>
+                <table class="plain" style="font-size:12pt;width:100%;">
+                    <tr><td class="header">Initial Test By:</td><td style="text-align:left;text-decoration:underline;">' . $initial->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . date('m-d-Y',strtotime($initial->tested_on))  . '</td></tr>
+                    <tr><td class="header">Repaired By:</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . $final_tested_on  . '</td></tr>
+                    <tr><td class="header">Final Test By:</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . $final_tested_on  . '</td></tr>
                 </table>
                 <br />
                 <div class="info">This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.$initial_passed.'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.$initial_failed.'/></div>
