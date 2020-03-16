@@ -196,6 +196,15 @@ class BackflowTestReportController extends Controller
         $final_2_closed = '';
         $final_3_closed = '';
         $final_passed = '';
+        $final_contact_name = '';
+        $final_contact_backflow_certification_number = '';
+        $final_tested_on = '';
+        if($initial != $final){
+            $final_contact_name = $final->contact->name;
+            $final_contact_backflow_certification_number = $final->contact->backflow_certification_number;
+            $final_tested_on = $final->tested_on;
+            $final_passed = 'checked="checked"';
+        }
         switch($report->backflow_assembly->backflow_type->backflow_super_type->name){
             case 'RP' :
                 $rp_reading_1 = round($initial->reading_1,1);
@@ -220,7 +229,6 @@ class BackflowTestReportController extends Controller
                     $final_1_closed = 'checked="checked"';
                     $final_2_closed = 'checked="checked"';
                     $final_3_closed = 'checked="checked"';
-                    $final_passed = 'checked="checked"';
                 }
                 break;
             case 'DC' :
@@ -249,7 +257,6 @@ class BackflowTestReportController extends Controller
                     $final_2 = round($final->reading_2,1);
                     $final_1_closed = 'checked="checked"';
                     $final_2_closed = 'checked="checked"';
-                    $final_passed = 'checked="checked"';
                 }
                 break;
             case 'PVB' :
@@ -277,7 +284,6 @@ class BackflowTestReportController extends Controller
                     $pvb_final_1 = round($final->reading_1,1);
                     $pvb_final_2 = round($final->reading_2,1);
                     $pvb_final_closed = 'checked="checked"';
-                    $final_passed = 'checked="checked"';
                 }
                 break;
         }
@@ -559,9 +565,9 @@ class BackflowTestReportController extends Controller
                     </tr>
                 </table>
                 <table class="plain" style="font-size:12pt;">
-                    <tr><td class="header">Initial Test By:</td><td style="text-align:left">' . $initial->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final->tested_on  . '</td></tr>
-                    <tr><td class="header">Repaired By:</td><td style="text-align:left">' . $final->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $final->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final->tested_on  . '</td></tr>
-                    <tr><td class="header">Final Test By:</td><td style="text-align:left">' . $final->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $final->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final->tested_on  . '</td></tr>
+                    <tr><td class="header">Initial Test By:</td><td style="text-align:left">' . $initial->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $initial->tested_on  . '</td></tr>
+                    <tr><td class="header">Repaired By:</td><td style="text-align:left">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final_tested_on  . '</td></tr>
+                    <tr><td class="header">Final Test By:</td><td style="text-align:left">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final_tested_on  . '</td></tr>
                 </table>
                 <br />
                 <div class="info">This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.$initial_passed.'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.$initial_failed.'/></div>
