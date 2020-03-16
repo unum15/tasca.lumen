@@ -202,7 +202,7 @@ class BackflowTestReportController extends Controller
         if($initial != $final){
             $final_contact_name = $final->contact->name;
             $final_contact_backflow_certification_number = $final->contact->backflow_certification_number;
-            $final_tested_on = $final->tested_on;
+            $final_tested_on = date('m-d-Y',strtotime($final->tested_on));
             $final_passed = 'checked="checked"';
         }
         switch($report->backflow_assembly->backflow_type->backflow_super_type->name){
@@ -565,7 +565,7 @@ class BackflowTestReportController extends Controller
                     </tr>
                 </table>
                 <table class="plain" style="font-size:12pt;">
-                    <tr><td class="header">Initial Test By:</td><td style="text-align:left">' . $initial->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $initial->tested_on  . '</td></tr>
+                    <tr><td class="header">Initial Test By:</td><td style="text-align:left">' . $initial->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . date('m-d-Y',strtotime($initial->tested_on))  . '</td></tr>
                     <tr><td class="header">Repaired By:</td><td style="text-align:left">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final_tested_on  . '</td></tr>
                     <tr><td class="header">Final Test By:</td><td style="text-align:left">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left">' . $final_tested_on  . '</td></tr>
                 </table>
