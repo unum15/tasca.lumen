@@ -21,7 +21,7 @@ class BackflowTestReport extends Model
     
     public function backflow_tests()
     {
-        return $this->hasMany('App\BackflowTest');
+        return $this->hasMany('App\BackflowTest')->orderBy('backflow_test_report_id');
     }
     
     public function backflow_repairs()

@@ -92,8 +92,7 @@ $app->singleton(
  $app->register(Zizaco\Entrust\EntrustServiceProvider::class);
  $app->register(niklasravnsborg\LaravelPdf\PdfServiceProvider::class);
  
- //class_alias('Illuminate\Support\Facades\Config', 'Config');creates conflict with phpunit
- $env = env('APP_ENV', '');
+  $env = env('APP_ENV', '');
  if($env == 'local'){
   $app->register(Unum\Maker\MakerServiceProvider::class);
  }
