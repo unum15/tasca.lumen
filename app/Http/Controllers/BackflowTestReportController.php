@@ -31,6 +31,7 @@ class BackflowTestReportController extends Controller
     public function create(Request $request)
     {
         $values = $this->validateModel($request, true);
+        $values['submitted_date'] = isset($values['submitted_date']) && $values['submitted_date'] != "" ? $values['submitted_date'] : null;
         $item = BackflowTestReport::create($values);
         return response(['data' => $item], 201, ['Location' => route('backflow_test_report.read', ['id' => $item->id])]);
     }
@@ -279,8 +280,8 @@ class BackflowTestReportController extends Controller
         $num_line_length = 6;
         switch($report->backflow_assembly->backflow_type->backflow_super_type->name){
             case 'RP' :
-                $rp_reading_1 = sprintf('%04.1f', $initial->reading_1);
-                $rp_reading_2 = sprintf('%04.1f',$initial->reading_2);
+                $rp_reading_1 = sprintf('%03.1f', $initial->reading_1);
+                $rp_reading_2 = sprintf('%03.1f',$initial->reading_2);
                 if($num_line_length-strlen($rp_reading_1) > 0){
                     $rp_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_1)).$rp_reading_1;
                 }
@@ -301,17 +302,17 @@ class BackflowTestReportController extends Controller
                     $initial_failed = 'checked="checked"';
                 }
                 if($initial != $final){
-                    $final_1 = sprintf('%04.1f',$final->reading_2);
+                    $final_1 = sprintf('%03.1f',$final->reading_2);
                     $final_2 = 'OK';
-                    $final_3 = sprintf('%04.1f',$final->reading_1);
+                    $final_3 = sprintf('%03.1f',$final->reading_1);
                     $final_1_closed = 'checked="checked"';
                     $final_2_closed = 'checked="checked"';
                     $final_3_closed = 'checked="checked"';
                 }
                 break;
             case 'DC' :
-                $dc_reading_1 = sprintf('%04.1f',$initial->reading_1);
-                $dc_reading_2 = sprintf('%04.1f',$initial->reading_2);
+                $dc_reading_1 = sprintf('%03.1f',$initial->reading_1);
+                $dc_reading_2 = sprintf('%03.1f',$initial->reading_2);
                 if($num_line_length-strlen($dc_reading_1) > 0){
                     $dc_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($dc_reading_1)).$dc_reading_1;
                 }
@@ -337,8 +338,8 @@ class BackflowTestReportController extends Controller
                     $initial_failed = 'checked="checked"';
                 }
                 if($initial != $final){
-                    $final_1 = sprintf('%04.1f',$final->reading_1);
-                    $final_2 = sprintf('%04.1f',$final->reading_2);
+                    $final_1 = sprintf('%03.1f',$final->reading_1);
+                    $final_2 = sprintf('%03.1f',$final->reading_2);
                     $final_1_closed = 'checked="checked"';
                     $final_2_closed = 'checked="checked"';
                 }
@@ -362,8 +363,8 @@ class BackflowTestReportController extends Controller
                 else{
                     $initial_failed = 'checked="checked"';
                 }
-                $pvb_reading_1 = sprintf('%04.1f',$initial->reading_1);
-                $pvb_reading_2 = sprintf('%04.1f',$initial->reading_2);
+                $pvb_reading_1 = sprintf('%03.1f',$initial->reading_1);
+                $pvb_reading_2 = sprintf('%03.1f',$initial->reading_2);
                 if($num_line_length-strlen($pvb_reading_1) > 0){
                     $pvb_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_1)).$pvb_reading_1;
                 }
@@ -371,8 +372,8 @@ class BackflowTestReportController extends Controller
                     $pvb_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_2)).$pvb_reading_2;
                 }
                 if($initial != $final){
-                    $pvb_final_1 = sprintf('%04.1f',$final->reading_1);
-                    $pvb_final_2 = sprintf('%04.1f',$final->reading_2);
+                    $pvb_final_1 = sprintf('%03.1f',$final->reading_1);
+                    $pvb_final_2 = sprintf('%03.1f',$final->reading_2);
                     $pvb_final_closed = 'checked="checked"';
                     if($num_line_length-strlen($pvb_final_1) > 0){
                         $pvb_final_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_final_1)).$pvb_final_1;
@@ -455,24 +456,24 @@ class BackflowTestReportController extends Controller
                         </td>
                         <td>
                             PSI Across <span class="underline">' . $rp_reading_2 . '</span>#<br />
-                            Closed tight <input type="checkbox" '.$rp_1_pass.'><br />
-                            Leaked <input type="checkbox" '.$rp_1_fail.' />
+                             Closed tight<input style="float:right;" type="checkbox" '.$rp_1_pass.'><br style="clear:right;"/>
+                             Leaked<input style="float:right;" type="checkbox" '.$rp_1_fail.' />
                         </td>
                         <td>
                             PSI Across <span class="underline">'.$rp_2_value.'</span>#<br />
-                            Closed tight <input type="checkbox" '.$rp_2_pass.'><br />
-                            Leaked <input type="checkbox" '.$rp_2_fail.'>
+                            Closed tight <input style="float:right;" type="checkbox" '.$rp_2_pass.'><br style="clear:right;" />
+                            Leaked <input style="float:right;" type="checkbox" '.$rp_2_fail.'>
                         </td>
                         <td>
                             Opened At <span class="underline">'.$rp_reading_1.'</span>#<br />
-                            Opened Under 2# <input type="checkbox" '.$rp_3_pass.'><br />
-                            or did not open <input type="checkbox" '.$rp_3_fail.'>
+                            Opened Under 2# <input style="float:right;" type="checkbox" '.$rp_3_pass.'><br style="clear:right;" />
+                            or did not open <input style="float:right;" type="checkbox" '.$rp_3_fail.'>
                         </td>
                         <td>
                             AIR INLET:<br />
                             Opened at <span class="underline">' . $pvb_reading_1 . '</span>#<br />
-                            Opened Under 1# <input type="checkbox" ' . $pvb_1_pass . '><br />
-                            or did not open <input type="checkbox" ' . $pvb_1_fail . '>
+                            Opened Under 1# <input style="float:right;" type="checkbox" ' . $pvb_1_pass . '><br style="clear:right;" />
+                            or did not open <input style="float:right;" type="checkbox" ' . $pvb_1_fail . '>
                         </td>
                     </tr>
                     <tr>
@@ -481,20 +482,20 @@ class BackflowTestReportController extends Controller
                         </td>
                         <td>
                             Held at <span class="underline">' . $dc_reading_1 . '</span>#<br />
-                            Closed tight <input type="checkbox" ' . $dc_1_pass . '><br />
-                            Leaked <input type="checkbox" ' . $dc_1_fail . '>
+                            Closed tight <input style="float:right;" type="checkbox" ' . $dc_1_pass . '><br style="clear:right;" />
+                            Leaked <input style="float:right;" type="checkbox" ' . $dc_1_fail . '>
                         </td>
                         <td>
                             Held at <span class="underline">' . $dc_reading_2 . '</span>#<br />
-                            Closed tight <input type="checkbox" ' . $dc_2_pass . '><br />
-                            Leaked <input type="checkbox" ' . $dc_2_fail . '>
+                            Closed tight <input style="float:right;" type="checkbox" ' . $dc_2_pass . '><br style="clear:right;" />
+                            Leaked <input style="float:right;" type="checkbox" ' . $dc_2_fail . '>
                         </td>
                         <td>
                         </td>
                         <td>
                             CHECK VALVE:<span class="underline">' . $pvb_reading_2 . '</span>#<br />
-                            Closed tight <input type="checkbox" ' . $pvb_2_pass . '><br />
-                            Leaked <input type="checkbox" ' . $pvb_2_fail . '>
+                            Closed tight <input style="float:right;" type="checkbox" ' . $pvb_2_pass . '><br style="clear:right;" />
+                            Leaked <input style="float:right;" type="checkbox" ' . $pvb_2_fail . '>
                         </td>
                     </tr>
                     <tr>

@@ -14,9 +14,9 @@ class ProjectController extends Controller
      */
     private $validation = [
         'name' => 'string|min:1|max:255',
-    'client_id' => 'integer|exists:clients,id',
+        'client_id' => 'integer|exists:clients,id',
         'open_date' => 'date',
-    'contact_id' => 'integer|exists:contacts,id',
+        'contact_id' => 'integer|exists:contacts,id',
         'close_date' => 'nullable|date',
         'notes' => 'nullable|string|max:255'
     ];
