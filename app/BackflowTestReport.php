@@ -11,6 +11,7 @@ class BackflowTestReport extends Model
         'visual_inspection_notes',
         'backflow_installed_to_code',
         'report_date',
+        'submitted_date',
         'notes'
     ];
 

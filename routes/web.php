@@ -326,6 +326,9 @@ $router->get('/backflow_test_report/{id:[0-9]+}', ['uses' => 'BackflowTestReport
 $router->patch('/backflow_test_report/{id:[0-9]+}', ['uses' => 'BackflowTestReportController@update', 'as' => 'backflow_test_report.update']);
 $router->delete('/backflow_test_report/{id:[0-9]+}', ['uses' => 'BackflowTestReportController@delete', 'as' => 'backflow_test_report.delete']);
 $router->get('/backflow_test_report/{id:[0-9]+}/pdf', ['uses' => 'BackflowTestReportController@pdf', 'as' => 'backflow_test_report.pdf']);
+$router->get('/backflow_test_report/{id:[0-9]+}/html', ['uses' => 'BackflowTestReportController@html', 'as' => 'backflow_test_report.html']);
+$router->get('/backflow_test_reports/pdf', ['uses' => 'BackflowTestReportController@pdfs', 'as' => 'backflow_test_report.pdfs']);
+$router->get('/backflow_test_reports/html', ['uses' => 'BackflowTestReportController@htmls', 'as' => 'backflow_test_report.htmls']);
 
 $router->put('/backflow_test_report/{id:[0-9]+}/repairs', ['uses' => 'BackflowTestReportController@updateRepairs', 'as' => 'backflow_test_report.update_repairs']);
 $router->put('/backflow_test_report/{id:[0-9]+}/cleanings', ['uses' => 'BackflowTestReportController@updateCleanings', 'as' => 'backflow_test_report.update_cleanings']);

@@ -20,6 +20,15 @@ class BackflowAssemblyController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $recent_reports = $request->input('recent_reports');
+        if($recent_reports){
+            $recent_report_date = date_create();
+            $recent_report_date->modify("-$recent_reports days");
+            $items_query = $items_query->with(['backflow_test_reports' => function ($query) use ($recent_report_date) {
+                $query->where('report_date', '>=', $recent_report_date);
+            }]);
+            $items_query = $items_query->with(['backflow_test_reports.backflow_tests','backflow_test_reports.backflow_repairs','backflow_test_reports.backflow_cleanings']);
+        }
         $items = $items_query->get();
         return ['data' => $items];
     }

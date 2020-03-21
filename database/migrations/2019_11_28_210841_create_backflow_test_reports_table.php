@@ -20,6 +20,7 @@ class CreateBackflowTestReportsTable extends Migration
             $table->string('notes')->nullable();
             $table->boolean('backflow_installed_to_code')->nullable();
             $table->date('report_date');
+            $table->date('submitted_date')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->foreign('backflow_assembly_id')

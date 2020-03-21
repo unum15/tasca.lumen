@@ -97,9 +97,73 @@ class BackflowTestReportController extends Controller
         return response([], 401);
     }
     
-    public function pdf($id, Request $request)
+    public function htmlHeader(){
+        $html = "
+            <!DOCTYPE html>
+            <head>
+                <style>
+                    body {
+                        font-size: 12pt;
+                        font-family: arial;
+                    }
+                    table {
+                        border: 5px solid black;
+                        border-collapse: collapse;
+                        width: 100%;
+                        vertical-align: top;
+                    }
+                    tr {
+                        border: 1px solid black;
+                    }
+                    td {
+                        border: 1px solid black;
+                        vertical-align: top;
+                    }
+                    .plain {
+                        border: 0px solid black;
+                        font-size: 10pt;
+                    }
+                    .plain tr{
+                        border: 0px solid black;
+                    }
+                    .plain td{
+                        border: 0px solid black;
+                    }
+                    .header {
+                        font-weight: bold;
+                        text-align: right;
+                    }
+                    .info {
+                        padding: 2px;
+                    }
+                    .underline {
+                        text-decoration: underline;
+                    }
+                </style>
+            </head>
+            <body>
+        ";
+        return $html;
+    }
+    
+    public function htmlFooter(){
+        $html = "
+        </body>
+            </html>
+        ";
+        return $html;
+    }
+    
+    public function html($id, Request $request){
+        $html = $this->htmlHeader();
+        $html .= $this->htmlBody($id, $request);
+        $html .= $this->htmlFooter();
+        return $html;
+    }
+    
+    
+    public function htmlBody($id, Request $request)
     {
-        class_alias('Illuminate\Support\Facades\Config', 'Config');//needed for PDF stuff to work, but conflicts with phpunit
         $report = BackflowTestReport::with('backflow_tests','backflow_assembly','backflow_assembly.property','backflow_assembly.property.client','backflow_assembly.backflow_water_system', 'backflow_assembly.backflow_manufacturer')->findOrFail($id);
         $billing_property = $report->backflow_assembly->property->client->billingProperty;
         if(!$billing_property){
@@ -196,19 +260,33 @@ class BackflowTestReportController extends Controller
         $final_2_closed = '';
         $final_3_closed = '';
         $final_passed = '';
+        $initial_contact_name=$initial->contact->name;
+        if(30-strlen($initial->contact->name) > 0){
+            $initial_contact_name.=str_repeat('&nbsp;',30-strlen($initial_contact_name));
+        }
         $final_contact_name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $final_contact_backflow_certification_number = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $final_tested_on = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         if($initial != $final){
             $final_contact_name = $final->contact->name;
+            if(30-strlen($final_contact_name) > 0){
+                $final_contact_name.=str_repeat('&nbsp;',30-strlen($final_contact_name));
+            }
             $final_contact_backflow_certification_number = $final->contact->backflow_certification_number;
             $final_tested_on = date('m-d-Y',strtotime($final->tested_on));
             $final_passed = 'checked="checked"';
         }
+        $num_line_length = 6;
         switch($report->backflow_assembly->backflow_type->backflow_super_type->name){
             case 'RP' :
                 $rp_reading_1 = round($initial->reading_1,1);
                 $rp_reading_2 = round($initial->reading_2,1);
+                if($num_line_length-strlen($rp_reading_1) > 0){
+                    $rp_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_1)).$rp_reading_1;
+                }
+                if($num_line_length-strlen($rp_reading_2) > 0){
+                    $rp_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_2)).$rp_reading_2;
+                }
                 if($initial->passed){
                     $rp_1_pass = 'checked="checked"';
                     $rp_2_pass = 'checked="checked"';
@@ -234,6 +312,12 @@ class BackflowTestReportController extends Controller
             case 'DC' :
                 $dc_reading_1 = round($initial->reading_1,1);
                 $dc_reading_2 = round($initial->reading_2,1);
+                if($num_line_length-strlen($dc_reading_1) > 0){
+                    $dc_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($dc_reading_1)).$dc_reading_1;
+                }
+                if($num_line_length-strlen($dc_reading_2) > 0){
+                    $dc_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($dc_reading_2)).$dc_reading_2;
+                }
                 if($initial->reading_1 > 1){
                     $dc_1_pass = 'checked="checked"';
                 }
@@ -280,12 +364,33 @@ class BackflowTestReportController extends Controller
                 }
                 $pvb_reading_1 = round($initial->reading_1,1);
                 $pvb_reading_2 = round($initial->reading_2,1);
+                if($num_line_length-strlen($pvb_reading_1) > 0){
+                    $pvb_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_1)).$pvb_reading_1;
+                }
+                if($num_line_length-strlen($pvb_reading_2) > 0){
+                    $pvb_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_2)).$pvb_reading_2;
+                }
                 if($initial != $final){
                     $pvb_final_1 = round($final->reading_1,1);
                     $pvb_final_2 = round($final->reading_2,1);
                     $pvb_final_closed = 'checked="checked"';
+                    if($num_line_length-strlen($pvb_final_1) > 0){
+                        $pvb_final_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_final_1)).$pvb_final_1;
+                    }
+                    if($num_line_length-strlen($pvb_final_2) > 0){
+                        $pvb_final_2=str_repeat('&nbsp;',$num_line_length-strlen($pvb_final_2)).$pvb_final_2;
+                    }
                 }
                 break;
+        }
+        if($num_line_length-strlen($final_1) > 0){
+            $final_1=str_repeat('&nbsp;',$num_line_length-strlen($final_1)).$final_1;
+        }
+        if($num_line_length-strlen($final_2) > 0){
+            $final_2=str_repeat('&nbsp;',$num_line_length-strlen($final_2)).$final_2;
+        }
+        if($num_line_length-strlen($final_3) > 0){
+            $final_3=str_repeat('&nbsp;',$num_line_length-strlen($final_3)).$final_3;
         }
         $number = "";
         $numbers = $report->backflow_assembly->contact->phoneNumbers;
@@ -293,48 +398,6 @@ class BackflowTestReportController extends Controller
             $number = $numbers->first()->phone_number;
         }
         $html = '
-            <head>
-                <style>
-                    body {
-                        font-size: 12pt;
-                        font-family: arial;
-                    }
-                    table {
-                        border: 5px solid black;
-                        border-collapse: collapse;
-                        width: 100%;
-                        vertical-align: top;
-                    }
-                    tr {
-                        border: 1px solid black;
-                    }
-                    td {
-                        border: 1px solid black;
-                        vertical-align: top;
-                    }
-                    .plain {
-                        border: 0px solid black;
-                        font-size: 10pt;
-                    }
-                    .plain tr{
-                        border: 0px solid black;
-                    }
-                    .plain td{
-                        border: 0px solid black;
-                    }
-                    .header {
-                        font-weight: bold;
-                        text-align: right;
-                    }
-                    .info {
-                        padding: 2px;
-                    }
-                    .underline {
-                        text-decoration: underline;
-                    }
-                </style>
-            <head>
-            <body>
                 <div style="text-align:center"><h3>Backflow Assembly Test Report</h3></div>
                 <div style="float:left;width:68%;font-size:11px;padding:5px;">
                     <div class="info"><span class="header">Water System:</span> ' . $report->backflow_assembly->backflow_water_system->name . '</div>
@@ -568,7 +631,7 @@ class BackflowTestReportController extends Controller
                     </tr>
                 </table>
                 <table class="plain" style="font-size:12pt;width:100%;">
-                    <tr><td class="header">Initial Test By:</td><td style="text-align:left;text-decoration:underline;">' . $initial->contact->name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . date('m-d-Y',strtotime($initial->tested_on))  . '</td></tr>
+                    <tr><td class="header">Initial Test By:</td><td style="text-align:left;text-decoration:underline;">' . $initial_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . date('m-d-Y',strtotime($initial->tested_on))  . '</td></tr>
                     <tr><td class="header">Repaired By:</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . $final_tested_on  . '</td></tr>
                     <tr><td class="header">Final Test By:</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . $final_tested_on  . '</td></tr>
                 </table>
@@ -577,20 +640,50 @@ class BackflowTestReportController extends Controller
                 <div class="info">This assembly\'s <span class="header">FINAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.$final_passed.' /> <span class="header">Unsatisfactory</span><input type="checkbox" /></div>
                 <div class="info">I certify the above test has been performed and I am aware of the final performance.</div>
                 <div class="info">BY: ________________________________________ Assembly Owner Representative Assembly</div>
-            </body>
-            </html> 
         ';
+        return $html;
+    }
+    
+    public function pdf($id, Request $request)
+    {
+        class_alias('Illuminate\Support\Facades\Config', 'Config');//needed for PDF stuff to work, but conflicts with phpunit
+        $html = $this->html($id, $request);
         $pdf = Pdf::loadHtml($html);
+        $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property','backflow_assembly.backflow_water_system')->findOrFail($id);
         $filename = $report->backflow_assembly->property->name . '-' . $report->backflow_assembly->backflow_water_system->name;
+        return $pdf->stream($filename . '.pdf');
+    }
+    
+    public function htmls(Request $request)
+    {
+        $ids = $request->input('backflow_test_report_id');
+        $html = $this->htmlHeader();
+        $count = 0;
+        foreach($ids as $id){
+            $html .= $this->htmlBody($id, $request);
+        }
+        $html .= $this->htmlFooter();
+        return $html;
+    }
+    
+    public function pdfs(Request $request)
+    {
+        class_alias('Illuminate\Support\Facades\Config', 'Config');//needed for PDF stuff to work, but conflicts with phpunit
+        $html = $this->htmls($request);
+        $pdf = Pdf::loadHtml($html);
+        $ids = $request->input('backflow_test_report_id');
+        $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property')->findOrFail($ids[0]);
+        $filename = $report->backflow_assembly->property->name;
         return $pdf->stream($filename . '.pdf');
     }
     
     protected $model_validation = [
        'backflow_assembly_id' => 'integer|exists:backflow_assemblies,id',
-       'visual_inspection_notes' => 'string|max:1020',
-       'notes' => 'string|max:1020',
+       'visual_inspection_notes' => 'string|max:1020|nullable',
+       'notes' => 'string|max:1020|nullable',
        'backflow_installed_to_code' => 'boolean',
-       'report_date' => 'date'
+       'report_date' => 'date',
+       'submitted_date' => 'date'
     ];
     
     protected $model_validation_required = [
