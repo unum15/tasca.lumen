@@ -279,8 +279,8 @@ class BackflowTestReportController extends Controller
         $num_line_length = 6;
         switch($report->backflow_assembly->backflow_type->backflow_super_type->name){
             case 'RP' :
-                $rp_reading_1 = round($initial->reading_1,1);
-                $rp_reading_2 = round($initial->reading_2,1);
+                $rp_reading_1 = sprintf('%04.1f', $initial->reading_1);
+                $rp_reading_2 = sprintf('%04.1f',$initial->reading_2);
                 if($num_line_length-strlen($rp_reading_1) > 0){
                     $rp_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_1)).$rp_reading_1;
                 }
@@ -301,17 +301,17 @@ class BackflowTestReportController extends Controller
                     $initial_failed = 'checked="checked"';
                 }
                 if($initial != $final){
-                    $final_1 = round($final->reading_2,1);
+                    $final_1 = sprintf('%04.1f',$final->reading_2);
                     $final_2 = 'OK';
-                    $final_3 = round($final->reading_1,1);
+                    $final_3 = sprintf('%04.1f',$final->reading_1);
                     $final_1_closed = 'checked="checked"';
                     $final_2_closed = 'checked="checked"';
                     $final_3_closed = 'checked="checked"';
                 }
                 break;
             case 'DC' :
-                $dc_reading_1 = round($initial->reading_1,1);
-                $dc_reading_2 = round($initial->reading_2,1);
+                $dc_reading_1 = sprintf('%04.1f',$initial->reading_1);
+                $dc_reading_2 = sprintf('%04.1f',$initial->reading_2);
                 if($num_line_length-strlen($dc_reading_1) > 0){
                     $dc_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($dc_reading_1)).$dc_reading_1;
                 }
@@ -337,8 +337,8 @@ class BackflowTestReportController extends Controller
                     $initial_failed = 'checked="checked"';
                 }
                 if($initial != $final){
-                    $final_1 = round($final->reading_1,1);
-                    $final_2 = round($final->reading_2,1);
+                    $final_1 = sprintf('%04.1f',$final->reading_1);
+                    $final_2 = sprintf('%04.1f',$final->reading_2);
                     $final_1_closed = 'checked="checked"';
                     $final_2_closed = 'checked="checked"';
                 }
@@ -362,8 +362,8 @@ class BackflowTestReportController extends Controller
                 else{
                     $initial_failed = 'checked="checked"';
                 }
-                $pvb_reading_1 = round($initial->reading_1,1);
-                $pvb_reading_2 = round($initial->reading_2,1);
+                $pvb_reading_1 = sprintf('%04.1f',$initial->reading_1);
+                $pvb_reading_2 = sprintf('%04.1f',$initial->reading_2);
                 if($num_line_length-strlen($pvb_reading_1) > 0){
                     $pvb_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_1)).$pvb_reading_1;
                 }
@@ -371,8 +371,8 @@ class BackflowTestReportController extends Controller
                     $pvb_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_2)).$pvb_reading_2;
                 }
                 if($initial != $final){
-                    $pvb_final_1 = round($final->reading_1,1);
-                    $pvb_final_2 = round($final->reading_2,1);
+                    $pvb_final_1 = sprintf('%04.1f',$final->reading_1);
+                    $pvb_final_2 = sprintf('%04.1f',$final->reading_2);
                     $pvb_final_closed = 'checked="checked"';
                     if($num_line_length-strlen($pvb_final_1) > 0){
                         $pvb_final_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_final_1)).$pvb_final_1;
