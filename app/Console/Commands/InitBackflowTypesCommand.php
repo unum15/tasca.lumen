@@ -11,6 +11,8 @@ use App\BackflowManufacturer;
 use App\BackflowModel;
 use App\BackflowWaterSystem;
 use App\BackflowSize;
+use App\Contact;
+use App\Setting;
 
 
 class InitBackflowTypesCommand extends Command
@@ -20,7 +22,7 @@ class InitBackflowTypesCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'init:bftypes';
+    protected $signature = 'init:bftypes {--wc}';
 
     /**
      * The console command description.
@@ -46,9 +48,17 @@ class InitBackflowTypesCommand extends Command
      */
     public function handle()
     {
-
-    
-    
+        $options = $this->options();
+        if($options['wc']){
+            Setting::create([
+                'name' => 'settings.operating_company_client_id',
+                'value' => '2'
+            ]);
+            $user = Contact::where('name', 'Paul Waters')->first();
+            $user->update(['backflow_certification_number' => 96005]);
+            $user = Contact::where('name', 'Tyson Waters')->first();
+            $user->update(['backflow_certification_number' => 17193]);
+        }
         $parts = [
             'Disc',
             'Spring',
