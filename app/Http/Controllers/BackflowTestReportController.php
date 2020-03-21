@@ -286,7 +286,7 @@ class BackflowTestReportController extends Controller
             $final_tested_on = date('m-d-Y',strtotime($final->tested_on));
             $final_passed = 'checked="checked"';
         }
-        $num_line_length = 6;
+        $num_line_length = 5;
         switch($report->backflow_assembly->backflow_type->backflow_super_type->name){
             case 'RP' :
                 $rp_reading_1 = sprintf('%03.1f', $initial->reading_1);
