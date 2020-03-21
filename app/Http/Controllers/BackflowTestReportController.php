@@ -130,6 +130,15 @@ class BackflowTestReportController extends Controller
                     .plain td{
                         border: 0px solid black;
                     }
+                    .plain-test {
+                        border: 0px solid black;
+                    }
+                    .plain-test tr{
+                        border: 0px solid black;
+                    }
+                    .plain-test td{
+                        border: 0px solid black;
+                    }
                     .header {
                         font-weight: bold;
                         text-align: right;
@@ -456,24 +465,88 @@ class BackflowTestReportController extends Controller
                         </td>
                         <td>
                             PSI Across <span class="underline">' . $rp_reading_2 . '</span>#<br />
-                             Closed tight<input style="float:right;" type="checkbox" '.$rp_1_pass.'><br style="clear:right;"/>
-                             Leaked<input style="float:right;" type="checkbox" '.$rp_1_fail.' />
+                            <table class="plain-test">
+                                <tr>
+                                    <td>
+                                        Closed tight
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" '.$rp_1_pass.' />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Leaked
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" '.$rp_1_fail.' />
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
                             PSI Across <span class="underline">'.$rp_2_value.'</span>#<br />
-                            Closed tight <input style="float:right;" type="checkbox" '.$rp_2_pass.'><br style="clear:right;" />
-                            Leaked <input style="float:right;" type="checkbox" '.$rp_2_fail.'>
+                            <table class="plain-test">
+                                <tr>
+                                    <td>
+                                        Closed tight
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" '.$rp_2_pass.'>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Leaked
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" '.$rp_2_fail.'>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
                             Opened At <span class="underline">'.$rp_reading_1.'</span>#<br />
-                            Opened Under 2# <input style="float:right;" type="checkbox" '.$rp_3_pass.'><br style="clear:right;" />
-                            or did not open <input style="float:right;" type="checkbox" '.$rp_3_fail.'>
+                            <table class="plain-test">
+                                <tr>
+                                    <td>
+                                        Opened Under 2#
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" '.$rp_3_pass.'>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        or did not open
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" '.$rp_3_fail.'>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
                             AIR INLET:<br />
                             Opened at <span class="underline">' . $pvb_reading_1 . '</span>#<br />
-                            Opened Under 1# <input style="float:right;" type="checkbox" ' . $pvb_1_pass . '><br style="clear:right;" />
-                            or did not open <input style="float:right;" type="checkbox" ' . $pvb_1_fail . '>
+                            <table class="plain-test">
+                                <tr>
+                                    <td>
+                                        Opened Under 1#
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" ' . $pvb_1_pass . '>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        or did not open
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" ' . $pvb_1_fail . '>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                     <tr>
@@ -482,20 +555,68 @@ class BackflowTestReportController extends Controller
                         </td>
                         <td>
                             Held at <span class="underline">' . $dc_reading_1 . '</span>#<br />
-                            Closed tight <input style="float:right;" type="checkbox" ' . $dc_1_pass . '><br style="clear:right;" />
-                            Leaked <input style="float:right;" type="checkbox" ' . $dc_1_fail . '>
+                            <table class="plain-test">
+                                <tr>
+                                    <td>
+                                        Closed tight
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" ' . $dc_1_pass . '>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Leaked
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" ' . $dc_1_fail . '>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
                             Held at <span class="underline">' . $dc_reading_2 . '</span>#<br />
-                            Closed tight <input style="float:right;" type="checkbox" ' . $dc_2_pass . '><br style="clear:right;" />
-                            Leaked <input style="float:right;" type="checkbox" ' . $dc_2_fail . '>
+                            <table class="plain-test">
+                                <tr>
+                                    <td>
+                                        Closed tight
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" ' . $dc_2_pass . '>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Leaked
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" ' . $dc_2_fail . '>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
                         </td>
                         <td>
                             CHECK VALVE:<span class="underline">' . $pvb_reading_2 . '</span>#<br />
-                            Closed tight <input style="float:right;" type="checkbox" ' . $pvb_2_pass . '><br style="clear:right;" />
-                            Leaked <input style="float:right;" type="checkbox" ' . $pvb_2_fail . '>
+                            <table class="plain-test">
+                                <tr>
+                                    <td>
+                                        Closed tight
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" ' . $pvb_2_pass . '><br style="clear:right;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Leaked
+                                    </td>
+                                    <td>
+                                        <input style="float:right;" type="checkbox" ' . $pvb_2_fail . '>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                     <tr>
