@@ -57,6 +57,6 @@ class BackflowAssembly extends Model
     
     public function backflow_test_reports()
     {
-        return $this->hasMany('App\BackflowTestReport');
+        return $this->hasMany('App\BackflowTestReport')->orderBy('report_date', 'desc');
     }
 }

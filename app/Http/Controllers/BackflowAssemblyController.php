@@ -103,7 +103,12 @@ class BackflowAssemblyController extends Controller
        'contact',
        'property',
        'backflow_type.backflow_super_type',
-       'backflow_type.backflow_super_type.backflow_valves'
+       'backflow_type.backflow_super_type.backflow_valves',
+       'backflow_test_reports',
+       'backflow_test_reports.backflow_tests',
+       'backflow_test_reports.backflow_tests.contact',
+       'backflow_test_reports.backflow_repairs',
+       'backflow_test_reports.backflow_repairs.backflow_valve_part'
     ];
     
 }
