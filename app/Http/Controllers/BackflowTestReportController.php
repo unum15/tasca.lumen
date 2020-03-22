@@ -270,142 +270,151 @@ class BackflowTestReportController extends Controller
         $final_2_closed = '';
         $final_3_closed = '';
         $final_passed = '';
-        $initial_contact_name=$initial->contact->name;
-        if(30-strlen($initial->contact->name) > 0){
-            $initial_contact_name.=str_repeat('&nbsp;',30-strlen($initial_contact_name));
-        }
+        $initial_contact_name = '';
+        $initial_cert = '';
+        $initial_date = '';
         $final_contact_name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $final_contact_backflow_certification_number = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $final_tested_on = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        if($initial != $final){
-            $final_contact_name = $final->contact->name;
-            if(30-strlen($final_contact_name) > 0){
-                $final_contact_name.=str_repeat('&nbsp;',30-strlen($final_contact_name));
-            }
-            $final_contact_backflow_certification_number = $final->contact->backflow_certification_number;
-            $final_tested_on = date('m-d-Y',strtotime($final->tested_on));
-            $final_passed = 'checked="checked"';
-        }
         $num_line_length = 5;
-        switch($report->backflow_assembly->backflow_type->backflow_super_type->name){
-            case 'RP' :
-                $rp_reading_1 = sprintf('%03.1f', $initial->reading_1);
-                $rp_reading_2 = sprintf('%03.1f',$initial->reading_2);
-                if($num_line_length-strlen($rp_reading_1) > 0){
-                    $rp_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_1)).$rp_reading_1;
+        if($initial){
+            $initial_cert = $initial->contact->backflow_certification_number;
+            $initial_date = date('m-d-Y',strtotime($initial->tested_on));
+            $initial_contact_name=$initial->contact->name;
+            if(30-strlen($initial->contact->name) > 0){
+                $initial_contact_name.=str_repeat('&nbsp;',30-strlen($initial_contact_name));
+            }
+            if($initial != $final){
+                $final_contact_name = $final->contact->name;
+                if(30-strlen($final_contact_name) > 0){
+                    $final_contact_name.=str_repeat('&nbsp;',30-strlen($final_contact_name));
                 }
-                if($num_line_length-strlen($rp_reading_2) > 0){
-                    $rp_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_2)).$rp_reading_2;
-                }
-                if($initial->passed){
-                    $rp_1_pass = 'checked="checked"';
-                    $rp_2_pass = 'checked="checked"';
-                    $rp_3_pass = 'checked="checked"';
-                    $rp_2_value = 'OK';
-                    $initial_passed = 'checked="checked"';
-                }
-                else{
-                    $rp_1_fail = 'checked="checked"';
-                    $rp_2_fail = 'checked="checked"';
-                    $rp_3_fail = 'checked="checked"';
-                    $initial_failed = 'checked="checked"';
-                }
-                if($initial != $final){
-                    $final_1 = sprintf('%03.1f',$final->reading_2);
-                    $final_2 = 'OK';
-                    $final_3 = sprintf('%03.1f',$final->reading_1);
-                    $final_1_closed = 'checked="checked"';
-                    $final_2_closed = 'checked="checked"';
-                    $final_3_closed = 'checked="checked"';
-                }
-                break;
-            case 'DC' :
-                $dc_reading_1 = sprintf('%03.1f',$initial->reading_1);
-                $dc_reading_2 = sprintf('%03.1f',$initial->reading_2);
-                if($num_line_length-strlen($dc_reading_1) > 0){
-                    $dc_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($dc_reading_1)).$dc_reading_1;
-                }
-                if($num_line_length-strlen($dc_reading_2) > 0){
-                    $dc_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($dc_reading_2)).$dc_reading_2;
-                }
-                if($initial->reading_1 > 1){
-                    $dc_1_pass = 'checked="checked"';
-                }
-                else{
-                    $dc_1_fail = 'checked="checked"';
-                }
-                if($initial->reading_2 > 1){
-                    $dc_2_pass = 'checked="checked"';
-                }
-                else{
-                    $dc_2_fail = 'checked="checked"';
-                }
-                if($initial->passed){
-                    $initial_passed = 'checked="checked"';
-                }
-                else{
-                    $initial_failed = 'checked="checked"';
-                }
-                if($initial != $final){
-                    $final_1 = sprintf('%03.1f',$final->reading_1);
-                    $final_2 = sprintf('%03.1f',$final->reading_2);
-                    $final_1_closed = 'checked="checked"';
-                    $final_2_closed = 'checked="checked"';
-                }
-                break;
-            case 'PVB' :
-                if($initial->reading_1){
-                    $pvb_1_pass = 'checked="checked"';
-                }
-                else{
-                    $pvb_1_fail = 'checked="checked"';
-                }
-                if($initial->reading_2){
-                    $pvb_2_pass = 'checked="checked"';
-                }
-                else{
-                    $pvb_2_fail = 'checked="checked"';
-                }
-                if($initial->passed){
-                    $initial_passed = 'checked="checked"';
-                }
-                else{
-                    $initial_failed = 'checked="checked"';
-                }
-                $pvb_reading_1 = sprintf('%03.1f',$initial->reading_1);
-                $pvb_reading_2 = sprintf('%03.1f',$initial->reading_2);
-                if($num_line_length-strlen($pvb_reading_1) > 0){
-                    $pvb_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_1)).$pvb_reading_1;
-                }
-                if($num_line_length-strlen($pvb_reading_2) > 0){
-                    $pvb_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_2)).$pvb_reading_2;
-                }
-                if($initial != $final){
-                    $pvb_final_1 = sprintf('%03.1f',$final->reading_1);
-                    $pvb_final_2 = sprintf('%03.1f',$final->reading_2);
-                    $pvb_final_closed = 'checked="checked"';
-                    if($num_line_length-strlen($pvb_final_1) > 0){
-                        $pvb_final_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_final_1)).$pvb_final_1;
+                $final_contact_backflow_certification_number = $final->contact->backflow_certification_number;
+                $final_tested_on = date('m-d-Y',strtotime($final->tested_on));
+                $final_passed = 'checked="checked"';
+            }
+            switch($report->backflow_assembly->backflow_type->backflow_super_type->name){
+                case 'RP' :
+                    $rp_reading_1 = sprintf('%03.1f', $initial->reading_1);
+                    $rp_reading_2 = sprintf('%03.1f',$initial->reading_2);
+                    if($num_line_length-strlen($rp_reading_1) > 0){
+                        $rp_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_1)).$rp_reading_1;
                     }
-                    if($num_line_length-strlen($pvb_final_2) > 0){
-                        $pvb_final_2=str_repeat('&nbsp;',$num_line_length-strlen($pvb_final_2)).$pvb_final_2;
+                    if($num_line_length-strlen($rp_reading_2) > 0){
+                        $rp_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_2)).$rp_reading_2;
                     }
-                }
-                break;
-        }
-        if($num_line_length-strlen($final_1) > 0){
-            $final_1=str_repeat('&nbsp;',$num_line_length-strlen($final_1)).$final_1;
-        }
-        if($num_line_length-strlen($final_2) > 0){
-            $final_2=str_repeat('&nbsp;',$num_line_length-strlen($final_2)).$final_2;
-        }
-        if($num_line_length-strlen($final_3) > 0){
-            $final_3=str_repeat('&nbsp;',$num_line_length-strlen($final_3)).$final_3;
+                    if($initial->passed){
+                        $rp_1_pass = 'checked="checked"';
+                        $rp_2_pass = 'checked="checked"';
+                        $rp_3_pass = 'checked="checked"';
+                        $rp_2_value = 'OK';
+                        $initial_passed = 'checked="checked"';
+                    }
+                    else{
+                        $rp_1_fail = 'checked="checked"';
+                        $rp_2_fail = 'checked="checked"';
+                        $rp_3_fail = 'checked="checked"';
+                        $initial_failed = 'checked="checked"';
+                    }
+                    if($initial != $final){
+                        $final_1 = sprintf('%03.1f',$final->reading_2);
+                        $final_2 = 'OK';
+                        $final_3 = sprintf('%03.1f',$final->reading_1);
+                        $final_1_closed = 'checked="checked"';
+                        $final_2_closed = 'checked="checked"';
+                        $final_3_closed = 'checked="checked"';
+                    }
+                    break;
+                case 'DC' :
+                    $dc_reading_1 = sprintf('%03.1f',$initial->reading_1);
+                    $dc_reading_2 = sprintf('%03.1f',$initial->reading_2);
+                    if($num_line_length-strlen($dc_reading_1) > 0){
+                        $dc_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($dc_reading_1)).$dc_reading_1;
+                    }
+                    if($num_line_length-strlen($dc_reading_2) > 0){
+                        $dc_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($dc_reading_2)).$dc_reading_2;
+                    }
+                    if($initial->reading_1 > 1){
+                        $dc_1_pass = 'checked="checked"';
+                    }
+                    else{
+                        $dc_1_fail = 'checked="checked"';
+                    }
+                    if($initial->reading_2 > 1){
+                        $dc_2_pass = 'checked="checked"';
+                    }
+                    else{
+                        $dc_2_fail = 'checked="checked"';
+                    }
+                    if($initial->passed){
+                        $initial_passed = 'checked="checked"';
+                    }
+                    else{
+                        $initial_failed = 'checked="checked"';
+                    }
+                    if($initial != $final){
+                        $final_1 = sprintf('%03.1f',$final->reading_1);
+                        $final_2 = sprintf('%03.1f',$final->reading_2);
+                        $final_1_closed = 'checked="checked"';
+                        $final_2_closed = 'checked="checked"';
+                    }
+                    break;
+                case 'PVB' :
+                    if($initial->reading_1){
+                        $pvb_1_pass = 'checked="checked"';
+                    }
+                    else{
+                        $pvb_1_fail = 'checked="checked"';
+                    }
+                    if($initial->reading_2){
+                        $pvb_2_pass = 'checked="checked"';
+                    }
+                    else{
+                        $pvb_2_fail = 'checked="checked"';
+                    }
+                    if($initial->passed){
+                        $initial_passed = 'checked="checked"';
+                    }
+                    else{
+                        $initial_failed = 'checked="checked"';
+                    }
+                    $pvb_reading_1 = sprintf('%03.1f',$initial->reading_1);
+                    $pvb_reading_2 = sprintf('%03.1f',$initial->reading_2);
+                    if($num_line_length-strlen($pvb_reading_1) > 0){
+                        $pvb_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_1)).$pvb_reading_1;
+                    }
+                    if($num_line_length-strlen($pvb_reading_2) > 0){
+                        $pvb_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_2)).$pvb_reading_2;
+                    }
+                    if($initial != $final){
+                        $pvb_final_1 = sprintf('%03.1f',$final->reading_1);
+                        $pvb_final_2 = sprintf('%03.1f',$final->reading_2);
+                        $pvb_final_closed = 'checked="checked"';
+                        if($num_line_length-strlen($pvb_final_1) > 0){
+                            $pvb_final_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_final_1)).$pvb_final_1;
+                        }
+                        if($num_line_length-strlen($pvb_final_2) > 0){
+                            $pvb_final_2=str_repeat('&nbsp;',$num_line_length-strlen($pvb_final_2)).$pvb_final_2;
+                        }
+                    }
+                    break;
+            }
+            if($num_line_length-strlen($final_1) > 0){
+                $final_1=str_repeat('&nbsp;',$num_line_length-strlen($final_1)).$final_1;
+            }
+            if($num_line_length-strlen($final_2) > 0){
+                $final_2=str_repeat('&nbsp;',$num_line_length-strlen($final_2)).$final_2;
+            }
+            if($num_line_length-strlen($final_3) > 0){
+                $final_3=str_repeat('&nbsp;',$num_line_length-strlen($final_3)).$final_3;
+            }
         }
         $number = "";
-        $numbers = $report->backflow_assembly->contact->phoneNumbers;
-        if($numbers->first()){
-            $number = $numbers->first()->phone_number;
+        if($report->backflow_assembly->contact){
+            $numbers = $report->backflow_assembly->contact->phoneNumbers;
+            if($numbers->first()){
+                $number = $numbers->first()->phone_number;
+            }
         }
         $html = '
                 <div style="text-align:center"><h3>Backflow Assembly Test Report</h3></div>
@@ -430,8 +439,8 @@ class BackflowTestReportController extends Controller
                     98 SOUTH 2200 WEST<br />
                     LAYTON UTAH 84041<br />
                     801-546-0844<br />
-                    ' . $final->contact->name  . '<br />
-                    CERTIFICATION # '.$final->contact->backflow_certification_number.'<br />
+                    ' . $initial_contact_name  . '<br />
+                    CERTIFICATION # '.$initial_cert.'<br />
                     WatersContracting1985@gmail.com<br />
                 </div>
                 <br style="clear:left;"/>
@@ -753,7 +762,7 @@ class BackflowTestReportController extends Controller
                     </tr>
                 </table>
                 <table class="plain" style="font-size:12pt;width:100%;">
-                    <tr><td class="header">Initial Test By:</td><td style="text-align:left;text-decoration:underline;">' . $initial_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $initial->contact->backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . date('m-d-Y',strtotime($initial->tested_on))  . '</td></tr>
+                    <tr><td class="header">Initial Test By:</td><td style="text-align:left;text-decoration:underline;">' . $initial_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $initial_cert  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . $initial_date  . '</td></tr>
                     <tr><td class="header">Repaired By:</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . $final_tested_on  . '</td></tr>
                     <tr><td class="header">Final Test By:</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . $final_tested_on  . '</td></tr>
                 </table>
