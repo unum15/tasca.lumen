@@ -171,6 +171,42 @@ class BackflowTestReportController extends Controller
         return $html;
     }
     
+    static public function RPTestResults($test){
+        $results = [
+            'check_1' => self::RPTestCheck1Results($test),
+            'check_2' => self::RPTestCheck2Results($test),
+            'differential' => self::RPTestDifferentialResults($test)
+        ];
+        return $results;
+    }
+    
+    static public function RPTestCheck1Results($test){
+        $results = [
+            'PSI' => $test['reading_2'],
+            'closed_tight' => false,
+            'leaked' => false
+        ];
+        return $results;
+    }
+    
+    static public function RPTestCheck2Results($test){
+        $results = [
+            'PSI' => 'OK',
+            'closed_tight' => false,
+            'leaked' => false
+        ];
+        return $results;
+    }
+    
+    static public function RPTestDifferentialResults($test){
+        $results = [
+            'opened_at' => $test['reading_1'],
+            'opened_under' => $test['reading_1'] < 2 && $test['reading_1'] > 0,
+            'did_not_open' => $test['reading_1'] == 0
+        ];
+        return $results;
+    }
+    
     
     public function htmlBody($id, Request $request)
     {
@@ -241,10 +277,10 @@ class BackflowTestReportController extends Controller
         $rp_reading_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'; 
         $rp_1_pass = '';
         $rp_2_pass = '';
-        $rp_3_pass = '';
+        $rp_under_2 = '';
         $rp_1_fail = '';
         $rp_2_fail = '';
-        $rp_3_fail = '';
+        $rp_did_not_open = '';
         $rp_2_value = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $dc_reading_1 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $dc_reading_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -296,24 +332,34 @@ class BackflowTestReportController extends Controller
             switch($report->backflow_assembly->backflow_type->backflow_super_type->name){
                 case 'RP' :
                     $rp_reading_1 = sprintf('%03.1f', $initial->reading_1);
-                    $rp_reading_2 = sprintf('%03.1f',$initial->reading_2);
+                    if(!empty($initial->reading_2)){
+                        $rp_reading_2 = sprintf('%03.1f',$initial->reading_2);
+                    }
                     if($num_line_length-strlen($rp_reading_1) > 0){
                         $rp_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_1)).$rp_reading_1;
                     }
                     if($num_line_length-strlen($rp_reading_2) > 0){
                         $rp_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_2)).$rp_reading_2;
                     }
-                    if($initial->passed){
+                    if(($initial->reading_1 < 2) && ($initial->reading_1 > 0)){
+                        $rp_under_2 = 'checked="checked"';
+                    }
+                    if($initial->reading_1 == 0){
+                        $rp_did_not_open = 'checked="checked"';
+                    }
+                    if($initial->reading_2 <= $initial->reading_1){
                         $rp_1_pass = 'checked="checked"';
                         $rp_2_pass = 'checked="checked"';
-                        $rp_3_pass = 'checked="checked"';
                         $rp_2_value = 'OK';
+                    }
+                    elseif(!empty($initial->reading_2)){
+                        $rp_1_fail = 'checked="checked"';
+                        $rp_2_fail = 'checked="checked"';
+                    }
+                    if($initial->passed){
                         $initial_passed = 'checked="checked"';
                     }
                     else{
-                        $rp_1_fail = 'checked="checked"';
-                        $rp_2_fail = 'checked="checked"';
-                        $rp_3_fail = 'checked="checked"';
                         $initial_failed = 'checked="checked"';
                     }
                     if($initial != $final){
@@ -522,7 +568,7 @@ class BackflowTestReportController extends Controller
                                         Opened Under 2#
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" '.$rp_3_pass.'>
+                                        <input style="float:right;" type="checkbox" '.$rp_under_2.'>
                                     </td>
                                 </tr>
                                 <tr>
@@ -530,7 +576,7 @@ class BackflowTestReportController extends Controller
                                         or did not open
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" '.$rp_3_fail.'>
+                                        <input style="float:right;" type="checkbox" '.$rp_did_not_open.'>
                                     </td>
                                 </tr>
                             </table>

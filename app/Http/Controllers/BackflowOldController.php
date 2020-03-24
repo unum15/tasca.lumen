@@ -21,7 +21,6 @@ class BackflowOldController extends Controller
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
-        $items = BackflowOld::with($includes)->get();
         return ['data' => $items];
     }
 

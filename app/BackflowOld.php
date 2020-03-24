@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BackflowOld extends Model
 {
+    protected $table = "backflow_old";
     protected $fillable = [
         'active',
         'prt',

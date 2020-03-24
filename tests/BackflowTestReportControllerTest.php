@@ -2,6 +2,7 @@
 
 use App\BackflowTestReport;
 use Laravel\Lumen\Testing\WithoutMiddleware;
+use App\Http\Controllers\BackflowTestReportController;
 
 class BackflowTestReportControllerTest extends TestCase
 {

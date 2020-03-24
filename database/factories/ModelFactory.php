@@ -533,3 +533,12 @@ $factory->define(App\BackflowCleaning::class, function (Faker\Generator $faker) 
     ];
 });
 
+
+$factory->define(App\PropertyUnit::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'unit_number' => $faker->word,
+        'unit_phone' => $faker->word,
+        'unit_notes' => $faker->word
+    ];
+});

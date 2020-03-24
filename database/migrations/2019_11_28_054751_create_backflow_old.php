@@ -42,6 +42,7 @@ class CreateBackflowOld extends Migration
             $table->string('size');
             $table->string('model');
             $table->string('serial');
+            $table->integer('property_id')->nullable();
         });
     }
 
