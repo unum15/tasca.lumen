@@ -42,7 +42,9 @@ class BackflowTestController extends Controller
     {
         $item = BackflowTest::findOrFail($id);
         $values = $this->validateModel($request);
-        $values['reading_2'] = $values['reading_2'] != '' ? $values['reading_2'] : NULL;//fix with middleware \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        if(isset($values['reading_2'])){
+            $values['reading_2'] = $values['reading_2'] != '' ? $values['reading_2'] : NULL;//fix with middleware \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        }
         $item->update($values);
         return ['data' => $item];
     }

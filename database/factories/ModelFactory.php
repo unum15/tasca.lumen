@@ -533,9 +533,10 @@ $factory->define(App\BackflowCleaning::class, function (Faker\Generator $faker) 
     ];
 });
 
-
 $factory->define(App\PropertyUnit::class, function (Faker\Generator $faker) {
+    $property = factory('App\Property')->create();
     return [
+        'property_id' => $property->id,
         'name' => $faker->word,
         'unit_number' => $faker->word,
         'unit_phone' => $faker->word,

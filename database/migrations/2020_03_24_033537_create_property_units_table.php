@@ -15,12 +15,17 @@ class CreatePropertyUnitsTable extends Migration
     {
         Schema::create('property_units', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('property_id');
             $table->string('name');
             $table->string('unit_number')->nullable();
             $table->string('unit_phone')->nullable();
             $table->string('unit_notes')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
+            $table->foreign('property_id')
+                ->references('id')
+                ->on('properties')
+                ->onDelete('cascade');
         });
     }
 
