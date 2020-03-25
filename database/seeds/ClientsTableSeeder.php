@@ -28,7 +28,7 @@ class ClientsTableSeeder extends Seeder
         $admin = Contact::first();
         
         
-        for($x=0;$x<=10;$x++){
+        for($x=0;$x<=50;$x++){
             $client = Client::create([
                 'name' => $faker->lastName." Household",
                 'notes' => $faker->realText,
@@ -39,28 +39,6 @@ class ClientsTableSeeder extends Seeder
                 'creator_id' => $admin->id,
                 'updater_id' => $admin->id
             ]);
-
-            
-            $property = $client->properties()->create([
-                'name' => 'Home',
-                'notes' => $faker->realText,
-                'activity_level_id' => $faker->randomElement($activity_levels),
-                'phone_number' => $faker->phoneNumber,
-                'address1' => $faker->streetAddress,
-                'address2' => $faker->secondaryAddress,
-                'city' => $faker->city,
-                'state' => $faker->stateAbbr,
-                'zip' => $faker->postcode,
-                'work_property' => $faker->boolean,
-                'property_type_id' => $faker->randomElement($property_types),
-                'creator_id' => $admin->id,
-                'updater_id' => $admin->id
-            ]);
-            
-/*            $client->update([
-               'billing_contact_id' => $contact->id,
-               'main_mailing_property_id' => $property->id
-            ]);*/
         }
     }
 }

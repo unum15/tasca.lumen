@@ -48,4 +48,9 @@ class Property extends Model
         return $this->belongsToMany('App\Contact')
             ->withTimestamps();
     }
+    
+    public function linkedClients()
+    {
+        return $this->belongsToMany('App\Client');
+    }
 }
