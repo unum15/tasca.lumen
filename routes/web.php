@@ -263,3 +263,23 @@ $router->post('/maintenance', ['uses' => 'MaintenanceController@create', 'as' =>
 $router->get('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@read', 'as' => 'maintenance.read']);
 $router->patch('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@update', 'as' => 'maintenance.update']);
 $router->delete('/maintenance/{id:[0-9]+}', ['uses' => 'MaintenanceController@delete', 'as' => 'maintenance.delete']);
+
+$router->get('/phree_books/contacts', 'PhreeBooksController@contacts');
+$router->get('/phree_books/addresses', 'PhreeBooksController@addresses');
+$router->get('/phree_books/matches', 'PhreeBooksController@matches');
+$router->get('/phree_books/tasca', 'PhreeBooksController@tasca');
+$router->get('/phree_books/phree_books', 'PhreeBooksController@phreeBooks');
+
+
+$router->post('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@createClient');
+$router->post('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@createContact');
+$router->post('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@createProperty');
+$router->put('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@updateClient');
+$router->put('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@updateContact');
+$router->put('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@updateProperty');
+
+
+$router->get('/info', function () use ($router) {
+    return phpinfo();
+});
+

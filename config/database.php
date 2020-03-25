@@ -28,6 +28,19 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
+        
+        'phreebooks' => [
+            'driver' => 'mysql',
+            'host' => env('PHREEBOOKS_HOST', '127.0.0.1'),
+            'port' => env('PHREEBOOKS_PORT', '3306'),
+            'database' => env('PHREEBOOKS_DATABASE', 'phreebooks'),
+            'username' => env('PHREEBOOKS_USERNAME', 'phreebooks'),
+            'password' => env('PHREEBOOKS_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
     ],
     'migrations' => 'migrations'
 ];

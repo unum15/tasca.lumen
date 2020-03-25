@@ -28,7 +28,8 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
     'creator_id',
     'updater_id',
         'google_calendar_token',
-        'google_calendar_id'
+        'google_calendar_id',
+        'phreebooks_id'
     ];
     
     protected $hidden = [
@@ -54,17 +55,17 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
     
     public function emails()
     {
-        return $this->hasMany('App\Email');
+        return $this->hasMany('App\Email')->orderBy('email_type_id');
     }
     
     public function phoneNumbers()
     {
-        return $this->hasMany('App\PhoneNumber');
+        return $this->hasMany('App\PhoneNumber')->orderBy('phone_number_type_id');
     }
     
     public function properties()
     {
-        return $this->belongsToMany('App\Property')
+        return $this->belongsToMany('App\Property')->orderBy('name')
             ->withTimestamps();
     }
     

@@ -18,7 +18,8 @@ class Client extends Model
     //        'attention_to',
     'referred_by',
     'creator_id',
-    'updater_id'
+    'updater_id',
+    'phreebooks_id'
     ];
     
     public function activityLevel()
@@ -34,7 +35,7 @@ class Client extends Model
     
     public function billingProperty()
     {
-        return $this->belongsTo('App\Property');
+        return $this->belongsTo('App\Property', 'main_mailing_property_id');
     }
     
     public function clientType()
