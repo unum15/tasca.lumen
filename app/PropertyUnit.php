@@ -9,9 +9,9 @@ class PropertyUnit extends Model
     protected $fillable = [
         'property_id',
         'name',
-        'unit_number',
-        'unit_phone',
-        'unit_notes'
+        'number',
+        'phone',
+        'notes'
     ];
 
     public function property()

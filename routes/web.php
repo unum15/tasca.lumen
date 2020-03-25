@@ -368,3 +368,9 @@ $router->post('/property_unit', ['uses' => 'PropertyUnitController@create', 'as'
 $router->get('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@read', 'as' => 'property_unit.read']);
 $router->patch('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@update', 'as' => 'property_unit.update']);
 $router->delete('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@delete', 'as' => 'property_unit.delete']);
+
+$router->get('/property_units', ['uses' => 'PropertyUnitController@index', 'as' => 'property_unit.index']);
+$router->post('/property_unit', ['uses' => 'PropertyUnitController@create', 'as' => 'property_unit.create']);
+$router->get('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@read', 'as' => 'property_unit.read']);
+$router->patch('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@update', 'as' => 'property_unit.update']);
+$router->delete('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@delete', 'as' => 'property_unit.delete']);

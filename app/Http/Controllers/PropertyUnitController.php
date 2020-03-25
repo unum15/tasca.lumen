@@ -56,9 +56,9 @@ class PropertyUnitController extends Controller
     protected $model_validation = [
        'property_id' => 'integer|exists:properties,id',
        'name' => 'string|max:1020',
-       'unit_number' => 'string|max:1020|nullable',
-       'unit_phone' => 'string|max:1020|nullable',
-       'unit_notes' => 'string|max:1020|nullable',
+       'number' => 'string|max:1020|nullable',
+       'phone' => 'string|max:1020|nullable',
+       'notes' => 'string|max:1020|nullable',
     ];
     
     protected $model_validation_required = [

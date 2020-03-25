@@ -17,9 +17,9 @@ class CreatePropertyUnitsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('property_id');
             $table->string('name');
-            $table->string('unit_number')->nullable();
-            $table->string('unit_phone')->nullable();
-            $table->string('unit_notes')->nullable();
+            $table->string('number')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('notes')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->foreign('property_id')

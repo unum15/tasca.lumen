@@ -52,4 +52,10 @@ class Property extends Model
     {
         return $this->hasMany('App\BackflowAssembly');
     }
+    
+    public function propertyUnits()
+    {
+        return $this->hasMany('App\PropertyUnit');
+    }
+
 }

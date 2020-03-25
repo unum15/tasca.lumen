@@ -68,7 +68,8 @@ class ClientController extends Controller
             'contacts',
             'contacts.properties',
             'properties',
-            'properties.contacts'
+            'properties.contacts',
+            'properties.propertyUnits'
         )
         ->findOrFail($id);
         return $item;
