@@ -13,9 +13,8 @@ class PropertyUnitControllerTest extends TestCase
         $items = factory('App\PropertyUnit', 2)->create();
         $response = $this->get('/property_units');
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $items->toArray()]);
-        $this->seeInDatabase('property_units', $items[0]->toArray());
-        $this->seeInDatabase('property_units', $items[1]->toArray());
+        $response->seeJson($items[0]->toArray());
+        $response->seeJson($items[1]->toArray());
     }    
     
     public function testCreate()
@@ -42,6 +41,7 @@ class PropertyUnitControllerTest extends TestCase
         $update = ['name' => 'test'];
         $response = $this->patch('/property_unit/' . $item->id, $update);
         $response->seeStatusCode(200);
+        $item = $item->find($item->id);
         $updated_array = array_merge($item->toArray(), $update);
         $response->seeJsonEquals(['data' => $updated_array]);
         $this->seeInDatabase('property_units', $updated_array);

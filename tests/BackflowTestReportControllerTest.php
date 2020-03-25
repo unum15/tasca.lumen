@@ -46,7 +46,18 @@ class BackflowTestReportControllerTest extends TestCase
         $response->seeJsonEquals(['data' => $updated_array]);
         $this->seeInDatabase('backflow_test_reports', $updated_array);
     }
-    
+    /*
+    public function testNullDate()
+    {
+        $item = factory('App\BackflowTestReport')->create();
+        $update = ['submitted_date' => ''];
+        $response = $this->patch('/backflow_test_report/' . $item->id, $update);
+        $response->seeStatusCode(200);
+        $updated_array = array_merge($item->toArray(), $update);
+        $response->seeJsonEquals(['data' => $updated_array]);
+        $this->seeInDatabase('backflow_test_reports', $updated_array);
+    }
+    */
     public function testDelete()
     {
         $item = factory('App\BackflowTestReport')->create();

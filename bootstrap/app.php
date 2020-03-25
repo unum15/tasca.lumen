@@ -62,17 +62,17 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//    App\Http\Middleware\ExampleMiddleware::class
-// ]);
+ $app->middleware([
+     //\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+     //\Illuminate\Foundation\Http\Middleware\TrimStrings::class,
+
+ ]);
 
  $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
     'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
     'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
     'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
-
-
  ]);
 
 /*

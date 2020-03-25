@@ -471,7 +471,8 @@ $factory->define(App\BackflowTestReport::class, function (Faker\Generator $faker
         'visual_inspection_notes' => $faker->word,
         'notes' => $faker->text,
         'backflow_installed_to_code' => $faker->boolean,
-        'report_date' => date('Y-m-d')
+        'report_date' => date('Y-m-d'),
+        'submitted_date' => date('Y-m-d')
     ];
 });
 
@@ -534,8 +535,9 @@ $factory->define(App\BackflowCleaning::class, function (Faker\Generator $faker) 
 });
 
 $factory->define(App\PropertyUnit::class, function (Faker\Generator $faker) {
+    $property = factory('App\Property')->create();
     return [
-        'property_id' => $faker->randomDigitNotNull,
+        'property_id' => $property->id,
         'name' => $faker->word,
         'number' => $faker->word,
         'phone' => $faker->word,
