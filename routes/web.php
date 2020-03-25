@@ -307,7 +307,6 @@ $router->get('/backflow_size/{id:[0-9]+}', ['uses' => 'BackflowSizeController@re
 $router->patch('/backflow_size/{id:[0-9]+}', ['uses' => 'BackflowSizeController@update', 'as' => 'backflow_size.update']);
 $router->delete('/backflow_size/{id:[0-9]+}', ['uses' => 'BackflowSizeController@delete', 'as' => 'backflow_size.delete']);
 
-
 $router->get('/backflow_old', ['uses' => 'BackflowOldController@index', 'as' => 'backflow_old.index']);
 $router->post('/backflow_old', ['uses' => 'BackflowOldController@create', 'as' => 'backflow_old.create']);
 $router->get('/backflow_old/{id:[0-9]+}', ['uses' => 'BackflowOldController@read', 'as' => 'backflow_old.read']);
@@ -369,8 +368,16 @@ $router->get('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@re
 $router->patch('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@update', 'as' => 'property_unit.update']);
 $router->delete('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@delete', 'as' => 'property_unit.delete']);
 
-$router->get('/property_units', ['uses' => 'PropertyUnitController@index', 'as' => 'property_unit.index']);
-$router->post('/property_unit', ['uses' => 'PropertyUnitController@create', 'as' => 'property_unit.create']);
-$router->get('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@read', 'as' => 'property_unit.read']);
-$router->patch('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@update', 'as' => 'property_unit.update']);
-$router->delete('/property_unit/{id:[0-9]+}', ['uses' => 'PropertyUnitController@delete', 'as' => 'property_unit.delete']);
+$router->get('/phree_books/contacts', 'PhreeBooksController@contacts');
+$router->get('/phree_books/addresses', 'PhreeBooksController@addresses');
+$router->get('/phree_books/matches', 'PhreeBooksController@matches');
+$router->get('/phree_books/tasca', 'PhreeBooksController@tasca');
+$router->get('/phree_books/phree_books', 'PhreeBooksController@phreeBooks');
+
+
+$router->post('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@createClient');
+$router->post('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@createContact');
+$router->post('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@createProperty');
+$router->put('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@updateClient');
+$router->put('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@updateContact');
+$router->put('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@updateProperty');
