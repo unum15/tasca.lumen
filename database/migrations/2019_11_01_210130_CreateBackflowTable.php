@@ -16,14 +16,17 @@ class CreateBackflowTable extends Migration
         Schema::create('backflow_assemblies', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('property_id');
-            $table->integer('contact_id');
+            $table->integer('property_unit_id')->nullable();
+            $table->integer('contact_id')->nullable();
             $table->integer('backflow_type_id')->nullable();            
             $table->integer('backflow_water_system_id')->nullable();
             $table->integer('backflow_size_id')->nullable();
             $table->integer('backflow_manufacturer_id')->nullable();
             $table->integer('backflow_model_id')->nullable();
+            $table->string('month',32)->nullable();
             $table->string('use',1024)->nullable();
             $table->string('placement',1024)->nullable();
+            $table->string('gps',1024)->nullable();
             $table->string('serial_number',128)->nullable();
             $table->string('notes',1024)->nullable();            
             $table->timestamps();
@@ -31,6 +34,11 @@ class CreateBackflowTable extends Migration
             $table->foreign('property_id')
                 ->references('id')
                 ->on('properties')
+                ->onDelete('cascade');
+                
+            $table->foreign('property_unit_id')
+                ->references('id')
+                ->on('property_units')
                 ->onDelete('cascade');
                 
             $table->foreign('contact_id')

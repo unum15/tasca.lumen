@@ -77,21 +77,23 @@ class BackflowAssemblyController extends Controller
     
     protected $model_validation = [
        'property_id' => 'integer|exists:properties,id',
-       'contact_id' => 'integer|exists:contacts,id',
+       'property_unit_id' => 'integer|exists:units,id|nullable',
+       'contact_id' => 'integer|exists:contacts,id|nullable',
        'backflow_type_id' => 'integer|nullable|exists:backflow_types,id',
        'backflow_water_system_id' => 'integer|nullable|exists:backflow_water_systems,id',
        'backflow_size_id' => 'integer|nullable|exists:backflow_sizes,id',
        'backflow_manufacturer_id' => 'integer|nullable|exists:backflow_manufacturers,id',
        'backflow_model_id' => 'integer|nullable|exists:backflow_models,id',
+       'month' => 'string|max:32|nullable',
        'use' => 'string|max:4096|nullable',
        'placement' => 'string|max:4096|nullable',
+       'gps' => 'string|max:4096|nullable',
        'serial_number' => 'string|max:512|nullable',
        'notes' => 'string|max:4096|nullable',
     ];
     
     protected $model_validation_required = [
-       'property_id' => 'required',
-       'contact_id' => 'required',
+       'property_id' => 'required'
     ];
 
     protected $model_includes = [

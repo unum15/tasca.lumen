@@ -3,13 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\BackflowOld;
+use App\Property;
+use App\BackflowAssembly;
+
+use App\BackflowType;
+use App\BackflowWaterSystem;
+use App\BackflowSize;
+use App\BackflowManufacturer;
+use App\BackflowModel;
+
 use Illuminate\Http\Request;
 
 class BackflowOldController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -20,7 +29,14 @@ class BackflowOldController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $items_query->whereNull('backflow_assembly_id');
         $items = $items_query->get();
+        return ['data' => $items];
+    }
+    
+    public function zips(Request $request)
+    {
+        $items = BackflowOld::distinct()->orderBy('zip')->get(['zip'])->pluck('zip');
         return ['data' => $items];
     }
 
@@ -53,6 +69,65 @@ class BackflowOldController extends Controller
         return response([], 401);
     }
     
+    public function export($id, Request $request)
+    {
+        $item = BackflowOld::findOrFail($id);
+        $property_id = $request->input('property_id');
+        $unit_id = $request->input('unit_id');
+        if(empty($property_id)){
+            $item->update(['backflow_assembly_id' => 0]);
+            return [];
+        }
+        $property = Property::findOrFail($property_id);
+        $contacts = $property->contacts();
+        $contact_id = null;
+        if($contacts->count()){
+            $contact_id = $contacts->first()->id;
+        }
+        $backflow_type = BackflowType::where('name', 'ilike', trim($item->style))->first();
+        $backflow_water_system = BackflowWaterSystem::where('name', 'ilike', trim($item->water_system))->first();
+        $size = trim($item->size);
+        $size = preg_replace('/["\s]/','',$size);
+        $backflow_size = BackflowSize::where('name', $size)->first();
+        $backflow_manufacturer = BackflowManufacturer::where('name', 'ilike', trim($item->manufacturer))->first();
+        $backflow_model = BackflowModel::where('name', 'ilike', trim($item->model))->first();
+        
+        if(!$backflow_type){
+            return response(['message' => 'Bad backflow type, can not import.'], 422);
+        }
+        if(!$backflow_water_system){
+            $backflow_water_system = BackflowWaterSystem::create(['name' => ucwords(strtolower($item->water_system))]);
+        }
+        if(!$backflow_size){
+            $backflow_size = BackflowSize::create(['name' => $item->size]);
+        }
+        if(!$backflow_manufacturer){
+            $backflow_manufacturer = BackflowManufacture::create(['name' => ucwords(strtolower($item->manufacturer))]);
+        }
+        if(!$backflow_model){
+            $backflow_model = BackflowModel::create(['name' => $item->model, 'backflow_manufacturer_id' => $backflow_manufacturer->id, 'backflow_type_id' => $backflow_type->id]);
+        }
+        
+        $backflow_assembly = BackflowAssembly::create([
+            'property_id' => $property_id,
+            'property_unit_id' => $unit_id ? $unit_id : null,
+            'contact_id' => $contact_id,
+            'backflow_type_id' => $backflow_type->id,
+            'backflow_water_system_id' => $backflow_water_system->id,
+            'backflow_size_id' => $backflow_size->id,
+            'backflow_manufacturer_id' => $backflow_manufacturer->id,
+            'backflow_model_id' => $backflow_model->id,
+            'month'=>$item->month,
+            'use'=>$item->use,
+            'placement'=>$item->placement,
+            'gps'=>$item->gps,
+            'serial_number'=>$item->serial,
+            'notes'
+        ]);
+        $item->update(['backflow_assembly_id' => $backflow_assembly->id]);
+        return ['data' => $backflow_assembly];
+    }
+    
     protected $model_validation = [
        'active' => 'string|max:1020',
        'prt' => 'string|max:1020',
@@ -81,6 +156,7 @@ class BackflowOldController extends Controller
        'size' => 'string|max:1020',
        'model' => 'string|max:1020',
        'serial' => 'string|max:1020',
+       'backflow_assembly_id' => 'integer',
     ];
     
     protected $model_validation_required = [

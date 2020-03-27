@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class BackflowOld extends Model
 {
     protected $table = "backflow_old";
+    public $timestamps = false;
     protected $fillable = [
         'active',
         'prt',
@@ -34,6 +35,7 @@ class BackflowOld extends Model
         'manufacturer',
         'size',
         'model',
-        'serial'
+        'serial',
+        'backflow_assembly_id'
     ];
 }

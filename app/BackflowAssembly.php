@@ -8,14 +8,17 @@ class BackflowAssembly extends Model
 {
     protected $fillable = [
         'property_id',
+        'property_unit_id',
         'contact_id',
         'backflow_type_id',
         'backflow_water_system_id',
         'backflow_size_id',
         'backflow_manufacturer_id',
         'backflow_model_id',
+        'month',
         'use',
         'placement',
+        'gps',
         'serial_number',
         'notes'
     ];
