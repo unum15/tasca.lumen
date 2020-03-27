@@ -36,7 +36,7 @@ class BackflowOld extends Model
         'size',
         'model',
         'serial',
-        'notes,'
+        'notes,',
         'backflow_assembly_id'
     ];
 }
