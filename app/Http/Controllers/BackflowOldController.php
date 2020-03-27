@@ -122,7 +122,7 @@ class BackflowOldController extends Controller
             'placement'=>$item->placement,
             'gps'=>$item->gps,
             'serial_number'=>$item->serial,
-            'notes'
+            'notes'=>$item->notes
         ]);
         $item->update(['backflow_assembly_id' => $backflow_assembly->id]);
         return ['data' => $backflow_assembly];
@@ -156,6 +156,7 @@ class BackflowOldController extends Controller
        'size' => 'string|max:1020',
        'model' => 'string|max:1020',
        'serial' => 'string|max:1020',
+       'notes' => 'string|max:1020',
        'backflow_assembly_id' => 'integer',
     ];
     

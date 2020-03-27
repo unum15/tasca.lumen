@@ -20,7 +20,11 @@ class BackflowAssembly extends Model
         'placement',
         'gps',
         'serial_number',
-        'notes'
+        'notes',
+        'tag_year_end',
+        'installation',
+        'tester',
+        'tester_number'
     ];
 
     public function property()
