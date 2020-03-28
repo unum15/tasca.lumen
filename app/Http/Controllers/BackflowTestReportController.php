@@ -47,6 +47,7 @@ class BackflowTestReportController extends Controller
     {
         $item = BackflowTestReport::findOrFail($id);
         $values = $this->validateModel($request);
+        $values['submitted_date'] = isset($values['submitted_date']) && $values['submitted_date'] != "" ? $values['submitted_date'] : null;
         $item->update($values);
         return ['data' => $item];
     }
@@ -860,7 +861,8 @@ class BackflowTestReportController extends Controller
        'notes' => 'string|max:1020|nullable',
        'backflow_installed_to_code' => 'boolean',
        'report_date' => 'date',
-       'submitted_date' => 'date'
+       'submitted_date' => 'date',
+       'tag_year' => 'string|max:4|nullable'
     ];
     
     protected $model_validation_required = [

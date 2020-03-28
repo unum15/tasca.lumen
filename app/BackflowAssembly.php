@@ -15,6 +15,7 @@ class BackflowAssembly extends Model
         'backflow_size_id',
         'backflow_manufacturer_id',
         'backflow_model_id',
+        'active',
         'month',
         'use',
         'placement',

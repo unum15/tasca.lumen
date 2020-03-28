@@ -23,6 +23,7 @@ class CreateBackflowTable extends Migration
             $table->integer('backflow_size_id')->nullable();
             $table->integer('backflow_manufacturer_id')->nullable();
             $table->integer('backflow_model_id')->nullable();
+            $table->boolean('active')->default(true);
             $table->string('month',32)->nullable();
             $table->string('use',1024)->nullable();
             $table->string('placement',1024)->nullable();

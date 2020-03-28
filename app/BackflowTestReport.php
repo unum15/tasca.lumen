@@ -12,6 +12,7 @@ class BackflowTestReport extends Model
         'backflow_installed_to_code',
         'report_date',
         'submitted_date',
+        'tag_year',
         'notes'
     ];
 

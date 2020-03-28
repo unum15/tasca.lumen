@@ -144,6 +144,7 @@ class BackflowOldController extends Controller
             'backflow_size_id' => $backflow_size->id,
             'backflow_manufacturer_id' => $backflow_manufacturer->id,
             'backflow_model_id' => $backflow_model->id,
+            'active' => $item->active == 'Y',
             'month'=>$item->month,
             'use'=>$item->use,
             'placement'=>$item->placement,
