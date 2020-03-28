@@ -165,6 +165,12 @@ class BackflowOldController extends Controller
             $reading_2 = $test->check_2 != "" ? $test->check_2 : $test->rp != "" ? $test->rp : $test->ch_1;
             //Log::error($test);
             //return response([ 'message' => print_r($test, true)], 422);
+            if(!empty($reading_1)&&(!is_numeric($reading_1))){
+                $reading_1 = -1;
+            }
+            if(!empty($reading_2)&&(!is_numeric($reading_2))){
+                $reading_2 = -1;
+            }
             $backflow_test = BackflowTest::create([
                 'backflow_test_report_id' => $backflow_test_report->id,
                 'contact_id' => null,
