@@ -41,12 +41,15 @@ class ClientController extends Controller
         }
         $backflow_only = $request->input('backflow_only');
         if(!empty($backflow_only)&&$backflow_only=='true') {
-            $query->has('properties.backflow_assemblies');
+            #$query->has('properties.backflow_assemblies');
+            $query->whereHas('properties.backflow_assemblies', function($query){
+                $query->where('active','true');
+            });
         }
         $zip = $request->input('zip');
         if(!empty($zip)) {
             $query->whereHas('properties', function($query) use ($zip){
-                $query->where('zip', '=', $zip);
+                $query->where('zip', 'like', "$zip%");
             });
         }
         $items = $query->get();
