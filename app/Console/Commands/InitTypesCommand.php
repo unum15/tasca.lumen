@@ -92,7 +92,8 @@ class InitTypesCommand extends Command
                 'None',
                 'Mail',
                 'Email',
-                'Text'
+                'Text',
+                'Call'
         ];
         $sort = 1;
         foreach($names as $name){

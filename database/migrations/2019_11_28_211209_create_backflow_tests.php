@@ -16,7 +16,7 @@ class CreateBackflowTests extends Migration
         Schema::create('backflow_tests', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('backflow_test_report_id');
-            $table->integer('contact_id');
+            $table->integer('contact_id')->nullable();
             $table->decimal('reading_1')->nullable();
             $table->decimal('reading_2')->nullable();
             $table->boolean('passed')->nullable();

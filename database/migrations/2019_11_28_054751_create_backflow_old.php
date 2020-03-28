@@ -19,6 +19,7 @@ class CreateBackflowOld extends Migration
             $table->string('prt')->nullable();
             $table->string('month')->nullable();
             $table->string('reference')->nullable();
+            $table->string('group')->nullable();
             $table->string('water_system')->nullable();
             $table->string('account')->nullable();
             $table->string('owner');
@@ -45,8 +46,6 @@ class CreateBackflowOld extends Migration
             $table->string('notes')->nullable();
             $table->string('tag_year_end')->nullable();
             $table->string('installation')->nullable();
-            $table->string('tester')->nullable();
-            $table->string('tester_number')->nullable();
             $table->integer('backflow_assembly_id')->nullable();
         });
     }

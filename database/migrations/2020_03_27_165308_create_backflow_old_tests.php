@@ -15,6 +15,7 @@ class CreateBackflowOldTests extends Migration
     {
         Schema::create('backflow_old_tests', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('backflow_old_id');
             $table->date('test_date');
             $table->string('check_1')->nullable();
             $table->string('check_2')->nullable();

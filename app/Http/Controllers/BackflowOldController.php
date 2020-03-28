@@ -11,8 +11,23 @@ use App\BackflowWaterSystem;
 use App\BackflowSize;
 use App\BackflowManufacturer;
 use App\BackflowModel;
+use App\BackflowTest;
+use App\BackflowTestReport;
+
+use App\ActivityLevel;
+use App\Client;
+use App\Contact;
+use App\ContactMethod;
+use App\ContactType;
+use App\PropertyType;
+use App\EmailType;
+use App\PhoneNumberType;
+use App\Email;
+use App\PhoneNumber;
 
 use Illuminate\Http\Request;
+
+use Log;
 
 class BackflowOldController extends Controller
 {
@@ -36,7 +51,18 @@ class BackflowOldController extends Controller
     
     public function zips(Request $request)
     {
-        $items = BackflowOld::distinct()->orderBy('zip')->get(['zip'])->pluck('zip');
+        $items_query = BackflowOld::distinct();
+        $group = $request->input('group');
+        if(!empty($group)){
+            $items_query->where('group',$group);
+        }
+        $items = $items_query->orderBy('zip')->get(['zip'])->pluck('zip');
+        return ['data' => $items];
+    }
+    
+    public function groups(Request $request)
+    {
+        $items = BackflowOld::distinct()->orderBy('group')->get(['group'])->pluck('group');
         return ['data' => $items];
     }
 
@@ -125,8 +151,116 @@ class BackflowOldController extends Controller
             'notes'=>$item->notes
         ]);
         $item->update(['backflow_assembly_id' => $backflow_assembly->id]);
+        foreach($item->backflow_old_tests as $test){
+            $backflow_test_report = BackflowTestReport::create([
+                'backflow_assembly_id' => $backflow_assembly->id,
+                'visual_inspection_notes' => null,
+                'backflow_installed_to_code' => true,
+                'report_date' => $test->test_date,
+                'submitted_date' => null,
+                'notes' => null
+            ]);
+            $reading_1 = $test->check_1 != "" ? $test->check_1 : $test->rp_check_1 != "" ? $test->rp_check_1 : $test->ail;
+            $reading_2 = $test->check_2 != "" ? $test->check_2 : $test->rp != "" ? $test->rp : $test->ch_1;
+            //Log::error($test);
+            //return response([ 'message' => print_r($test, true)], 422);
+            $backflow_test = BackflowTest::create([
+                'backflow_test_report_id' => $backflow_test_report->id,
+                'contact_id' => null,
+                'reading_1' => $reading_1 != "" ? $reading_1 : null,
+                'reading_2' => $reading_2 != "" ? $reading_2 : null,
+                'passed' => true,
+                'tested_on' => $test->test_date,
+                'notes' => null
+            ]);
+        }
         return ['data' => $backflow_assembly];
     }
+    
+    
+    public function exportClient($id, Request $request)
+    {
+        $item = BackflowOld::findOrFail($id);
+        $activity_level_id = ActivityLevel::where('name', 'Level 3')->first()->id;
+        $property_type_id = PropertyType::where('name', 'Office')->first()->id;
+        $contact_type_id = ContactType::where('name', 'Manager')->first()->id;
+        $contact_method_id = ContactMethod::where('name', 'Call')->first()->id;
+        $email_type_id = EmailType::where('name', 'Office')->first()->id;
+        $phone_number_type_id = PhoneNumberType::where('name', 'Office')->first()->id;
+        $client = Client::create([
+            'name' => $item->owner,
+            'activity_level_id' => $activity_level_id,
+            'notes' => 'Backflow report import',
+            'creator_id' => $request->user()->id,
+            'updater_id' => $request->user()->id
+        ]);
+        $property = $client->properties()->create([
+            'name' => $item->owner,
+            'activity_level_id' => $activity_level_id,
+            'address1' => $item->address,
+            'city' => $item->city,
+            'state' => $item->state,
+            'zip' => $item->zip,
+            'work_property' => false,
+            'billing_property' => false,
+            'notes' => 'Backflow report import',
+            'property_type_id' => $property_type_id,
+            'creator_id' => $request->user()->id,
+            'updater_id' => $request->user()->id
+        ]);
+        if(!empty($item->contact)){
+            $contact = $client->contacts()->create([
+                'name' => $item->contact,
+                'activity_level_id' => $activity_level_id,
+                'contact_method_id' => $contact_method_id,
+                'notes' => 'Backflow report import',
+                'creator_id' => $request->user()->id,
+                'updater_id' => $request->user()->id
+            ],['contact_type_id'=>$contact_type_id]);
+            if(!empty($item->email)){
+                $contact->emails()->create([
+                    'email_type_id' => $email_type_id,
+                    'email' => $item->email,
+                    'creator_id' => $request->user()->id,
+                    'updater_id' => $request->user()->id
+                ]);
+            }
+            if(!empty($item->phone)){
+                $contact->phoneNumbers()->create([
+                    'phone_number_type_id' => $phone_number_type_id,
+                    'phone_number' => $item->phone,
+                    'creator_id' => $request->user()->id,
+                    'updater_id' => $request->user()->id
+                ]);
+            }
+        }
+        return ['data' => $client];
+    }
+
+    public function exportProperty($id, Request $request)
+    {
+        $client_id = $request->input('client_id');
+        $item = BackflowOld::findOrFail($id);
+        $activity_level_id = ActivityLevel::where('name', 'Level 3')->first()->id;
+        $property_type_id = PropertyType::where('name', 'Retail')->first()->id;
+        $property = Property::create([
+            'client_id' => $client_id,
+            'name' => $item->location,
+            'activity_level_id' => $activity_level_id,
+            'address1' => $item->laddress,
+            'city' => $item->lcity,
+            'state' => $item->lstate,
+            'zip' => $item->lzip,
+            'work_property' => true,
+            'billing_property' => false,
+            'notes' => 'Backflow report import',
+            'property_type_id' => $property_type_id,
+            'creator_id' => $request->user()->id,
+            'updater_id' => $request->user()->id
+        ]);
+        return ['data' => $property];
+    }
+    
     
     protected $model_validation = [
        'active' => 'string|max:1020',

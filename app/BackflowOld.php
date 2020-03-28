@@ -39,4 +39,9 @@ class BackflowOld extends Model
         'notes,',
         'backflow_assembly_id'
     ];
+    
+    public function backflow_old_tests()
+    {
+        return $this->hasMany('App\BackflowOldTest')->orderBy('test_date');
+    }
 }

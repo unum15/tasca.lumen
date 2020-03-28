@@ -313,7 +313,10 @@ $router->get('/backflow_old/{id:[0-9]+}', ['uses' => 'BackflowOldController@read
 $router->patch('/backflow_old/{id:[0-9]+}', ['uses' => 'BackflowOldController@update', 'as' => 'backflow_old.update']);
 $router->delete('/backflow_old/{id:[0-9]+}', ['uses' => 'BackflowOldController@delete', 'as' => 'backflow_old.delete']);
 $router->get('/backflow_old/zips', ['uses' => 'BackflowOldController@zips', 'as' => 'backflow_old.zips']);
+$router->get('/backflow_old/groups', ['uses' => 'BackflowOldController@groups', 'as' => 'backflow_old.groups']);
 $router->post('/backflow_old/export/{id:[0-9]+}', ['uses' => 'BackflowOldController@export', 'as' => 'backflow_old.export']);
+$router->post('/backflow_old/export/client/{id:[0-9]+}', ['uses' => 'BackflowOldController@exportClient', 'as' => 'backflow_old.export_client']);
+$router->post('/backflow_old/export/property/{id:[0-9]+}', ['uses' => 'BackflowOldController@exportProperty', 'as' => 'backflow_old.export_property']);
 
 $router->get('/backflow_models', ['uses' => 'BackflowModelController@index', 'as' => 'backflow_model.index']);
 $router->post('/backflow_model', ['uses' => 'BackflowModelController@create', 'as' => 'backflow_model.create']);
