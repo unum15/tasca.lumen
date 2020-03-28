@@ -120,7 +120,8 @@ class BackflowOldController extends Controller
         $backflow_model = BackflowModel::where('name', 'ilike', trim($item->model))->first();
         
         if(!$backflow_type){
-            return response(['message' => 'Bad backflow type, can not import.'], 422);
+            Log::error($item);
+            return response(['message' => 'Bad backflow type(' . $item->style . '), can not import.'], 422);
         }
         if(!$backflow_water_system){
             $backflow_water_system = BackflowWaterSystem::create(['name' => ucwords(strtolower($item->water_system))]);
