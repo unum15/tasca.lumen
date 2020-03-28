@@ -16,6 +16,7 @@ use App\BackflowTestReport;
 
 use App\ActivityLevel;
 use App\Client;
+use App\ClientType;
 use App\Contact;
 use App\ContactMethod;
 use App\ContactType;
@@ -183,6 +184,7 @@ class BackflowOldController extends Controller
         $item = BackflowOld::findOrFail($id);
         $activity_level_id = ActivityLevel::where('name', 'Level 3')->first()->id;
         $property_type_id = PropertyType::where('name', 'Office')->first()->id;
+        $client_type_id = ClientType::where('name', 'Commercial')->first()->id;
         $contact_type_id = ContactType::where('name', 'Manager')->first()->id;
         $contact_method_id = ContactMethod::where('name', 'Call')->first()->id;
         $email_type_id = EmailType::where('name', 'Office')->first()->id;
@@ -190,6 +192,7 @@ class BackflowOldController extends Controller
         $client = Client::create([
             'name' => $item->owner,
             'activity_level_id' => $activity_level_id,
+            'client_type_id' => $client_type_id,
             'notes' => 'Backflow report import',
             'creator_id' => $request->user()->id,
             'updater_id' => $request->user()->id
@@ -266,6 +269,7 @@ class BackflowOldController extends Controller
        'active' => 'string|max:1020',
        'prt' => 'string|max:1020',
        'month' => 'string|max:1020',
+       'group' => 'string|max:1020',
        'reference' => 'string|max:1020',
        'water_system' => 'string|max:1020',
        'account' => 'string|max:1020',
