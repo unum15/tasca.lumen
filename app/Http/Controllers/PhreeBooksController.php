@@ -436,20 +436,24 @@ class PhreeBooksController extends Controller
             }
             else{
                 if((($location == "Tasca")||($location == "Both"))&&(($synced == "Not Synced")||($synced == "Both"))){
-                    $client->phreebooks_id = null;
-                    $results->push($client);
+                    if((($active == "Active")&&($client->activity_level_id == 1))||((($active == "Inactive")&&($client->activity_level_id > 1)))||($active == "Both")){
+                        $client->phreebooks_id = null;
+                        $results->push($client);
+                    }
                 }
             }
         }
         if((($location == "Phree Books")||($location == "Both"))&&(($synced == "Not Synced")||($synced == "Both"))){
             foreach($pb_contacts as $id => $pb_contact){
-                $client = new Client([
-                    'name' => '',
-                    'billingProperty' => ['name' => ''],
-                    'phreebooks_id' => $id
-                ]);
-                $client->phree_books = $pb_contact;
-                $results->push($client);
+                if((($active == "Active")&&($pb_contact->inactive == 0))||(($active == "Inactive")&&($pb_contact->inactive == 1))||($active == "Both")){
+                    $client = new Client([
+                        'name' => '',
+                        'billingProperty' => ['name' => ''],
+                        'phreebooks_id' => $id
+                    ]);
+                    $client->phree_books = $pb_contact;
+                    $results->push($client);
+                }
             }
         }
         return $results;
