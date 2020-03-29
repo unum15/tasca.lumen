@@ -41,7 +41,7 @@ class BackflowOldController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
-        $items_query = BackflowOld::with($includes)->orderBy('owner')->orderBy('laddress')->orderBy('active')->orderBy('placement');
+        $items_query = BackflowOld::with($includes)->orderBy('owner')->orderBy('laddress')->orderBy('active')->orderBy('placement')->orderBy('id');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
@@ -135,26 +135,28 @@ class BackflowOldController extends Controller
         if(!$backflow_model){
             $backflow_model = BackflowModel::create(['name' => $item->model, 'backflow_manufacturer_id' => $backflow_manufacturer->id, 'backflow_type_id' => $backflow_type->id]);
         }
-        
-        $backflow_assembly = BackflowAssembly::create([
-            'property_id' => $property_id,
-            'property_unit_id' => $unit_id ? $unit_id : null,
-            'contact_id' => $contact_id,
-            'backflow_type_id' => $backflow_type->id,
-            'backflow_water_system_id' => $backflow_water_system->id,
-            'backflow_size_id' => $backflow_size->id,
-            'backflow_manufacturer_id' => $backflow_manufacturer->id,
-            'backflow_model_id' => $backflow_model->id,
-            'active' => $item->active == 'Y',
-            'month'=>$item->month,
-            'use'=>$item->use,
-            'placement'=>$item->placement,
-            'gps'=>$item->gps,
-            'serial_number'=>$item->serial,
-            'notes'=>$item->notes
-        ]);
+        $backflow_assembly = BackflowAssembly::where('property_id',$property_id)->where('serial_number', $item->serial)->first();
+        if(!$backflow_assembly){
+            $backflow_assembly = BackflowAssembly::create([
+                'property_id' => $property_id,
+                'property_unit_id' => $unit_id ? $unit_id : null,
+                'contact_id' => $contact_id,
+                'backflow_type_id' => $backflow_type->id,
+                'backflow_water_system_id' => $backflow_water_system->id,
+                'backflow_size_id' => $backflow_size->id,
+                'backflow_manufacturer_id' => $backflow_manufacturer->id,
+                'backflow_model_id' => $backflow_model->id,
+                'active' => $item->active == 'Y',
+                'month'=>$item->month,
+                'use'=>$item->use,
+                'placement'=>$item->placement,
+                'gps'=>$item->gps,
+                'serial_number'=>$item->serial,
+                'notes'=>$item->notes
+            ]);
+        }
         $item->update(['backflow_assembly_id' => $backflow_assembly->id]);
-        $old_backflow_assembly = BackflowAssembly::where('placement',$item->placement)->first();
+        $old_backflow_assembly = BackflowAssembly::where('placement',$item->placement)->where('property_id',$property_id)->first();
         foreach($item->backflow_old_tests as $test){
             $reading_1 = $test->check_1 != "" ? $test->check_1 : $test->rp_check_1 != "" ? $test->rp_check_1 : $test->ail;
             $reading_2 = $test->check_2 != "" ? $test->check_2 : $test->rp != "" ? $test->rp : $test->ch_1;
