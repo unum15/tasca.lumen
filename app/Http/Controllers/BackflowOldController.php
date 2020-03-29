@@ -41,7 +41,7 @@ class BackflowOldController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
-        $items_query = BackflowOld::with($includes);
+        $items_query = BackflowOld::with($includes)->orderBy('owner')->orderBy('laddress')->orderBy('active')->orderBy('placement');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
@@ -154,7 +154,27 @@ class BackflowOldController extends Controller
             'notes'=>$item->notes
         ]);
         $item->update(['backflow_assembly_id' => $backflow_assembly->id]);
+        $old_backflow_assembly = BackflowAssembly::where('placement',$item->placement)->first();
         foreach($item->backflow_old_tests as $test){
+            $reading_1 = $test->check_1 != "" ? $test->check_1 : $test->rp_check_1 != "" ? $test->rp_check_1 : $test->ail;
+            $reading_2 = $test->check_2 != "" ? $test->check_2 : $test->rp != "" ? $test->rp : $test->ch_1;
+            $reading_1 = $reading_1 != "" ? $reading_1 : null;
+            $reading_2 = $reading_1 != "" ? $reading_1 : null;
+            if(!empty($reading_1)&&(!is_numeric($reading_1))){
+                $reading_1 = -1;
+            }
+            if(!empty($reading_2)&&(!is_numeric($reading_2))){
+                $reading_2 = -1;
+            }
+            if($old_backflow_assembly){
+                $old_backflow_test_report = BackflowTestReport::where('report_date',$test->test_date)->first();
+                if($old_backflow_test_report){
+                    $old_backflow_test = BackflowTest::where('reading_1', $reading_1)->where('reading_2',$reading_2)->first();
+                    if($old_backflow_test){
+                        continue;
+                    }
+                }
+            }
             $backflow_test_report = BackflowTestReport::create([
                 'backflow_assembly_id' => $backflow_assembly->id,
                 'visual_inspection_notes' => null,
@@ -163,23 +183,16 @@ class BackflowOldController extends Controller
                 'submitted_date' => $test->test_date,
                 'notes' => null
             ]);
-            $reading_1 = $test->check_1 != "" ? $test->check_1 : $test->rp_check_1 != "" ? $test->rp_check_1 : $test->ail;
-            $reading_2 = $test->check_2 != "" ? $test->check_2 : $test->rp != "" ? $test->rp : $test->ch_1;
             Log::error($test);
             Log::error($reading_1);
             Log::error($reading_2);
             //return response([ 'message' => print_r($test, true)], 422);
-            if(!empty($reading_1)&&(!is_numeric($reading_1))){
-                $reading_1 = -1;
-            }
-            if(!empty($reading_2)&&(!is_numeric($reading_2))){
-                $reading_2 = -1;
-            }
+            
             $backflow_test = BackflowTest::create([
                 'backflow_test_report_id' => $backflow_test_report->id,
                 'contact_id' => null,
-                'reading_1' => $reading_1 != "" ? $reading_1 : null,
-                'reading_2' => $reading_2 != "" ? $reading_2 : null,
+                'reading_1' => $reading_1,
+                'reading_2' => $reading_2,
                 'passed' => true,
                 'tested_on' => $test->test_date,
                 'notes' => null
