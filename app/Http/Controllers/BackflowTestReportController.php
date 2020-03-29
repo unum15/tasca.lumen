@@ -172,11 +172,82 @@ class BackflowTestReportController extends Controller
         return $html;
     }
     
+    static public function FormatPSI($psi){
+        return $psi;
+    }
+    
+    static public function TestResults($super_type,$test){
+        $results = [
+            'RP' =>  [
+                'check_1' => [
+                    'PSI' => '',
+                    'closed_tight' => false,
+                    'leaked' => false
+                ],
+                'check_2' => [
+                    'PSI' => '',
+                    'closed_tight' => false,
+                    'leaked' => false
+                ],
+                'differential' => [
+                    'opened_at' => '',
+                    'opened_under' => false,
+                    'did_not_open' => false
+                ],
+            ],
+            'DC' => [
+                'check_1' => [
+                    'PSI' => '',
+                    'closed_tight' => false,
+                    'leaked' => false
+                ],
+                'check_2' => [
+                    'PSI' => '',
+                    'closed_tight' => false,
+                    'leaked' => false
+                ]
+            ],
+            'PVB' => [
+                'check' => [
+                    'PSI' => '',
+                    'closed_tight' => false,
+                    'leaked' => false
+                ],
+                'air_inlet' => [
+                    'opened_at' => '',
+                    'opened_under' => false,
+                    'did_not_open' => false
+                ],
+            ],
+            'passed' => $test->passed
+        ];
+        switch ($super_type){
+            case 'RP' :
+                $results['RP']=self::RPTestResults($test);
+                break;
+            case 'DC' :
+                $results['DC']=self::DCTestResults($test);
+                break;
+            case 'PVB' :
+                $results['PVB']=self::PVBTestResults($test);
+                break;
+        }
+        return $results;
+    }
+    
     static public function RPTestResults($test){
         $results = [
             'check_1' => self::RPTestCheck1Results($test),
             'check_2' => self::RPTestCheck2Results($test),
             'differential' => self::RPTestDifferentialResults($test)
+        ];
+        return $results;
+    }
+    
+    static public function PVBTestResults($test){
+        $results = [
+            'check' => self::PVBTestCheckResults($test),
+            'air_inlet' => self::PVBTestAirInletResults($test)
         ];
         return $results;
     }
@@ -199,6 +270,33 @@ class BackflowTestReportController extends Controller
         return $results;
     }
     
+    
+    static public function DCTestResults($test){
+        $results = [
+            'check_1' => self::DCTestCheck1Results($test),
+            'check_2' => self::DCTestCheck2Results($test)
+        ];
+        return $results;
+    }
+    
+    static public function DCTestCheck1Results($test){
+        $results = [
+            'PSI' => $test['reading_1'],
+            'closed_tight' => $test['reading_1'] >= 1,
+            'leaked' => $test['reading_1'] < 1
+        ];
+        return $results;
+    }
+    
+    static public function DCTestCheck2Results($test){
+        $results = [
+            'PSI' => $test['reading_2'],
+            'closed_tight' => $test['reading_2'] >= 1,
+            'leaked' => $test['reading_2'] < 1
+        ];
+        return $results;
+    }
+    
     static public function RPTestDifferentialResults($test){
         $results = [
             'opened_at' => $test['reading_1'],
@@ -208,6 +306,23 @@ class BackflowTestReportController extends Controller
         return $results;
     }
     
+    static public function PVBTestAirInletResults($test){
+        $results = [
+            'opened_at' => $test['reading_1'],
+            'opened_under' => $test['reading_1'] < 1 && $test['reading_1'] >0,
+            'did_not_open' => $test['reading_1'] <= 0
+        ];
+        return $results;
+    }
+    
+    static public function PVBTestCheckResults($test){
+        $results = [
+            'PSI' => $test['reading_2'],
+            'closed_tight' => $test['reading_2'] >= 1,
+            'leaked' => $test['reading_2'] < 1
+        ];
+        return $results;
+    }
     
     public function htmlBody($id, Request $request)
     {
@@ -315,12 +430,14 @@ class BackflowTestReportController extends Controller
         $final_tested_on = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $num_line_length = 5;
         if($initial){
-            $initial_cert = $initial->contact->backflow_certification_number;
-            $initial_date = date('m-d-Y',strtotime($initial->tested_on));
-            $initial_contact_name=$initial->contact->name;
-            if(30-strlen($initial->contact->name) > 0){
-                $initial_contact_name.=str_repeat('&nbsp;',30-strlen($initial_contact_name));
+            if($initial->contact){
+                $initial_cert = $initial->contact->backflow_certification_number;
+                $initial_contact_name=$initial->contact->name;
+                if(30-strlen($initial_contact_name) > 0){
+                    $initial_contact_name.=str_repeat('&nbsp;',30-strlen($initial_contact_name));
+                }
             }
+            $initial_date = date('m-d-Y',strtotime($initial->tested_on));
             if($initial != $final){
                 $final_contact_name = $final->contact->name;
                 if(30-strlen($final_contact_name) > 0){
@@ -457,7 +574,9 @@ class BackflowTestReportController extends Controller
             }
         }
         $number = "";
+        $backflow_assembly_contact_name = "";
         if($report->backflow_assembly->contact){
+            $backflow_assembly_contact_name = $report->backflow_assembly->contact->name;
             $numbers = $report->backflow_assembly->contact->phoneNumbers;
             if($numbers->first()){
                 $number = $numbers->first()->phone_number;
@@ -468,7 +587,7 @@ class BackflowTestReportController extends Controller
                 <div style="float:left;width:68%;font-size:11px;padding:5px;">
                     <div class="info"><span class="header">Water System:</span> ' . $report->backflow_assembly->backflow_water_system->name . '</div>
                     <div class="info"><span class="header">Owner:</span> ' . $property->client->name . '</div>
-                    <div class="info"><span class="header">Contact Person:</span> ' . $report->backflow_assembly->contact->name . '&nbsp;&nbsp;&nbsp;<span class="header">Phone:</span> ' . $number . '</div>
+                    <div class="info"><span class="header">Contact Person:</span> ' . $backflow_assembly_contact_name . '&nbsp;&nbsp;&nbsp;<span class="header">Phone:</span> ' . $number . '</div>
                     <div class="info"><span class="header">Address:</span> ' . $billing_property->address1 . ' ' . $billing_property->address_2 . '&nbsp;&nbsp;&nbsp;<span class="header">City:</span> ' . $billing_property->city . '&nbsp;&nbsp;&nbsp;<span class="header">State:</span> ' . $billing_property->state . '&nbsp;&nbsp;&nbsp;<span class="header">Zip:</span> ' . $billing_property->zip . '</div>
                     <br />
                     <div class="info"><span class="header">Assembly Location:</span> ' . $property->name . '</div>

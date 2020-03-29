@@ -160,12 +160,14 @@ class BackflowOldController extends Controller
                 'visual_inspection_notes' => null,
                 'backflow_installed_to_code' => true,
                 'report_date' => $test->test_date,
-                'submitted_date' => null,
+                'submitted_date' => $test->test_date,
                 'notes' => null
             ]);
             $reading_1 = $test->check_1 != "" ? $test->check_1 : $test->rp_check_1 != "" ? $test->rp_check_1 : $test->ail;
             $reading_2 = $test->check_2 != "" ? $test->check_2 : $test->rp != "" ? $test->rp : $test->ch_1;
-            //Log::error($test);
+            Log::error($test);
+            Log::error($reading_1);
+            Log::error($reading_2);
             //return response([ 'message' => print_r($test, true)], 422);
             if(!empty($reading_1)&&(!is_numeric($reading_1))){
                 $reading_1 = -1;

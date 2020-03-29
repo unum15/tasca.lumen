@@ -379,8 +379,9 @@ $router->get('/phree_books/matches', 'PhreeBooksController@matches');
 $router->get('/phree_books/tasca', 'PhreeBooksController@tasca');
 $router->get('/phree_books/phree_books', 'PhreeBooksController@phreeBooks');
 
-
+$router->get('/phree_books/clients', 'PhreeBooksController@clients');
 $router->post('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@createClient');
+$router->patch('/phree_books/client/{id:[0-9]+}/match', 'PhreeBooksController@matchClient');
 $router->post('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@createContact');
 $router->post('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@createProperty');
 $router->put('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@updateClient');

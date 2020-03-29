@@ -7,6 +7,7 @@ use App\Contact;
 use App\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Log;
 
 class PhreeBooksController extends Controller
 {
@@ -139,6 +140,21 @@ class PhreeBooksController extends Controller
         $client = Client::find($id);
         return $client;
     }
+    
+    
+    public function matchClient($id, Request $request){
+        $pb_id = $request->input('phreebooks_id');
+        $phreebooks = DB::connection('phreebooks');
+        $pb_property = $phreebooks->select("SELECT address_id FROM address_book WHERE ref_id=:ref_id AND type='cm';", ['ref_id' => $pb_id]);
+        $client = Client::find($id);
+        $property = Property::find($client->main_mailing_property_id);
+        $client->update(['phreebooks_id' => $pb_id]);
+        if(($property)&&(count($pb_property)>0)){
+            $property->update(['phreebooks_id' => $pb_property[0]->address_id]);
+        }
+        $client = Client::find($id);
+        return $client;
+    }
 
     public function createContact($id){
         $contact = Contact::with('clients')
@@ -208,7 +224,7 @@ class PhreeBooksController extends Controller
         ];
         $phreebooks->update($sql, $values);
         $pb_id = $phreebooks->getPdo()->lastInsertId();
-	$property->update(['phreebooks_id' => $pb_id]);
+        $property->update(['phreebooks_id' => $pb_id]);
         return $property;
     }
 
@@ -393,6 +409,50 @@ class PhreeBooksController extends Controller
           'email' => $client->billingContact ? count($client->billingContact->emails) > 0 ? $client->billingContact->emails[0]->email : null : null,
         ];
         return $values;
+    }
+    
+    public function clients(Request $request){
+        $active = $request->input('active');
+        $location = $request->input('location');
+        $synced = $request->input('synced');
+        $phreebooks = DB::connection('phreebooks');
+        $query = Client::with('billingProperty');
+        $clients = $query->get();
+        $results = collect([]);
+        #type=c, address_book.primary_name where type=cm,
+        $pb_contacts_array = $phreebooks->select("SELECT * FROM contacts LEFT JOIN address_book ON (contacts.id = address_book.ref_id AND address_book.type='cm') WHERE contacts.type='c';");
+        $pb_contacts = [];
+        foreach($pb_contacts_array as $pb_contact){
+            $pb_contacts[$pb_contact->id] = $pb_contact;
+        }
+        foreach($clients as $client){
+            if(($client->phreebooks_id)&&(isset($pb_contacts[$client->phreebooks_id]))){
+                if(($synced == "Synced") || ($synced == "Both")){
+                    $client->phree_books = $pb_contacts[$client->phreebooks_id];
+                    $results->push($client);
+                }
+                unset($pb_contacts[$client->phreebooks_id]);
+                //Log::error(print_r($pb_contacts[$client->phreebooks_id],true));
+            }
+            else{
+                if((($location == "Tasca")||($location == "Both"))&&(($synced == "Not Synced")||($synced == "Both"))){
+                    $client->phreebooks_id = null;
+                    $results->push($client);
+                }
+            }
+        }
+        if((($location == "Phree Books")||($location == "Both"))&&(($synced == "Not Synced")||($synced == "Both"))){
+            foreach($pb_contacts as $id => $pb_contact){
+                $client = new Client([
+                    'name' => '',
+                    'billingProperty' => ['name' => ''],
+                    'phreebooks_id' => $id
+                ]);
+                $client->phree_books = $pb_contact;
+                $results->push($client);
+            }
+        }
+        return $results;
     }
 
 
