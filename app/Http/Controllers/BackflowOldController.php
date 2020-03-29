@@ -169,9 +169,9 @@ class BackflowOldController extends Controller
                 $reading_2 = -1;
             }
             if($old_backflow_assembly){
-                $old_backflow_test_report = BackflowTestReport::where('report_date',$test->test_date)->first();
+                $old_backflow_test_report = BackflowTestReport::where('backflow_assembly_id', $old_backflow_assembly->id)->where('report_date',$test->test_date)->first();
                 if($old_backflow_test_report){
-                    $old_backflow_test = BackflowTest::where('reading_1', $reading_1)->where('reading_2',$reading_2)->first();
+                    $old_backflow_test = BackflowTest::where('backflow_test_report_id', $old_backflow_test_report->id)->where('reading_1', $reading_1)->where('reading_2',$reading_2)->first();
                     if($old_backflow_test){
                         continue;
                     }
