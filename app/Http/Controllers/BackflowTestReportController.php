@@ -186,7 +186,7 @@ class BackflowTestReportController extends Controller
     
     static public function formatString($string, $padding = 4){
         $formatted = $string;
-        for($x=strlen($formatted);$x<$padding;$x++){
+        for($x=strlen($formatted)*2;$x<$padding;$x++){
             $formatted.='&nbsp;';
         }
         return $formatted;
@@ -353,13 +353,18 @@ class BackflowTestReportController extends Controller
         return $results;
     }
     
-    static public function formatContact(){
+    static public function contactFormat($test){
         $contact = [
             'name' => '',
-            'number' => '',
             'cert' => '',
             'date' => ''
         ];
+        if(!$test){
+            return $contact;
+        }
+        $contact['name'] = $test->contact->name;
+        $contact['cert'] = $test->contact->backflow_certification_number;
+        $contact['date'] = date('m-d-Y',strtotime($test->tested_on));
         return $contact;
     }
     
@@ -491,8 +496,8 @@ class BackflowTestReportController extends Controller
                     98 SOUTH 2200 WEST<br />
                     LAYTON UTAH 84041<br />
                     801-546-0844<br />
-                    ' . $initial_contact_name  . '<br />
-                    CERTIFICATION # '.$initial_cert.'<br />
+                    ' . $initial_contact['name']  . '<br />
+                    CERTIFICATION # '.$initial_contact['cert'].'<br />
                     WatersContracting1985@gmail.com<br />
                 </div>
                 <br style="clear:left;"/>
@@ -814,9 +819,9 @@ class BackflowTestReportController extends Controller
                     </tr>
                 </table>
                 <table class="plain" style="font-size:12pt;width:100%;">
-                    <tr><td class="header">Initial Test By:</td><td style="text-align:left;text-decoration:underline;">' . $initial_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $initial_cert  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . $initial_date  . '</td></tr>
-                    <tr><td class="header">Repaired By:</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . $final_tested_on  . '</td></tr>
-                    <tr><td class="header">Final Test By:</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . $final_tested_on  . '</td></tr>
+                    <tr><td class="header" style="padding:0px;">Initial Test By:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($initial_contact['name'],42)  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($initial_contact['cert'],16)  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($initial_contact['date'],18)  . '</td></tr>
+                    <tr><td class="header">Repaired By:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['name'],42)  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['cert'],16)  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['date'],18)  . '</td></tr>
+                    <tr><td class="header">Final Test By:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['name'],42)  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['cert'],16)  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['date'],18)  . '</td></tr>
                 </table>
                 <br />
                 <div class="info">This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.self::checked($initial_test_results['satisfactory']).'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.self::checked($initial_test_results['unsatisfactory']).'/></div>

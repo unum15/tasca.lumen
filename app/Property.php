@@ -50,14 +50,21 @@ class Property extends Model
             ->withTimestamps();
     }
     
+
     public function backflow_assemblies()
     {
         return $this->hasMany('App\BackflowAssembly');
     }
     
+
     public function propertyUnits()
     {
         return $this->hasMany('App\PropertyUnit');
+    }
+
+    public function linkedClients()
+    {
+        return $this->belongsToMany('App\Client');
     }
 
 }

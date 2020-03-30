@@ -59,6 +59,11 @@ class Client extends Model
     public function properties()
     {
         return $this->hasMany('App\Property')->orderBy('name');
+    }
+    
+    public function linkedProperties()
+    {
+        return $this->belongsToMany('App\Property')->orderBy('name');
     }    
     
 }
