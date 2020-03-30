@@ -8,6 +8,7 @@ use App\BackflowCleaning;
 use App\BackflowValvePart;
 use Illuminate\Http\Request;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
+use Log;
 
 class BackflowTestReportController extends Controller
 {
@@ -172,11 +173,35 @@ class BackflowTestReportController extends Controller
         return $html;
     }
     
-    static public function FormatPSI($psi){
-        return $psi;
+    static public function formatPSI($psi, $padding = 4){
+        $formatted = $psi;
+        if(is_numeric($psi)){
+            $formatted = sprintf('%03.1f',$psi);
+        }
+        for($x=strlen($formatted);$x<$padding;$x++){
+            $formatted='&nbsp;'.$formatted;
+        }
+        return $formatted;
     }
     
-    static public function TestResults($super_type,$test){
+    static public function formatString($string, $padding = 4){
+        $formatted = $string;
+        for($x=strlen($formatted);$x<$padding;$x++){
+            $formatted.='&nbsp;';
+        }
+        return $formatted;
+    }
+    
+    static public function checked($checked){
+        if($checked){
+            return 'checked="checked"';
+        }
+        else{
+            return '';
+        }
+    }
+    
+    static public function testResults($super_type,$test){
         $results = [
             'RP' =>  [
                 'check_1' => [
@@ -219,8 +244,12 @@ class BackflowTestReportController extends Controller
                     'did_not_open' => false
                 ],
             ],
-            'passed' => $test->passed
+            'satisfactory' => $test ? $test->passed : false,
+            'unsatisfactory' => $test ? !$test->passed : false
         ];
+        if(!$test){
+            return $results;
+        }
         switch ($super_type){
             case 'RP' :
                 $results['RP']=self::RPTestResults($test);
@@ -255,17 +284,17 @@ class BackflowTestReportController extends Controller
     static public function RPTestCheck1Results($test){
         $results = [
             'PSI' => $test['reading_2'],
-            'closed_tight' => $test['reading_2'] >= $test['reading_1'],
-            'leaked' => $test['reading_2'] ? $test['reading_2'] < $test['reading_1'] : false
+            'closed_tight' => $test['reading_2'] <= $test['reading_1'],
+            'leaked' => $test['reading_2'] ? $test['reading_2'] > $test['reading_1'] : false
         ];
         return $results;
     }
     
     static public function RPTestCheck2Results($test){
         $results = [
-            'PSI' => $test['reading_2'] >= $test['reading_1'],
-            'closed_tight' => $test['reading_2'] >= $test['reading_1'],
-            'leaked' => $test['reading_2'] ? $test['reading_2'] < $test['reading_1'] : false
+            'PSI' => $test['reading_2'] <= $test['reading_1'] ? 'OK' : null,
+            'closed_tight' => $test['reading_2'] <= $test['reading_1'],
+            'leaked' => $test['reading_2'] ? $test['reading_2'] > $test['reading_1'] : false
         ];
         return $results;
     }
@@ -322,6 +351,16 @@ class BackflowTestReportController extends Controller
             'leaked' => $test['reading_2'] < 1
         ];
         return $results;
+    }
+    
+    static public function formatContact(){
+        $contact = [
+            'name' => '',
+            'number' => '',
+            'cert' => '',
+            'date' => ''
+        ];
+        return $contact;
     }
     
     public function htmlBody($id, Request $request)
@@ -389,46 +428,17 @@ class BackflowTestReportController extends Controller
             ->whereHas('backflow_valve', function($q){
                 $q->where('name', '=', 'Air Inlet');
             })->pluck('backflow_valve_part_id')->toArray();
-        $rp_reading_1 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $rp_reading_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'; 
-        $rp_1_pass = '';
-        $rp_2_pass = '';
-        $rp_under_2 = '';
-        $rp_1_fail = '';
-        $rp_2_fail = '';
-        $rp_did_not_open = '';
-        $rp_2_value = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $dc_reading_1 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $dc_reading_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $dc_1_pass = '';
-        $dc_2_pass = '';
-        $dc_1_fail = '';
-        $dc_2_fail = '';
-        $pvb_reading_1 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $pvb_reading_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $pvb_1_pass = '';
-        $pvb_2_pass = '';
-        $pvb_1_fail = '';
-        $pvb_2_fail = '';
-        $final_1 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $final_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $final_3 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $pvb_final_1 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $pvb_final_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $initial_passed = '';
-        $initial_failed = '';
-        $pvb_final_closed = '';
-        $final_1_closed = '';
-        $final_2_closed = '';
-        $final_3_closed = '';
-        $final_passed = '';
+        $super_type = $report->backflow_assembly->backflow_type->backflow_super_type->name;
+        $initial_test_results = self::testResults($super_type,$initial);
+        $final_test_results = self::testResults($super_type,$final);
+        $initial_contact = self::contactFormat($initial);
+        $final_contact = self::contactFormat($final);
         $initial_contact_name = '';
         $initial_cert = '';
         $initial_date = '';
         $final_contact_name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $final_contact_backflow_certification_number = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $final_tested_on = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $num_line_length = 5;
         if($initial){
             if($initial->contact){
                 $initial_cert = $initial->contact->backflow_certification_number;
@@ -447,131 +457,6 @@ class BackflowTestReportController extends Controller
                 $final_tested_on = date('m-d-Y',strtotime($final->tested_on));
                 $final_passed = 'checked="checked"';
             }
-            switch($report->backflow_assembly->backflow_type->backflow_super_type->name){
-                case 'RP' :
-                    $rp_reading_1 = sprintf('%03.1f', $initial->reading_1);
-                    if(!empty($initial->reading_2)){
-                        $rp_reading_2 = sprintf('%03.1f',$initial->reading_2);
-                    }
-                    if($num_line_length-strlen($rp_reading_1) > 0){
-                        $rp_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_1)).$rp_reading_1;
-                    }
-                    if($num_line_length-strlen($rp_reading_2) > 0){
-                        $rp_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($rp_reading_2)).$rp_reading_2;
-                    }
-                    if(($initial->reading_1 < 2) && ($initial->reading_1 > 0)){
-                        $rp_under_2 = 'checked="checked"';
-                    }
-                    if($initial->reading_1 == 0){
-                        $rp_did_not_open = 'checked="checked"';
-                    }
-                    if($initial->reading_2 <= $initial->reading_1){
-                        $rp_1_pass = 'checked="checked"';
-                        $rp_2_pass = 'checked="checked"';
-                        $rp_2_value = 'OK';
-                    }
-                    elseif(!empty($initial->reading_2)){
-                        $rp_1_fail = 'checked="checked"';
-                        $rp_2_fail = 'checked="checked"';
-                    }
-                    if($initial->passed){
-                        $initial_passed = 'checked="checked"';
-                    }
-                    else{
-                        $initial_failed = 'checked="checked"';
-                    }
-                    if($initial != $final){
-                        $final_1 = sprintf('%03.1f',$final->reading_2);
-                        $final_2 = 'OK';
-                        $final_3 = sprintf('%03.1f',$final->reading_1);
-                        $final_1_closed = 'checked="checked"';
-                        $final_2_closed = 'checked="checked"';
-                        $final_3_closed = 'checked="checked"';
-                    }
-                    break;
-                case 'DC' :
-                    $dc_reading_1 = sprintf('%03.1f',$initial->reading_1);
-                    $dc_reading_2 = sprintf('%03.1f',$initial->reading_2);
-                    if($num_line_length-strlen($dc_reading_1) > 0){
-                        $dc_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($dc_reading_1)).$dc_reading_1;
-                    }
-                    if($num_line_length-strlen($dc_reading_2) > 0){
-                        $dc_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($dc_reading_2)).$dc_reading_2;
-                    }
-                    if($initial->reading_1 > 1){
-                        $dc_1_pass = 'checked="checked"';
-                    }
-                    else{
-                        $dc_1_fail = 'checked="checked"';
-                    }
-                    if($initial->reading_2 > 1){
-                        $dc_2_pass = 'checked="checked"';
-                    }
-                    else{
-                        $dc_2_fail = 'checked="checked"';
-                    }
-                    if($initial->passed){
-                        $initial_passed = 'checked="checked"';
-                    }
-                    else{
-                        $initial_failed = 'checked="checked"';
-                    }
-                    if($initial != $final){
-                        $final_1 = sprintf('%03.1f',$final->reading_1);
-                        $final_2 = sprintf('%03.1f',$final->reading_2);
-                        $final_1_closed = 'checked="checked"';
-                        $final_2_closed = 'checked="checked"';
-                    }
-                    break;
-                case 'PVB' :
-                    if($initial->reading_1){
-                        $pvb_1_pass = 'checked="checked"';
-                    }
-                    else{
-                        $pvb_1_fail = 'checked="checked"';
-                    }
-                    if($initial->reading_2){
-                        $pvb_2_pass = 'checked="checked"';
-                    }
-                    else{
-                        $pvb_2_fail = 'checked="checked"';
-                    }
-                    if($initial->passed){
-                        $initial_passed = 'checked="checked"';
-                    }
-                    else{
-                        $initial_failed = 'checked="checked"';
-                    }
-                    $pvb_reading_1 = sprintf('%03.1f',$initial->reading_1);
-                    $pvb_reading_2 = sprintf('%03.1f',$initial->reading_2);
-                    if($num_line_length-strlen($pvb_reading_1) > 0){
-                        $pvb_reading_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_1)).$pvb_reading_1;
-                    }
-                    if($num_line_length-strlen($pvb_reading_2) > 0){
-                        $pvb_reading_2=str_repeat('&nbsp;',$num_line_length-strlen($pvb_reading_2)).$pvb_reading_2;
-                    }
-                    if($initial != $final){
-                        $pvb_final_1 = sprintf('%03.1f',$final->reading_1);
-                        $pvb_final_2 = sprintf('%03.1f',$final->reading_2);
-                        $pvb_final_closed = 'checked="checked"';
-                        if($num_line_length-strlen($pvb_final_1) > 0){
-                            $pvb_final_1=str_repeat('&nbsp;',$num_line_length-strlen($pvb_final_1)).$pvb_final_1;
-                        }
-                        if($num_line_length-strlen($pvb_final_2) > 0){
-                            $pvb_final_2=str_repeat('&nbsp;',$num_line_length-strlen($pvb_final_2)).$pvb_final_2;
-                        }
-                    }
-                    break;
-            }
-            if($num_line_length-strlen($final_1) > 0){
-                $final_1=str_repeat('&nbsp;',$num_line_length-strlen($final_1)).$final_1;
-            }
-            if($num_line_length-strlen($final_2) > 0){
-                $final_2=str_repeat('&nbsp;',$num_line_length-strlen($final_2)).$final_2;
-            }
-            if($num_line_length-strlen($final_3) > 0){
-                $final_3=str_repeat('&nbsp;',$num_line_length-strlen($final_3)).$final_3;
-            }
         }
         $number = "";
         $backflow_assembly_contact_name = "";
@@ -582,6 +467,7 @@ class BackflowTestReportController extends Controller
                 $number = $numbers->first()->phone_number;
             }
         }
+        $super_type_result = $super_type == "PVB" ? 'RP' : $super_type;
         $html = '
                 <div style="text-align:center"><h3>Backflow Assembly Test Report</h3></div>
                 <div style="float:left;width:68%;font-size:11px;padding:5px;">
@@ -639,14 +525,14 @@ class BackflowTestReportController extends Controller
                             RP
                         </td>
                         <td>
-                            PSI Across <span class="underline">' . $rp_reading_2 . '</span>#<br />
+                            PSI Across <span class="underline">' . self::formatPSI($initial_test_results['RP']['check_1']['PSI']) . '</span>#<br />
                             <table class="plain-test">
                                 <tr>
                                     <td>
                                         Closed tight
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" '.$rp_1_pass.' />
+                                        <input style="float:right;" type="checkbox" '.self::checked($initial_test_results['RP']['check_1']['closed_tight']).' />
                                     </td>
                                 </tr>
                                 <tr>
@@ -654,20 +540,20 @@ class BackflowTestReportController extends Controller
                                         Leaked
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" '.$rp_1_fail.' />
+                                        <input style="float:right;" type="checkbox" '.self::checked($initial_test_results['RP']['check_1']['leaked']).' />
                                     </td>
                                 </tr>
                             </table>
                         </td>
                         <td>
-                            PSI Across <span class="underline">'.$rp_2_value.'</span>#<br />
+                            PSI Across <span class="underline">'.self::formatPSI($initial_test_results['RP']['check_2']['PSI']).'</span>#<br />
                             <table class="plain-test">
                                 <tr>
                                     <td>
                                         Closed tight
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" '.$rp_2_pass.'>
+                                        <input style="float:right;" type="checkbox" '.self::checked($initial_test_results['RP']['check_2']['closed_tight']).'>
                                     </td>
                                 </tr>
                                 <tr>
@@ -675,20 +561,20 @@ class BackflowTestReportController extends Controller
                                         Leaked
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" '.$rp_2_fail.'>
+                                        <input style="float:right;" type="checkbox" '.self::checked($initial_test_results['RP']['check_2']['leaked']).'>
                                     </td>
                                 </tr>
                             </table>
                         </td>
                         <td>
-                            Opened At <span class="underline">'.$rp_reading_1.'</span>#<br />
+                            Opened At <span class="underline">'.self::formatPSI($initial_test_results['RP']['differential']['opened_at']).'</span>#<br />
                             <table class="plain-test">
                                 <tr>
                                     <td>
                                         Opened Under 2#
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" '.$rp_under_2.'>
+                                        <input style="float:right;" type="checkbox" '.self::checked($initial_test_results['RP']['differential']['opened_under']).'>
                                     </td>
                                 </tr>
                                 <tr>
@@ -696,21 +582,21 @@ class BackflowTestReportController extends Controller
                                         or did not open
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" '.$rp_did_not_open.'>
+                                        <input style="float:right;" type="checkbox" '.self::checked($initial_test_results['RP']['differential']['did_not_open']).'>
                                     </td>
                                 </tr>
                             </table>
                         </td>
                         <td>
                             AIR INLET:<br />
-                            Opened at <span class="underline">' . $pvb_reading_1 . '</span>#<br />
+                            Opened at <span class="underline">' . self::formatPSI($initial_test_results['PVB']['air_inlet']['opened_at']) . '</span>#<br />
                             <table class="plain-test">
                                 <tr>
                                     <td>
                                         Opened Under 1#
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" ' . $pvb_1_pass . '>
+                                        <input style="float:right;" type="checkbox" ' . self::checked($initial_test_results['PVB']['air_inlet']['opened_under']) . '>
                                     </td>
                                 </tr>
                                 <tr>
@@ -718,7 +604,7 @@ class BackflowTestReportController extends Controller
                                         or did not open
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" ' . $pvb_1_fail . '>
+                                        <input style="float:right;" type="checkbox" ' . self::checked($initial_test_results['PVB']['air_inlet']['did_not_open']) . '>
                                     </td>
                                 </tr>
                             </table>
@@ -729,14 +615,14 @@ class BackflowTestReportController extends Controller
                             DC
                         </td>
                         <td>
-                            Held at <span class="underline">' . $dc_reading_1 . '</span>#<br />
+                            Held at <span class="underline">' . self::formatPSI($initial_test_results['DC']['check_1']['PSI']) . '</span>#<br />
                             <table class="plain-test">
                                 <tr>
                                     <td>
                                         Closed tight
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" ' . $dc_1_pass . '>
+                                        <input style="float:right;" type="checkbox" ' . self::checked($initial_test_results['DC']['check_1']['closed_tight']) . '>
                                     </td>
                                 </tr>
                                 <tr>
@@ -744,20 +630,20 @@ class BackflowTestReportController extends Controller
                                         Leaked
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" ' . $dc_1_fail . '>
+                                        <input style="float:right;" type="checkbox" ' . self::checked($initial_test_results['DC']['check_1']['leaked']) . '>
                                     </td>
                                 </tr>
                             </table>
                         </td>
                         <td>
-                            Held at <span class="underline">' . $dc_reading_2 . '</span>#<br />
+                            Held at <span class="underline">' . self::formatPSI($initial_test_results['DC']['check_2']['PSI']) . '</span>#<br />
                             <table class="plain-test">
                                 <tr>
                                     <td>
                                         Closed tight
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" ' . $dc_2_pass . '>
+                                        <input style="float:right;" type="checkbox" ' . self::checked($initial_test_results['DC']['check_2']['closed_tight']) . '>
                                     </td>
                                 </tr>
                                 <tr>
@@ -765,7 +651,7 @@ class BackflowTestReportController extends Controller
                                         Leaked
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" ' . $dc_2_fail . '>
+                                        <input style="float:right;" type="checkbox" ' . self::checked($initial_test_results['DC']['check_2']['leaked']) . '>
                                     </td>
                                 </tr>
                             </table>
@@ -773,14 +659,14 @@ class BackflowTestReportController extends Controller
                         <td>
                         </td>
                         <td>
-                            CHECK VALVE:<span class="underline">' . $pvb_reading_2 . '</span>#<br />
+                            CHECK VALVE:<span class="underline">' . self::formatPSI($initial_test_results['PVB']['check']['PSI']) . '</span>#<br />
                             <table class="plain-test">
                                 <tr>
                                     <td>
                                         Closed tight
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" ' . $pvb_2_pass . '><br style="clear:right;" />
+                                        <input style="float:right;" type="checkbox" ' . self::checked($initial_test_results['PVB']['check']['closed_tight']) . '><br style="clear:right;" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -788,7 +674,7 @@ class BackflowTestReportController extends Controller
                                         Leaked
                                     </td>
                                     <td>
-                                        <input style="float:right;" type="checkbox" ' . $pvb_2_fail . '>
+                                        <input style="float:right;" type="checkbox" ' . self::checked($initial_test_results['PVB']['check']['leaked']) . '>
                                     </td>
                                 </tr>
                             </table>
@@ -909,21 +795,21 @@ class BackflowTestReportController extends Controller
                            FINAL TEST
                         </td>
                         <td>
-                            PSI Across <span class="underline">' . $final_1 . '</span>#<br />
-                            Closed Tight <input type="checkbox" ' . $final_1_closed . '><br />
+                            PSI Across <span class="underline">' . self::formatPSI($final_test_results[$super_type_result]['check_1']['PSI']) . '</span>#<br />
+                            Closed Tight <input type="checkbox" ' . self::checked($final_test_results[$super_type_result]['check_1']['closed_tight']) . '><br />
                         </td>
                         <td>
-                            PSI Across <span class="underline">' . $final_2 . '</span>#<br />
-                            Closed Tight <input type="checkbox" ' . $final_1_closed . '><br />
+                            PSI Across <span class="underline">' . self::formatPSI($final_test_results[$super_type_result]['check_2']['PSI']) . '</span>#<br />
+                            Closed Tight <input type="checkbox" ' . self::checked($final_test_results[$super_type_result]['check_2']['closed_tight']) . '><br />
                         </td>
                         <td>
-                            Opened at <span class="underline">' . $final_3 . '</span>#<br />
-                            Reduced Pressure <input type="checkbox" ' . $final_1_closed . '><br />
+                            Opened at <span class="underline">' . self::formatPSI($final_test_results['RP']['differential']['opened_at']) . '</span>#<br />
+                            Reduced Pressure <input type="checkbox" ' . self::checked($final_test_results['RP']['differential']['opened_under']) . '><br />
                         </td>
                         <td>
-                            INLET Opened At <span class="underline">' . $pvb_final_1 . '</span>#<br />
-                            CHECK VALVE: <span class="underline">' . $pvb_final_2 . '</span>#<br />
-                            Closed tight <input type="checkbox" ' . $pvb_final_closed . '><br />
+                            INLET Opened At <span class="underline">' . self::formatPSI($final_test_results['PVB']['air_inlet']['opened_at']) . '</span>#<br />
+                            CHECK VALVE: <span class="underline">' . self::formatPSI($final_test_results['PVB']['check']['PSI']) . '</span>#<br />
+                            Closed tight <input type="checkbox" ' . self::checked($final_test_results['PVB']['check']['closed_tight']) . '><br />
                         </td>
                     </tr>
                 </table>
@@ -933,8 +819,8 @@ class BackflowTestReportController extends Controller
                     <tr><td class="header">Final Test By:</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_name  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . $final_contact_backflow_certification_number  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . $final_tested_on  . '</td></tr>
                 </table>
                 <br />
-                <div class="info">This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.$initial_passed.'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.$initial_failed.'/></div>
-                <div class="info">This assembly\'s <span class="header">FINAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.$final_passed.' /> <span class="header">Unsatisfactory</span><input type="checkbox" /></div>
+                <div class="info">This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.self::checked($initial_test_results['satisfactory']).'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.self::checked($initial_test_results['unsatisfactory']).'/></div>
+                <div class="info">This assembly\'s <span class="header">FINAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.self::checked($final_test_results['satisfactory']).' /> <span class="header">Unsatisfactory</span><input type="checkbox" /></div>
                 <div class="info">I certify the above test has been performed and I am aware of the final performance.</div>
                 <div class="info">BY: ________________________________________ Assembly Owner Representative Assembly</div>
         ';
