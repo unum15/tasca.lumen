@@ -210,6 +210,7 @@ $router->get('/calendar/status', 'GoogleCalendarController@status');
 $router->get('/calendar/url', 'GoogleCalendarController@url');
 $router->post('/calendar/callback', 'GoogleCalendarController@callback');
 
+
 $router->get('/vehicles', ['uses' => 'VehicleController@index', 'as' => 'vehicle.index']);
 $router->post('/vehicle', ['uses' => 'VehicleController@create', 'as' => 'vehicle.create']);
 $router->get('/vehicle/{id:[0-9]+}', ['uses' => 'VehicleController@read', 'as' => 'vehicle.read']);
@@ -387,4 +388,3 @@ $router->post('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@createP
 $router->put('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@updateClient');
 $router->put('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@updateContact');
 $router->put('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@updateProperty');
-
