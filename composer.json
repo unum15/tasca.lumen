@@ -10,7 +10,9 @@
         "vlucas/phpdotenv": "^3.0",
         "google/apiclient": "^2.0",
         "proshore/entrust-lumen": "^1.0",
-        "doctrine/dbal": "^2.9"
+        "doctrine/dbal": "^2.9",
+        "niklasravnsborg/laravel-pdf": "^3.1",
+        "irazasyed/larasupport": "^1.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

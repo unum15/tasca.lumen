@@ -25,6 +25,7 @@ class Property extends Model
         'notes',
         'creator_id',
         'updater_id',
+        'updater_id',
         'phreebooks_id'
     ];
     
@@ -48,4 +49,15 @@ class Property extends Model
         return $this->belongsToMany('App\Contact')
             ->withTimestamps();
     }
+    
+    public function backflow_assemblies()
+    {
+        return $this->hasMany('App\BackflowAssembly');
+    }
+    
+    public function propertyUnits()
+    {
+        return $this->hasMany('App\PropertyUnit');
+    }
+
 }

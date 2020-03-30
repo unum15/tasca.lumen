@@ -62,17 +62,17 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//    App\Http\Middleware\ExampleMiddleware::class
-// ]);
+ $app->middleware([
+     //\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+     //\Illuminate\Foundation\Http\Middleware\TrimStrings::class,
+
+ ]);
 
  $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
     'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
     'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
     'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
-
-
  ]);
 
 /*
@@ -86,10 +86,13 @@ $app->singleton(
 |
 */
 
+ $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
  $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
  $app->register(Zizaco\Entrust\EntrustServiceProvider::class);
- $env = env('APP_ENV', '');
+ $app->register(niklasravnsborg\LaravelPdf\PdfServiceProvider::class);
+ 
+  $env = env('APP_ENV', '');
  if($env == 'local'){
   $app->register(Unum\Maker\MakerServiceProvider::class);
  }

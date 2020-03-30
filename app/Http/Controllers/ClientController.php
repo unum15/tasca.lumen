@@ -20,10 +20,10 @@ class ClientController extends Controller
     
     public function __construct(Request $request)
     {
-        $this->middleware('auth');
+        /*$this->middleware('auth');
         if(($request->user())&&(!$request->user()->can('view-clients'))) {
             return response(['Unauthorized(permissions)'], 401);
-        }
+        }*/
     }
 
     public function index(Request $request)
@@ -38,6 +38,19 @@ class ClientController extends Controller
         $max_activity_level = $request->input('maximium_activity_level_id');
         if(!empty($max_activity_level)) {
             $query->where('activity_level_id','<=',$max_activity_level);
+        }
+        $backflow_only = $request->input('backflow_only');
+        if(!empty($backflow_only)&&$backflow_only=='true') {
+            #$query->has('properties.backflow_assemblies');
+            $query->whereHas('properties.backflow_assemblies', function($query){
+                $query->where('active','true');
+            });
+        }
+        $zip = $request->input('zip');
+        if(!empty($zip)) {
+            $query->whereHas('properties', function($query) use ($zip){
+                $query->where('zip', 'like', "$zip%");
+            });
         }
         $items = $query->get();
         return $items;
@@ -64,7 +77,8 @@ class ClientController extends Controller
             'contacts',
             'contacts.properties',
             'properties',
-            'properties.contacts'
+            'properties.contacts',
+            'properties.propertyUnits'
         )
         ->findOrFail($id);
         return $item;

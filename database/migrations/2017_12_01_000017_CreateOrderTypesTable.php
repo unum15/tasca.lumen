@@ -19,7 +19,7 @@ class CreateOrderTypesTable extends Migration
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();            
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 

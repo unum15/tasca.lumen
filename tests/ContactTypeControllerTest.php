@@ -57,7 +57,7 @@ class ContactTypeControllerTest extends TestCase
     
     public function testRead()
     {
-        $contact_type = ContactType::first();
+        $contact_type = factory('App\ContactType')->create();
         $response = $this->actingAs($this->getAdminUser())->get('/contact_type/' . $contact_type->id);
         $response->seeStatusCode(200);
         $response->seeJson($contact_type->toArray());

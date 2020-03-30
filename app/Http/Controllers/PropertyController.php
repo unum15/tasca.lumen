@@ -41,6 +41,7 @@ class PropertyController extends Controller
             ->with('activityLevel')
             ->with('propertyType')
             ->with('contacts')
+            ->with('propertyUnits')
             ->orderBy('name');
         $values = $request->only(array_keys($this->validation));
         foreach($values as $field => $value){

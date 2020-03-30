@@ -8,13 +8,13 @@ class Order extends Model
 {
     protected $fillable = [
         'project_id',
-    'order_status_type_id',
+        'order_status_type_id',
         'name',
-    'date',
+        'date',
         'completion_date',
         'expiration_date',
         'approval_date',
-    'start_date',
+        'start_date',
         'description',
         'order_category_id',
         'order_priority_id',
