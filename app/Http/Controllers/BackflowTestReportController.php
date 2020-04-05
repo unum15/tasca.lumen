@@ -286,17 +286,17 @@ class BackflowTestReportController extends Controller
     static public function RPTestCheck1Results($test){
         $results = [
             'PSI' => $test['reading_2'],
-            'closed_tight' => $test['reading_2'] <= $test['reading_1'],
-            'leaked' => $test['reading_2'] ? $test['reading_2'] > $test['reading_1'] : false
+            'closed_tight' => $test['reading_1'] <= $test['reading_2'],
+            'leaked' => $test['reading_1'] ? $test['reading_1'] > $test['reading_2'] : false
         ];
         return $results;
     }
     
     static public function RPTestCheck2Results($test){
         $results = [
-            'PSI' => $test['reading_2'] <= $test['reading_1'] ? 'OK' : null,
-            'closed_tight' => $test['reading_2'] <= $test['reading_1'],
-            'leaked' => $test['reading_2'] ? $test['reading_2'] > $test['reading_1'] : false
+            'PSI' => $test['reading_1'] <= $test['reading_2'] ? 'OK' : null,
+            'closed_tight' => $test['reading_1'] <= $test['reading_2'],
+            'leaked' => $test['reading_1'] ? $test['reading_1'] > $test['reading_2'] : false
         ];
         return $results;
     }
