@@ -40,7 +40,11 @@ class BackflowTestReportController extends Controller
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = BackflowTestReport::with($includes)->find($id);
+        $item_query = BackflowTestReport::with($includes);
+        $item_query->with(['backflow_tests'=> function ($q) {
+            $q->orderBy('id');
+        }]);
+        $item = $item_query->find($id);
         return ['data' => $item];
     }
 
@@ -381,7 +385,7 @@ class BackflowTestReportController extends Controller
             $billing_property = $report->backflow_assembly->property;
         }
         $property = $report->backflow_assembly->property;
-        $initial = $report->backflow_tests->first();
+        $initial = $report->backflow_tests()->orderBy('id')->first();
         $final = null;
         if($report->backflow_tests->count() > 1){
             $final = $report->backflow_tests->last();

@@ -71,7 +71,7 @@ class BackflowRepairController extends Controller
 
     protected $model_includes = [
        'backflow_valve_part',
-       'backflow_valf',
+       'backflow_valve',
        'contact',
        'backflow_test_report'
     ];
