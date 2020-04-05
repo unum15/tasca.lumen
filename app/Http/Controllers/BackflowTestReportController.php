@@ -297,7 +297,7 @@ class BackflowTestReportController extends Controller
     
     static public function RPTestCheck2Results($test){
         $results = [
-            'PSI' => $test['reading_1'] <= $test['reading_2'] ? 'OK' : null,
+            'PSI' => $test['reading_1'] < $test['reading_2'] ? 'OK' : null,
             'closed_tight' => $test['reading_1'] < $test['reading_2'],
             'leaked' => $test['reading_1'] && strlen($test['reading_2']) ? $test['reading_1'] >= $test['reading_2'] : false
         ];
