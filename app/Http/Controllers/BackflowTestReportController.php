@@ -180,6 +180,9 @@ class BackflowTestReportController extends Controller
         if(is_numeric($psi)){
             $formatted = sprintf('%03.1f',$psi);
         }
+        else{
+            $padding--;
+        }
         for($x=strlen($formatted);$x<$padding;$x++){
             $formatted='&nbsp;'.$formatted;
         }
@@ -285,7 +288,7 @@ class BackflowTestReportController extends Controller
     
     static public function RPTestCheck1Results($test){
         $results = [
-            'PSI' => $test['reading_2'],
+            'PSI' => strlen($test['reading_2']) ? $test['reading_2'] : "N/A",
             'closed_tight' => $test['reading_1'] <= $test['reading_2'],
             'leaked' => $test['reading_1'] ? $test['reading_1'] > $test['reading_2'] : false
         ];
@@ -296,7 +299,7 @@ class BackflowTestReportController extends Controller
         $results = [
             'PSI' => $test['reading_1'] <= $test['reading_2'] ? 'OK' : null,
             'closed_tight' => $test['reading_1'] <= $test['reading_2'],
-            'leaked' => $test['reading_1'] ? $test['reading_1'] > $test['reading_2'] : false
+            'leaked' => $test['reading_1'] && strlen($test['reading_2']) ? $test['reading_1'] > $test['reading_2'] : false
         ];
         return $results;
     }
