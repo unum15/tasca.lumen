@@ -859,7 +859,7 @@ class BackflowTestReportController extends Controller
        'notes' => 'string|max:1020|nullable',
        'backflow_installed_to_code' => 'boolean',
        'report_date' => 'date',
-       'submitted_date' => 'date',
+       'submitted_date' => 'date|nullable',
        'tag_year' => 'string|max:4|nullable'
     ];
     
