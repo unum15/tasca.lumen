@@ -555,7 +555,9 @@ class BackflowAssemblyTableSeeder extends Seeder
                         'backflow_installed_to_code' => true,
                         'report_date' => $date->format('Y-m-d')
                     ]);
-                    for($test_count = 0;$test_count<2;$test_count++){
+                    $test_amount = rand (0,10);
+                    $test_amount = $test_amount < 5 ? $test_amount : 1;
+                    for($test_count = 0;$test_count<$test_amount;$test_count++){
                         $test = BackflowTest::create([
                             'backflow_test_report_id' => $report->id,
                             'contact_id' => $faker->randomElement($client_contacts),
@@ -565,26 +567,30 @@ class BackflowAssemblyTableSeeder extends Seeder
                             'tested_on' => $date->format('Y-m-d')
                         ]);
                     }
-                    $valves = $assembly->backflow_type->backflow_super_type->backflow_valves;
-                    foreach($valves as $valve){
-                        $valve_parts = $valve->backflow_valve_parts->pluck('id')->toArray();
-                        for($test_count = 0;$test_count<2;$test_count++){
-                            $test = BackflowRepair::create([
-                                'backflow_test_report_id' => $report->id,
-                                'contact_id' => $faker->randomElement($client_contacts),
-                                'backflow_valve_id' => $valve->id,
-                                'backflow_valve_part_id' => $faker->randomElement($valve_parts),
-                                'repaired_on' => $date->format('Y-m-d')
-                            ]);
-                        }
-                        for($test_count = 0;$test_count<2;$test_count++){
-                            $test = BackflowCleaning::create([
-                                'backflow_test_report_id' => $report->id,
-                                'contact_id' => $faker->randomElement($client_contacts),
-                                'backflow_valve_id' => $valve->id,
-                                'backflow_valve_part_id' => $faker->randomElement($valve_parts),
-                                'cleaned_on' => $date->format('Y-m-d')
-                            ]);
+                    if($test_amount > 1){
+                        $valves = $assembly->backflow_type->backflow_super_type->backflow_valves;
+                        foreach($valves as $valve){
+                            $valve_parts = $valve->backflow_valve_parts->pluck('id')->toArray();
+                            $test_amount = rand (0,4);
+                            for($test_count = 0;$test_count<$test_amount;$test_count++){
+                                $test = BackflowRepair::create([
+                                    'backflow_test_report_id' => $report->id,
+                                    'contact_id' => $faker->randomElement($client_contacts),
+                                    'backflow_valve_id' => $valve->id,
+                                    'backflow_valve_part_id' => $faker->randomElement($valve_parts),
+                                    'repaired_on' => $date->format('Y-m-d')
+                                ]);
+                            }
+                            $test_amount = rand (0,4);
+                            for($test_count = 0;$test_count<$test_amount;$test_count++){
+                                $test = BackflowCleaning::create([
+                                    'backflow_test_report_id' => $report->id,
+                                    'contact_id' => $faker->randomElement($client_contacts),
+                                    'backflow_valve_id' => $valve->id,
+                                    'backflow_valve_part_id' => $faker->randomElement($valve_parts),
+                                    'cleaned_on' => $date->format('Y-m-d')
+                                ]);
+                            }
                         }
                     }
                     $date->modify('-1 year');

@@ -20,10 +20,10 @@ class ClientController extends Controller
     
     public function __construct(Request $request)
     {
-        /*$this->middleware('auth');
+        $this->middleware('auth');
         if(($request->user())&&(!$request->user()->can('view-clients'))) {
             return response(['Unauthorized(permissions)'], 401);
-        }*/
+        }
     }
 
     public function index(Request $request)

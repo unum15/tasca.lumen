@@ -48,7 +48,9 @@ class BackflowTestReportController extends Controller
     {
         $item = BackflowTestReport::findOrFail($id);
         $values = $this->validateModel($request);
-        $values['submitted_date'] = isset($values['submitted_date']) && $values['submitted_date'] != "" ? $values['submitted_date'] : null;
+        if(isset($values['submitted_date'])){
+            $values['submitted_date'] = $values['submitted_date'] != "" ? $values['submitted_date'] : null;  //fix with middleware
+        }
         $item->update($values);
         return ['data' => $item];
     }
@@ -377,7 +379,10 @@ class BackflowTestReportController extends Controller
         }
         $property = $report->backflow_assembly->property;
         $initial = $report->backflow_tests->first();
-        $final = $report->backflow_tests->last();
+        $final = null;
+        if($report->backflow_tests->count() > 1){
+            $final = $report->backflow_tests->last();
+        }
         $first_parts=BackflowValvePart::whereHas('backflow_valve', function($q){
             $q->where('name', '=', 'First');
         })->orderBy('id')->get();
@@ -438,31 +443,11 @@ class BackflowTestReportController extends Controller
         $final_test_results = self::testResults($super_type,$final);
         $initial_contact = self::contactFormat($initial);
         $final_contact = self::contactFormat($final);
-        $initial_contact_name = '';
-        $initial_cert = '';
-        $initial_date = '';
-        $final_contact_name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $final_contact_backflow_certification_number = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        $final_tested_on = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-        if($initial){
-            if($initial->contact){
-                $initial_cert = $initial->contact->backflow_certification_number;
-                $initial_contact_name=$initial->contact->name;
-                if(30-strlen($initial_contact_name) > 0){
-                    $initial_contact_name.=str_repeat('&nbsp;',30-strlen($initial_contact_name));
-                }
-            }
-            $initial_date = date('m-d-Y',strtotime($initial->tested_on));
-            if($initial != $final){
-                $final_contact_name = $final->contact->name;
-                if(30-strlen($final_contact_name) > 0){
-                    $final_contact_name.=str_repeat('&nbsp;',30-strlen($final_contact_name));
-                }
-                $final_contact_backflow_certification_number = $final->contact->backflow_certification_number;
-                $final_tested_on = date('m-d-Y',strtotime($final->tested_on));
-                $final_passed = 'checked="checked"';
-            }
+        $first_repair = BackflowRepair::where('backflow_test_report_id', '=', $id)->first();
+        if($first_repair == null){
+            $first_repair=BackflowCleaning::where('backflow_test_report_id', '=', $id)->first();
         }
+        $repair_contact = self::contactFormat($first_repair);
         $number = "";
         $backflow_assembly_contact_name = "";
         if($report->backflow_assembly->contact){
@@ -820,7 +805,7 @@ class BackflowTestReportController extends Controller
                 </table>
                 <table class="plain" style="font-size:12pt;width:100%;">
                     <tr><td class="header" style="padding:0px;">Initial Test By:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($initial_contact['name'],42)  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($initial_contact['cert'],16)  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($initial_contact['date'],18)  . '</td></tr>
-                    <tr><td class="header">Repaired By:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['name'],42)  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['cert'],16)  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['date'],18)  . '</td></tr>
+                    <tr><td class="header">Repaired By:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($repair_contact['name'],42)  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($repair_contact['cert'],16)  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($repair_contact['date'],18)  . '</td></tr>
                     <tr><td class="header">Final Test By:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['name'],42)  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['cert'],16)  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['date'],18)  . '</td></tr>
                 </table>
                 <br />
@@ -886,6 +871,7 @@ class BackflowTestReportController extends Controller
        'backflow_assembly.property',
        'backflow_assembly.property.client',
        'backflow_assembly.backflow_type',
+       'backflow_assembly.backflow_type.backflow_super_type',
        'backflow_tests',
        'backflow_repairs',
        'backflow_cleanings'
