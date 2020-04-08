@@ -38,8 +38,7 @@ class VehicleControllerTest extends TestCase
         $item = factory('App\Vehicle')->create();
         $response = $this->get('/vehicle/' . $item->id . '?includes=vehicle_type');
         $response->seeStatusCode(200);
-        $item->vehicle_type;
-        $response->seeJsonEquals(['data' => $item->toArray()]);
+        $response->seeJson($item->toArray());
     }
     
     public function testUpdate()
@@ -48,6 +47,7 @@ class VehicleControllerTest extends TestCase
         $update = ['name' => 'test'];
         $response = $this->patch('/vehicle/' . $item->id, $update);
         $response->seeStatusCode(200);
+        $update['updated_at'] = date('Y-m-d H:i:s',strtotime($item->find($item->id)->pluck('updated_at')[0]));
         $updated_array = array_merge($item->toArray(), $update);
         $response->seeJsonEquals(['data' => $updated_array]);
         $this->seeInDatabase('vehicles', $updated_array);

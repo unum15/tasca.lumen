@@ -41,6 +41,7 @@ class BackflowTestControllerTest extends TestCase
         $update = ['notes' => 'test'];
         $response = $this->patch('/backflow_test/' . $item->id, $update);
         $response->seeStatusCode(200);
+        $update['updated_at'] = date('Y-m-d H:i:s',strtotime(BackflowTest::find($item->id)['updated_at']));
         $updated_array = array_merge($item->toArray(), $update);
         $response->seeJsonEquals(['data' => $updated_array]);
         $this->seeInDatabase('backflow_tests', $updated_array);

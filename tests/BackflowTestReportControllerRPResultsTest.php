@@ -20,7 +20,7 @@ class BackflowTestReportControllerRPResultsTest extends TestCase
                 'leaked' => false
             ],
             'check_2' => [
-                'PSI' => true,
+                'PSI' => 'OK',
                 'closed_tight' => true,
                 'leaked' => false
             ],
@@ -45,7 +45,7 @@ class BackflowTestReportControllerRPResultsTest extends TestCase
                 'leaked' => false
             ],
             'check_2' => [
-                'PSI' => true,
+                'PSI' => 'OK',
                 'closed_tight' => true,
                 'leaked' => false
             ],
@@ -99,9 +99,9 @@ class BackflowTestReportControllerRPResultsTest extends TestCase
     {
         $test = ['reading_1' => 2, 'reading_2' => null];
         $expected_results = [
-            'PSI' => null,
+            'PSI' => 'N/A',
             'closed_tight' => false,
-            'leaked' => false
+            'leaked' => true
         ];
         $results = BackflowTestReportController::RPTestCheck1Results($test);
         $this->assertEquals($expected_results, $results);
@@ -111,7 +111,7 @@ class BackflowTestReportControllerRPResultsTest extends TestCase
     {
         $test = ['reading_1' => 2, 'reading_2' => 3];
         $expected_results = [
-            'PSI' => true,
+            'PSI' => 'OK',
             'closed_tight' => true,
             'leaked' => false
         ];
@@ -123,9 +123,9 @@ class BackflowTestReportControllerRPResultsTest extends TestCase
     {
         $test = ['reading_1' => 2, 'reading_2' => 2];
         $expected_results = [
-            'PSI' => true,
-            'closed_tight' => true,
-            'leaked' => false
+            'PSI' => null,
+            'closed_tight' => false,
+            'leaked' => true
         ];
         $results = BackflowTestReportController::RPTestCheck2Results($test);
         $this->assertEquals($expected_results, $results);
@@ -147,8 +147,8 @@ class BackflowTestReportControllerRPResultsTest extends TestCase
     {
         $test = ['reading_1' => 2, 'reading_2' => 2];
         $expected_results = [
-            'PSI' => $test['reading_2'],
-            'closed_tight' => true,
+            'PSI' => 'N/A',
+            'closed_tight' => false,
             'leaked' => false
         ];
         $results = BackflowTestReportController::RPTestCheck1Results($test);
@@ -171,9 +171,9 @@ class BackflowTestReportControllerRPResultsTest extends TestCase
     {
         $test = ['reading_1' => 2, 'reading_2' => 1];
         $expected_results = [
-            'PSI' => $test['reading_2'],
+            'PSI' => 'N/A',
             'closed_tight' => false,
-            'leaked' => true
+            'leaked' => false
         ];
         $results = BackflowTestReportController::RPTestCheck1Results($test);
         $this->assertEquals($expected_results, $results);

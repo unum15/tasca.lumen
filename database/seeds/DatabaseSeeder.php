@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
         DB::table('emails')->delete();
         DB::table('phone_numbers')->delete();
         DB::table('contacts')->delete();
+        DB::table('projects')->delete();
+        DB::table('orders')->delete();
+        DB::table('tasks')->delete();
+        DB::table('task_dates')->delete();
         //create the admin user first
         $this->call(ContactsAdminSeeder::class);
         $this->call(ClientsTableSeeder::class);

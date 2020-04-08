@@ -15,7 +15,7 @@ class ContactTypeControllerTest extends TestCase
     
     public function testCreate()
     {
-        $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => true];
+        $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1];
         $response = $this->actingAs($this->getAdminUser())->post('/contact_type',$item);
         $response->seeStatusCode(200);                
         $response->seeJson($item);

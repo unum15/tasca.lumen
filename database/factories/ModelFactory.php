@@ -408,7 +408,23 @@ $factory->define(App\BackflowAssembly::class, function (Faker\Generator $faker) 
         'use' => $faker->word,
         'placement' => $faker->word,
         'serial_number' => $faker->word,
-        'notes' => $faker->word
+        'notes' => $faker->word,
+        'property_unit_id' => null,
+        'active' => true,
+        'month' => $faker->word,
+        'gps' => null,
+    ];
+});
+
+$factory->define(App\BackflowModel::class, function (Faker\Generator $faker) {
+    $manufacturer = factory('App\BackflowManufacturer')->create();
+    $type = factory('App\BackflowType')->create();
+    return [
+        'backflow_manufacturer_id' => $manufacturer->id,
+        'backflow_type_id' => $type->id,
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
     ];
 });
 
@@ -444,18 +460,6 @@ $factory->define(App\BackflowOld::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\BackflowModel::class, function (Faker\Generator $faker) {
-    $manufacturer = factory('App\BackflowManufacturer')->create();
-    $type = factory('App\BackflowType')->create();
-    return [
-        'backflow_manufacturer_id' => $manufacturer->id,
-        'backflow_type_id' => $type->id,
-        'name' => $faker->word,
-        'notes' => $faker->text,
-        'sort_order' => $faker->randomDigitNotNull
-    ];
-});
-
 $factory->define(App\BackflowValvePart::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
@@ -472,7 +476,8 @@ $factory->define(App\BackflowTestReport::class, function (Faker\Generator $faker
         'notes' => $faker->text,
         'backflow_installed_to_code' => $faker->boolean,
         'report_date' => date('Y-m-d'),
-        'submitted_date' => date('Y-m-d')
+        'submitted_date' => date('Y-m-d'),
+        'tag_year' => $faker->regexify('\d{4}')
     ];
 });
 

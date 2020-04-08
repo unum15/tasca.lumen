@@ -43,19 +43,40 @@ class ProjectsTableSeeder extends Seeder
         $task_statuses = TaskStatus::pluck('id')->toArray();
         $task_actions = TaskAction::pluck('id')->toArray();
         
+        $today = date_create();
+        $yesterday = date_create();
+        $yesterday->modify('-1 day');
+        $last_week = date_create();
+        $last_week->modify('-7 day');
+        $last_month = date_create();
+        $last_month->modify('-30 day');
+        $last_year = date_create();
+        $last_year->modify('-365 day');
+        $next_week = date_create();
+        $next_week->modify('+7 day');
+        
+        
+        
         //$priorities = Priority::pluck('id')->toArray();;
         $work_types = WorkType::pluck('id')->toArray();;
         foreach($properties as $property){
             $client_contacts = Contact::whereHas('clients', function($q) use ($property){
                 $q->where('client_id', $property->client_id);
             })->pluck('id')->toArray();
+            $open_date = $faker->dateTimeBetween('-1 month');
+            $closed_date = null;
+            $expiration = clone $open_date;
+            $expiration->modify('+30 days');
+            if(rand(0,4)%4 == 0){
+                $closed_date = $faker->dateTimeBetween($open_date->format('Y-m-d'));
+            }
             $project = Project::create([
                 'name' => $faker->word,
                 'notes' => $faker->text,
                 'client_id' => $property->client_id,
                 'contact_id' => $faker->randomElement($client_contacts),
-                'open_date' => $faker->date,
-                'close_date' => $faker->date,
+                'open_date' => $open_date->format('Y-m-d'),
+                'close_date' => $closed_date ? $closed_date->format('Y-m-d') : null,
                 'creator_id' => $faker->randomElement($contacts),
                 'updater_id' => $faker->randomElement($contacts)
             ]);
@@ -64,9 +85,9 @@ class ProjectsTableSeeder extends Seeder
                 'project_id' => $project->id,
                 'order_status_type_id' => 3,
                 'date' => $faker->date,
-                'approval_date' => $faker->date,
-                'completion_date' => $faker->date,
-                'expiration_date' => $faker->date,
+                'approval_date' => $open_date->format('Y-m-d'),
+                'completion_date' => $closed_date ? $closed_date->format('Y-m-d') : null,
+                'expiration_date' => $expiration->format('Y-m-d'),
                 'name' => $faker->word,
                 'description' => $faker->text,
                 'order_category_id' => $faker->randomElement($service_order_categories),
@@ -97,10 +118,11 @@ class ProjectsTableSeeder extends Seeder
             
             $order->properties()->sync([$property->id]);
             
-            Task::create([
+            $task = Task::create([
                 'order_id' => $order->id,
                 'name' => $faker->word,
                 'description' => $faker->text,
+                'completion_date' => $closed_date ? $closed_date->format('Y-m-d') : null,
                 'task_category_id' => $faker->randomElement($task_categories),
                 'task_type_id' => $faker->randomElement($task_types),
                 'task_status_id' => $faker->randomElement($task_statuses),
@@ -111,6 +133,11 @@ class ProjectsTableSeeder extends Seeder
                 'updater_id' => $faker->randomElement($contacts)
             ]);
             
+            $task->dates()->create([
+                'date' => $faker->dateTimeBetween($open_date->format('Y-m-d')),
+                'creator_id' => $faker->randomElement($contacts),
+                'updater_id' => $faker->randomElement($contacts)
+            ]);
         }
     }
 }

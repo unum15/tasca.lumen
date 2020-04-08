@@ -32,7 +32,9 @@ class BackflowTestReportControllerTest extends TestCase
         $item = factory('App\BackflowTestReport')->create();
         $response = $this->get('/backflow_test_report/' . $item->id);
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $item->toArray()]);
+        $data = $item->toArray();
+        $data['backflow_tests'] = [];
+        $response->seeJsonEquals(['data' => $data]);
         $this->seeInDatabase('backflow_test_reports', $item->toArray());
     }
     
@@ -42,6 +44,7 @@ class BackflowTestReportControllerTest extends TestCase
         $update = ['notes' => 'test'];
         $response = $this->patch('/backflow_test_report/' . $item->id, $update);
         $response->seeStatusCode(200);
+        $update['updated_at'] = date('Y-m-d H:i:s',strtotime(BackflowTestReport::find($item->id)['updated_at']));
         $updated_array = array_merge($item->toArray(), $update);
         $response->seeJsonEquals(['data' => $updated_array]);
         $this->seeInDatabase('backflow_test_reports', $updated_array);
