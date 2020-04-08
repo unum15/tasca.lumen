@@ -118,7 +118,7 @@ class BackflowOldController extends Controller
         $backflow_size = BackflowSize::where('name', $size)->first();
         $backflow_manufacturer = BackflowManufacturer::where('name', 'ilike', trim($item->manufacturer))->first();
         $backflow_model = BackflowModel::where('name', 'ilike', trim($item->model))->first();
-        
+        $month = preg_replace('/\D/', '', $item->month);
         if(!$backflow_type){
             Log::error($item);
             return response(['message' => 'Bad backflow type(' . $item->style . '), can not import.'], 422);
@@ -147,7 +147,7 @@ class BackflowOldController extends Controller
                 'backflow_manufacturer_id' => $backflow_manufacturer->id,
                 'backflow_model_id' => $backflow_model->id,
                 'active' => $item->active == 'Y',
-                'month'=>$item->month,
+                'month'=>$month,
                 'use'=>$item->use,
                 'placement'=>$item->placement,
                 'gps'=>$item->gps,
