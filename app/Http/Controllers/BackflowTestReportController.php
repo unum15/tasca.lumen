@@ -373,12 +373,8 @@ class BackflowTestReportController extends Controller
         }
         $contact['name'] = $test->contact->name;
         $contact['cert'] = $test->contact->backflow_certification_number;
-        if($test->tested_on){
-            $contact['date'] = date('m-d-Y',strtotime($test->tested_on));
-        }
-        else{
-            $contact['date'] = date('m-d-Y',strtotime($test->repaired_on));
-        }
+        $contact['date'] = date('m-d-Y',strtotime($test->tested_on ?? $test->cleaned_on ?? $test->repaired_on));
+//        $contact['date'] = date('m-d-Y',strtotime($test->tested_on));
         return $contact;
     }
     
@@ -820,6 +816,10 @@ class BackflowTestReportController extends Controller
                     <tr><td class="header">Repaired By:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($repair_contact['name'],42)  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($repair_contact['cert'],16)  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($repair_contact['date'],18)  . '</td></tr>
                     <tr><td class="header">Final Test By:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['name'],42)  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['cert'],16)  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['date'],18)  . '</td></tr>
                 </table>
+                <div class="info">
+                <div style="font-weight:bold;">Report Notes</div>
+                '. $report->notes .'
+                </div>
                 <br />
                 <div class="info">This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.self::checked($initial_test_results['satisfactory']).'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.self::checked($initial_test_results['unsatisfactory']).'/></div>
                 <div class="info">This assembly\'s <span class="header">FINAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.self::checked($final_test_results['satisfactory']).' /> <span class="header">Unsatisfactory</span><input type="checkbox" /></div>
