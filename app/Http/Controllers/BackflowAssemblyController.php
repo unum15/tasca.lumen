@@ -77,7 +77,7 @@ class BackflowAssemblyController extends Controller
     
     protected $model_validation = [
        'property_id' => 'integer|exists:properties,id',
-       'property_unit_id' => 'integer|exists:units,id|nullable',
+       'property_unit_id' => 'integer|exists:property_units,id|nullable',
        'contact_id' => 'integer|exists:contacts,id|nullable',
        'backflow_type_id' => 'integer|nullable|exists:backflow_types,id',
        'backflow_water_system_id' => 'integer|nullable|exists:backflow_water_systems,id',
