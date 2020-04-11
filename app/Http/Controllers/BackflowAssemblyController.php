@@ -89,18 +89,22 @@ class BackflowAssemblyController extends Controller
             $year_table .= '
                 </tr>';
         }
+        $src = '/api/images/w_logo.jpg';
+        if(env('APP_ENV')=='local'){
+            $src = '/images/w_logo.jpg';
+        }
         $html = '
-        <div style="border:1px solid black;"/>
-            <div style="width:49%;float:left;position:relative;border-right:1px solid black;">
+        <div style="border:1px solid black;padding-bottom:7px;padding-top:7px;">
+            <div style="width:51%;float:left;position:relative;border-right:1px solid black;">
                 This assembly is tested annually by<br />
-                <img src="/api/images/w_logo.jpg" style="width:50%;float:left;" />Waters Contracting<br />
+                <img src="' . $src . '" style="width:40%;float:left;margin-right:10px;margin-bottom:20px;" />Waters Contracting<br />
                 801-546-0844<br />
-                Paul Waters<br />
+                License # 17193<br />
                 License # 96005<br />
-                Level II Backflow Technician<br />
-                This is a record of this device testing history<br />
-                DO NOT REMOVE THIS TAG YEAR<br />
-                <table style="font-size:8pt;text-align:center;">
+                Level II Backflow Technicians<br />
+                <div style="text-align:center;">This is a record of this device testing history</div>
+                <div style="font-size:150%;text-align:center;font-weight:bold;">DO NOT REMOVE THIS TAG</div>
+                <table style="font-size:6pt;text-align:center;">
                     <tr>
                         <td>YEAR</td>
                         <td colspan="2">J</td>
@@ -119,17 +123,18 @@ class BackflowAssemblyController extends Controller
                     ' . $year_table . '
                 </table>
             </div>
-            <div style="width:50%;float:right;position:relative;">
-                If this assembly needs attention call the number on the<br />
-                other side with the following information.<br />
-                Owner ' . $backflow_assembly->property->client->name . '<br />
-                Address ' . $backflow_assembly->property->address1 . ' ' . $backflow_assembly->property->address2 . ' ' . ($backflow_assembly->property_unit ? $backflow_assembly->property_unit->name : null)  . '<br />
+            <div style="width:48%;float:right;position:relative;">
+                If this assembly needs attention call the number on<br />
+                the other side with the following information.<br />
+                <span style="font-weight:bold;">Owner</span> ' . $backflow_assembly->property->client->name . '<br />
+                <span style="font-weight:bold;">Location</span> ' . $backflow_assembly->property->name . '<br />
+                <span style="font-weight:bold;">Address</span> ' . $backflow_assembly->property->address1 . ' ' . $backflow_assembly->property->address2 . ' ' . ($backflow_assembly->property_unit ? $backflow_assembly->property_unit->name : null)  . '<br />
                 ' .  $backflow_assembly->property->city . ',' . $backflow_assembly->property->state . ' ' . $backflow_assembly->property->zip . '<br />
-                Placement ' . $backflow_assembly->placement . '<br />
-                Use ' . $backflow_assembly->use . '<br />
-                Type of Assembly ' . $backflow_assembly->backflow_type->name . ' Size ' . $backflow_assembly->backflow_size->name . '"<br />
-                Manufacturer ' . $backflow_assembly->backflow_manufacturer->name . ' Model ' . $backflow_assembly->backflow_model->name . '<br />
-                Serial No: ' . $backflow_assembly->serial_number . '<br />
+                <span style="font-weight:bold;">Placement</span> ' . $backflow_assembly->placement . '<br />
+                <span style="font-weight:bold;">Use</span> ' . $backflow_assembly->use . '<br />
+                <span style="font-weight:bold;">Type of Assembly</span> ' . $backflow_assembly->backflow_type->name . ' Size ' . $backflow_assembly->backflow_size->name . '"<br />
+                <span style="font-weight:bold;">Manufacturer</span> ' . $backflow_assembly->backflow_manufacturer->name . ' Model ' . $backflow_assembly->backflow_model->name . '<br />
+                <span style="font-weight:bold;">Serial No</span> ' . $backflow_assembly->serial_number . '<br />
             </div>
         </div>
 ';
@@ -146,8 +151,13 @@ class BackflowAssemblyController extends Controller
     </head>
     <body style="font-size:10pt">
 ';
+        $tags_on_page = 0;
         foreach($ids as $id){
             $html .= $this->tagHtml($id);
+            $tags_on_page ++;
+            if($tags_on_page == 4){
+                
+            }
         }
         $html .='
     </body>
