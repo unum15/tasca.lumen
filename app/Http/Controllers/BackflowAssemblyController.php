@@ -93,7 +93,7 @@ class BackflowAssemblyController extends Controller
         <div style="border:1px solid black;"/>
             <div style="width:49%;float:left;position:relative;border-right:1px solid black;">
                 This assembly is tested annually by<br />
-                <img src="/images/w_logo.jpg" style="width:50%;float:left;" />Waters Contracting<br />
+                <img src="/api/images/w_logo.jpg" style="width:50%;float:left;" />Waters Contracting<br />
                 801-546-0844<br />
                 Paul Waters<br />
                 License # 96005<br />
