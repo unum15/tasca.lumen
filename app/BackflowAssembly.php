@@ -32,6 +32,11 @@ class BackflowAssembly extends Model
     {
         return $this->belongsTo('App\Property');
     }
+    
+    public function property_unit()
+    {
+        return $this->belongsTo('App\PropertyUnit');
+    }
 
     public function contact()
     {
