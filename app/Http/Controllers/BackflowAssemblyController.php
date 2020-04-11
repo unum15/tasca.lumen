@@ -129,7 +129,7 @@ class BackflowAssemblyController extends Controller
                 <span style="font-weight:bold;">Owner</span> ' . $backflow_assembly->property->client->name . '<br />
                 <span style="font-weight:bold;">Location</span> ' . $backflow_assembly->property->name . '<br />
                 <span style="font-weight:bold;">Address</span> ' . substr($backflow_assembly->property->address1 . ' ' . $backflow_assembly->property->address2 . ' ' . ($backflow_assembly->property_unit ? $backflow_assembly->property_unit->name : null)  . ' ' .  $backflow_assembly->property->city . ',' . $backflow_assembly->property->state . ' ' . $backflow_assembly->property->zip, 0, 35) . '<br />
-                <span style="font-weight:bold;">Placement</span> ' . $backflow_assembly->placement . '<br />
+                <span style="font-weight:bold;">Placement</span> ' . substr($backflow_assembly->placement,0,35) . '<br />
                 <span style="font-weight:bold;">Use</span> ' . $backflow_assembly->use . '<br />
                 <span style="font-weight:bold;">Type of Assembly</span> ' . $backflow_assembly->backflow_type->name . ' Size ' . $backflow_assembly->backflow_size->name . '"<br />
                 <span style="font-weight:bold;">Manufacturer</span> ' . $backflow_assembly->backflow_manufacturer->name . ' Model ' . $backflow_assembly->backflow_model->name . '<br />
