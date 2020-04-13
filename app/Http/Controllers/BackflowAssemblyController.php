@@ -148,17 +148,22 @@ class BackflowAssemblyController extends Controller
         $html = '<!DOCTYPE html>
     <head>
     </head>
-    <body style="font-size:10pt">
+    <body style="font-size:10pt;">
+        <div style="page-break-after: always;margin: .15in 0in .5in 0in">
 ';
         $tags_on_page = 0;
         foreach($ids as $id){
             $html .= $this->tagHtml($id);
             $tags_on_page ++;
             if($tags_on_page == 4){
-                
+                $html .= '
+        </div>
+        <div style="page-break-after: auto;margin: .15in 0in .5in 0in">
+                ';
             }
         }
         $html .='
+        </div>
     </body>
 </html>';
         $pdf = Pdf::loadHtml($html);
