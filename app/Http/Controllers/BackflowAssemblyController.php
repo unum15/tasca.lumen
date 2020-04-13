@@ -79,10 +79,12 @@ class BackflowAssemblyController extends Controller
             for($month = 0; $month < 12; $month++){
                 $year_table .= '
                         <td>
-                            T
+				T
+				&nbsp;
                         </td>
                         <td>
                             R
+				&nbsp;
                         </td>
                 ';
             }
@@ -94,7 +96,7 @@ class BackflowAssemblyController extends Controller
             $src = '/images/w_logo.jpg';
         }
         $html = '
-        <div style="border:1px solid black;padding-bottom:7px;padding-top:7px;">
+        <div style="border:1px solid black;padding-bottom:3px;padding-top:3px;padding-left:5px;">
             <div style="width:51%;float:left;position:relative;border-right:1px solid black;">
                 This assembly is tested annually by<br />
                 <img src="' . $src . '" style="width:40%;float:left;margin-right:10px;margin-bottom:20px;" />Waters Contracting<br />
@@ -123,7 +125,7 @@ class BackflowAssemblyController extends Controller
                     ' . $year_table . '
                 </table>
             </div>
-            <div style="width:48%;float:right;position:relative;">
+            <div style="width:47%;float:right;position:relative;font-size:9pt;padding-left:5px;">
                 If this assembly needs attention call the number on<br />
                 the other side with the following information.<br />
                 <span style="font-weight:bold;">Owner</span> ' . $backflow_assembly->property->client->name . '<br />
@@ -147,9 +149,15 @@ class BackflowAssemblyController extends Controller
         
         $html = '<!DOCTYPE html>
     <head>
+	<style>
+		@page {
+			size: 8.5in 11in;
+			margin: .5in;
+		}
+	</style>
     </head>
     <body style="font-size:10pt;">
-        <div style="page-break-after: always;margin: .15in 0in .5in 0in">
+        <div style="page-break-after: auto;">
 ';
         $tags_on_page = 0;
         foreach($ids as $id){
@@ -158,7 +166,7 @@ class BackflowAssemblyController extends Controller
             if($tags_on_page == 4){
                 $html .= '
         </div>
-        <div style="page-break-after: auto;margin: .15in 0in .5in 0in">
+        <div style="page-break-after: auto;">
                 ';
             }
         }
@@ -166,7 +174,7 @@ class BackflowAssemblyController extends Controller
         </div>
     </body>
 </html>';
-        $pdf = Pdf::loadHtml($html);
+	$pdf = PDF::loadHtml($html, ['format' => 'Letter']);
         $backflow_assembly = BackflowAssembly::findOrFail($id);
         $filename = $backflow_assembly->property->name . '-' . $backflow_assembly->backflow_water_system->name . '-' .$backflow_assembly->use;
         return $pdf->stream($filename . '.pdf');
