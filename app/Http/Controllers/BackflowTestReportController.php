@@ -103,7 +103,7 @@ class BackflowTestReportController extends Controller
     {
         $item = BackflowTestReport::findOrFail($id);
         $item->delete();
-        return response([], 401);
+        return response([], 204);
     }
     
     public function htmlHeader(){

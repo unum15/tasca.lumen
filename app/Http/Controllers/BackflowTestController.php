@@ -53,7 +53,7 @@ class BackflowTestController extends Controller
     {
         $item = BackflowTest::findOrFail($id);
         $item->delete();
-        return response([], 401);
+        return response([], 204);
     }
     
     protected $model_validation = [
