@@ -65,8 +65,7 @@ class BackflowTestReportControllerTest extends TestCase
     {
         $item = factory('App\BackflowTestReport')->create();
         $response = $this->delete('/backflow_test_report/' . $item->id);
-        $response->seeStatusCode(401);
-        $response->seeJsonEquals([]);
+        $response->seeStatusCode(204);
         $this->notSeeInDatabase('backflow_test_reports', $item->toArray());
     }
 }

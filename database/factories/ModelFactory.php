@@ -411,7 +411,7 @@ $factory->define(App\BackflowAssembly::class, function (Faker\Generator $faker) 
         'notes' => $faker->word,
         'property_unit_id' => null,
         'active' => true,
-        'month' => $faker->word,
+        'month' => (string)$faker->randomDigitNotNull,
         'gps' => null,
     ];
 });

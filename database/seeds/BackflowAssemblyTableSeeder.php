@@ -533,7 +533,9 @@ class BackflowAssemblyTableSeeder extends Seeder
             $client_contacts = Contact::whereHas('clients', function($q) use ($property){
                 $q->where('client_id', $property->client_id);
             })->pluck('id')->toArray();
-            for($assembly_count = 0;$assembly_count<10;$assembly_count++){
+            $acount = rand(1,19);
+            $month = $faker->numberBetween(1,12);
+            for($assembly_count = 0;$assembly_count<$acount;$assembly_count++){
                 $assembly = BackflowAssembly::create([
                     'property_id' => $property->id,
                     'contact_id' => $faker->randomElement($client_contacts),
@@ -545,15 +547,19 @@ class BackflowAssemblyTableSeeder extends Seeder
                     'placement' => $faker->randomElement($placements),
                     'backflow_size_id' => $faker->randomElement($backflow_sizes),
                     'serial_number' => $faker->regexify('[\w-]{3,9}'),
+                    'month' => $month,
                     'notes' => $faker->text
                 ]);
-                $date = date_create();
-                for($report_count = 0;$report_count<5;$report_count++){
+                $rcount = rand(1,10);
+                $current_year = date('Y');
+                for($report_year = $current_year - $rcount;$report_year<=$current_year;$report_year++){
+                    $date = $faker->dateTimeBetween("$report_year-$month-1","$report_year-$month-31",);
                     $report = BackflowTestReport::create([
                         'backflow_assembly_id' => $assembly->id,
                         'visual_inspection_notes' => $faker->text,
                         'backflow_installed_to_code' => true,
-                        'report_date' => $date->format('Y-m-d')
+                        'report_date' => $date->format('Y-m-d'),
+                        'submitted_date' => $date->format('Y-m-d')
                     ]);
                     $test_amount = rand (0,10);
                     $test_amount = $test_amount < 5 ? $test_amount : 1;

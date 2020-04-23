@@ -184,7 +184,7 @@ class OrderController extends Controller
         return response([], 204);
     }    
 
-    public function convert(Request $request)
+    public function convert($id, Request $request)
     {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
@@ -199,7 +199,7 @@ class OrderController extends Controller
         $items = [];
         $properties = $request->only('properties');
 
-        $original_order = Order::findOrFail($values['id']);
+        $original_order = Order::findOrFail($id);
         //add number as per Paul
         $order_number = 1;
         $recurring = ((!empty($values['recurring']))&&($values['recurring'] == 'true'));
@@ -241,9 +241,11 @@ class OrderController extends Controller
                 'service_window' => $request->user()->default_service_window
                 ]
             );
+            array_push($items, Order::findOrFail($original_order->id));
         }
         else{
             $original_order->update(['completion_date' => date('Y-m-d')]);
+            array_push($items, Order::findOrFail($original_order->id));
         }
         return $items;
     }

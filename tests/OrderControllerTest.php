@@ -113,6 +113,15 @@ class OrderControllerTest extends TestCase
         $response->seeJsonEquals($dbitem->toArray());
     }
     
+    public function testConversion()
+    {
+        $item = factory('App\Order')->create();
+        $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id);
+        $response->seeStatusCode(200);
+        $dbitem = Order::find($item->id);
+        print $response->response->getContent();
+    }
+    
     public function testDelete()
     {
         $item = factory('App\Order')->create();
