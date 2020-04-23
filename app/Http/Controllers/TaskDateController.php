@@ -175,6 +175,18 @@ class TaskDateController extends Controller
                     }
                 );
                 break;
+            case 'service':
+                $items_query->where(
+                    function ($q) {
+                            $q->whereNotNull('orders.date')
+                                ->whereNull('orders.start_date')
+                                ->whereNull('orders.completion_date')
+                                ->whereNull('orders.expiration_date')
+                                ->where('recurring', false)
+                                ->where('renewable', false);
+                    }
+                );
+                break;
             case 'pending':
                 $items_query->where('orders.start_date', '>', $current_date);
                 break;
