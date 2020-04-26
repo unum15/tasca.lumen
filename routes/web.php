@@ -389,3 +389,10 @@ $router->post('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@createP
 $router->put('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@updateClient');
 $router->put('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@updateContact');
 $router->put('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@updateProperty');
+
+
+$router->get('/clock_ins', ['uses' => 'ClockInController@index', 'as' => 'clock_in.index']);
+$router->post('/clock_in', ['uses' => 'ClockInController@create', 'as' => 'clock_in.create']);
+$router->get('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@read', 'as' => 'clock_in.read']);
+$router->patch('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@update', 'as' => 'clock_in.update']);
+$router->delete('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@delete', 'as' => 'clock_in.delete']);
