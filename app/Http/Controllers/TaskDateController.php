@@ -120,7 +120,7 @@ class TaskDateController extends Controller
                 'appointment_status_id',
                 'clients.name AS client',
                 'properties.name AS property',
-                DB::raw("properties.address1||' '||properties.address2||' - '||properties.city AS address"),
+                DB::raw("COALESCE(properties.address1,'')||' '||COALESCE(properties.address2,'')||' - '||COALESCE(properties.city,'') AS address"),
                 'tasks.description',
                 'order_priorities.name AS order_priority',
                 'task_categories.name AS task_category',
