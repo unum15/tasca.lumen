@@ -26,7 +26,7 @@ class TaskDateController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -107,6 +107,9 @@ class TaskDateController extends Controller
                 'orders.start_date',
                 'orders.service_window',
                 'tasks.name',
+                'orders.name AS order_name',
+                'orders.description AS order_description',
+                'orders.date AS order_date',
                 'orders.approval_date',
                 'orders.expiration_date',
                 'orders.completion_date',
@@ -117,6 +120,7 @@ class TaskDateController extends Controller
                 'appointment_status_id',
                 'clients.name AS client',
                 'properties.name AS property',
+                DB::raw("properties.address1||' '||properties.address2||' - '||properties.city AS address"),
                 'tasks.description',
                 'order_priorities.name AS order_priority',
                 'task_categories.name AS task_category',
@@ -135,6 +139,7 @@ class TaskDateController extends Controller
                 'tasks.billed_date',
                 'tasks.task_type_id',
                 'orders.order_status_type_id',
+                'tasks.crew_hours',
                 'crew_id',
                 'crews.name AS crew'
             )
