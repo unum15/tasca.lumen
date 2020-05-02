@@ -563,3 +563,19 @@ $factory->define(App\ClockIn::class, function (Faker\Generator $faker) {
         'updater_id' => $faker->randomDigitNotNull
     ];
 });
+
+$factory->define(App\OverheadAssignment::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull,
+    ];
+});
+
+$factory->define(App\OverheadCategory::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
