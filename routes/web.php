@@ -396,3 +396,4 @@ $router->post('/clock_in', ['uses' => 'ClockInController@create', 'as' => 'clock
 $router->get('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@read', 'as' => 'clock_in.read']);
 $router->patch('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@update', 'as' => 'clock_in.update']);
 $router->delete('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@delete', 'as' => 'clock_in.delete']);
+$router->get('/clock_in/current', ['uses' => 'ClockInController@current', 'as' => 'clock_in.current']);

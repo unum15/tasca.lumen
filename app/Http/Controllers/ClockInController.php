@@ -27,6 +27,9 @@ class ClockInController extends Controller
     public function create(Request $request)
     {
         $values = $this->validateModel($request, true);
+        $values['contact_id'] = $values['contact_id'] ?? $request->user()->id;
+        $values['creator_id'] = $request->user()->id;
+        $values['updater_id'] = $request->user()->id;
         $item = ClockIn::create($values);
         return response(['data' => $item], 201, ['Location' => route('clock_in.read', ['id' => $item->id])]);
     }
@@ -35,6 +38,12 @@ class ClockInController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = ClockIn::with($includes)->find($id);
+        return ['data' => $item];
+    }
+    
+    public function current(Request $request)
+    {
+        $item = ClockIn::where('contact_id', $request->user()->id)->whereRaw('clock_in::DATE=NOW()::DATE')->orderByDesc('clock_in')->first();
         return ['data' => $item];
     }
 
@@ -63,10 +72,7 @@ class ClockInController extends Controller
     ];
     
     protected $model_validation_required = [
-       'contact_id' => 'required',
        'clock_in' => 'required',
-       'creator_id' => 'required',
-       'updater_id' => 'required',
     ];
 
     protected $model_includes = [
