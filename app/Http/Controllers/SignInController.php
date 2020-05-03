@@ -146,15 +146,15 @@ class SignInController extends Controller
             'TaskDate.Task',
             'OverheadAssignment',
             'OverheadCategory',
-            'ClockIn' => function ($q) use ($request){
-                $q->where('contact_id', $request->user()->id)
-                ->whereNull('clock_out')
-                ->whereRaw('clock_in::DATE=NOW()::DATE');
-            },
+            'ClockIn',
             'ClockIn.Contact'
             ]
         )
-        
+        ->whereHas('clockIn', function ($q) use ($request){
+                $q->where('contact_id', $request->user()->id)
+                ->whereNull('clock_out')
+                ->whereRaw('clock_in::DATE=NOW()::DATE');
+        })
         ->whereNull('sign_out')
         ->orderByDesc('sign_in')
         ->first();
