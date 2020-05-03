@@ -43,7 +43,11 @@ class ClockInController extends Controller
     
     public function current(Request $request)
     {
-        $item = ClockIn::where('contact_id', $request->user()->id)->whereRaw('clock_in::DATE=NOW()::DATE')->orderByDesc('clock_in')->first();
+        $item = ClockIn::where('contact_id', $request->user()->id)
+            ->whereRaw('clock_in::DATE=NOW()::DATE')
+            ->whereNull('clock_out')
+            ->orderByDesc('clock_in')
+            ->first();
         return ['data' => $item];
     }
 

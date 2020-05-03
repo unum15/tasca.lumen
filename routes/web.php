@@ -199,6 +199,7 @@ $router->get('/sign_ins', 'SignInController@index');
 $router->get('/sign_ins/by_employee', 'SignInController@by_employee');
 $router->post('/sign_in', 'SignInController@create');
 $router->get('/sign_in/{id:[0-9]+}', 'SignInController@read');
+$router->get('/sign_in/current', 'SignInController@current');
 $router->patch('/sign_in/{id:[0-9]+}', 'SignInController@update');
 $router->delete('/sign_in/{id:[0-9]+}', 'SignInController@delete');
 

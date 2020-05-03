@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\DB;
 class SignInController extends Controller
 {
     private $validation = [
-        'contact_id' => 'integer|exists:contacts,id',
         'task_date_id' => 'integer|exists:task_dates,id',
+        'clock_in_id' => 'integer|exists:clock_ins,id',
+        'overhead_assignment_id' => 'integer|exists:overhead_assignments,id',
+        'overhead_category_id' => 'integer|exists:overhead_categories,id',
         'sign_in' => 'string|max:255',
         'sign_out' => 'string|max:255',
         'notes' => 'nullable|string|max:255'
@@ -29,7 +31,10 @@ class SignInController extends Controller
             'TaskDate',
             'TaskDate.Task',
             'TaskDate.Task.Order',
-            'Contact',
+            'OverheadAssignment',
+            'OverheadCategory',
+            'ClockIn',
+            'ClockIn.Contact',
             'TaskDate.Task.Order.Project',
             'TaskDate.Task.Order.Project.Client'
         )
@@ -80,7 +85,8 @@ class SignInController extends Controller
             ->leftJoin('task_dates', 'sign_ins.task_date_id', '=', 'task_dates.id')
             ->leftJoin('tasks', 'task_dates.task_id', '=', 'tasks.id')
             ->leftJoin('orders', 'tasks.order_id', '=', 'orders.id')
-            ->leftJoin('contacts', 'sign_ins.contact_id', '=', 'contacts.id')
+            ->leftJoin('clock_ins', 'sign_ins.clock_in_id', '=', 'clock_ins.id')
+            ->leftJoin('contacts', 'clock_ins.contact_id', '=', 'contacts.id')
             ->select(
                 DB::raw('ROUND((EXTRACT(EPOCH FROM SUM(sign_out-sign_in))/3600)::NUMERIC, 2) AS hours'),
                 'contacts.id',
@@ -104,13 +110,16 @@ class SignInController extends Controller
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $values = $request->input();
-        $values['contact_id'] = $request->user()->id;
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = SignIn::create($values);
         $item = SignIn::with(
             'TaskDate',
-            'Contact'
+            'TaskDate.Task',
+            'OverheadAssignment',
+            'OverheadCategory',
+            'ClockIn',
+            'ClockIn.Contact'
         )
             ->findOrFail($item->id);
         return $item;
@@ -120,9 +129,35 @@ class SignInController extends Controller
     {
         $item = SignIn::with(
             'TaskDate',
-            'Contact'
+            'TaskDate.Task',
+            'OverheadAssignment',
+            'OverheadCategory',
+            'ClockIn',
+            'ClockIn.Contact'
         )
         ->findOrFail($id);
+        return $item;
+    }
+    
+    public function current(Request $request)
+    {
+        $item = SignIn::with([
+            'TaskDate',
+            'TaskDate.Task',
+            'OverheadAssignment',
+            'OverheadCategory',
+            'ClockIn' => function ($q) use ($request){
+                $q->where('contact_id', $request->user()->id)
+                ->whereNull('clock_out')
+                ->whereRaw('clock_in::DATE=NOW()::DATE');
+            },
+            'ClockIn.Contact'
+            ]
+        )
+        
+        ->whereNull('sign_out')
+        ->orderByDesc('sign_in')
+        ->first();
         return $item;
     }
     
@@ -135,7 +170,11 @@ class SignInController extends Controller
         $item->update($values);
         $item = SignIn::with(
             'TaskDate',
-            'Contact'
+            'TaskDate.Task',
+            'OverheadAssignment',
+            'OverheadCategory',
+            'ClockIn',
+            'ClockIn.Contact'
         )
         ->findOrFail($id);
         return $item;
