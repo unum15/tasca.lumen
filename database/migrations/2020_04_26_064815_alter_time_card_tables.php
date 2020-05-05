@@ -16,13 +16,13 @@ class AlterTimeCardTables extends Migration
     public function up()
     {
         Schema::table('sign_ins', function (Blueprint $table) {
-            $table->datetimeTZ('sign_in')->change();
-            $table->datetimeTZ('sign_out')->change();
+            $table->datetime('sign_in')->change();
+            $table->datetime('sign_out')->change();
             $table->integer('clock_in_id')->default(0);
         });
         Schema::table('clock_ins', function (Blueprint $table) {
-            $table->datetimeTZ('clock_in')->change();
-            $table->datetimeTZ('clock_out')->change();
+            $table->datetime('clock_in')->change();
+            $table->datetime('clock_out')->change();
         });
         $sign_ins = SignIn::all();
         $sql = "
@@ -85,16 +85,9 @@ class AlterTimeCardTables extends Migration
         ";
         DB::connection()->getPdo()->exec($sql);
         Schema::table('sign_ins', function (Blueprint $table) {
-            $table->datetime('sign_in')->change();
-            $table->datetime('sign_out')->change();
             $table->dropColumn('clock_in_id');
         });
         DB::table('clock_ins')->delete();
-        Schema::table('clock_ins', function (Blueprint $table) {
-            $table->datetime('clock_in')->change();
-            $table->datetime('clock_out')->change();
-        });
-        
     }
     
 }
