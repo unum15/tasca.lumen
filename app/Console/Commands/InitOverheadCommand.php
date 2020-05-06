@@ -62,17 +62,30 @@ class InitOverheadCommand extends Command
                             ]
                         ]
                     ]
-                ]
+                ],
+                'categories' => [
+                    'Work Orders',
+                    'Shop',
+                    'Park Pick Up'
+                ],
             ],
             [
                 'name' => 'Driving',
                 'notes' =>  'Are we there yet?',
-                'sort_order' => 2
+                'sort_order' => 2,
+                'categories' => [
+                    'Work Orders',
+                    'Shop',
+                    'Park Pick Up'
+                ],
             ],        
             [
                 'name' => 'Napping',
                 'notes' =>  'Do not tell',
-                'sort_order' => 3
+                'sort_order' => 3,
+                'categories' => [
+                    'Lunch',
+                ],
             ]
         ];        
         
@@ -106,7 +119,13 @@ class InitOverheadCommand extends Command
         };
         
         
-        
+        foreach($assignments as $assignment_name){
+            $assignment = OverheadAssignment::where('name', $assignment_name['name'])->first();
+            foreach($assignment_name['categories'] as $category_name){
+                $category = OverheadCategory::where('name', $category_name)->first();
+                $assignment->overhead_categories()->attach($category);
+            }
+        }
     }
     
     public function createAssignments($assignments, $parent=null){

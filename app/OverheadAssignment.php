@@ -16,4 +16,8 @@ class OverheadAssignment extends Model
     public function children(){
         return $this->hasMany(self::class, 'parent_id');
     }
+    
+    public function overhead_categories(){
+        return $this->belongsToMany('App\OverheadCategory');
+    }
 }

@@ -16,7 +16,7 @@ class OverheadAssignmentController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
-        $items_query = OverheadAssignment::whereNull('parent_id')->with('children')->with('children.children')->with('children.children.children')->with('children.children.children.children');
+        $items_query = OverheadAssignment::whereNull('parent_id')->with('overhead_categories')->with('children')->with('children.children')->with('children.children.children')->with('children.children.children.children');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
