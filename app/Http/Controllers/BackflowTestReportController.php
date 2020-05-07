@@ -835,7 +835,7 @@ class BackflowTestReportController extends Controller
         $html = $this->html($id, $request);
         $pdf = Pdf::loadHtml($html);
         $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property','backflow_assembly.backflow_water_system')->findOrFail($id);
-        $filename = $report->backflow_assembly->property->name . '-' . $report->backflow_assembly->backflow_water_system->name;
+        $filename = $report->backflow_assembly->property->client->name.'_'.$report->backflow_assembly->property->name.'_'.$report->backflow_assembly->backflow_water_system->name.'_'.$report->report_date;
         return $pdf->stream($filename . '.pdf');
     }
     
@@ -858,7 +858,7 @@ class BackflowTestReportController extends Controller
         $pdf = Pdf::loadHtml($html);
         $ids = $request->input('backflow_test_report_id');
         $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property')->findOrFail($ids[0]);
-        $filename = $report->backflow_assembly->client->name.'-'.$report->backflow_assembly->property->name.'-'.$report->backflow_assembly->backflow_water_system->name.'-'.$report->report_date;
+        $filename = $report->backflow_assembly->property->client->name.'_'.$report->backflow_assembly->property->name.'_'.$report->backflow_assembly->backflow_water_system->name.'_'.$report->report_date;
         return $pdf->stream($filename . '.pdf');
     }
     
