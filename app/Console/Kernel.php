@@ -15,6 +15,7 @@ use App\Console\Commands\InitBackflowTypesCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
 use App\Console\Commands\ResetHelpCommand;
 use App\Console\Commands\CreateTaskDatesCommand;
+use App\Console\Commands\CloseOrdersCommand;
 use App\Console\Commands\UpdateOrderStatusCommand;
 
 class Kernel extends ConsoleKernel
@@ -33,6 +34,7 @@ class Kernel extends ConsoleKernel
         InitVehicleTypesCommand::class,
         InitBackflowTypesCommand::class,
         CreateTaskDatesCommand::class,
+        CloseOrdersCommand::class,
         UpdateOrderStatusCommand::class
     ];
 
@@ -46,5 +48,6 @@ class Kernel extends ConsoleKernel
     {
        $schedule->command('db:createTaskDates')->timezone(env("TIMEZONE", 'America/Denver'));
        $schedule->command('db:updateOrderStatus')->timezone(env("TIMEZONE", 'America/Denver'));
+       $schedule->command('db:closeOrders')->timezone(env("TIMEZONE", 'America/Denver'));
     }
 }
