@@ -41,79 +41,102 @@ class InitOverheadCommand extends Command
     {
         $assignments = [
             [
-                'name' => 'Equipment Maintance',
-                'notes' =>  'Taking care of stuff',
-                'sort_order' => 1,
+                'name' => 'Stores',
                 'children' => [
                     [
-                        'name' => 'Gas Up',
-                        'notes' =>  'Get Gas',
-                        'sort_order' => 1,
-                        'children' => [
-                            [
-                                'name' => 'Blue Truck',
-                                'notes' =>  'That blue one',
-                                'sort_order' => 1
-                            ],
-                            [
-                                'name' => 'Red Truck',
-                                'notes' =>  'That red one',
-                                'sort_order' => 1
-                            ]
-                        ]
+                        'name' =>'Durks',
+                    ],
+                    [
+                        'name' =>'SSC',
+                    ],
+                    [
+                        'name' =>'MLS',
+                    ],
+                    [
+                        'name' => 'SW'
                     ]
                 ],
                 'categories' => [
-                    'Work Orders',
-                    'Shop',
-                    'Park Pick Up'
+                    'Driving'
                 ],
             ],
             [
-                'name' => 'Driving',
-                'notes' =>  'Are we there yet?',
-                'sort_order' => 2,
+                'name' => 'Vehicle',
                 'categories' => [
-                    'Work Orders',
                     'Shop',
-                    'Park Pick Up'
-                ],
-            ],        
+                    'Gas',
+                    'Wash',
+                    'Repairing'
+                ]
+            ],
             [
-                'name' => 'Napping',
-                'notes' =>  'Do not tell',
-                'sort_order' => 3,
+                'name' => 'Shop Time'
+            ],
+            [
+                'name' => 'Heavy Equipment',
                 'categories' => [
-                    'Lunch',
+                    'Maintenance',
+                    'Repairing',
+                    'Cleaning'
+                ]
+            ],
+            [
+                'name' => 'Gas Equipment',
+                'categories' => [
+                    'Maintenance',
+                    'Repairing',
+                    'Cleaning'
                 ],
+            ],
+            [
+                'name' => 'Office',
+                'categories' => [
+                    'Design',
+                    'Financial',
+                    'Schedule'
+                ]
+            ],
+            [
+                'name' => 'Inventory'
             ]
         ];        
         
         $this->createAssignments($assignments);
-        
+
+
         $categories = [
             [
-                'name' => 'Work Orders',
-                'notes' =>  '',
-                'sort_order' => 1
+                'name' => 'Driving',
             ],
             [
                 'name' => 'Shop',
-                'notes' =>  '',
-                'sort_order' => 2
-            ],        
+            ],
             [
-                'name' => 'Lunch',
-                'notes' =>  '',
-                'sort_order' => 3
-            ],        
+                'name' => 'Gas',
+            ],
             [
-                'name' => 'Park Pick Up',
-                'notes' =>  '',
-                'sort_order' => 4
+                'name' => 'Wash',
+            ],
+            [
+                'name' => 'Maintenance',
+            ],
+            [
+                'name' => 'Repairing',
+            ],
+            [
+                'name' => 'Cleaning',
+            ],
+            [
+                'name' => 'Design',
+            ],
+            [
+                'name' => 'Financial',
+            ],
+            [
+                'name' => 'Schedule',
             ]
-        ];        
-        
+        ];
+
         foreach($categories as $category){
             OverheadCategory::create($category);
         };
@@ -121,9 +144,11 @@ class InitOverheadCommand extends Command
         
         foreach($assignments as $assignment_name){
             $assignment = OverheadAssignment::where('name', $assignment_name['name'])->first();
-            foreach($assignment_name['categories'] as $category_name){
-                $category = OverheadCategory::where('name', $category_name)->first();
-                $assignment->overhead_categories()->attach($category);
+            if(isset($assignment_name['categories'])){
+                foreach($assignment_name['categories'] as $category_name){
+                    $category = OverheadCategory::where('name', $category_name)->first();
+                    $assignment->overhead_categories()->attach($category);
+                }
             }
         }
     }
