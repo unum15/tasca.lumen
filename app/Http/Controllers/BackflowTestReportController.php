@@ -802,7 +802,7 @@ class BackflowTestReportController extends Controller
                         </td>
                         <td>
                             Opened at <span class="underline">' . self::formatPSI($final_test_results['RP']['differential']['opened_at']) . '</span>#<br />
-                            Reduced Pressure <input type="checkbox" ' . self::checked($final_test_results['RP']['differential']['opened_under']) . '><br />
+                            Reduced Pressure<br />
                         </td>
                         <td>
                             INLET Opened At <span class="underline">' . self::formatPSI($final_test_results['PVB']['air_inlet']['opened_at']) . '</span>#<br />
@@ -858,7 +858,7 @@ class BackflowTestReportController extends Controller
         $pdf = Pdf::loadHtml($html);
         $ids = $request->input('backflow_test_report_id');
         $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property')->findOrFail($ids[0]);
-        $filename = $report->backflow_assembly->property->name;
+        $filename = $report->backflow_assembly->client->name.'-'.$report->backflow_assembly->property->name.'-'.$report->backflow_assembly->backflow_water_system->name.'-'.$report->report_date;
         return $pdf->stream($filename . '.pdf');
     }
     

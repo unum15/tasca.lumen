@@ -98,7 +98,7 @@ class SignInController extends Controller
         }
         return $items_query->get();
     }
-    
+
     public function create(Request $request)
     {
         $this->validate($request, $this->validation);
@@ -125,7 +125,7 @@ class SignInController extends Controller
         ->findOrFail($id);
         return $item;
     }
-    
+
     public function update($id, Request $request)
     {
         $this->validate($request, $this->validation);     
@@ -140,12 +140,12 @@ class SignInController extends Controller
         ->findOrFail($id);
         return $item;
     }
-    
+
     public function delete($id)
     {
         $item = SignIn::findOrFail($id);
         $item->delete();
         return response([], 204);
-    }    
+    }
 
 }
