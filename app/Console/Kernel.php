@@ -48,6 +48,6 @@ class Kernel extends ConsoleKernel
     {
        $schedule->command('db:createTaskDates')->timezone(env("TIMEZONE", 'America/Denver'));
        $schedule->command('db:updateOrderStatus')->timezone(env("TIMEZONE", 'America/Denver'));
-       $schedule->command('db:closeOrders')->timezone(env("TIMEZONE", 'America/Denver'));
+       //$schedule->command('db:closeOrders')->timezone(env("TIMEZONE", 'America/Denver'));
     }
 }
