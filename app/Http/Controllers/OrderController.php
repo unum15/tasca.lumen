@@ -265,4 +265,23 @@ class OrderController extends Controller
             return 2;
         }
     }
+    
+    public function closable()
+    {
+        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties', 'tasks', 'tasks.dates', 'tasks.dates.signIns')
+        ->orderBy('date');
+        $items_query->whereNull('completion_date')
+        ->where(function ($query) {
+            $date = date_create();
+            $query->whereNull('expiration_date')
+            ->orWhere('completion_date', '>=', $date->format('Y-m-d'));
+        })
+        ->whereDoesntHave('tasks', function($q){
+            $q->whereNull('completion_date');
+        })
+        ->has('tasks')
+        ;
+        $items = $items_query->get();
+        return $items;
+    }
 }
