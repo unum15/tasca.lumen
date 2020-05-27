@@ -93,13 +93,21 @@ class OrderController extends Controller
                     ->whereDoesntHave('tasks', function($q){
                         $q->whereNull('completion_date');
                     })
-                    ->has('tasks')
-                    ;
+                    ->whereHas('tasks', function($q){
+                        $date = date_create();
+                        $date->modify('-14 days');
+                        $q->where('completion_date', '>=', $date->format('Y-m-d'));
+                    });
                     break;
                 case 'Non-Completed' :
                     $items_query->whereNull('completion_date')
                     ->whereHas('tasks', function($query){
                         $query->whereNull('completion_date');
+                    })
+                    ->whereHas('tasks', function($q){
+                        $date = date_create();
+                        $date->modify('-14 days');
+                        $q->where('completion_date', '>=', $date->format('Y-m-d'));
                     });
                     break;
             }
