@@ -371,8 +371,8 @@ class BackflowTestReportController extends Controller
         if(!$test){
             return $contact;
         }
-        $contact['name'] = $test->contact->name;
-        $contact['cert'] = $test->contact->backflow_certification_number;
+        $contact['name'] = $test->contact->name ?? '(none)';
+        $contact['cert'] = $test->contact->backflow_certification_number ?? '(none)';
         $contact['date'] = date('m-d-Y',strtotime($test->tested_on ?? $test->cleaned_on ?? $test->repaired_on));
 //        $contact['date'] = date('m-d-Y',strtotime($test->tested_on));
         return $contact;
