@@ -56,6 +56,7 @@ class BackflowOldController extends Controller
         $group = $request->input('group');
         if(!empty($group)){
             $items_query->where('group',$group);
+            $items_query->whereNull('backflow_assembly_id');
         }
         $items = $items_query->orderBy('zip')->get(['zip'])->pluck('zip');
         return ['data' => $items];
