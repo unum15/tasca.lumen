@@ -84,30 +84,26 @@ class OrderController extends Controller
         if(!empty($status)) {
             switch ($status) {
                 case 'Completed' :
-                    $items_query->where(function ($query) {
-                        $date = date_create();
-                        $date->modify('-7 days');
-                        $query->whereNull('completion_date')
-                        ->orWhere('completion_date', '>=', $date->format('Y-m-d'));
-                    })
+                    $items_query
                     ->whereDoesntHave('tasks', function($q){
                         $q->whereNull('completion_date');
                     })
                     ->whereHas('tasks', function($q){
                         $date = date_create();
                         $date->modify('-14 days');
-                        $q->where('completion_date', '>=', $date->format('Y-m-d'));
+                        $q->whereNotNull('completion_date');
+                        $q->where(function ($q){
+                            $q->where('closed_date', '>=', $date->format('Y-m-d'))
+                            ->orWhereNull('closed_date');
+                        });
                     });
                     break;
                 case 'Non-Completed' :
-                    $items_query->whereNull('completion_date')
-                    ->whereHas('tasks', function($query){
-                        $query->whereNull('completion_date');
+                    $items_query->whereHas('tasks', function($query){
+                        $query->whereNull('closed_date');
                     })
                     ->whereHas('tasks', function($q){
-                        $date = date_create();
-                        $date->modify('-14 days');
-                        $q->where('completion_date', '>=', $date->format('Y-m-d'));
+                        $q->whereNotNull('completion_date');
                     });
                     break;
             }
