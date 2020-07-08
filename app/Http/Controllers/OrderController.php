@@ -152,7 +152,6 @@ class OrderController extends Controller
             'tasks',
             'tasks.taskCategory',
             'tasks.taskStatus',
-            'tasks.taskAppointmentStatus',
             'tasks.taskAction',
             'tasks.taskType',
             'orderPriority',
