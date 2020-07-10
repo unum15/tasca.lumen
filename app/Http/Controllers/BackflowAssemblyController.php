@@ -31,6 +31,12 @@ class BackflowAssemblyController extends Controller
             }],'backflow_test_reports.backflow_tests','backflow_test_reports.backflow_repairs','backflow_test_reports.backflow_cleanings');
             //$items_query->with([]);
         }
+        $test_date = $request->input('test_date');
+        if($test_date){
+            $items_query->whereHas('property.orders.tasks.dates', function ($query) use ($test_date) {
+                $query->where('date', '=', $test_date);
+            });
+        }
         $items = $items_query->get();
         return ['data' => $items];
     }
