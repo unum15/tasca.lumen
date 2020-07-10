@@ -181,6 +181,7 @@ $router->post('/order/convert/{id:[0-9]+}', 'OrderController@convert');
 $router->get('/order/{id:[0-9]+}', 'OrderController@read');
 $router->patch('/order/{id:[0-9]+}', 'OrderController@update');
 $router->delete('/order/{id:[0-9]+}', 'OrderController@delete');
+$router->get('/orders/closable', 'OrderController@closable');
 
 $router->get('/tasks', 'TaskController@index');
 $router->post('/task', 'TaskController@create');
