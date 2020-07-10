@@ -143,7 +143,7 @@ class TaskDateController extends Controller
                 'crew_id',
                 'crews.name AS crew'
             )
-            ->orderBy('task_dates.id');
+
             ;
             $items_query->whereNull('orders.completion_date');
             $items_query->whereNull('tasks.closed_date');
@@ -162,9 +162,12 @@ class TaskDateController extends Controller
             switch($status){
             case 'current':
                 $items_query->where(
-                    function ($q) use ($current_date) {
-                            $q->whereNull('tasks.hold_date')
-                                ->orWhere('tasks.hold_date', '<=', $current_date);
+                    function ($q) use ($date) {
+                        $date_obj = date_create($date);
+                        $days = 14;
+                        $two_weeks_out = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
+                        $q->whereNull('tasks.hold_date')
+                        ->orWhere('tasks.hold_date', '<=', $two_weeks_out);
                     }
                 );
                 $items_query->where(
@@ -194,14 +197,13 @@ class TaskDateController extends Controller
                 break;
             case 'pending':
                 $items_query->where('orders.start_date', '>', $current_date);
+                $items_query->orderBy('orders.start_date');
                 break;
             case 'on hold':
-                $items_query->where(
-                    function ($q) use ($current_date) {
-                            $q->whereNull('orders.start_date')
-                                ->orWhere('tasks.hold_date', '>', $current_date);
-                    }
-                );
+                $date_obj = date_create($date);
+                $days = 30;
+                $one_month_ago = $date_obj->modify('-' . $days . 'days')->format('Y-m-d');
+                $items_query->where('tasks.hold_date', '>=', $one_month_ago);
                 break;
             case 'today':
                 $items_query->where('task_dates.date', '=', $date);
@@ -209,6 +211,7 @@ class TaskDateController extends Controller
             }
 
         }
+        $items_query->orderBy('task_dates.id');
         return $items_query->get();
     }
     

@@ -6,6 +6,8 @@ use App\Order;
 use App\Task;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -57,7 +59,7 @@ class OrderController extends Controller
     {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties')
+        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties', 'tasks', 'tasks.dates', 'tasks.dates.signIns')
         ->orderBy('date');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
@@ -78,7 +80,37 @@ class OrderController extends Controller
             );
         }
         
-        return $items_query->get();
+        $status = $request->input('status');
+        if(!empty($status)) {
+            switch ($status) {
+                case 'Completed' :
+                    $items_query
+                    ->whereDoesntHave('tasks', function($q){
+                        $q->whereNull('completion_date');
+                    })
+                    ->whereHas('tasks', function($q){
+                        $q->whereNotNull('completion_date');
+                        $q->where(function ($q){
+                            $date = date_create();
+                            $date->modify('-14 days');
+                            $q->where('closed_date', '>=', $date->format('Y-m-d'))
+                            ->orWhereNull('closed_date');
+                        });
+                    });
+                    break;
+                case 'Non-Completed' :
+                    $items_query->whereHas('tasks', function($query){
+                        $query->whereNull('completion_date');
+                    })
+                    ->whereHas('tasks', function($q){
+                        $q->whereNotNull('completion_date');
+                    });
+                    break;
+            }
+            
+        }
+        $items = $items_query->get();
+        return $items;
     }
     
     public function create(Request $request)
@@ -120,7 +152,6 @@ class OrderController extends Controller
             'tasks',
             'tasks.taskCategory',
             'tasks.taskStatus',
-            'tasks.taskAppointmentStatus',
             'tasks.taskAction',
             'tasks.taskType',
             'orderPriority',
