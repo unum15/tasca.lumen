@@ -155,61 +155,60 @@ class TaskDateController extends Controller
             );
             $status = strtolower($request->input('status'));
             
-        if((!empty($status) && $status!='all')) {
+        if(!empty($status)) {
             $date_obj = date_create($date);
             $days = 7; //$request->user()->pending_days_out;
             $current_date = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
             switch($status){
-            case 'current':
-                $items_query->where(
-                    function ($q) use ($date) {
-                        $date_obj = date_create($date);
-                        $days = 14;
-                        $two_weeks_out = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
-                        $q->whereNull('tasks.hold_date')
-                        ->orWhere('tasks.hold_date', '<=', $two_weeks_out);
-                    }
-                );
-                $items_query->where(
-                    function ($q) use ($current_date) {
-                            $q->where('orders.start_date', '<=', $current_date)
-                                ->orWhere('tasks.task_type_id', 1);
-                    }
-                );
-                $items_query->where(
-                    function ($q) use ($date) {
-                            $q->where('task_dates.date', '>=', $date)
-                                ->orWhereNull('task_dates.date');
-                    }
-                );
-                break;
-            case 'service':
-                $items_query->where(
-                    function ($q) {
-                            $q->whereNotNull('orders.date')
-                                ->whereNull('orders.start_date')
-                                ->whereNull('orders.completion_date')
-                                ->whereNull('orders.expiration_date')
-                                ->where('recurring', false)
-                                ->where('renewable', false);
-                    }
-                );
-                break;
-            case 'pending':
-                $items_query->where('orders.start_date', '>', $current_date);
-                $items_query->orderBy('orders.start_date');
-                break;
-            case 'on hold':
-                $date_obj = date_create($date);
-                $days = 30;
-                $one_month_ago = $date_obj->modify('-' . $days . 'days')->format('Y-m-d');
-                $items_query->where('tasks.hold_date', '>=', $one_month_ago);
-                break;
-            case 'today':
-                $items_query->where('task_dates.date', '=', $date);
-                break;
-            }
+                case 'current':
+                    $items_query->where(
+                        function ($q) use ($date) {
+                            $date_obj = date_create($date);
+                            $days = 14;
+                            $two_weeks_out = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
+                            $q->whereNull('tasks.hold_date')
+                            ->orWhere('tasks.hold_date', '<=', $two_weeks_out);
+                        }
+                    );
+                    $items_query->where(
+                        function ($q) use ($date) {
+                                $q->where('task_dates.date', '>=', $date)
+                                    ->orWhereNull('task_dates.date');
+                        }
+                    );
+                    break;
+                case 'service':
+                    $items_query->where('recurring', false)
+                        ->where('renewable', false)
+                        ->where(
+                        function ($q) {
+                            $q->whereNull('orders.start_date')
+                            ->orWhereNull('orders.approval_date');
+                        }
+                    );
+                    break;
+                case 'pending':
+                    $items_query->where('task_dates.date', '>=', $date);
+                    $items_query->orderBy('orders.start_date');
+                    break;
+                case 'on hold':
+                    $date_obj = date_create($date);
+                    $days = 30;
+                    $one_month_ago = $date_obj->modify('-' . $days . 'days')->format('Y-m-d');
+                    $items_query->where('tasks.hold_date', '>=', $one_month_ago);
+                    $items_query->whereNotNull('orders.start_date');
+                    $items_query->orderBy('orders.start_date');
+                    break;
+                case 'today':
+                    $items_query->where('task_dates.date', '=', $date);
+                    break;
+                case 'all' :
+                    $items_query->whereNotNull('orders.start_date');
+                    $items_query->where('task_dates.date', '>=', $date);
+                    $items_query->orderBy('orders.start_date');
 
+            }
+            
         }
         $items_query->orderBy('task_dates.id');
         return $items_query->get();
