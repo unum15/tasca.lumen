@@ -86,7 +86,7 @@ class OrderController extends Controller
                         ->whereNotNull('orders.start_date')
                         ->where(function ($q){
                             $date = date_create();
-                            $date->modify('-30 days');
+                            $date->modify('-14 days');
                             $q->where('completion_date', '>=', $date->format('Y-m-d'))
                             ->orWhereNull('completion_date');
                         });
