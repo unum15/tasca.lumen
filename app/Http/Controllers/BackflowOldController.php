@@ -211,7 +211,7 @@ class BackflowOldController extends Controller
         $activity_level_id = ActivityLevel::where('name', 'Level 3')->first()->id;
         $property_type_id = PropertyType::where('name', 'Office')->first()->id;
         $client_type_id = ClientType::where('name', 'Commercial')->first()->id;
-        $contact_type_id = ContactType::where('name', 'Manager')->first()->id;
+        $contact_type_id = ContactType::where('name', 'Property Manager')->first()->id;
         $contact_method_id = ContactMethod::where('name', 'Call')->first()->id;
         $email_type_id = EmailType::where('name', 'Office')->first()->id;
         $phone_number_type_id = PhoneNumberType::where('name', 'Office')->first()->id;
