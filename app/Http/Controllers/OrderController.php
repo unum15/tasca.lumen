@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Property;
 use App\Task;
 use Illuminate\Http\Request;
 use Auth;
@@ -187,8 +188,48 @@ class OrderController extends Controller
         $values['expiration_date'] = isset($values['expiration_date']) && $values['expiration_date'] != "" ? $values['expiration_date'] : null;
         $values['renewal_date'] = isset($values['renewal_date']) && $values['renewal_date'] != "" ? $values['renewal_date'] : null;
         $values['updater_id'] = $request->user()->id;
-        $item->update($values);
-        $this->syncProperties($item, $request);
+        if(($item->order_status_type_id != 1) || ($values['order_status_type_id'] == 1)){
+            $item->update($values);
+            $this->syncProperties($item, $request);
+        }
+        else{
+            $properties = $request->only('properties');
+            $properties = $properties['properties'];
+            if(count($properties) == 1){
+                $item->update($values);
+                $this->syncProperties($item, $request);
+            }
+            else{
+                $items = [];
+                $property = array_shift($properties);
+                $pname = Property::find($property)->name;
+                $oname = $values['name'];
+                $odescription = $values['description'];
+                $values['name'] = $oname . '-' . $pname;
+                $values['description'] = $odescription . '-' . $pname;
+                $item->update($values);
+                $item->properties()->sync([$property]);
+                array_push($items, $item);
+                $values['creator_id'] = $request->user()->id;
+                $values['updater_id'] = $request->user()->id;
+                foreach($properties as $property){
+                    $pname = Property::find($property)->name;
+                    $values['name'] = $oname . '-' . $pname;
+                    $values['description'] = $odescription . '-' . $pname;
+                    $new_item = Order::create($values);
+                    $new_item->properties()->attach($property);
+                    foreach($item->tasks as $task){
+                        $task_values = $task->toArray();
+                        unset($task_values['id']);
+                        $task_values['order_id'] = $new_item->id;
+                        Task::create($task_values);
+                    }
+                    array_push($items, $new_item);
+                }
+                return $items;
+            }
+
+        }
         return $item;
     }
     
@@ -286,28 +327,8 @@ class OrderController extends Controller
             array_push($items, Order::findOrFail($original_order->id));
         }
         else{
-            if($recurring){
-                $original_order->update(['completion_date' => date('Y-m-d')]);
-                array_push($items, Order::findOrFail($original_order->id));
-            }
-            else{
-                if(count($properties) > 1){
-                    $property = array_shift($properties);
-                    foreach($properties as $property){
-                        $item = Order::create($new_values);
-                        $item->properties()->attach($property["id"]);
-                        foreach($original_order->tasks as $task){
-                            $task_values = $task->toArray();
-                            unset($task_values['id']);
-                            $task_values['order_id'] = $item->id;
-                            Task::create($task_values);
-                        }
-                        array_push($items, Order::findOrFail($item->id));
-                    }
-                    $original_order->properties()->sync([$property['id']]);
-                }
-                array_push($items, Order::findOrFail($original_order->id));
-            }
+            $original_order->update(['completion_date' => date('Y-m-d')]);
+            array_push($items, Order::findOrFail($original_order->id));
         }
         return $items;
     }
