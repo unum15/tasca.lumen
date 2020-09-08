@@ -9,6 +9,7 @@ class Order extends Model
     protected $fillable = [
         'project_id',
         'order_status_type_id',
+        'approver_id',
         'name',
         'date',
         'completion_date',
@@ -41,6 +42,8 @@ class Order extends Model
         'renewal_message',
         'recurring_interval',
         'renewal_interval',
+        'progress_percentage',
+        'contact_id',
         'creator_id',
         'updater_id'
     ];

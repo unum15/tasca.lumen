@@ -74,10 +74,51 @@ $factory->define(App\Order::class, function (Faker\Generator $faker) {
     $contact = factory(App\Contact::class)->create();
     $project = factory(App\Project::class)->create();
     $order_status_type = factory(App\OrderStatusType::class)->create();
+    $category = factory(App\OrderCategory::class)->create();
+    $priority = factory(App\OrderPriority::class)->create();
+    $type = factory(App\OrderType::class)->create();
+    $status = factory(App\OrderStatus::class)->create();
+    $action = factory(App\OrderAction::class)->create();
     return [
         'name' => $faker->word,
         'project_id' => $project->id,
         'order_status_type_id' => $order_status_type->id,
+        'name' => $faker->word,
+        'date' => $faker->date,
+        'completion_date' => $faker->date,
+        'expiration_date' => $faker->date,
+        'approval_date' => $faker->date,
+        'start_date' => $faker->date,
+        'description' => $faker->word,
+        'order_category_id' => $category->id,
+        'order_priority_id' => $priority->id,
+        'order_type_id' => $type->id,
+        'order_status_id' => $status->id,
+        'order_action_id' => $action->id,
+        'recurrences' => $faker->randomDigitNotNull,
+        'service_window' => $faker->randomDigitNotNull,
+        'recurring' => $faker->boolean,
+        'location' => $faker->word,
+        'instructions' => $faker->word,
+        'notes' => $faker->word,
+        'purchase_order_number' => $faker->word,
+        'budget' => (string)$faker->randomDigitNotNull,
+        'budget_plus_minus' => $faker->randomDigitNotNull,
+        'budget_invoice_number' => $faker->word,
+        'bid' => (string)$faker->randomDigitNotNull,
+        'bid_plus_minus' => $faker->randomDigitNotNull,
+        'invoice_number' => $faker->word,
+        'renewable' => $faker->boolean,
+        'renewal_count' => $faker->randomDigitNotNull,
+        'renewal_date' => $faker->date,
+        'notification_lead' => $faker->randomDigitNotNull,
+        'renewal_message' => $faker->word,
+        'recurring_interval' => ($faker->randomDigitNotNull+1).' days',
+        'renewal_interval' => ($faker->randomDigitNotNull+1).' days',
+        'progress_percentage' => $faker->randomDigitNotNull,
+        'work_days' => (string)$faker->randomDigitNotNull,
+        'approver_id' => $contact->id,
+        'contact_id' => $contact->id,
         'creator_id' => $contact->id,
         'updater_id' => $contact->id,
     ];
@@ -107,11 +148,25 @@ $factory->define(App\OrderPriority::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\OrderCategory::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+
 $factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
     ];
 });
+
+$factory->define(App\OrderType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
 
 $factory->define(App\PhoneNumber::class, function (Faker\Generator $faker) {
     $contact = factory(App\Contact::class)->create();
@@ -348,6 +403,13 @@ $factory->define(App\BackflowCertification::class, function (Faker\Generator $fa
 $factory->define(App\BackflowWaterSystem::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
+        #'address' => $faker->word,
+        #'city' => $faker->word,
+        #'state' => substr($faker->word,0,2),
+        #'zip' => $faker->word,
+        #'phone' => $faker->word,
+        #'contact' => $faker->word,
+        #'email' => $faker->word,
         'notes' => $faker->text,
         'sort_order' => $faker->randomDigitNotNull
     ];
@@ -411,7 +473,7 @@ $factory->define(App\BackflowAssembly::class, function (Faker\Generator $faker) 
         'notes' => $faker->word,
         'property_unit_id' => null,
         'active' => true,
-        'month' => (string)$faker->randomDigitNotNull,
+        'month' => $faker->randomDigitNotNull,
         'gps' => null,
     ];
 });
