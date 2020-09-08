@@ -115,11 +115,53 @@ class OrderControllerTest extends TestCase
     
     public function testConversion()
     {
-        $item = factory('App\Order')->create();
+        $item = factory('App\Order')->create(['recurring' => false, 'renewable'=> false]);
         $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id);
         $response->seeStatusCode(200);
-        $dbitem = Order::find($item->id);
-        print $response->response->getContent();
+        $itemArray = $item->toArray();
+        //$itemArray['completion_date'] = date('Y-m-d');
+        $response->seeJsonEquals([$itemArray]);
+    }
+    
+    public function testRenewal()
+    {
+        $item = factory('App\Order')->create(['recurring' => false, 'renewable'=> true]);
+        $prop1 = factory('App\Property')->create();
+        $prop2 = factory('App\Property')->create();
+        $item->properties()->sync([$prop1->id, $prop2->id]);
+        $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id);
+        $response->seeStatusCode(200);
+        $itemArray = $item->toArray();
+        //$itemArray['completion_date'] = date('Y-m-d');
+        $response->seeJsonEquals([$itemArray]);
+    }
+    
+    public function testConversionRecurring()
+    {
+        $item = factory('App\Order')->create(['recurring' => true, 'renewable'=> false]);
+        $prop1 = factory('App\Property')->create();
+        $prop2 = factory('App\Property')->create();
+        $item->properties()->sync([$prop1->id, $prop2->id]);
+        $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id);
+        $response->seeStatusCode(200);
+        $itemArray = $item->toArray();
+        //$itemArray['completion_date'] = date('Y-m-d');
+        $response->seeJsonEquals([$itemArray]);
+    }
+    
+    public function testConversionProperties()
+    {
+        $item = factory('App\Order')->create(['recurring' => false, 'renewable'=> false]);
+        $prop1 = factory('App\Property')->create();
+        $prop2 = factory('App\Property')->create();
+        $item->properties()->sync([$prop1->id, $prop2->id]);
+        $item->save();
+        $dbitem = Order::with('properties')->find($item->id);
+        $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id, $dbitem->toArray());
+        $response->seeStatusCode(200);
+        $itemArray = $item->toArray();
+        //$itemArray['completion_date'] = date('Y-m-d');
+        $response->seeJson($itemArray);
     }
     
     public function testDelete()

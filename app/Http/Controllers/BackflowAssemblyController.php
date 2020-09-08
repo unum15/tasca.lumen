@@ -207,7 +207,7 @@ class BackflowAssemblyController extends Controller
        'backflow_size_id' => 'integer|nullable|exists:backflow_sizes,id',
        'backflow_manufacturer_id' => 'integer|nullable|exists:backflow_manufacturers,id',
        'backflow_model_id' => 'integer|nullable|exists:backflow_models,id',
-       'active' => 'string',
+       'active' => 'boolean',
        'month' => 'integer|nullable',
        'use' => 'string|max:4096|nullable',
        'placement' => 'string|max:4096|nullable',

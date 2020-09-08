@@ -49,9 +49,16 @@ class BackflowWaterSystemController extends Controller
     }
     
     protected $model_validation = [
-       'name' => 'string|max:1020',
-       'notes' => 'string|max:1073741824|nullable',
-       'sort_order' => 'integer|nullable',
+        'name' => 'string|max:1020',
+        'address' => 'string|max:1020',
+        'city' => 'string|max:1020',
+        'state' => 'string|max:2',
+        'zip' => 'string|max:16',
+        'phone' => 'string|max:16',
+        'contact' =>  'string|max:1020',
+        'email' =>  'string|max:1020',
+        'notes' => 'string|max:1073741824|nullable',
+        'sort_order' => 'integer|nullable',
     ];
     
     protected $model_validation_required = [
