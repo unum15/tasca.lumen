@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\Property;
 use App\Task;
+use App\TaskDate;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Log;
@@ -222,7 +223,13 @@ class OrderController extends Controller
                         $task_values = $task->toArray();
                         unset($task_values['id']);
                         $task_values['order_id'] = $new_item->id;
-                        Task::create($task_values);
+                        $new_task = Task::create($task_values);
+                        foreach($task->dates as $date){
+                            $date_values = $date->toArray();
+                            unset($date_values['id']);
+                            $date_values['task_id'] = $new_task->id;
+                            TaskDate::create($date_values);
+                        }
                     }
                     array_push($items, $new_item);
                 }
