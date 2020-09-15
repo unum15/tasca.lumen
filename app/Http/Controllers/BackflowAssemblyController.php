@@ -28,6 +28,7 @@ class BackflowAssemblyController extends Controller
             //echo $recent_report_date->format('Y-m-d');
             $items_query->with(['backflow_test_reports' => function ($query) use ($recent_report_date) {
                 $query->where('report_date', '>=', $recent_report_date);
+                $query->orderBy('created_at');
             }],'backflow_test_reports.backflow_tests','backflow_test_reports.backflow_repairs','backflow_test_reports.backflow_cleanings');
             //$items_query->with([]);
         }
