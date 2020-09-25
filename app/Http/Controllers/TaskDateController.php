@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\TaskDate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TaskDateController extends Controller
 {
@@ -86,6 +87,7 @@ class TaskDateController extends Controller
     {
         $this->validate($request, $this->validation);
         $date = $request->input('date', date('Y-m-d'));
+        $crew_id = $request->input('crew_id');
         $items_query = DB::table('tasks')
             ->leftJoin('task_dates', 'tasks.id', '=', 'task_dates.task_id')
             ->leftJoin('orders', 'tasks.order_id', '=', 'orders.id')
@@ -112,7 +114,7 @@ class TaskDateController extends Controller
                 'orders.date AS order_date',
                 'orders.approval_date',
                 'orders.expiration_date',
-                'orders.completion_date',
+                'orders.completion_date AS order_completion_date',
                 'orders.project_id',
                 'projects.client_id',
                 'tasks.order_id',
@@ -136,80 +138,153 @@ class TaskDateController extends Controller
                 'task_dates.time',
                 'task_dates.notes',
                 'tasks.completion_date',
+                'tasks.closed_date',
                 'tasks.billed_date',
                 'tasks.task_type_id',
                 'orders.order_status_type_id',
                 'tasks.crew_hours',
                 'crew_id',
                 'crews.name AS crew'
-            )
-
-            ;
-            $items_query->whereNull('orders.completion_date');
-            $items_query->whereNull('tasks.closed_date');
-            $items_query->where(
-                function ($q) {
-                    $q->whereNull('orders.expiration_date')
-                        ->orWhere('orders.expiration_date', '>=', date('Y-m-d'));
-                }
-            );
-            $status = strtolower($request->input('status'));
-            
-        if((!empty($status) && $status!='all')) {
+        );
+        if(!empty($crew_id)){
+            switch($crew_id){
+                case '*':
+                    break;
+                case '':
+                    $items_query->whereNull('crew_id');
+                    break;
+                default:
+                    $items_query->where('crew_id',$crew_id);
+            }
+        }
+        $status = strtolower($request->input('status'));
+        
+        if(!empty($status)) {
             $date_obj = date_create($date);
             $days = 7; //$request->user()->pending_days_out;
             $current_date = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
+            $pending_date_obj = date_create($date);
+            $pending_days = 14;
+            $two_weeks_out = $pending_date_obj->modify('+' . $pending_days . 'days')->format('Y-m-d');
             switch($status){
-            case 'current':
-                $items_query->where(
-                    function ($q) use ($date) {
-                        $date_obj = date_create($date);
-                        $days = 14;
-                        $two_weeks_out = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
-                        $q->whereNull('tasks.hold_date')
-                        ->orWhere('tasks.hold_date', '<=', $two_weeks_out);
-                    }
-                );
-                $items_query->where(
-                    function ($q) use ($current_date) {
-                            $q->where('orders.start_date', '<=', $current_date)
-                                ->orWhere('tasks.task_type_id', 1);
-                    }
-                );
-                $items_query->where(
-                    function ($q) use ($date) {
+                case 'service':
+                    $items_query->whereNull('orders.completion_date')
+                    ->where(
+                        function ($q) {
+                            $q->whereNull('orders.expiration_date')
+                                ->orWhere('orders.expiration_date', '>=', date('Y-m-d'));
+                        }
+                    )
+                    ->where(
+                        function ($q) use ($date){
                             $q->where('task_dates.date', '>=', $date)
-                                ->orWhereNull('task_dates.date');
-                    }
-                );
-                break;
-            case 'service':
-                $items_query->where(
-                    function ($q) {
-                            $q->whereNotNull('orders.date')
-                                ->whereNull('orders.start_date')
-                                ->whereNull('orders.completion_date')
-                                ->whereNull('orders.expiration_date')
-                                ->where('recurring', false)
-                                ->where('renewable', false);
-                    }
-                );
-                break;
-            case 'pending':
-                $items_query->where('orders.start_date', '>', $current_date);
-                $items_query->orderBy('orders.start_date');
-                break;
-            case 'on hold':
-                $date_obj = date_create($date);
-                $days = 30;
-                $one_month_ago = $date_obj->modify('-' . $days . 'days')->format('Y-m-d');
-                $items_query->where('tasks.hold_date', '>=', $one_month_ago);
-                break;
-            case 'today':
-                $items_query->where('task_dates.date', '=', $date);
-                break;
-            }
+                            ->orWhereNull('task_dates.date');
+                        }
+                    )
+                    ->where(
+                        function ($q){
+                            $q->whereNull('tasks.completion_date')
+                            ->orWhereNull('tasks.closed_date');
+                        }
+                    )
+                    ->where('recurring', false)
+                    ->where('renewable', false)
+                    ->whereNull('orders.start_date')
+                    ->WhereNull('orders.approval_date');
+                    break;
+                            //On Hold, All Task, Pending Task, Current Task tab
+            //Start Date and (Blank Close, or expiration date), and the Tasks that have a (blank completion or closed date).
+            //Show blank and future task dates from the date on the calendar on the page.
 
+
+                case 'current':
+                    $items_query->whereNotNull('orders.start_date')
+                    ->whereNull('orders.completion_date')
+                    ->whereNull('tasks.completion_date')
+                    ->WhereNull('tasks.closed_date')
+                    ->where(
+                        function ($q) use ($date) {
+                            $q->whereNull('orders.expiration_date')
+                            ->orWhere('orders.expiration_date','>=',$date);
+                        }
+                    );
+                    $items_query->where(
+                        function ($q) use ($two_weeks_out) {
+                            $q->where('orders.start_date', '<=', $two_weeks_out)
+                            ->orWhereNotNull('task_dates.date');
+                        }
+                    );
+                    $items_query->where(
+                        function ($q) use ($date) {
+                                $q->where('task_dates.date', '>=', $date)
+                                ->orWhereNull('task_dates.date');
+                        }
+                    );
+                    break;
+                case 'pending':
+                    $items_query->where('orders.start_date','>=',$two_weeks_out)
+                    ->whereNull('orders.completion_date')
+                    ->whereNull('tasks.completion_date')
+                    ->WhereNull('tasks.closed_date')
+                    ->where(
+                        function ($q) use ($date) {
+                            $q->whereNull('orders.expiration_date')
+                            ->orWhere('orders.expiration_date','>=',$date);
+                        }
+                    )
+                    ->where(
+                        function ($q) use ($date){
+                            $q->where('task_dates.date', '>=', $date)
+                            ->orWhereNull('task_dates.date');
+                        }
+                    );
+                    $items_query->orderBy('orders.start_date');
+                    break;
+                case 'on hold':
+                    $items_query->whereNotNull('orders.start_date')
+                    ->whereNull('orders.completion_date')
+                    ->whereNull('tasks.completion_date')
+                    ->WhereNull('tasks.closed_date')
+                    ->where(
+                        function ($q) use ($date) {
+                            $q->whereNull('orders.expiration_date')
+                            ->orWhere('orders.expiration_date','>=',$date);
+                        }
+                    )
+                    ->where(
+                        function ($q) use ($date){
+                            $q->where('task_dates.date', '>=', $date)
+                            ->orWhereNull('task_dates.date');
+                        }
+                    );
+                    
+                    $items_query->where('tasks.hold_date', '>=', $date);
+                    $items_query->orderBy('orders.start_date');
+                    break;
+                case 'today':
+                    $items_query->where('task_dates.date', '=', $date);
+                    break;
+                case 'all' :
+                    $items_query->whereNotNull('orders.start_date')
+                    ->whereNull('orders.completion_date')
+                    ->whereNull('tasks.completion_date')
+                    ->WhereNull('tasks.closed_date')
+                    ->where(
+                        function ($q) use ($date) {
+                            $q->whereNull('orders.expiration_date')
+                            ->orWhere('orders.expiration_date','>=',$date);
+                        }
+                    )
+                    ->where(
+                        function ($q) use ($date){
+                            $q->where('task_dates.date', '>=', $date)
+                            ->orWhereNull('task_dates.date');
+                        }
+                    );
+                    $items_query->orderBy('orders.start_date');
+
+            }
+            
         }
         $items_query->orderBy('task_dates.id');
         return $items_query->get();

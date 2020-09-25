@@ -82,6 +82,14 @@ class OrderController extends Controller
         
         $status = $request->input('status');
         if(!empty($status)) {
+            $items_query->whereNotNull('orders.approval_date')
+                        ->whereNotNull('orders.start_date')
+                        ->where(function ($q){
+                            $date = date_create();
+                            $date->modify('-14 days');
+                            $q->where('completion_date', '>=', $date->format('Y-m-d'))
+                            ->orWhereNull('completion_date');
+                        });
             switch ($status) {
                 case 'Completed' :
                     $items_query
