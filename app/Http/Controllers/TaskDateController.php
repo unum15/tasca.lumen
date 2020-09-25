@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\TaskDate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TaskDateController extends Controller
 {
@@ -86,6 +87,7 @@ class TaskDateController extends Controller
     {
         $this->validate($request, $this->validation);
         $date = $request->input('date', date('Y-m-d'));
+        $crew_id = $request->input('crew_id');
         $items_query = DB::table('tasks')
             ->leftJoin('task_dates', 'tasks.id', '=', 'task_dates.task_id')
             ->leftJoin('orders', 'tasks.order_id', '=', 'orders.id')
@@ -112,7 +114,7 @@ class TaskDateController extends Controller
                 'orders.date AS order_date',
                 'orders.approval_date',
                 'orders.expiration_date',
-                'orders.completion_date',
+                'orders.completion_date AS order_completion_date',
                 'orders.project_id',
                 'projects.client_id',
                 'tasks.order_id',
@@ -136,18 +138,27 @@ class TaskDateController extends Controller
                 'task_dates.time',
                 'task_dates.notes',
                 'tasks.completion_date',
+                'tasks.closed_date',
                 'tasks.billed_date',
                 'tasks.task_type_id',
                 'orders.order_status_type_id',
                 'tasks.crew_hours',
                 'crew_id',
                 'crews.name AS crew'
-            )
-
-            ;
-            
-            $status = strtolower($request->input('status'));
-
+        );
+        if(!empty($crew_id)){
+            switch($crew_id){
+                case '*':
+                    break;
+                case '':
+                    $items_query->whereNull('crew_id');
+                    break;
+                default:
+                    $items_query->where('crew_id',$crew_id);
+            }
+        }
+        $status = strtolower($request->input('status'));
+        
         if(!empty($status)) {
             $date_obj = date_create($date);
             $days = 7; //$request->user()->pending_days_out;
@@ -159,6 +170,18 @@ class TaskDateController extends Controller
                         function ($q) {
                             $q->whereNull('orders.expiration_date')
                                 ->orWhere('orders.expiration_date', '>=', date('Y-m-d'));
+                        }
+                    )
+                    ->where(
+                        function ($q) use ($date){
+                            $q->where('task_dates.date', '>=', $date)
+                            ->orWhereNull('task_dates.date');
+                        }
+                    )
+                    ->where(
+                        function ($q){
+                            $q->whereNull('tasks.completion_date')
+                            ->orWhereNull('tasks.closed_date');
                         }
                     )
                     ->where('recurring', false)
@@ -173,16 +196,13 @@ class TaskDateController extends Controller
 
                 case 'current':
                     $items_query->whereNotNull('orders.start_date')
+                    ->whereNull('orders.completion_date')
+                    ->whereNull('tasks.completion_date')
+                    ->WhereNull('tasks.closed_date')
                     ->where(
-                        function ($q) {
-                            $q->whereNull('orders.completion_date')
-                            ->orWhereNull('orders.expiration_date');
-                        }
-                    )
-                    ->where(
-                        function ($q) {
-                            $q->whereNull('tasks.completion_date')
-                            ->orWhereNull('tasks.closed_date');
+                        function ($q) use ($date) {
+                            $q->whereNull('orders.expiration_date')
+                            ->orWhere('orders.expiration_date','>=',$date);
                         }
                     );
                     $items_query->where(
@@ -203,16 +223,13 @@ class TaskDateController extends Controller
                     break;
                 case 'pending':
                     $items_query->whereNotNull('orders.start_date')
+                    ->whereNull('orders.completion_date')
+                    ->whereNull('tasks.completion_date')
+                    ->WhereNull('tasks.closed_date')
                     ->where(
-                        function ($q) {
-                            $q->whereNull('orders.completion_date')
-                            ->orWhereNull('orders.expiration_date');
-                        }
-                    )
-                    ->where(
-                        function ($q) {
-                            $q->whereNull('tasks.completion_date')
-                            ->orWhereNull('tasks.closed_date');
+                        function ($q) use ($date) {
+                            $q->whereNull('orders.expiration_date')
+                            ->orWhere('orders.expiration_date','>=',$date);
                         }
                     )
                     ->where(
@@ -225,16 +242,13 @@ class TaskDateController extends Controller
                     break;
                 case 'on hold':
                     $items_query->whereNotNull('orders.start_date')
+                    ->whereNull('orders.completion_date')
+                    ->whereNull('tasks.completion_date')
+                    ->WhereNull('tasks.closed_date')
                     ->where(
-                        function ($q) {
-                            $q->whereNull('orders.completion_date')
-                            ->orWhereNull('orders.expiration_date');
-                        }
-                    )
-                    ->where(
-                        function ($q) {
-                            $q->whereNull('tasks.completion_date')
-                            ->orWhereNull('tasks.closed_date');
+                        function ($q) use ($date) {
+                            $q->whereNull('orders.expiration_date')
+                            ->orWhere('orders.expiration_date','>=',$date);
                         }
                     )
                     ->where(
@@ -252,16 +266,13 @@ class TaskDateController extends Controller
                     break;
                 case 'all' :
                     $items_query->whereNotNull('orders.start_date')
+                    ->whereNull('orders.completion_date')
+                    ->whereNull('tasks.completion_date')
+                    ->WhereNull('tasks.closed_date')
                     ->where(
-                        function ($q) {
-                            $q->whereNull('orders.completion_date')
-                            ->orWhereNull('orders.expiration_date');
-                        }
-                    )
-                    ->where(
-                        function ($q) {
-                            $q->whereNull('tasks.completion_date')
-                            ->orWhereNull('tasks.closed_date');
+                        function ($q) use ($date) {
+                            $q->whereNull('orders.expiration_date')
+                            ->orWhere('orders.expiration_date','>=',$date);
                         }
                     )
                     ->where(
