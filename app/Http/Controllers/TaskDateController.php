@@ -161,11 +161,9 @@ class TaskDateController extends Controller
         
         if(!empty($status)) {
             $date_obj = date_create($date);
-            $days = 7; //$request->user()->pending_days_out;
-            $current_date = $date_obj->modify('+' . $days . 'days')->format('Y-m-d');
-            $pending_date_obj = date_create($date);
-            $pending_days = 14;
-            $two_weeks_out = $pending_date_obj->modify('+' . $pending_days . 'days')->format('Y-m-d');
+            $current_view_days = $request->input('view_days',14);
+            Log::Debug($current_view_days);
+            $current_view_date = $date_obj->modify('+' . $current_view_days . 'days')->format('Y-m-d');
             switch($status){
                 case 'service':
                     $items_query->whereNull('orders.completion_date')
@@ -209,8 +207,8 @@ class TaskDateController extends Controller
                         }
                     );
                     $items_query->where(
-                        function ($q) use ($two_weeks_out) {
-                            $q->where('orders.start_date', '<=', $two_weeks_out)
+                        function ($q) use ($current_view_date) {
+                            $q->where('orders.start_date', '<=', $current_view_date)
                             ->orWhereNotNull('task_dates.date');
                         }
                     );
@@ -222,7 +220,7 @@ class TaskDateController extends Controller
                     );
                     break;
                 case 'pending':
-                    $items_query->where('orders.start_date','>=',$two_weeks_out)
+                    $items_query->where('orders.start_date','>=',$current_view_date)
                     ->whereNull('orders.completion_date')
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
