@@ -10,7 +10,7 @@ class BackflowAssemblyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -28,8 +28,15 @@ class BackflowAssemblyController extends Controller
             //echo $recent_report_date->format('Y-m-d');
             $items_query->with(['backflow_test_reports' => function ($query) use ($recent_report_date) {
                 $query->where('report_date', '>=', $recent_report_date);
+                $query->orderBy('created_at');
             }],'backflow_test_reports.backflow_tests','backflow_test_reports.backflow_repairs','backflow_test_reports.backflow_cleanings');
             //$items_query->with([]);
+        }
+        $test_date = $request->input('test_date');
+        if($test_date){
+            $items_query->whereHas('property.orders.tasks.dates', function ($query) use ($test_date) {
+                $query->where('date', '=', $test_date);
+            });
         }
         $items = $items_query->get();
         return ['data' => $items];

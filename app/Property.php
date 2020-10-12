@@ -66,5 +66,10 @@ class Property extends Model
     {
         return $this->belongsToMany('App\Client');
     }
+    
+    public function orders()
+    {
+        return $this->belongsToMany('App\Order');
+    }
 
 }

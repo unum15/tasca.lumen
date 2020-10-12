@@ -82,6 +82,14 @@ class OrderController extends Controller
         
         $status = $request->input('status');
         if(!empty($status)) {
+            $items_query->whereNotNull('orders.approval_date')
+                        ->whereNotNull('orders.start_date')
+                        ->where(function ($q){
+                            $date = date_create();
+                            $date->modify('-14 days');
+                            $q->where('completion_date', '>=', $date->format('Y-m-d'))
+                            ->orWhereNull('completion_date');
+                        });
             switch ($status) {
                 case 'Completed' :
                     $items_query
@@ -229,6 +237,9 @@ class OrderController extends Controller
         unset($new_values['completion_date']);
         $items = [];
         $properties = $request->only('properties');
+        if(isset($properties['properties'])){
+            $properties = $properties['properties'];
+        }
 
         $original_order = Order::findOrFail($id);
         //add number as per Paul
@@ -275,8 +286,28 @@ class OrderController extends Controller
             array_push($items, Order::findOrFail($original_order->id));
         }
         else{
-            $original_order->update(['completion_date' => date('Y-m-d')]);
-            array_push($items, Order::findOrFail($original_order->id));
+            if($recurring){
+                $original_order->update(['completion_date' => date('Y-m-d')]);
+                array_push($items, Order::findOrFail($original_order->id));
+            }
+            else{
+                if(count($properties) > 1){
+                    $property = array_shift($properties);
+                    foreach($properties as $property){
+                        $item = Order::create($new_values);
+                        $item->properties()->attach($property["id"]);
+                        foreach($original_order->tasks as $task){
+                            $task_values = $task->toArray();
+                            unset($task_values['id']);
+                            $task_values['order_id'] = $item->id;
+                            Task::create($task_values);
+                        }
+                        array_push($items, Order::findOrFail($item->id));
+                    }
+                    $original_order->properties()->sync([$property['id']]);
+                }
+                array_push($items, Order::findOrFail($original_order->id));
+            }
         }
         return $items;
     }

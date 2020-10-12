@@ -884,6 +884,8 @@ class BackflowTestReportController extends Controller
        'backflow_assembly.property.client',
        'backflow_assembly.backflow_type',
        'backflow_assembly.backflow_type.backflow_super_type',
+       'backflow_assembly.backflow_test_reports',
+       'backflow_assembly.backflow_test_reports.backflow_tests',
        'backflow_tests',
        'backflow_repairs',
        'backflow_cleanings'
