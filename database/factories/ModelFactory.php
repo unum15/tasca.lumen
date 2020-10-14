@@ -611,3 +611,48 @@ $factory->define(App\PropertyUnit::class, function (Faker\Generator $faker) {
         'notes' => $faker->word
     ];
 });
+
+$factory->define(App\IrrigationSystem::class, function (Faker\Generator $faker) {
+    return [
+        'property_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'stops' => $faker->randomDigitNotNull,
+        'points_of_connection' => $faker->randomDigitNotNull,
+        'water_type_id' => $faker->randomDigitNotNull,
+        'filters' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\IrrigationWaterType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word
+    ];
+});
+
+$factory->define(App\IrrigationController::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'model' => $faker->word,
+        'zones' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\IrrigationSystem::class, function (Faker\Generator $faker) {
+    return [
+        'property_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'stops' => $faker->randomDigitNotNull,
+        'points_of_connection' => $faker->randomDigitNotNull,
+        'irrigation_water_type_id' => $faker->randomDigitNotNull,
+        'filters' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\IrrigationController::class, function (Faker\Generator $faker) {
+    return [
+        'irrigation_system_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'model' => $faker->word,
+        'zones' => $faker->randomDigitNotNull
+    ];
+});

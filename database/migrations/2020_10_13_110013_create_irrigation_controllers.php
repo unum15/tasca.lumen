@@ -15,8 +15,10 @@ class CreateIrrigationControllers extends Migration
     {
         Schema::create('irrigation_controllers', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('irrigation_system_id');
+            $table->string('name');
             $table->string('model');
-            $table->string('zones');
+            $table->integer('zones');
             $table->timestamps();
         });
     }

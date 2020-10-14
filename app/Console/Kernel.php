@@ -7,6 +7,7 @@ use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\PopulateDatabaseAdminCommand;
 use App\Console\Commands\InitAdminCommand;
 use App\Console\Commands\InitAllCommand;
+use App\Console\Commands\InitIrrigationWaterTypesCommand;
 use App\Console\Commands\InitRolesCommand;
 use App\Console\Commands\InitSettingsCommand;
 use App\Console\Commands\InitTypesCommand;
@@ -28,6 +29,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         InitAdminCommand::class,
         InitAllCommand::class,
+        InitIrrigationWaterTypesCommand::class,
         InitRolesCommand::class,
         InitSettingsCommand::class,
         InitTypesCommand::class,

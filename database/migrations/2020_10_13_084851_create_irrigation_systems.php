@@ -19,7 +19,7 @@ class CreateIrrigationSystems extends Migration
             $table->string('name');
             $table->integer('stops')->nullable();
             $table->integer('points_of_connection')->nullable();
-            $table->integer('water_type_id')->nullable();
+            $table->integer('irrigation_water_type_id')->nullable();
             $table->integer('filters')->nullable();
             $table->timestamps();
         });
