@@ -390,3 +390,34 @@ $router->post('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@createP
 $router->put('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@updateClient');
 $router->put('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@updateContact');
 $router->put('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@updateProperty');
+
+
+$router->get('/irrigation_systems', ['uses' => 'IrrigationSystemController@index', 'as' => 'irrigation_system.index']);
+$router->post('/irrigation_system', ['uses' => 'IrrigationSystemController@create', 'as' => 'irrigation_system.create']);
+$router->get('/irrigation_system/{id:[0-9]+}', ['uses' => 'IrrigationSystemController@read', 'as' => 'irrigation_system.read']);
+$router->patch('/irrigation_system/{id:[0-9]+}', ['uses' => 'IrrigationSystemController@update', 'as' => 'irrigation_system.update']);
+$router->delete('/irrigation_system/{id:[0-9]+}', ['uses' => 'IrrigationSystemController@delete', 'as' => 'irrigation_system.delete']);
+
+$router->get('/irrigation_water_types', ['uses' => 'IrrigationWaterTypeController@index', 'as' => 'irrigation_water_type.index']);
+$router->post('/irrigation_water_type', ['uses' => 'IrrigationWaterTypeController@create', 'as' => 'irrigation_water_type.create']);
+$router->get('/irrigation_water_type/{id:[0-9]+}', ['uses' => 'IrrigationWaterTypeController@read', 'as' => 'irrigation_water_type.read']);
+$router->patch('/irrigation_water_type/{id:[0-9]+}', ['uses' => 'IrrigationWaterTypeController@update', 'as' => 'irrigation_water_type.update']);
+$router->delete('/irrigation_water_type/{id:[0-9]+}', ['uses' => 'IrrigationWaterTypeController@delete', 'as' => 'irrigation_water_type.delete']);
+
+$router->get('/irrigation_controllers', ['uses' => 'IrrigationControllerController@index', 'as' => 'irrigation_controller.index']);
+$router->post('/irrigation_controller', ['uses' => 'IrrigationControllerController@create', 'as' => 'irrigation_controller.create']);
+$router->get('/irrigation_controller/{id:[0-9]+}', ['uses' => 'IrrigationControllerController@read', 'as' => 'irrigation_controller.read']);
+$router->patch('/irrigation_controller/{id:[0-9]+}', ['uses' => 'IrrigationControllerController@update', 'as' => 'irrigation_controller.update']);
+$router->delete('/irrigation_controller/{id:[0-9]+}', ['uses' => 'IrrigationControllerController@delete', 'as' => 'irrigation_controller.delete']);
+
+$router->get('/irrigation_systems', ['uses' => 'IrrigationSystemController@index', 'as' => 'irrigation_system.index']);
+$router->post('/irrigation_system', ['uses' => 'IrrigationSystemController@create', 'as' => 'irrigation_system.create']);
+$router->get('/irrigation_system/{id:[0-9]+}', ['uses' => 'IrrigationSystemController@read', 'as' => 'irrigation_system.read']);
+$router->patch('/irrigation_system/{id:[0-9]+}', ['uses' => 'IrrigationSystemController@update', 'as' => 'irrigation_system.update']);
+$router->delete('/irrigation_system/{id:[0-9]+}', ['uses' => 'IrrigationSystemController@delete', 'as' => 'irrigation_system.delete']);
+
+$router->get('/irrigation_controllers', ['uses' => 'IrrigationControllerController@index', 'as' => 'irrigation_controller.index']);
+$router->post('/irrigation_controller', ['uses' => 'IrrigationControllerController@create', 'as' => 'irrigation_controller.create']);
+$router->get('/irrigation_controller/{id:[0-9]+}', ['uses' => 'IrrigationControllerController@read', 'as' => 'irrigation_controller.read']);
+$router->patch('/irrigation_controller/{id:[0-9]+}', ['uses' => 'IrrigationControllerController@update', 'as' => 'irrigation_controller.update']);
+$router->delete('/irrigation_controller/{id:[0-9]+}', ['uses' => 'IrrigationControllerController@delete', 'as' => 'irrigation_controller.delete']);

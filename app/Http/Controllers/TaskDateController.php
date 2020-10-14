@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class TaskDateController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     
     private $validation = [
         'task_id' => 'integer:exists:tasks,id',
@@ -327,8 +322,8 @@ class TaskDateController extends Controller
             'task.order.project.contact.phoneNumbers.phoneNumberType',
             'task.order.project.client',
             'task.order.properties.contacts',
-            'task.order.properties.contacts.phoneNumbers',
-            'task.order.properties.contacts.phoneNumbers.phoneNumberType',
+            'task.order.properties.contacts.emails',
+            'task.order.properties.contacts.emails.emailType',
             'task.TaskCategory',
             'task.TaskStatus',
             'task.TaskAction',
