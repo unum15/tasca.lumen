@@ -390,3 +390,5 @@ $router->post('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@createP
 $router->put('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@updateClient');
 $router->put('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@updateContact');
 $router->put('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@updateProperty');
+
+$router->post('/sms/response', 'SMSController@response');
