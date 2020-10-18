@@ -536,7 +536,6 @@ $router->get('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@read', 'as
 $router->patch('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@update', 'as' => 'asset_sub.update']);
 $router->delete('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@delete', 'as' => 'asset_sub.delete']);
 
-
 $router->get('/asset_accessories', ['uses' => 'AssetAccessoryController@index', 'as' => 'asset_accessory.index']);
 $router->post('/asset_accessory', ['uses' => 'AssetAccessoryController@create', 'as' => 'asset_accessory.create']);
 $router->get('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@read', 'as' => 'asset_accessory.read']);
