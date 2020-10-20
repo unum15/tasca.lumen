@@ -17,9 +17,9 @@ class CreateIrrigationControllers extends Migration
             $table->bigIncrements('id');
             $table->integer('irrigation_system_id');
             $table->string('name');
-            $table->string('model');
-            $table->integer('zones');
-            $table->string('password');
+            $table->string('model')->nullable();
+            $table->integer('zones')->nullable();
+            $table->string('password')->nullable();
             $table->timestamps();
             
             $table->foreign('irrigation_system_id')

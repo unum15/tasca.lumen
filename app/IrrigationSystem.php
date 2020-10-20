@@ -9,11 +9,28 @@ class IrrigationSystem extends Model
     protected $fillable = [
         'property_id',
         'name',
-        'stops',
-        'points_of_connection',
+        'point_of_connection_location',
         'irrigation_water_type_id',
-        'filters'
+        'backflow_assembly_id',
+        'filter_model',
+        'filter_location',
+        'property_unit_id'
     ];
+
+    public function irrigation_water_type()
+    {
+        return $this->belongsTo('App\IrrigationWaterType');
+    }
+
+    public function backflow_assembly()
+    {
+        return $this->belongsTo('App\BackflowAssembly');
+    }
+
+    public function property_unit()
+    {
+        return $this->belongsTo('App\PropertyUnit');
+    }
     
     public function irrigation_controllers()
     {

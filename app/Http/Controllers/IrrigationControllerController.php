@@ -56,16 +56,20 @@ class IrrigationControllerController extends Controller
     }
     
     protected $model_validation = [
-       'irrigation_system_id' => 'integer',
+       'irrigation_system_id' => 'integer|exists:irrigation_systems,id',
        'name' => 'string|max:1020',
-       'model' => 'string|max:1020',
-       'zones' => 'integer',
+       'model' => 'string|max:1020|nullable',
+       'zones' => 'integer|nullable',
+       'password' => 'string|max:1020|nullable',
     ];
     
     protected $model_validation_required = [
        'irrigation_system_id' => 'required',
        'name' => 'required',
-       'model' => 'required',
-       'zones' => 'required',
     ];
+
+    protected $model_includes = [
+       'irrigation_system'
+    ];
+    
 }
