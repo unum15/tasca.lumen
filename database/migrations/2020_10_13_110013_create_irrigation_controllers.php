@@ -19,7 +19,13 @@ class CreateIrrigationControllers extends Migration
             $table->string('name');
             $table->string('model');
             $table->integer('zones');
+            $table->string('password');
             $table->timestamps();
+            
+            $table->foreign('irrigation_system_id')
+                ->references('id')
+                ->on('irrigation_systems')
+                ->onDelete('cascade');
         });
     }
 

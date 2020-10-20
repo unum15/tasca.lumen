@@ -22,7 +22,14 @@ class CreateIrrigationSystems extends Migration
             $table->integer('irrigation_water_type_id')->nullable();
             $table->integer('filters')->nullable();
             $table->timestamps();
+            
+            $table->foreign('irrigation_water_type_id')
+                ->references('id')
+                ->on('irrigation_water_types')
+                ->onDelete('cascade');
         });
+        
+        
     }
 
     /**
