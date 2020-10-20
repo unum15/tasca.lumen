@@ -9,8 +9,10 @@ class IrrigationController extends Model
     protected $fillable = [
         'irrigation_system_id',
         'name',
+        'location',
         'model',
         'zones',
+        'property_unit_id',
         'password'
     ];
 
