@@ -11,7 +11,7 @@ class IrrigationSystemController extends Controller
     public function __construct()
     {
         Log::debug('IrrigationSystemController Constructed');
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -23,7 +23,6 @@ class IrrigationSystemController extends Controller
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
-        Log::debug(print_r($items,true));
         return ['data' => $items];
     }
 
@@ -59,18 +58,24 @@ class IrrigationSystemController extends Controller
     protected $model_validation = [
        'property_id' => 'integer',
        'name' => 'string|max:1020',
-       'stops' => 'integer|nullable',
-       'points_of_connection' => 'integer|nullable',
-       'irrigation_water_type_id' => 'integer|nullable',
-       'filters' => 'integer|nullable',
+       'point_of_connection_location' => 'string|max:1020|nullable',
+       'irrigation_water_type_id' => 'integer|nullable|exists:irrigation_water_types,id',
+       'backflow_assembly_id' => 'integer|nullable|exists:backflow_assemblies,id',
+       'filter_model' => 'string|max:1020|nullable',
+       'filter_location' => 'string|max:1020|nullable',
+       'property_unit_id' => 'integer|nullable|exists:property_units,id',
     ];
     
     protected $model_validation_required = [
        'property_id' => 'required',
        'name' => 'required',
     ];
-    
+
     protected $model_includes = [
-        'irrigation_controllers'
+       'property_unit',
+       'backflow_assembly',
+       'irrigation_water_type',
+       'irrigation_controllers'
     ];
+    
 }

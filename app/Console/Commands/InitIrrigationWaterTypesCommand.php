@@ -19,7 +19,9 @@ class InitIrrigationWaterTypesCommand extends Command
     {
         $types = [
             'Culinary',
-            'Secondary'
+            'Secondary',
+            'Dual',
+            'Well'
         ];
 
         foreach($types as $type){

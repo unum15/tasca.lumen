@@ -656,3 +656,39 @@ $factory->define(App\IrrigationController::class, function (Faker\Generator $fak
         'zones' => $faker->randomDigitNotNull
     ];
 });
+
+$factory->define(App\IrrigationSystem::class, function (Faker\Generator $faker) {
+    return [
+        'property_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'point_of_connnection_location' => $faker->word,
+        'irrigation_water_type_id' => $faker->randomDigitNotNull,
+        'backflow_assembly_id' => $faker->randomDigitNotNull,
+        'filter_model' => $faker->word,
+        'filter_location' => $faker->word,
+        'property_unit_id' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\IrrigationSystem::class, function (Faker\Generator $faker) {
+    return [
+        'property_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'point_of_connnection_location' => $faker->word,
+        'irrigation_water_type_id' => $faker->randomDigitNotNull,
+        'backflow_assembly_id' => $faker->randomDigitNotNull,
+        'filter_model' => $faker->word,
+        'filter_location' => $faker->word,
+        'property_unit_id' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\IrrigationController::class, function (Faker\Generator $faker) {
+    return [
+        'irrigation_system_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'model' => $faker->word,
+        'zones' => $faker->randomDigitNotNull,
+        'password' => $faker->word
+    ];
+});

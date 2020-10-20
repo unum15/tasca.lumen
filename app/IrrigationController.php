@@ -10,6 +10,12 @@ class IrrigationController extends Model
         'irrigation_system_id',
         'name',
         'model',
-        'zones'
+        'zones',
+        'password'
     ];
+
+    public function irrigation_system()
+    {
+        return $this->belongsTo('App\IrrigationSystem');
+    }
 }
