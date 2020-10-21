@@ -23,6 +23,7 @@ class CreateIrrigationSystems extends Migration
             $table->string('filter_model')->nullable();
             $table->string('filter_location')->nullable();
             $table->integer('property_unit_id')->nullable();
+            $table->string('notes')->nullable();
             $table->timestamps();
 
             $table->foreign('irrigation_water_type_id')

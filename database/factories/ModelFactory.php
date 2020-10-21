@@ -692,3 +692,9 @@ $factory->define(App\IrrigationController::class, function (Faker\Generator $fak
         'password' => $faker->word
     ];
 });
+
+$factory->define(App\IrrigationControllerLocation::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word
+    ];
+});

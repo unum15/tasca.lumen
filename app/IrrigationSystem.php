@@ -14,7 +14,8 @@ class IrrigationSystem extends Model
         'backflow_assembly_id',
         'filter_model',
         'filter_location',
-        'property_unit_id'
+        'property_unit_id',
+        'notes'
     ];
 
     public function irrigation_water_type()
