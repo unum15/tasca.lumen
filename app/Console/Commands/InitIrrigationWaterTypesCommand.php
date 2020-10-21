@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\IrrigationWaterType;
+use App\IrrigationControllerLocation;
 
 class InitIrrigationWaterTypesCommand extends Command
 {
@@ -26,6 +27,15 @@ class InitIrrigationWaterTypesCommand extends Command
 
         foreach($types as $type){
             IrrigationWaterType::create(['name' => $type]);
+        }
+        
+        $types = [
+            'Inside',
+            'Outside'
+        ];
+
+        foreach($types as $type){
+            IrrigationControllerLocation::create(['name' => $type]);
         }
     }
 }

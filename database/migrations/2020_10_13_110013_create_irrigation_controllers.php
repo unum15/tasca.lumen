@@ -17,11 +17,15 @@ class CreateIrrigationControllers extends Migration
             $table->bigIncrements('id');
             $table->integer('irrigation_system_id');
             $table->string('name');
-            $table->string('location')->nullable();
+            $table->string('placement')->nullable();
+            $table->integer('irrigation_controller_location_id')->nullable();
             $table->string('model')->nullable();
             $table->integer('zones')->nullable();
+            $table->string('username')->nullable();
             $table->string('password')->nullable();
             $table->integer('property_unit_id')->nullable();
+            $table->boolean('accessible')->nullable();
+            $table->string('notes')->nullable();
             $table->timestamps();
             
             $table->foreign('irrigation_system_id')
@@ -32,6 +36,11 @@ class CreateIrrigationControllers extends Migration
             $table->foreign('property_unit_id')
                 ->references('id')
                 ->on('property_units')
+                ->onDelete('cascade');
+                
+            $table->foreign('irrigation_controller_location_id')
+                ->references('id')
+                ->on('irrigation_controller_locations')
                 ->onDelete('cascade');
         });
     }
