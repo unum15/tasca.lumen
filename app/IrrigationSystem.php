@@ -32,9 +32,14 @@ class IrrigationSystem extends Model
     {
         return $this->belongsTo('App\PropertyUnit');
     }
-    
+
     public function irrigation_controllers()
     {
         return $this->hasMany('App\IrrigationController');
+    }
+
+    public function irrigation_system_others()
+    {
+        return $this->hasMany('App\IrrigationSystemOther');
     }
 }
