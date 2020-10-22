@@ -698,3 +698,11 @@ $factory->define(App\IrrigationControllerLocation::class, function (Faker\Genera
         'name' => $faker->word
     ];
 });
+
+$factory->define(App\IrrigationSystemOther::class, function (Faker\Generator $faker) {
+    return [
+        'irrigation_system_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'count' => $faker->randomDigitNotNull
+    ];
+});
