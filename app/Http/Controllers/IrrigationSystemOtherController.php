@@ -58,7 +58,7 @@ class IrrigationSystemOtherController extends Controller
     protected $model_validation = [
        'irrigation_system_id' => 'integer|exists:irrigation_systems,id',
        'name' => 'string|max:1020',
-       'count' => 'integer|nullable',
+       'value' => 'string|max:1020|nullable',
     ];
     
     protected $model_validation_required = [

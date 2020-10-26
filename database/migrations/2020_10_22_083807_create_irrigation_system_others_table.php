@@ -17,7 +17,7 @@ class CreateIrrigationSystemOthersTable extends Migration
             $table->bigIncrements('id');
             $table->integer('irrigation_system_id');
             $table->string('name');
-            $table->integer('count')->nullable();
+            $table->string('value')->nullable();
             $table->timestamps();
 
             $table->foreign('irrigation_system_id')
