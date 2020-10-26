@@ -706,3 +706,11 @@ $factory->define(App\IrrigationSystemOther::class, function (Faker\Generator $fa
         'count' => $faker->randomDigitNotNull
     ];
 });
+
+$factory->define(App\IrrigationControllerOther::class, function (Faker\Generator $faker) {
+    return [
+        'irrigation_controller_id' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'value' => $faker->word
+    ];
+});

@@ -422,3 +422,9 @@ $router->post('/irrigation_system_other', ['uses' => 'IrrigationSystemOtherContr
 $router->get('/irrigation_system_other/{id:[0-9]+}', ['uses' => 'IrrigationSystemOtherController@read', 'as' => 'irrigation_system_other.read']);
 $router->patch('/irrigation_system_other/{id:[0-9]+}', ['uses' => 'IrrigationSystemOtherController@update', 'as' => 'irrigation_system_other.update']);
 $router->delete('/irrigation_system_other/{id:[0-9]+}', ['uses' => 'IrrigationSystemOtherController@delete', 'as' => 'irrigation_system_other.delete']);
+
+$router->get('/irrigation_controller_others', ['uses' => 'IrrigationControllerOtherController@index', 'as' => 'irrigation_controller_other.index']);
+$router->post('/irrigation_controller_other', ['uses' => 'IrrigationControllerOtherController@create', 'as' => 'irrigation_controller_other.create']);
+$router->get('/irrigation_controller_other/{id:[0-9]+}', ['uses' => 'IrrigationControllerOtherController@read', 'as' => 'irrigation_controller_other.read']);
+$router->patch('/irrigation_controller_other/{id:[0-9]+}', ['uses' => 'IrrigationControllerOtherController@update', 'as' => 'irrigation_controller_other.update']);
+$router->delete('/irrigation_controller_other/{id:[0-9]+}', ['uses' => 'IrrigationControllerOtherController@delete', 'as' => 'irrigation_controller_other.delete']);
