@@ -75,7 +75,8 @@ class IrrigationControllerController extends Controller
     ];
 
     protected $model_includes = [
-       'irrigation_system'
+       'irrigation_system',
+       'irrication_controller_others'
     ];
     
 }

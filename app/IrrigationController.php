@@ -24,4 +24,9 @@ class IrrigationController extends Model
     {
         return $this->belongsTo('App\IrrigationSystem');
     }
+
+    public function irrigation_controller_others()
+    {
+        return $this->hasMany('App\IrrigationControllerOther');
+    }
 }
