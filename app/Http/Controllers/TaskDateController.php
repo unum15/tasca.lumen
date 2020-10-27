@@ -22,7 +22,7 @@ class TaskDateController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -323,6 +323,8 @@ class TaskDateController extends Controller
             'task.order.project.contact.phoneNumbers.phoneNumberType',
             'task.order.project.client',
             'task.order.properties.contacts',
+            'task.order.properties.contacts.clientContactTypes',
+            'task.order.properties.contacts.clientContactTypes.contact_type',            
             'task.order.properties.contacts.emails',
             'task.order.properties.contacts.emails.emailType',
             'task.order.properties.contacts',
