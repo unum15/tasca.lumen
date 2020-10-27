@@ -153,6 +153,7 @@ class TaskDateController extends Controller
             }
         }
         $status = strtolower($request->input('status'));
+        $items_query->whereNull('projects.close_date');
         
         if(!empty($status)) {
             $date_obj = date_create($date);
