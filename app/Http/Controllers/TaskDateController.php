@@ -158,7 +158,6 @@ class TaskDateController extends Controller
         if(!empty($status)) {
             $date_obj = date_create($date);
             $current_view_days = $request->input('view_days',14);
-            Log::Debug($current_view_days);
             $current_view_date = $date_obj->modify('+' . $current_view_days . 'days')->format('Y-m-d');
             switch($status){
                 case 'service':

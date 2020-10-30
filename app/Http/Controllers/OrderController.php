@@ -187,6 +187,8 @@ class OrderController extends Controller
         $values['expiration_date'] = isset($values['expiration_date']) && $values['expiration_date'] != "" ? $values['expiration_date'] : null;
         $values['renewal_date'] = isset($values['renewal_date']) && $values['renewal_date'] != "" ? $values['renewal_date'] : null;
         $values['updater_id'] = $request->user()->id;
+        Log::debug("order_id:".$values['id']);
+        Log::debug("close_date:".$values['completion_date']);
         $item->update($values);
         $this->syncProperties($item, $request);
         return $item;

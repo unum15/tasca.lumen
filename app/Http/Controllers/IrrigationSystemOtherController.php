@@ -10,7 +10,6 @@ class IrrigationSystemOtherController extends Controller
 {
     public function __construct()
     {
-        Log::debug('IrrigationSystemOtherController Constructed');
         $this->middleware('auth');
     }
 
