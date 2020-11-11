@@ -10,7 +10,6 @@ class IrrigationSystemController extends Controller
 {
     public function __construct()
     {
-        Log::debug('IrrigationSystemController Constructed');
         $this->middleware('auth');
     }
 
@@ -79,6 +78,7 @@ class IrrigationSystemController extends Controller
        'irrigation_controllers',
        'irrigation_system_others',
        'irrigation_controllers.irrigation_controller_others',
+       'irrigation_controllers.irrigation_zones',
     ];
     
 }

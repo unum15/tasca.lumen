@@ -235,7 +235,6 @@ class OrderController extends Controller
                 }
                 return $items;
             }
-
         }
         return $item;
     }

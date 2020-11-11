@@ -714,3 +714,31 @@ $factory->define(App\IrrigationControllerOther::class, function (Faker\Generator
         'value' => $faker->word
     ];
 });
+
+$factory->define(App\IrrigationZone::class, function (Faker\Generator $faker) {
+    return [
+        'number' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'plant_type' => $faker->word,
+        'head_type' => $faker->word,
+        'gallons_per_minute' => $faker->word,
+        'application_rate' => $faker->word,
+        'heads' => $faker->randomDigitNotNull,
+        'program' => $faker->word,
+        'run_start' => $faker->word,
+        'run_length' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\IrrigationZone::class, function (Faker\Generator $faker) {
+    return [
+        'irrigation_controller_id' => $faker->randomDigitNotNull,
+        'number' => $faker->randomDigitNotNull,
+        'name' => $faker->word,
+        'plant_type' => $faker->word,
+        'head_type' => $faker->word,
+        'gallons_per_minute' => $faker->word,
+        'application_rate' => $faker->word,
+        'heads' => $faker->randomDigitNotNull
+    ];
+});

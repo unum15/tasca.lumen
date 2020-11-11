@@ -10,7 +10,6 @@ class IrrigationControllerLocationController extends Controller
 {
     public function __construct()
     {
-        Log::debug('IrrigationControllerLocationController Constructed');
         $this->middleware('auth');
     }
 

@@ -66,6 +66,10 @@ class BackflowTestReportController extends Controller
         $valve_id = $request->input('valve_id');
         $contact_id = $request->input('contact_id');
         $repaired_on = $request->input('repaired_on');
+        if(!is_array($parts)){
+            Log::debug($parts);
+            return response(['message' => 'Invalid parts array:'.print_r($parts,true)], 400);
+        }
         BackflowRepair::where('backflow_test_report_id',$item->id)->where('backflow_valve_id',$valve_id)->delete();
         foreach($parts as $part_id){
             BackflowRepair::create([
@@ -83,6 +87,10 @@ class BackflowTestReportController extends Controller
     {
         $item = BackflowTestReport::findOrFail($id);
         $parts = $request->input('parts');
+        if(!is_array($parts)){
+            Log::debug($parts);
+            return response(['message' => 'Invalid parts array:'.print_r($parts,true)], 400);
+        }
         $valve_id = $request->input('valve_id');
         $contact_id = $request->input('contact_id');
         $cleaned_on = $request->input('cleaned_on');

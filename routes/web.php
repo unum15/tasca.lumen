@@ -415,8 +415,6 @@ $router->get('/irrigation_controller_location/{id:[0-9]+}', ['uses' => 'Irrigati
 $router->patch('/irrigation_controller_location/{id:[0-9]+}', ['uses' => 'IrrigationControllerLocationController@update', 'as' => 'irrigation_controller_location.update']);
 $router->delete('/irrigation_controller_location/{id:[0-9]+}', ['uses' => 'IrrigationControllerLocationController@delete', 'as' => 'irrigation_controller_location.delete']);
 
-
-
 $router->get('/irrigation_system_others', ['uses' => 'IrrigationSystemOtherController@index', 'as' => 'irrigation_system_other.index']);
 $router->post('/irrigation_system_other', ['uses' => 'IrrigationSystemOtherController@create', 'as' => 'irrigation_system_other.create']);
 $router->get('/irrigation_system_other/{id:[0-9]+}', ['uses' => 'IrrigationSystemOtherController@read', 'as' => 'irrigation_system_other.read']);
@@ -428,3 +426,9 @@ $router->post('/irrigation_controller_other', ['uses' => 'IrrigationControllerOt
 $router->get('/irrigation_controller_other/{id:[0-9]+}', ['uses' => 'IrrigationControllerOtherController@read', 'as' => 'irrigation_controller_other.read']);
 $router->patch('/irrigation_controller_other/{id:[0-9]+}', ['uses' => 'IrrigationControllerOtherController@update', 'as' => 'irrigation_controller_other.update']);
 $router->delete('/irrigation_controller_other/{id:[0-9]+}', ['uses' => 'IrrigationControllerOtherController@delete', 'as' => 'irrigation_controller_other.delete']);
+
+$router->get('/irrigation_zones', ['uses' => 'IrrigationZoneController@index', 'as' => 'irrigation_zone.index']);
+$router->post('/irrigation_zone', ['uses' => 'IrrigationZoneController@create', 'as' => 'irrigation_zone.create']);
+$router->get('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneController@read', 'as' => 'irrigation_zone.read']);
+$router->patch('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneController@update', 'as' => 'irrigation_zone.update']);
+$router->delete('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneController@delete', 'as' => 'irrigation_zone.delete']);

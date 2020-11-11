@@ -47,6 +47,7 @@ class Property extends Model
     public function contacts()
     {
         return $this->belongsToMany('App\Contact')
+            ->orderBy('name')
             ->withTimestamps();
     }
     

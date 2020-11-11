@@ -10,7 +10,6 @@ class IrrigationControllerController extends Controller
 {
     public function __construct()
     {
-        Log::debug('IrrigationControllerController Constructed');
         $this->middleware('auth');
     }
 
@@ -62,7 +61,7 @@ class IrrigationControllerController extends Controller
        'irrigation_controller_location_id' => 'integer|exists:irrigation_controller_locations,id',
        'model' => 'string|max:1020|nullable',
        'zones' => 'integer|nullable',
-       'property_unit_id' => 'integer|exists:property_units,id',
+       'property_unit_id' => 'integer|exists:property_units,id|nullable',
        'username' => 'string|max:1020|nullable',
        'password' => 'string|max:1020|nullable',
        'notes' => 'string|max:1020|nullable',
@@ -76,7 +75,8 @@ class IrrigationControllerController extends Controller
 
     protected $model_includes = [
        'irrigation_system',
-       'irrication_controller_others'
+       'irrigation_controller_others',
+       'irrigation_zones'
     ];
     
 }

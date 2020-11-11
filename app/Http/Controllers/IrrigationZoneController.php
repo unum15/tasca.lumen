@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\IrrigationWaterType;
+use App\IrrigationZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class IrrigationWaterTypeController extends Controller
+class IrrigationZoneController extends Controller
 {
     public function __construct()
     {
+        Log::debug('IrrigationZoneController Constructed');
         $this->middleware('auth');
     }
 
@@ -17,10 +18,11 @@ class IrrigationWaterTypeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
-        $items_query = IrrigationWaterType::with($includes);
+        $items_query = IrrigationZone::with($includes);
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $items_query->orderBy('number');
         $items = $items_query->get();
         return ['data' => $items];
     }
@@ -28,20 +30,20 @@ class IrrigationWaterTypeController extends Controller
     public function create(Request $request)
     {
         $values = $this->validateModel($request, true);
-        $item = IrrigationWaterType::create($values);
-        return response(['data' => $item], 201, ['Location' => route('irrigation_water_type.read', ['id' => $item->id])]);
+        $item = IrrigationZone::create($values);
+        return response(['data' => $item], 201, ['Location' => route('irrigation_zone.read', ['id' => $item->id])]);
     }
 
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = IrrigationWaterType::with($includes)->find($id);
+        $item = IrrigationZone::with($includes)->find($id);
         return ['data' => $item];
     }
 
     public function update($id, Request $request)
     {
-        $item = IrrigationWaterType::findOrFail($id);
+        $item = IrrigationZone::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
         return ['data' => $item];
@@ -49,16 +51,29 @@ class IrrigationWaterTypeController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $item = IrrigationWaterType::findOrFail($id);
+        $item = IrrigationZone::findOrFail($id);
         $item->delete();
         return response([], 204);
     }
     
     protected $model_validation = [
-       'name' => 'string|max:1020',
+       'irrigation_controller_id' => 'integer|exists:irrigation_controllers,id',
+       'number' => 'integer',
+       'name' => 'string|max:1020|nullable',
+       'plant_type' => 'string|max:1020|nullable',
+       'head_type' => 'string|max:1020|nullable',
+       'gallons_per_minute' => 'numeric|nullable',
+       'application_rate' => 'numeric|nullable',
+       'heads' => 'integer|nullable',
     ];
     
     protected $model_validation_required = [
-       'name' => 'required',
+       'irrigation_controller_id' => 'required',
+       'number' => 'required',
     ];
+
+    protected $model_includes = [
+       'irrigation_controller'
+    ];
+    
 }

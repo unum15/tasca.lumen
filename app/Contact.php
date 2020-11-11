@@ -49,6 +49,11 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
             ->withPivot('contact_type_id');
     }
     
+    public function clientContactTypes()
+    {
+        return $this->hasMany('App\ClientContactType');
+    }
+    
     public function contactMethod()
     {
         return $this->belongsTo('App\ContactMethod');
@@ -66,7 +71,8 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
     
     public function properties()
     {
-        return $this->belongsToMany('App\Property')->orderBy('name')
+        return $this->belongsToMany('App\Property')
+            ->orderBy('name')
             ->withTimestamps();
     }
     
