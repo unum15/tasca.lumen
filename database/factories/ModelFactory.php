@@ -759,3 +759,12 @@ $factory->define(App\PropertyAccount::class, function (Faker\Generator $faker) {
         'notes' => $faker->word
     ];
 });
+
+$factory->define(App\BackflowPicture::class, function (Faker\Generator $faker) {
+    return [
+        'backflow_assembly_id' => $faker->word,
+        'filename' => $faker->word,
+        'original_filename' => $faker->word,
+        'notes' => $faker->word
+    ];
+});

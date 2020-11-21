@@ -433,14 +433,14 @@ $router->get('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneControlle
 $router->patch('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneController@update', 'as' => 'irrigation_zone.update']);
 $router->delete('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneController@delete', 'as' => 'irrigation_zone.delete']);
 
-$router->get('/accounts_table', ['uses' => 'AccountsTableController@index', 'as' => 'accounts_table.index']);
-$router->post('/accounts_table', ['uses' => 'AccountsTableController@create', 'as' => 'accounts_table.create']);
-$router->get('/accounts_table/{id:[0-9]+}', ['uses' => 'AccountsTableController@read', 'as' => 'accounts_table.read']);
-$router->patch('/accounts_table/{id:[0-9]+}', ['uses' => 'AccountsTableController@update', 'as' => 'accounts_table.update']);
-$router->delete('/accounts_table/{id:[0-9]+}', ['uses' => 'AccountsTableController@delete', 'as' => 'accounts_table.delete']);
-
 $router->get('/property_accounts', ['uses' => 'PropertyAccountController@index', 'as' => 'property_account.index']);
 $router->post('/property_account', ['uses' => 'PropertyAccountController@create', 'as' => 'property_account.create']);
 $router->get('/property_account/{id:[0-9]+}', ['uses' => 'PropertyAccountController@read', 'as' => 'property_account.read']);
 $router->patch('/property_account/{id:[0-9]+}', ['uses' => 'PropertyAccountController@update', 'as' => 'property_account.update']);
 $router->delete('/property_account/{id:[0-9]+}', ['uses' => 'PropertyAccountController@delete', 'as' => 'property_account.delete']);
+
+$router->get('/backflow_pictures', ['uses' => 'BackflowPictureController@index', 'as' => 'backflow_picture.index']);
+$router->post('/backflow_picture', ['uses' => 'BackflowPictureController@create', 'as' => 'backflow_picture.create']);
+$router->get('/backflow_picture/{id:[0-9]+}', ['uses' => 'BackflowPictureController@read', 'as' => 'backflow_picture.read']);
+$router->patch('/backflow_picture/{id:[0-9]+}', ['uses' => 'BackflowPictureController@update', 'as' => 'backflow_picture.update']);
+$router->delete('/backflow_picture/{id:[0-9]+}', ['uses' => 'BackflowPictureController@delete', 'as' => 'backflow_picture.delete']);
