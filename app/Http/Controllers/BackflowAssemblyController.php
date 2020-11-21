@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BackflowAssembly;
 use Illuminate\Http\Request;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
+use Log;
 
 class BackflowAssemblyController extends Controller
 {
@@ -60,6 +61,11 @@ class BackflowAssemblyController extends Controller
     {
         $item = BackflowAssembly::findOrFail($id);
         $values = $this->validateModel($request);
+        foreach($values as $key=>$value){
+            if((empty($value))&&(!in_array($key,['active','need_access']))){
+                $values[$key] = null;
+            }
+        }
         $item->update($values);
         return ['data' => $item];
     }
@@ -208,7 +214,9 @@ class BackflowAssemblyController extends Controller
        'backflow_size_id' => 'integer|nullable|exists:backflow_sizes,id',
        'backflow_manufacturer_id' => 'integer|nullable|exists:backflow_manufacturers,id',
        'backflow_model_id' => 'integer|nullable|exists:backflow_models,id',
+       'property_account_id' => 'integer|nullable|exists:property_accounts,id',
        'active' => 'boolean',
+       'need_access' => 'boolean',
        'month' => 'integer|nullable',
        'use' => 'string|max:4096|nullable',
        'placement' => 'string|max:4096|nullable',
