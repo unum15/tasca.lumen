@@ -25,7 +25,9 @@ class BackflowAssembly extends Model
         'tag_year_end',
         'installation',
         'tester',
-        'tester_number'
+        'tester_number',
+        'property_account_id',
+        'need_access'
     ];
 
     public function property()
