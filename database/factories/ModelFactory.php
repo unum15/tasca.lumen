@@ -742,3 +742,20 @@ $factory->define(App\IrrigationZone::class, function (Faker\Generator $faker) {
         'heads' => $faker->randomDigitNotNull
     ];
 });
+
+$factory->define(App\AccountsTable::class, function (Faker\Generator $faker) {
+    return 
+    ];
+});
+
+$factory->define(App\PropertyAccount::class, function (Faker\Generator $faker) {
+    return [
+        'property_id' => $faker->word,
+        'number' => $faker->word,
+        'name' => $faker->word,
+        'address' => $faker->word,
+        'city' => $faker->word,
+        'access_code' => $faker->word,
+        'notes' => $faker->word
+    ];
+});
