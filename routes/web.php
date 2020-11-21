@@ -432,3 +432,15 @@ $router->post('/irrigation_zone', ['uses' => 'IrrigationZoneController@create', 
 $router->get('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneController@read', 'as' => 'irrigation_zone.read']);
 $router->patch('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneController@update', 'as' => 'irrigation_zone.update']);
 $router->delete('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneController@delete', 'as' => 'irrigation_zone.delete']);
+
+$router->get('/accounts_table', ['uses' => 'AccountsTableController@index', 'as' => 'accounts_table.index']);
+$router->post('/accounts_table', ['uses' => 'AccountsTableController@create', 'as' => 'accounts_table.create']);
+$router->get('/accounts_table/{id:[0-9]+}', ['uses' => 'AccountsTableController@read', 'as' => 'accounts_table.read']);
+$router->patch('/accounts_table/{id:[0-9]+}', ['uses' => 'AccountsTableController@update', 'as' => 'accounts_table.update']);
+$router->delete('/accounts_table/{id:[0-9]+}', ['uses' => 'AccountsTableController@delete', 'as' => 'accounts_table.delete']);
+
+$router->get('/property_accounts', ['uses' => 'PropertyAccountController@index', 'as' => 'property_account.index']);
+$router->post('/property_account', ['uses' => 'PropertyAccountController@create', 'as' => 'property_account.create']);
+$router->get('/property_account/{id:[0-9]+}', ['uses' => 'PropertyAccountController@read', 'as' => 'property_account.read']);
+$router->patch('/property_account/{id:[0-9]+}', ['uses' => 'PropertyAccountController@update', 'as' => 'property_account.update']);
+$router->delete('/property_account/{id:[0-9]+}', ['uses' => 'PropertyAccountController@delete', 'as' => 'property_account.delete']);
