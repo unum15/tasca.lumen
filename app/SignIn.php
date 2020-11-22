@@ -8,7 +8,7 @@ class SignIn extends Model
 {
     protected $fillable = [
         'task_date_id',
-        'clock_in_id',
+        'contact_id',
         'overhead_assignment_id',
         'overhead_category_id',
         'sign_in',
@@ -23,9 +23,9 @@ class SignIn extends Model
         return $this->belongsTo('App\TaskDate');
     }
     
-    function clockIn()
+    function contact()
     {
-        return $this->belongsTo('App\ClockIn');
+        return $this->belongsTo('App\Contact');
     }
     
     function overheadAssignment()
