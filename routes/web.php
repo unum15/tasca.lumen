@@ -200,6 +200,7 @@ $router->get('/sign_ins', 'SignInController@index');
 $router->get('/sign_ins/by_employee', 'SignInController@by_employee');
 $router->post('/sign_in', 'SignInController@create');
 $router->get('/sign_in/{id:[0-9]+}', 'SignInController@read');
+$router->get('/sign_in/current', 'SignInController@current');
 $router->patch('/sign_in/{id:[0-9]+}', 'SignInController@update');
 $router->delete('/sign_in/{id:[0-9]+}', 'SignInController@delete');
 
@@ -444,3 +445,22 @@ $router->post('/backflow_picture', ['uses' => 'BackflowPictureController@create'
 $router->get('/backflow_picture/{id:[0-9]+}', ['uses' => 'BackflowPictureController@read', 'as' => 'backflow_picture.read']);
 $router->patch('/backflow_picture/{id:[0-9]+}', ['uses' => 'BackflowPictureController@update', 'as' => 'backflow_picture.update']);
 $router->delete('/backflow_picture/{id:[0-9]+}', ['uses' => 'BackflowPictureController@delete', 'as' => 'backflow_picture.delete']);
+
+$router->get('/clock_ins', ['uses' => 'ClockInController@index', 'as' => 'clock_in.index']);
+$router->post('/clock_in', ['uses' => 'ClockInController@create', 'as' => 'clock_in.create']);
+$router->get('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@read', 'as' => 'clock_in.read']);
+$router->patch('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@update', 'as' => 'clock_in.update']);
+$router->delete('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@delete', 'as' => 'clock_in.delete']);
+$router->get('/clock_in/current', ['uses' => 'ClockInController@current', 'as' => 'clock_in.current']);
+
+$router->get('/overhead_assignments', ['uses' => 'OverheadAssignmentController@index', 'as' => 'overhead_assignment.index']);
+$router->post('/overhead_assignment', ['uses' => 'OverheadAssignmentController@create', 'as' => 'overhead_assignment.create']);
+$router->get('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@read', 'as' => 'overhead_assignment.read']);
+$router->patch('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@update', 'as' => 'overhead_assignment.update']);
+$router->delete('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@delete', 'as' => 'overhead_assignment.delete']);
+
+$router->get('/overhead_categories', ['uses' => 'OverheadCategoryController@index', 'as' => 'overhead_category.index']);
+$router->post('/overhead_category', ['uses' => 'OverheadCategoryController@create', 'as' => 'overhead_category.create']);
+$router->get('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@read', 'as' => 'overhead_category.read']);
+$router->patch('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@update', 'as' => 'overhead_category.update']);
+$router->delete('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@delete', 'as' => 'overhead_category.delete']);

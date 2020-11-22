@@ -743,11 +743,6 @@ $factory->define(App\IrrigationZone::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\AccountsTable::class, function (Faker\Generator $faker) {
-    return 
-    ];
-});
-
 $factory->define(App\PropertyAccount::class, function (Faker\Generator $faker) {
     return [
         'property_id' => $faker->word,
@@ -766,5 +761,36 @@ $factory->define(App\BackflowPicture::class, function (Faker\Generator $faker) {
         'filename' => $faker->word,
         'original_filename' => $faker->word,
         'notes' => $faker->word
+    ];
+});
+
+
+$factory->define(App\ClockIn::class, function (Faker\Generator $faker) {
+    $clock_in = $faker->dateTimeBetween('-30 days');
+    $clock_out = clone $clock_in;
+    $clock_out->modify('+8 hours');
+    return [
+        'contact_id' => $faker->randomDigitNotNull,
+        'clock_in' => $clock_in->format('Y-m-d H:i:s'),
+        'clock_out' => $clock_out->format('Y-m-d H:i:s'),
+        'notes' => $faker->text,
+        'creator_id' => $faker->randomDigitNotNull,
+        'updater_id' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\OverheadAssignment::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull,
+    ];
+});
+
+$factory->define(App\OverheadCategory::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
     ];
 });
