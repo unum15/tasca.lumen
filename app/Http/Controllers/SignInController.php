@@ -20,7 +20,7 @@ class SignInController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -33,8 +33,7 @@ class SignInController extends Controller
             'TaskDate.Task.Order',
             'OverheadAssignment',
             'OverheadCategory',
-            'ClockIn',
-            'ClockIn.Contact',
+            'Contact',
             'TaskDate.Task.Order.Project',
             'TaskDate.Task.Order.Project.Client'
         )
@@ -117,8 +116,7 @@ class SignInController extends Controller
             'TaskDate.Task',
             'OverheadAssignment',
             'OverheadCategory',
-            'ClockIn',
-            'ClockIn.Contact'
+            'Contact'
         )
             ->findOrFail($item->id);
         return $item;
@@ -131,8 +129,7 @@ class SignInController extends Controller
             'TaskDate.Task',
             'OverheadAssignment',
             'OverheadCategory',
-            'ClockIn',
-            'ClockIn.Contact'
+            'Contact'
         )
         ->findOrFail($id);
         return $item;
