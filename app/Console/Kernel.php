@@ -7,11 +7,13 @@ use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\PopulateDatabaseAdminCommand;
 use App\Console\Commands\InitAdminCommand;
 use App\Console\Commands\InitAllCommand;
+use App\Console\Commands\InitIrrigationWaterTypesCommand;
 use App\Console\Commands\InitRolesCommand;
 use App\Console\Commands\InitSettingsCommand;
 use App\Console\Commands\InitTypesCommand;
 use App\Console\Commands\InitVehicleTypesCommand;
 use App\Console\Commands\InitBackflowTypesCommand;
+use App\Console\Commands\InitOverheadCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
 use App\Console\Commands\ResetHelpCommand;
 use App\Console\Commands\CreateTaskDatesCommand;
@@ -28,11 +30,13 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         InitAdminCommand::class,
         InitAllCommand::class,
+        InitIrrigationWaterTypesCommand::class,
         InitRolesCommand::class,
         InitSettingsCommand::class,
         InitTypesCommand::class,
         InitVehicleTypesCommand::class,
         InitBackflowTypesCommand::class,
+        InitOverheadCommand::class,
         CreateTaskDatesCommand::class,
         CloseOrdersCommand::class,
         UpdateOrderStatusCommand::class

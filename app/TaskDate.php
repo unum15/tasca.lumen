@@ -23,9 +23,9 @@ class TaskDate extends Model
         return $this->belongsTo('App\Task');
     }
     
-    public function signIns()
+    public function clockIns()
     {
-        return $this->hasMany('App\SignIn');
+        return $this->hasMany('App\ClockIn');
     }
     
     public function appointmentStatus()

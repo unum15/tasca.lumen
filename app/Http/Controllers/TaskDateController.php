@@ -22,7 +22,7 @@ class TaskDateController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -153,11 +153,11 @@ class TaskDateController extends Controller
             }
         }
         $status = strtolower($request->input('status'));
+        $items_query->whereNull('projects.close_date');
         
         if(!empty($status)) {
             $date_obj = date_create($date);
             $current_view_days = $request->input('view_days',14);
-            Log::Debug($current_view_days);
             $current_view_date = $date_obj->modify('+' . $current_view_days . 'days')->format('Y-m-d');
             switch($status){
                 case 'service':
@@ -322,8 +322,13 @@ class TaskDateController extends Controller
             'task.order.project.contact.phoneNumbers.phoneNumberType',
             'task.order.project.client',
             'task.order.properties.contacts',
+            'task.order.properties.contacts.clientContactTypes',
+            'task.order.properties.contacts.clientContactTypes.contact_type',            
             'task.order.properties.contacts.emails',
             'task.order.properties.contacts.emails.emailType',
+            'task.order.properties.contacts',
+            'task.order.properties.contacts.phoneNumbers',
+            'task.order.properties.contacts.phoneNumbers.phoneNumberType',
             'task.TaskCategory',
             'task.TaskStatus',
             'task.TaskAction',

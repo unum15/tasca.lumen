@@ -196,14 +196,6 @@ $router->get('/task_date/{id:[0-9]+}', 'TaskDateController@read');
 $router->patch('/task_date/{id:[0-9]+}', 'TaskDateController@update');
 $router->delete('/task_date/{id:[0-9]+}', 'TaskDateController@delete');
 
-$router->get('/sign_ins', 'SignInController@index');
-$router->get('/sign_ins/by_employee', 'SignInController@by_employee');
-$router->post('/sign_in', 'SignInController@create');
-$router->get('/sign_in/{id:[0-9]+}', 'SignInController@read');
-$router->patch('/sign_in/{id:[0-9]+}', 'SignInController@update');
-$router->delete('/sign_in/{id:[0-9]+}', 'SignInController@delete');
-
-
 $router->get('/settings', 'SettingController@index');
 $router->patch('/settings', 'SettingController@update');
 
@@ -390,3 +382,77 @@ $router->post('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@createP
 $router->put('/phree_books/client/{id:[0-9]+}', 'PhreeBooksController@updateClient');
 $router->put('/phree_books/contact/{id:[0-9]+}', 'PhreeBooksController@updateContact');
 $router->put('/phree_books/property/{id:[0-9]+}', 'PhreeBooksController@updateProperty');
+
+$router->get('/irrigation_water_types', ['uses' => 'IrrigationWaterTypeController@index', 'as' => 'irrigation_water_type.index']);
+$router->post('/irrigation_water_type', ['uses' => 'IrrigationWaterTypeController@create', 'as' => 'irrigation_water_type.create']);
+$router->get('/irrigation_water_type/{id:[0-9]+}', ['uses' => 'IrrigationWaterTypeController@read', 'as' => 'irrigation_water_type.read']);
+$router->patch('/irrigation_water_type/{id:[0-9]+}', ['uses' => 'IrrigationWaterTypeController@update', 'as' => 'irrigation_water_type.update']);
+$router->delete('/irrigation_water_type/{id:[0-9]+}', ['uses' => 'IrrigationWaterTypeController@delete', 'as' => 'irrigation_water_type.delete']);
+
+$router->get('/irrigation_systems', ['uses' => 'IrrigationSystemController@index', 'as' => 'irrigation_system.index']);
+$router->post('/irrigation_system', ['uses' => 'IrrigationSystemController@create', 'as' => 'irrigation_system.create']);
+$router->get('/irrigation_system/{id:[0-9]+}', ['uses' => 'IrrigationSystemController@read', 'as' => 'irrigation_system.read']);
+$router->patch('/irrigation_system/{id:[0-9]+}', ['uses' => 'IrrigationSystemController@update', 'as' => 'irrigation_system.update']);
+$router->delete('/irrigation_system/{id:[0-9]+}', ['uses' => 'IrrigationSystemController@delete', 'as' => 'irrigation_system.delete']);
+
+$router->get('/irrigation_controllers', ['uses' => 'IrrigationControllerController@index', 'as' => 'irrigation_controller.index']);
+$router->post('/irrigation_controller', ['uses' => 'IrrigationControllerController@create', 'as' => 'irrigation_controller.create']);
+$router->get('/irrigation_controller/{id:[0-9]+}', ['uses' => 'IrrigationControllerController@read', 'as' => 'irrigation_controller.read']);
+$router->patch('/irrigation_controller/{id:[0-9]+}', ['uses' => 'IrrigationControllerController@update', 'as' => 'irrigation_controller.update']);
+$router->delete('/irrigation_controller/{id:[0-9]+}', ['uses' => 'IrrigationControllerController@delete', 'as' => 'irrigation_controller.delete']);
+
+$router->get('/irrigation_controller_locations', ['uses' => 'IrrigationControllerLocationController@index', 'as' => 'irrigation_controller_location.index']);
+$router->post('/irrigation_controller_location', ['uses' => 'IrrigationControllerLocationController@create', 'as' => 'irrigation_controller_location.create']);
+$router->get('/irrigation_controller_location/{id:[0-9]+}', ['uses' => 'IrrigationControllerLocationController@read', 'as' => 'irrigation_controller_location.read']);
+$router->patch('/irrigation_controller_location/{id:[0-9]+}', ['uses' => 'IrrigationControllerLocationController@update', 'as' => 'irrigation_controller_location.update']);
+$router->delete('/irrigation_controller_location/{id:[0-9]+}', ['uses' => 'IrrigationControllerLocationController@delete', 'as' => 'irrigation_controller_location.delete']);
+
+$router->get('/irrigation_system_others', ['uses' => 'IrrigationSystemOtherController@index', 'as' => 'irrigation_system_other.index']);
+$router->post('/irrigation_system_other', ['uses' => 'IrrigationSystemOtherController@create', 'as' => 'irrigation_system_other.create']);
+$router->get('/irrigation_system_other/{id:[0-9]+}', ['uses' => 'IrrigationSystemOtherController@read', 'as' => 'irrigation_system_other.read']);
+$router->patch('/irrigation_system_other/{id:[0-9]+}', ['uses' => 'IrrigationSystemOtherController@update', 'as' => 'irrigation_system_other.update']);
+$router->delete('/irrigation_system_other/{id:[0-9]+}', ['uses' => 'IrrigationSystemOtherController@delete', 'as' => 'irrigation_system_other.delete']);
+
+$router->get('/irrigation_controller_others', ['uses' => 'IrrigationControllerOtherController@index', 'as' => 'irrigation_controller_other.index']);
+$router->post('/irrigation_controller_other', ['uses' => 'IrrigationControllerOtherController@create', 'as' => 'irrigation_controller_other.create']);
+$router->get('/irrigation_controller_other/{id:[0-9]+}', ['uses' => 'IrrigationControllerOtherController@read', 'as' => 'irrigation_controller_other.read']);
+$router->patch('/irrigation_controller_other/{id:[0-9]+}', ['uses' => 'IrrigationControllerOtherController@update', 'as' => 'irrigation_controller_other.update']);
+$router->delete('/irrigation_controller_other/{id:[0-9]+}', ['uses' => 'IrrigationControllerOtherController@delete', 'as' => 'irrigation_controller_other.delete']);
+
+$router->get('/irrigation_zones', ['uses' => 'IrrigationZoneController@index', 'as' => 'irrigation_zone.index']);
+$router->post('/irrigation_zone', ['uses' => 'IrrigationZoneController@create', 'as' => 'irrigation_zone.create']);
+$router->get('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneController@read', 'as' => 'irrigation_zone.read']);
+$router->patch('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneController@update', 'as' => 'irrigation_zone.update']);
+$router->delete('/irrigation_zone/{id:[0-9]+}', ['uses' => 'IrrigationZoneController@delete', 'as' => 'irrigation_zone.delete']);
+
+$router->get('/property_accounts', ['uses' => 'PropertyAccountController@index', 'as' => 'property_account.index']);
+$router->post('/property_account', ['uses' => 'PropertyAccountController@create', 'as' => 'property_account.create']);
+$router->get('/property_account/{id:[0-9]+}', ['uses' => 'PropertyAccountController@read', 'as' => 'property_account.read']);
+$router->patch('/property_account/{id:[0-9]+}', ['uses' => 'PropertyAccountController@update', 'as' => 'property_account.update']);
+$router->delete('/property_account/{id:[0-9]+}', ['uses' => 'PropertyAccountController@delete', 'as' => 'property_account.delete']);
+
+$router->get('/backflow_pictures', ['uses' => 'BackflowPictureController@index', 'as' => 'backflow_picture.index']);
+$router->post('/backflow_picture', ['uses' => 'BackflowPictureController@create', 'as' => 'backflow_picture.create']);
+$router->get('/backflow_picture/{id:[0-9]+}', ['uses' => 'BackflowPictureController@read', 'as' => 'backflow_picture.read']);
+$router->patch('/backflow_picture/{id:[0-9]+}', ['uses' => 'BackflowPictureController@update', 'as' => 'backflow_picture.update']);
+$router->delete('/backflow_picture/{id:[0-9]+}', ['uses' => 'BackflowPictureController@delete', 'as' => 'backflow_picture.delete']);
+
+$router->get('/clock_ins', ['uses' => 'ClockInController@index', 'as' => 'clock_in.index']);
+$router->post('/clock_in', ['uses' => 'ClockInController@create', 'as' => 'clock_in.create']);
+$router->get('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@read', 'as' => 'clock_in.read']);
+$router->patch('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@update', 'as' => 'clock_in.update']);
+$router->delete('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@delete', 'as' => 'clock_in.delete']);
+$router->get('/clock_in/current', ['uses' => 'ClockInController@current', 'as' => 'clock_in.current']);
+$router->get('/clock_ins/by_employee', 'ClockInController@by_employee');
+
+$router->get('/overhead_assignments', ['uses' => 'OverheadAssignmentController@index', 'as' => 'overhead_assignment.index']);
+$router->post('/overhead_assignment', ['uses' => 'OverheadAssignmentController@create', 'as' => 'overhead_assignment.create']);
+$router->get('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@read', 'as' => 'overhead_assignment.read']);
+$router->patch('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@update', 'as' => 'overhead_assignment.update']);
+$router->delete('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@delete', 'as' => 'overhead_assignment.delete']);
+
+$router->get('/overhead_categories', ['uses' => 'OverheadCategoryController@index', 'as' => 'overhead_category.index']);
+$router->post('/overhead_category', ['uses' => 'OverheadCategoryController@create', 'as' => 'overhead_category.create']);
+$router->get('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@read', 'as' => 'overhead_category.read']);
+$router->patch('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@update', 'as' => 'overhead_category.update']);
+$router->delete('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@delete', 'as' => 'overhead_category.delete']);

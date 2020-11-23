@@ -43,6 +43,9 @@ class BackflowModelController extends Controller
         $item = BackflowModel::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+        if(isset($values['sizes'])){
+            $item->backflow_sizes()->attach($values['sizes']);
+        }
         return ['data' => $item];
     }
 
@@ -59,6 +62,7 @@ class BackflowModelController extends Controller
        'name' => 'string|max:1020',
        'notes' => 'string|max:1073741824|nullable',
        'sort_order' => 'integer|nullable',
+       'sizes' => 'array'
     ];
     
     protected $model_validation_required = [
