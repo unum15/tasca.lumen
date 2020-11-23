@@ -61,7 +61,7 @@ class OrderController extends Controller
     {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties', 'tasks', 'tasks.dates', 'tasks.dates.signIns')
+        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties', 'tasks', 'tasks.dates', 'tasks.dates.clockIns')
         ->orderBy('date');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
@@ -166,8 +166,8 @@ class OrderController extends Controller
             'tasks.taskType',
             'orderPriority',
             'orderCategory',
-            'tasks.dates.signIns',
-            'tasks.dates.signIns.contact'
+            'tasks.dates.clockIns',
+            'tasks.dates.clockIns.contact'
         )
             ->where('id', $id)
             ->first();
@@ -357,7 +357,7 @@ class OrderController extends Controller
     
     public function closable()
     {
-        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties', 'tasks', 'tasks.dates', 'tasks.dates.signIns')
+        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties', 'tasks', 'tasks.dates', 'tasks.dates.clockIns')
         ->orderBy('date');
         $items_query->whereNull('completion_date')
         ->where(function ($query) {

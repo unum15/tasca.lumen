@@ -58,7 +58,7 @@ class TaskController extends Controller
             'order.orderCategory',
             'crew',
             'dates',
-            'dates.signIns',
+            'dates.clockIns',
             'dates.AppointmentStatus'
         )
         ->orderBy('id');

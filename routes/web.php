@@ -196,15 +196,6 @@ $router->get('/task_date/{id:[0-9]+}', 'TaskDateController@read');
 $router->patch('/task_date/{id:[0-9]+}', 'TaskDateController@update');
 $router->delete('/task_date/{id:[0-9]+}', 'TaskDateController@delete');
 
-$router->get('/sign_ins', 'SignInController@index');
-$router->get('/sign_ins/by_employee', 'SignInController@by_employee');
-$router->post('/sign_in', 'SignInController@create');
-$router->get('/sign_in/{id:[0-9]+}', 'SignInController@read');
-$router->get('/sign_in/current', 'SignInController@current');
-$router->patch('/sign_in/{id:[0-9]+}', 'SignInController@update');
-$router->delete('/sign_in/{id:[0-9]+}', 'SignInController@delete');
-
-
 $router->get('/settings', 'SettingController@index');
 $router->patch('/settings', 'SettingController@update');
 
@@ -452,6 +443,7 @@ $router->get('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@read', 'as' 
 $router->patch('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@update', 'as' => 'clock_in.update']);
 $router->delete('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@delete', 'as' => 'clock_in.delete']);
 $router->get('/clock_in/current', ['uses' => 'ClockInController@current', 'as' => 'clock_in.current']);
+$router->get('/clock_ins/by_employee', 'ClockInController@by_employee');
 
 $router->get('/overhead_assignments', ['uses' => 'OverheadAssignmentController@index', 'as' => 'overhead_assignment.index']);
 $router->post('/overhead_assignment', ['uses' => 'OverheadAssignmentController@create', 'as' => 'overhead_assignment.create']);
