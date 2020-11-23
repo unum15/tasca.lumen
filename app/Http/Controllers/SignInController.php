@@ -134,6 +134,7 @@ class SignInController extends Controller
         ->findOrFail($id);
         return $item;
     }
+
     
     public function current(Request $request)
     {
@@ -152,7 +153,6 @@ class SignInController extends Controller
         ->first();
         return $item;
     }
-    
 
     public function update($id, Request $request)
     {
