@@ -11,7 +11,7 @@ use App\Console\Commands\InitIrrigationWaterTypesCommand;
 use App\Console\Commands\InitRolesCommand;
 use App\Console\Commands\InitSettingsCommand;
 use App\Console\Commands\InitTypesCommand;
-use App\Console\Commands\InitVehicleTypesCommand;
+use App\Console\Commands\InitAssetTypesCommand;
 use App\Console\Commands\InitBackflowTypesCommand;
 use App\Console\Commands\InitOverheadCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
         InitRolesCommand::class,
         InitSettingsCommand::class,
         InitTypesCommand::class,
-        InitVehicleTypesCommand::class,
+        InitAssetTypesCommand::class,
         InitBackflowTypesCommand::class,
         InitOverheadCommand::class,
         CreateTaskDatesCommand::class,

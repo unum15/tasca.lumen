@@ -259,108 +259,6 @@ $factory->define(App\WorkType::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Vehicle::class, function (Faker\Generator $faker) {
-    $type = factory('App\VehicleType')->create();
-    return [
-        'name' => $faker->word,
-        'vehicle_type_id' => $type->id,
-        'year' => $faker->randomDigitNotNull,
-        'make' => $faker->word,
-        'model' => $faker->word,
-        'trim' => $faker->word,
-        'vin' => $faker->word,
-        'notes' => $faker->text
-    ];
-});
-
-$factory->define(App\VehicleType::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->word,
-        'notes' => $faker->text,
-        'sort_order' => $faker->randomDigitNotNull
-    ];
-});
-
-$factory->define(App\Fueling::class, function (Faker\Generator $faker) {
-    $vehicle = factory('App\Vehicle')->create();
-    return [
-        'vehicle_id' => $vehicle->id,
-        'beginning_reading' => $faker->randomDigitNotNull,
-        'ending_reading' => $faker->randomDigitNotNull,
-        'date' => $faker->date,
-        'gallons' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 10000) . "",
-        'amount' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 10000) . "",
-        'notes' => $faker->text
-    ];
-});
-
-$factory->define(App\Part::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->word,
-        'on_hand' => $faker->randomDigitNotNull,
-        'notes' => $faker->text
-    ];
-});
-
-$factory->define(App\Repair::class, function (Faker\Generator $faker) {
-    $vehicle = factory('App\Vehicle')->create();
-    return [
-        'vehicle_id' => $vehicle->id,
-        'repair' => $faker->word,
-        'ending_reading' => $faker->randomDigitNotNull,
-        'date' => $faker->date,
-        'amount' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 10000) . "",
-        'where' => $faker->word,
-        'notes' => $faker->text
-    ];
-});
-
-$factory->define(App\ServiceType::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->word,
-        'notes' => $faker->text,
-        'sort_order' => $faker->randomDigitNotNull
-    ];
-});
-
-$factory->define(App\Service::class, function (Faker\Generator $faker) {
-    $vehicle = factory('App\Vehicle')->create();
-    $serviceType = factory('App\ServiceType')->create();
-    $usageType = factory('App\UsageType')->create();
-    return [
-        'vehicle_id' => $vehicle->id,
-        'service_type_id' => $serviceType->id,
-        'description' => $faker->text,
-        'quantity' => $faker->randomDigitNotNull,
-        'usage_type_id' => $usageType->id,
-        'usage_interval' => $faker->randomDigitNotNull,
-        'part_number' => $faker->word,
-        'notes' => $faker->text,
-        'time_interval' => '00:15:00'
-    ];
-});
-
-$factory->define(App\UsageType::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->word,
-        'notes' => $faker->text,
-        'sort_order' => $faker->randomDigitNotNull
-    ];
-});
-
-$factory->define(App\Maintenance::class, function (Faker\Generator $faker) {
-    $service = factory('App\Service')->create();
-    return [
-        'service_id' => $service->id,
-        'ending_reading' => $faker->randomDigitNotNull,
-        'date' => $faker->date,
-        'amount' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 10000) . "",
-        'where' => $faker->word,
-        'notes' => $faker->text
-    ];
-});
-
-
 $factory->define(App\BackflowAssemblyTest::class, function (Faker\Generator $faker) {
     $installStatus = factory('App\BackflowInstallationStatus')->create();
     $testStatus = factory('App\BackflowTestStatus')->create();
@@ -733,5 +631,113 @@ $factory->define(App\OverheadCategory::class, function (Faker\Generator $faker) 
         'notes' => $faker->text,
         'parent_id' => null,
         'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\AssetType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\AssetUsageType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+
+$factory->define(App\AssetPart::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'on_hand' => $faker->randomDigitNotNull,
+        'notes' => $faker->text
+    ];
+});
+
+$factory->define(App\AssetServiceType::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\AssetService::class, function (Faker\Generator $faker) {
+    $asset = factory(App\Asset::class)->create();
+    $asset_service_type = factory(App\AssetServiceType::class)->create();
+    $asset_usage_type = factory(App\AssetUsageType::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'asset_service_type_id' => $asset_service_type->id,
+        'description' => $faker->text,
+        'quantity' => $faker->randomDigitNotNull,
+        'asset_usage_type_id' => $asset_usage_type->id,
+        'usage_interval' => $faker->randomDigitNotNull,
+        'part_number' => $faker->word,
+        'notes' => $faker->text,
+        'time_interval' => ($faker->randomDigitNotNull + 1) . ' mons'
+    ];
+});
+
+$factory->define(App\AssetFueling::class, function (Faker\Generator $faker) {
+    $asset = factory(App\Asset::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'usage' => $faker->randomDigitNotNull,
+        'date' => $faker->date,
+        'gallons' => $faker->randomFloat."",
+        'amount' => $faker->randomFloat."",
+        'notes' => $faker->text
+    ];
+});
+
+$factory->define(App\Asset::class, function (Faker\Generator $faker) {
+    $asset_type = factory(App\AssetType::class)->create();
+    $asset_usage_type = factory(App\AssetUsageType::class)->create();
+    return [
+        'name' => $faker->word,
+        'asset_type_id' => $asset_type->id,
+        'asset_usage_type_id' => $asset_usage_type->id,
+        'year' => $faker->randomDigitNotNull,
+        'make' => $faker->word,
+        'model' => $faker->word,
+        'trim' => $faker->word,
+        'vin' => $faker->word,
+        'parent_asset_id' => $faker->randomDigitNotNull,
+        'notes' => $faker->text
+    ];
+});
+
+$factory->define(App\AssetRepair::class, function (Faker\Generator $faker) {
+    $asset = factory(App\Asset::class)->create();
+    $asset_usage_type = factory(App\AssetUsageType::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'asset_usage_type_id' => $asset_usage_type->id,
+        'usage' => $faker->randomDigitNotNull,
+        'repair' => $faker->word,
+        'date' => $faker->date,
+        'amount' => $faker->randomFloat."",
+        'where' => $faker->word,
+        'notes' => $faker->text
+    ];
+});
+
+$factory->define(App\AssetMaintenance::class, function (Faker\Generator $faker) {
+    $asset_service = factory(App\AssetService::class)->create();
+    $asset_usage_type = factory(App\AssetUsageType::class)->create();
+    return [
+        'asset_service_id' => $asset_service->id,
+        'asset_usage_type_id' => $asset_usage_type->id,
+        'usage' => $faker->randomDigitNotNull,
+        'date' => $faker->date,
+        'amount' => $faker->randomFloat."",
+        'where' => $faker->word,
+        'notes' => $faker->text
     ];
 });
