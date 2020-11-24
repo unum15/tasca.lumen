@@ -10,7 +10,6 @@ class PropertyAccountController extends Controller
 {
     public function __construct()
     {
-        Log::debug('PropertyAccountController Constructed');
         $this->middleware('auth');
     }
 

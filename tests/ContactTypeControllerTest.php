@@ -27,7 +27,7 @@ class ContactTypeControllerTest extends TestCase
     
     public function testCreateBad()
     {
-        $item = ['name' => '', 'sort_order' => 'a', 'default' => 'a'];
+        $item = ['name' => '', 'sort_order' => 'a'];
         $response = $this->actingAs($this->getAdminUser())->post('/contact_type',$item);
         $response->seeStatusCode(422);                
         $response->seeJson(["name" => ["The name field is required."],"sort_order" => ["The sort order must be an integer."]]);

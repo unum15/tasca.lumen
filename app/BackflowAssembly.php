@@ -22,10 +22,6 @@ class BackflowAssembly extends Model
         'gps',
         'serial_number',
         'notes',
-        'tag_year_end',
-        'installation',
-        'tester',
-        'tester_number',
         'property_account_id',
         'need_access'
     ];

@@ -390,13 +390,13 @@ $factory->define(App\BackflowCertification::class, function (Faker\Generator $fa
 $factory->define(App\BackflowWaterSystem::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
-        #'address' => $faker->word,
-        #'city' => $faker->word,
-        #'state' => substr($faker->word,0,2),
-        #'zip' => $faker->word,
-        #'phone' => $faker->word,
-        #'contact' => $faker->word,
-        #'email' => $faker->word,
+        'address' => $faker->word,
+        'city' => $faker->word,
+        'state' => substr($faker->word,0,2),
+        'zip' => $faker->word,
+        'phone' => $faker->word,
+        'contact' => $faker->word,
+        'email' => $faker->word,
         'notes' => $faker->text,
         'sort_order' => $faker->randomDigitNotNull
     ];
@@ -462,6 +462,8 @@ $factory->define(App\BackflowAssembly::class, function (Faker\Generator $faker) 
         'active' => true,
         'month' => $faker->randomDigitNotNull,
         'gps' => null,
+        'property_account_id' => null,
+        'need_access' => false
     ];
 });
 
@@ -606,24 +608,36 @@ $factory->define(App\IrrigationWaterType::class, function (Faker\Generator $fake
 });
 
 $factory->define(App\IrrigationSystem::class, function (Faker\Generator $faker) {
+    $property = factory('App\Property')->create();
+    $type = factory('App\IrrigationWaterType')->create();
+    $backflow = factory('App\BackflowAssembly')->create();
     return [
-        'property_id' => $faker->randomDigitNotNull,
+        'property_id' => $property->id,
         'name' => $faker->word,
-        'point_of_connnection_location' => $faker->word,
-        'irrigation_water_type_id' => $faker->randomDigitNotNull,
-        'backflow_assembly_id' => $faker->randomDigitNotNull,
+        'point_of_connection_location' => $faker->word,
+        'irrigation_water_type_id' => $type->id,
+        'backflow_assembly_id' => $backflow->id,
         'filter_model' => $faker->word,
         'filter_location' => $faker->word,
-        'property_unit_id' => $faker->randomDigitNotNull
+        'property_unit_id' => null,
+        'notes' => $faker->word
     ];
 });
 
 $factory->define(App\IrrigationController::class, function (Faker\Generator $faker) {
+    $system = factory('App\IrrigationSystem')->create();
+    $location = factory('App\IrrigationControllerLocation')->create();
     return [
-        'irrigation_system_id' => $faker->randomDigitNotNull,
+        'irrigation_system_id' => $system->id,
         'name' => $faker->word,
         'model' => $faker->word,
         'zones' => $faker->randomDigitNotNull,
+        'placement' => $faker->word,
+        'irrigation_controller_location_id' => $location->id,
+        'property_unit_id' => null,
+        'username' => $faker->word,
+        'accessible' => $faker->boolean,
+        'notes' => $faker->word,
         'password' => $faker->word
     ];
 });
@@ -635,37 +649,41 @@ $factory->define(App\IrrigationControllerLocation::class, function (Faker\Genera
 });
 
 $factory->define(App\IrrigationSystemOther::class, function (Faker\Generator $faker) {
+    $system = factory('App\IrrigationSystem')->create();
     return [
-        'irrigation_system_id' => $faker->randomDigitNotNull,
+        'irrigation_system_id' => $system->id,
         'name' => $faker->word,
-        'count' => $faker->randomDigitNotNull
+        'value' => $faker->word
     ];
 });
 
 $factory->define(App\IrrigationControllerOther::class, function (Faker\Generator $faker) {
+    $controller = factory('App\IrrigationController')->create();
     return [
-        'irrigation_controller_id' => $faker->randomDigitNotNull,
+        'irrigation_controller_id' => $controller->id,
         'name' => $faker->word,
         'value' => $faker->word
     ];
 });
 
 $factory->define(App\IrrigationZone::class, function (Faker\Generator $faker) {
+    $controller = factory('App\IrrigationController')->create();
     return [
-        'irrigation_controller_id' => $faker->randomDigitNotNull,
+        'irrigation_controller_id' => $controller->id,
         'number' => $faker->randomDigitNotNull,
         'name' => $faker->word,
         'plant_type' => $faker->word,
         'head_type' => $faker->word,
-        'gallons_per_minute' => $faker->word,
-        'application_rate' => $faker->word,
+        'gallons_per_minute' => $faker->randomDigitNotNull.'.00',
+        'application_rate' => $faker->randomDigitNotNull.'.00',
         'heads' => $faker->randomDigitNotNull
     ];
 });
 
 $factory->define(App\PropertyAccount::class, function (Faker\Generator $faker) {
+    $property = factory('App\Property')->create();
     return [
-        'property_id' => $faker->word,
+        'property_id' => $property->id,
         'number' => $faker->word,
         'name' => $faker->word,
         'address' => $faker->word,
@@ -676,8 +694,9 @@ $factory->define(App\PropertyAccount::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\BackflowPicture::class, function (Faker\Generator $faker) {
+    $backflow = factory('App\BackflowAssembly')->create();
     return [
-        'backflow_assembly_id' => $faker->word,
+        'backflow_assembly_id' => $backflow->id,
         'filename' => $faker->word,
         'original_filename' => $faker->word,
         'notes' => $faker->word
@@ -688,13 +707,14 @@ $factory->define(App\ClockIn::class, function (Faker\Generator $faker) {
     $clock_in = $faker->dateTimeBetween('-30 days');
     $clock_out = clone $clock_in;
     $clock_out->modify('+8 hours');
+    $contact = factory(App\Contact::class)->create();
     return [
-        'contact_id' => $faker->randomDigitNotNull,
+        'contact_id' => $contact->id,
         'clock_in' => $clock_in->format('Y-m-d H:i:s'),
         'clock_out' => $clock_out->format('Y-m-d H:i:s'),
         'notes' => $faker->text,
-        'creator_id' => $faker->randomDigitNotNull,
-        'updater_id' => $faker->randomDigitNotNull
+        'creator_id' => $contact->id,
+        'updater_id' => $contact->id
     ];
 });
 
@@ -702,6 +722,7 @@ $factory->define(App\OverheadAssignment::class, function (Faker\Generator $faker
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
+        'parent_id' => null,
         'sort_order' => $faker->randomDigitNotNull,
     ];
 });
@@ -710,6 +731,7 @@ $factory->define(App\OverheadCategory::class, function (Faker\Generator $faker) 
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
+        'parent_id' => null,
         'sort_order' => $faker->randomDigitNotNull
     ];
 });

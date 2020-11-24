@@ -20,8 +20,10 @@ class ClockInControllerTest extends TestCase
     public function testCreate()
     {
         $item = factory('App\ClockIn')->make();
-        $response = $this->post('/clock_in', $item->toArray());
-        $response->seeStatusCode(201);
+        unset($item['creator_id']);
+        unset($item['updater_id']);
+        $response = $this->actingAs($this->getAdminUser())->post('/clock_in', $item->toArray());
+        $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
         $this->seeInDatabase('clock_ins', $item->toArray());
     }
@@ -31,7 +33,7 @@ class ClockInControllerTest extends TestCase
         $item = factory('App\ClockIn')->create();
         $response = $this->get('/clock_in/' . $item->id);
         $response->seeStatusCode(200);
-        $response->seeJsonEquals(['data' => $item->toArray()]);
+        $response->seeJson($item->toArray());
         $this->seeInDatabase('clock_ins', $item->toArray());
     }
     
@@ -39,11 +41,11 @@ class ClockInControllerTest extends TestCase
     {
         $item = factory('App\ClockIn')->create();
         $update = ['notes' => 'test'];
-        $response = $this->patch('/clock_in/' . $item->id, $update);
+        $response = $this->actingAs($this->getAdminUser())->patch('/clock_in/' . $item->id, $update);
         $response->seeStatusCode(200);
         $item = $item->find($item->id);
         $updated_array = array_merge($item->toArray(), $update);
-        $response->seeJsonEquals(['data' => $updated_array]);
+        $response->seeJson($updated_array);
         $this->seeInDatabase('clock_ins', $updated_array);
     }
     

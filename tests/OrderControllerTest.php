@@ -116,6 +116,7 @@ class OrderControllerTest extends TestCase
     public function testConversion()
     {
         $item = factory('App\Order')->create(['recurring' => false, 'renewable'=> false]);
+        $item['completion_date'] = date('Y-m-d');
         $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id);
         $response->seeStatusCode(200);
         $itemArray = $item->toArray();
@@ -129,6 +130,7 @@ class OrderControllerTest extends TestCase
         $prop1 = factory('App\Property')->create();
         $prop2 = factory('App\Property')->create();
         $item->properties()->sync([$prop1->id, $prop2->id]);
+        $item['completion_date'] = date('Y-m-d');
         $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id);
         $response->seeStatusCode(200);
         $itemArray = $item->toArray();
@@ -142,6 +144,7 @@ class OrderControllerTest extends TestCase
         $prop1 = factory('App\Property')->create();
         $prop2 = factory('App\Property')->create();
         $item->properties()->sync([$prop1->id, $prop2->id]);
+        $item['completion_date'] = date('Y-m-d');
         $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id);
         $response->seeStatusCode(200);
         $itemArray = $item->toArray();
@@ -157,6 +160,7 @@ class OrderControllerTest extends TestCase
         $item->properties()->sync([$prop1->id, $prop2->id]);
         $item->save();
         $dbitem = Order::with('properties')->find($item->id);
+        $item['completion_date'] = date('Y-m-d');
         $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id, $dbitem->toArray());
         $response->seeStatusCode(200);
         $itemArray = $item->toArray();

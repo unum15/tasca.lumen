@@ -57,7 +57,7 @@ class OverheadCategoryController extends Controller
        'name' => 'string|max:1020',
        'notes' => 'string|max:1073741824|nullable',
        'sort_order' => 'integer|nullable',
-       'parent_id' => 'integer',
+       'parent_id' => 'integer|nullable',
     ];
     
     protected $model_validation_required = [
