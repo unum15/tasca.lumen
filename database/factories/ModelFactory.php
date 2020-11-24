@@ -686,8 +686,10 @@ $factory->define(App\AssetService::class, function (Faker\Generator $faker) {
 
 $factory->define(App\AssetFueling::class, function (Faker\Generator $faker) {
     $asset = factory(App\Asset::class)->create();
+    $asset_usage_type = factory(App\AssetUsageType::class)->create();
     return [
         'asset_id' => $asset->id,
+        'asset_usage_type_id' => $asset_usage_type->id,
         'usage' => $faker->randomDigitNotNull,
         'date' => $faker->date,
         'gallons' => $faker->randomFloat."",

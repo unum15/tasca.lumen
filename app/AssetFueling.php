@@ -8,6 +8,7 @@ class AssetFueling extends Model
 {
     protected $fillable = [
         'asset_id',
+        'asset_usage_type_id',
         'usage',
         'date',
         'gallons',

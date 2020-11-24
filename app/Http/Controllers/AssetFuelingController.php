@@ -57,6 +57,7 @@ class AssetFuelingController extends Controller
     
     protected $model_validation = [
        'asset_id' => 'integer|exists:assets,id',
+       'asset_usage_type_id' => 'integer|exists:asset_usage_types,id',
        'usage' => 'integer|nullable',
        'date' => 'date|nullable',
        'gallons' => 'regex:/[\d\.]+/|nullable',
@@ -66,6 +67,7 @@ class AssetFuelingController extends Controller
     
     protected $model_validation_required = [
        'asset_id' => 'required',
+       'asset_usage_type_id' => 'required',
     ];
 
     protected $model_includes = [
