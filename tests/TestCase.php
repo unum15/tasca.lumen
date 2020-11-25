@@ -16,7 +16,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
     }    
 
     public function getAdminUser(){
-        $user = Contact::where('login', 'unum@unum5.org')->first();
+        $user = Contact::where('login', 'admin@example.com')->first();
         return $user;
     }
     
