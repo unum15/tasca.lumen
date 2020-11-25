@@ -61,6 +61,7 @@ class AssetServiceController extends Controller
        'description' => 'string|max:1073741824',
        'quantity' => 'integer',
        'asset_usage_type_id' => 'integer|exists:asset_usage_types,id',
+       'asset_unit_id' => 'integer|exists:asset_units,id',
        'usage_interval' => 'integer',
        'part_number' => 'string|max:1020|nullable',
        'notes' => 'string|max:1073741824|nullable',

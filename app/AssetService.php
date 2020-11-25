@@ -12,6 +12,7 @@ class AssetService extends Model
         'description',
         'quantity',
         'asset_usage_type_id',
+        'asset_unit_id',
         'usage_interval',
         'part_number',
         'notes',

@@ -14,8 +14,9 @@ class CreateAssetServicesTable extends Migration
             $table->bigInteger('asset_service_type_id')->unsigned();
             $table->text('description');
             $table->integer('quantity');
-            $table->bigInteger('asset_usage_type_id')->unsigned();
+            $table->bigInteger('asset_unit_id')->unsigned();
             $table->integer('usage_interval');
+            $table->bigInteger('asset_usage_type_id')->unsigned();
             $table->string('part_number')->nullable();
             $table->text('notes')->nullable();
             $table->timestamp('created_at')->useCurrent();

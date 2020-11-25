@@ -671,12 +671,14 @@ $factory->define(App\AssetService::class, function (Faker\Generator $faker) {
     $asset = factory(App\Asset::class)->create();
     $asset_service_type = factory(App\AssetServiceType::class)->create();
     $asset_usage_type = factory(App\AssetUsageType::class)->create();
+    $asset_unit = factory(App\AssetUnit::class)->create();
     return [
         'asset_id' => $asset->id,
         'asset_service_type_id' => $asset_service_type->id,
         'description' => $faker->text,
         'quantity' => $faker->randomDigitNotNull,
         'asset_usage_type_id' => $asset_usage_type->id,
+        'asset_unit_id' => $asset_unit->id,
         'usage_interval' => $faker->randomDigitNotNull,
         'part_number' => $faker->word,
         'notes' => $faker->text,
@@ -741,5 +743,13 @@ $factory->define(App\AssetMaintenance::class, function (Faker\Generator $faker) 
         'amount' => $faker->randomFloat."",
         'where' => $faker->word,
         'notes' => $faker->text
+    ];
+});
+
+$factory->define(App\AssetUnit::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
     ];
 });

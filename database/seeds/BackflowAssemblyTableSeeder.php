@@ -574,6 +574,9 @@ class BackflowAssemblyTableSeeder extends Seeder
                         ]);
                     }
                     if($test_amount > 1){
+                        if(!$assembly->backflow_type){
+                            continue;
+                        }
                         $valves = $assembly->backflow_type->backflow_super_type->backflow_valves;
                         foreach($valves as $valve){
                             $valve_parts = $valve->backflow_valve_parts->pluck('id')->toArray();
@@ -587,7 +590,7 @@ class BackflowAssemblyTableSeeder extends Seeder
                                     'repaired_on' => $date->format('Y-m-d')
                                 ]);
                             }
-                            $test_amount = rand (0,4);
+                            $test_amount = rand(0,4);
                             for($test_count = 0;$test_count<$test_amount;$test_count++){
                                 $test = BackflowCleaning::create([
                                     'backflow_test_report_id' => $report->id,

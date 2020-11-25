@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\AssetServiceType;
 use App\AssetUsageType;
 use App\AssetType;
+use App\AssetUnit;
 
 
 
@@ -60,6 +61,20 @@ class InitAssetTypesCommand extends Command
         $sort = 1;
         foreach($names as $name){
             AssetType::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+        
+        $names = [
+            "OZ",
+            "Cups",
+            "Quarts",
+            "Gallons"
+        ];
+        $sort = 1;
+        foreach($names as $name){
+            AssetUnit::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);

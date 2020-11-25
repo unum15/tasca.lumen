@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('assets')->delete();
         DB::table('client_contact')->delete();
         DB::table('clients')->delete();
         DB::table('properties')->delete();
@@ -29,5 +30,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ProjectsTableSeeder::class);
         $this->call(BackflowAssemblyTableSeeder::class);
         $this->call(ClientPropertyTableSeeder::class);
+        $this->call(AssetsTableSeeder::class);
     }
 }

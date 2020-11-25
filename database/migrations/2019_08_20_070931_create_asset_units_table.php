@@ -4,20 +4,13 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBackflowWaterSystemsTable extends Migration
+class CreateAssetUnitsTable extends Migration
 {
     public function up()
     {
-        Schema::create('backflow_water_systems', function (Blueprint $table) {
+        Schema::create('asset_units', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->text('address')->nullable();
-            $table->text('city')->nullable();
-            $table->text('state')->nullable();
-            $table->text('zip')->nullable();
-            $table->text('phone')->nullable();
-            $table->text('contact')->nullable();
-            $table->text('email')->nullable();
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();
@@ -27,6 +20,6 @@ class CreateBackflowWaterSystemsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('backflow_water_systems');
+        Schema::dropIfExists('asset_units');
     }
 }

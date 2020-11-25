@@ -455,3 +455,10 @@ $router->post('/asset_maintenance', ['uses' => 'AssetMaintenanceController@creat
 $router->get('/asset_maintenance/{id:[0-9]+}', ['uses' => 'AssetMaintenanceController@read', 'as' => 'asset_maintenance.read']);
 $router->patch('/asset_maintenance/{id:[0-9]+}', ['uses' => 'AssetMaintenanceController@update', 'as' => 'asset_maintenance.update']);
 $router->delete('/asset_maintenance/{id:[0-9]+}', ['uses' => 'AssetMaintenanceController@delete', 'as' => 'asset_maintenance.delete']);
+
+
+$router->get('/asset_units', ['uses' => 'AssetUnitController@index', 'as' => 'asset_unit.index']);
+$router->post('/asset_unit', ['uses' => 'AssetUnitController@create', 'as' => 'asset_unit.create']);
+$router->get('/asset_unit/{id:[0-9]+}', ['uses' => 'AssetUnitController@read', 'as' => 'asset_unit.read']);
+$router->patch('/asset_unit/{id:[0-9]+}', ['uses' => 'AssetUnitController@update', 'as' => 'asset_unit.update']);
+$router->delete('/asset_unit/{id:[0-9]+}', ['uses' => 'AssetUnitController@delete', 'as' => 'asset_unit.delete']);
