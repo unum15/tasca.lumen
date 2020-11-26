@@ -40,6 +40,18 @@ class AssetMaintenanceController extends Controller
         return ['data' => $item];
     }
 
+    public function last(Request $request)
+    {
+        $includes = $this->validateIncludes($request->input('includes'));
+        $values = $this->validateModel($request);
+        $items_query = AssetMaintenance::with($includes);
+        foreach($values as $field => $value){
+            $items_query->where($field, $value);
+        }
+        $item = $items_query->orderByRaw('date DESC NULLS LAST')->first();
+        return ['data' => $item];
+    }
+
     public function update($id, Request $request)
     {
         $item = AssetMaintenance::findOrFail($id);

@@ -20,4 +20,9 @@ class AssetFueling extends Model
     {
         return $this->belongsTo('App\Asset');
     }
+
+    public function asset_usage_type()
+    {
+        return $this->belongsTo('App\AssetUsageType');
+    }
 }

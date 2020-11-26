@@ -423,6 +423,7 @@ $router->delete('/asset/{id:[0-9]+}', ['uses' => 'AssetController@delete', 'as' 
 $router->get('/asset_fuelings', ['uses' => 'AssetFuelingController@index', 'as' => 'asset_fueling.index']);
 $router->post('/asset_fueling', ['uses' => 'AssetFuelingController@create', 'as' => 'asset_fueling.create']);
 $router->get('/asset_fueling/{id:[0-9]+}', ['uses' => 'AssetFuelingController@read', 'as' => 'asset_fueling.read']);
+$router->get('/asset_fueling/last', ['uses' => 'AssetFuelingController@last', 'as' => 'asset_fueling.last']);
 $router->patch('/asset_fueling/{id:[0-9]+}', ['uses' => 'AssetFuelingController@update', 'as' => 'asset_fueling.update']);
 $router->delete('/asset_fueling/{id:[0-9]+}', ['uses' => 'AssetFuelingController@delete', 'as' => 'asset_fueling.delete']);
 
@@ -453,6 +454,7 @@ $router->delete('/asset_service/{id:[0-9]+}', ['uses' => 'AssetServiceController
 $router->get('/asset_maintenances', ['uses' => 'AssetMaintenanceController@index', 'as' => 'asset_maintenance.index']);
 $router->post('/asset_maintenance', ['uses' => 'AssetMaintenanceController@create', 'as' => 'asset_maintenance.create']);
 $router->get('/asset_maintenance/{id:[0-9]+}', ['uses' => 'AssetMaintenanceController@read', 'as' => 'asset_maintenance.read']);
+$router->get('/asset_maintenance/last/', ['uses' => 'AssetMaintenanceController@last', 'as' => 'asset_maintenance.last']);
 $router->patch('/asset_maintenance/{id:[0-9]+}', ['uses' => 'AssetMaintenanceController@update', 'as' => 'asset_maintenance.update']);
 $router->delete('/asset_maintenance/{id:[0-9]+}', ['uses' => 'AssetMaintenanceController@delete', 'as' => 'asset_maintenance.delete']);
 

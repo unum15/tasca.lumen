@@ -80,6 +80,7 @@ class AssetServiceController extends Controller
     protected $model_includes = [
        'asset_usage_type',
        'asset_service_type',
+       'asset_unit',
        'asset'
     ];
     

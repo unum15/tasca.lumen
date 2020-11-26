@@ -40,6 +40,18 @@ class AssetFuelingController extends Controller
         return ['data' => $item];
     }
 
+    public function last(Request $request)
+    {
+        $includes = $this->validateIncludes($request->input('includes'));
+        $values = $this->validateModel($request);
+        $items_query = AssetFueling::with($includes);
+        foreach($values as $field => $value){
+            $items_query->where($field, $value);
+        }
+        $item = $items_query->orderByRaw('date DESC NULLS LAST')->first();
+        return ['data' => $item];
+    }
+
     public function update($id, Request $request)
     {
         $item = AssetFueling::findOrFail($id);
@@ -71,7 +83,8 @@ class AssetFuelingController extends Controller
     ];
 
     protected $model_includes = [
-       'asset'
+       'asset',
+       'asset_usage_type'
     ];
     
 }

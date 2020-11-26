@@ -60,7 +60,8 @@ class AssetsTableSeeder extends Seeder
                     'asset_unit_id' => $faker->randomElement($units),
                     'asset_usage_type_id' => $faker->randomElement($usage_types),
                     'usage_interval' => $faker->randomNumber,
-                    'part_number' => $faker->regexify('[\w\d]{3-10}'),
+                    'time_interval' => $faker->randomDigitNotNull . ' mons',
+                    'part_number' => $faker->regexify('/[\w\d]{3,10}/'),
                     'notes' => $faker->text()
                 ]);
         }
