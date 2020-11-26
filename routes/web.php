@@ -438,6 +438,7 @@ $router->post('/asset_repair', ['uses' => 'AssetRepairController@create', 'as' =
 $router->get('/asset_repair/{id:[0-9]+}', ['uses' => 'AssetRepairController@read', 'as' => 'asset_repair.read']);
 $router->patch('/asset_repair/{id:[0-9]+}', ['uses' => 'AssetRepairController@update', 'as' => 'asset_repair.update']);
 $router->delete('/asset_repair/{id:[0-9]+}', ['uses' => 'AssetRepairController@delete', 'as' => 'asset_repair.delete']);
+$router->get('/asset_repairs/unique/{field:\w+}', ['uses' => 'AssetRepairController@unique', 'as' => 'asset_repair.unique']);
 
 $router->get('/asset_service_types', ['uses' => 'AssetServiceTypeController@index', 'as' => 'asset_service_type.index']);
 $router->post('/asset_service_type', ['uses' => 'AssetServiceTypeController@create', 'as' => 'asset_service_type.create']);
@@ -457,6 +458,7 @@ $router->get('/asset_maintenance/{id:[0-9]+}', ['uses' => 'AssetMaintenanceContr
 $router->get('/asset_maintenance/last/', ['uses' => 'AssetMaintenanceController@last', 'as' => 'asset_maintenance.last']);
 $router->patch('/asset_maintenance/{id:[0-9]+}', ['uses' => 'AssetMaintenanceController@update', 'as' => 'asset_maintenance.update']);
 $router->delete('/asset_maintenance/{id:[0-9]+}', ['uses' => 'AssetMaintenanceController@delete', 'as' => 'asset_maintenance.delete']);
+$router->get('/asset_maintenances/unique/{field:\w+}', ['uses' => 'AssetMaintenanceController@unique', 'as' => 'asset_maintenance.unique']);
 
 
 $router->get('/asset_units', ['uses' => 'AssetUnitController@index', 'as' => 'asset_unit.index']);

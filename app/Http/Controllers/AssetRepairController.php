@@ -54,7 +54,19 @@ class AssetRepairController extends Controller
         $item->delete();
         return response([], 204);
     }
-    
+
+    public function unique($field)
+    {
+        if(!in_array($field,array_keys($this->model_validation))){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'field' => ['Field is not a valid field for Backflow Assembly'],
+            ]);
+            throw $error;
+        }
+        $items = AssetRepair::whereNotNull($field)->distinct()->get($field);
+        return ['data' => $items];
+    }
+
     protected $model_validation = [
        'asset_id' => 'integer|exists:assets,id',
        'asset_usage_type_id' => 'integer|exists:asset_usage_types,id',
