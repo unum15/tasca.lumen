@@ -6,7 +6,7 @@ use App\TaskDate;
 use App\Contact;
 use App\OverheadAssignment;
 use App\OverheadCategory;
-
+use App\Setting;
 
 class ClockInsTableSeeder extends Seeder
 {
@@ -14,9 +14,10 @@ class ClockInsTableSeeder extends Seeder
     {
         DB::table('clock_ins')->delete();
         $task_dates = TaskDate::all();
+        $company = Setting::where('name','operating_company_client_id')->orderBy('value','DESC')->first();
         $contacts = Contact::whereHas(
-                'clients', function ($q) {
-                    $q->where('client_id', 1);
+                'clients', function ($q) use ($company){
+                    $q->where('client_id', $company->value);
                 }
             )->pluck('id');
         $assignments = OverheadAssignment::all();

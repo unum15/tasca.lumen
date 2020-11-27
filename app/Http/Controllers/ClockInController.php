@@ -11,7 +11,7 @@ class ClockInController extends Controller
     private $validation = [
         'task_date_id' => 'integer|exists:task_dates,id',
         'contact_id' => 'integer|exists:contacts,id',
-        'overhead_asclockment_id' => 'integer|exists:overhead_assignment,id',
+        'overhead_assignment_id' => 'integer|exists:overhead_assignments,id',
         'overhead_category_id' => 'integer|exists:overhead_categories,id',
         'clock_in' => 'string|max:255',
         'clock_out' => 'string|max:255',
@@ -64,6 +64,19 @@ class ClockInController extends Controller
         $stop_date = $request->input('stop_date');
         if(!empty($stop_date)) {
             $items_query->where(DB::raw('clock_out::DATE'), '<=', $stop_date);
+        }
+        
+        $type = $request->input('type');
+        if(!empty($type)) {
+            switch($type){
+                case 'task':
+                    $items_query->whereNotNull('task_date_id')->where('task_date_id','!=',0);
+                    break;
+                case 'overhead':
+                    $items_query->whereNotNull('overhead_assignment_id');
+                    break;
+            }
+            
         }
 
 
