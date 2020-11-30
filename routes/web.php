@@ -149,6 +149,9 @@ $router->get('/contacts', 'ContactController@index');
 $router->post('/contact', 'ContactController@create');
 $router->get('/contact/{id:[0-9]+}', 'ContactController@read');
 $router->patch('/contact/{id:[0-9]+}', 'ContactController@update');
+$router->post('/contact/{id:[0-9]+}/account', 'ContactController@createAccount');
+$router->post('/contact/{id:[0-9]+}/password', 'ContactController@resetPassword');
+$router->put('/contact/{id:[0-9]+}/roles', 'ContactController@updateRoles');
 $router->delete('/contact/{id:[0-9]+}', 'ContactController@delete');
 
 $router->get('/emails', 'EmailController@index');
@@ -456,3 +459,10 @@ $router->post('/overhead_category', ['uses' => 'OverheadCategoryController@creat
 $router->get('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@read', 'as' => 'overhead_category.read']);
 $router->patch('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@update', 'as' => 'overhead_category.update']);
 $router->delete('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@delete', 'as' => 'overhead_category.delete']);
+
+
+$router->get('/roles', ['uses' => 'RoleController@index', 'as' => 'role.index']);
+$router->post('/role', ['uses' => 'RoleController@create', 'as' => 'role.create']);
+$router->get('/role/{id:[0-9]+}', ['uses' => 'RoleController@read', 'as' => 'role.read']);
+$router->patch('/role/{id:[0-9]+}', ['uses' => 'RoleController@update', 'as' => 'role.update']);
+$router->delete('/role/{id:[0-9]+}', ['uses' => 'RoleController@delete', 'as' => 'role.delete']);

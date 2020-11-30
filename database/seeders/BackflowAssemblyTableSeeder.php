@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\BackflowAssembly;
 use App\BackflowType;
@@ -15,19 +17,16 @@ use App\BackflowCleaning;
 use App\Contact;
 use App\Project;
 use App\Property;
-
+use Faker\Factory;
+use Illuminate\Support\Facades\DB ;
 
 class BackflowAssemblyTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
+
     public function run()
     {
         DB::table('backflow_assemblies')->delete();
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         $properties = Property::all();
         $backflow_types = BackflowType::pluck('id')->toArray();
         $backflow_water_systems = BackflowWaterSystem::pluck('id')->toArray();

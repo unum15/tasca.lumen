@@ -3,7 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
-    (Dotenv\Dotenv::create(__DIR__.'/../'))->load();
+    (Dotenv\Dotenv::createImmutable(__DIR__.'/../'))->load();
 } catch (Dotenv\Exception\InvalidPathException $e) {
     //
 }
@@ -23,10 +23,7 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-$app->withFacades(true,
-         [
-             Zizaco\Entrust\EntrustFacade::class => 'Entrust',
-         ]);
+$app->withFacades(true);
 
 $app->withEloquent();
 
@@ -70,9 +67,6 @@ $app->singleton(
 
  $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
-    'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
-    'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
-    'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
  ]);
 
 /*
@@ -89,16 +83,17 @@ $app->singleton(
  $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
  $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
- $app->register(Zizaco\Entrust\EntrustServiceProvider::class);
  $app->register(niklasravnsborg\LaravelPdf\PdfServiceProvider::class);
- 
-  $env = env('APP_ENV', '');
+ $app->register(Illuminate\Mail\MailServiceProvider::class);
+ $app->register(Illuminate\Auth\Passwords\PasswordResetServiceProvider::class);
+ $app->register(Illuminate\Notifications\NotificationServiceProvider::class);
+ $env = env('APP_ENV', '');
  if($env == 'local'){
   $app->register(Unum\Maker\MakerServiceProvider::class);
  }
 // $app->register(App\Providers\EventServiceProvider::class);
 
-$app->configure('permission');
+ $app->configure('mail');
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes

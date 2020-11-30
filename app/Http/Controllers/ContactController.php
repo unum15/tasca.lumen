@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\Contact;
 use Illuminate\Http\Request;
+use App\Traits\SendsPasswordResetEmails;
 
 class ContactController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
+    use SendsPasswordResetEmails;
+
     private $validation = [
         'name' => 'string|min:1|max:255',
         'notes' => 'nullable|string|max:255',
@@ -27,6 +26,7 @@ class ContactController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->broker='contacts';
     }
 
     public function index(Request $request)
@@ -104,6 +104,53 @@ class ContactController extends Controller
         if($properties) {
             $item->properties()->sync($properties['properties']);
         }
+        return $item;
+    }
+    
+    public function createAccount($id, Request $request)
+    {
+        $item = Contact::findOrFail($id);
+        $this->validate($request, ['login' => 'required|string|max:255']);
+        $values = $request->only(['login','roles']);
+        $values['updater_id'] = $request->user()->id;
+        $item->update($values);
+        $this->broker()->sendResetLink($values);
+        //$item->roles()->sync($values['roles']);
+        return $item;
+    }
+    
+    public function resetPassword($id, Request $request)
+    {
+        $this->validate($request, $this->validation);     
+        $item = Contact::findOrFail($id);
+        $values = $request->only(array_keys($this->validation));
+        $values['updater_id'] = $request->user()->id;
+        if(!empty($values['password'])) {
+            $values['password'] = password_hash($values['password'], PASSWORD_DEFAULT);
+        }
+        $item->update($values);
+        $client_id = $request->input('client_id');
+        if($client_id) {
+            if(!$item->clients->contains($client_id)) {
+                $this->validate($request, ['contact_type_id' => 'required|integer|exists:contact_types,id']);
+                $contact_type_id = $request->input('contact_type_id');
+                $client = Client::findOrFail($client_id);
+                $item->clients()->attach($client, ['contact_type_id' => $contact_type_id]);
+            }
+        }
+        $properties = $request->only('properties');
+        if($properties) {
+            $item->properties()->sync($properties['properties']);
+        }
+        return $item;
+    }
+    
+    public function updateRoles($id, Request $request)
+    {
+        $item = Contact::findOrFail($id);
+        $this->validate($request, ['roles' => 'required|array']);
+        $roles = $request->only('roles');
+        $item->roles()->sync($roles['roles']);
         return $item;
     }
     
