@@ -17,7 +17,7 @@ class InitAllCommand extends Command
 
     public function handle()
     {
-        $this->call('init:roles');
+//        $this->call('init:roles');
         $this->call('init:types');
         $this->call('init:settings');
         $this->call('init:asset-types');
@@ -25,5 +25,9 @@ class InitAllCommand extends Command
         $this->call('init:iwtypes');
         $this->call('init:overhead');
         $this->call('init:admin');
+        $this->call('init:bftypes');
+        $this->call('init:iwtypes');
+        $this->call('init:overhead');
+        $this->call('init:vtypes');
     }
 }

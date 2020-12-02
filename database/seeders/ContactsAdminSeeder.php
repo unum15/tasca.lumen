@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\ActivityLevel;
 use App\Contact;
@@ -26,8 +28,8 @@ class ContactsAdminSeeder extends Seeder
                 'creator_id' => 0,
                 'updater_id' => 0
         ]);
-        $adminRole = Role::where('name', 'admin')->first();
-        $admin->attachRole($adminRole);
+//        $adminRole = Role::where('name', 'admin')->first();
+//        $admin->attachRole($adminRole);
 
     }
 }

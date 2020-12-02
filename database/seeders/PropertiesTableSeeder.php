@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\ActivityLevel;
 use App\Client;
@@ -7,26 +9,21 @@ use App\Contact;
 use App\ContactMethod;
 use App\ContactType;
 Use App\PropertyType;
-
+Use Faker\Factory;
 
 class PropertiesTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
+
     public function run()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         $activity_levels = ActivityLevel::pluck('id')->toArray();
         $contact_methods = ContactMethod::pluck('id')->toArray();
         $contact_types = ContactType::pluck('id')->toArray();
         $property_types = PropertyType::pluck('id')->toArray();
         $admin = Contact::first();
         $clients = Client::all();
-        
-        
+
         foreach($clients as $client){
             $prop_count = rand(1,4);
             for($x=0;$x<$prop_count;$x++){

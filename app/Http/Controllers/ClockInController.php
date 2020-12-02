@@ -11,7 +11,7 @@ class ClockInController extends Controller
     private $validation = [
         'task_date_id' => 'integer|exists:task_dates,id',
         'contact_id' => 'integer|exists:contacts,id',
-        'overhead_asclockment_id' => 'integer|exists:overhead_assignment,id',
+        'overhead_assignment_id' => 'integer|exists:overhead_assignments,id',
         'overhead_category_id' => 'integer|exists:overhead_categories,id',
         'clock_in' => 'string|max:255',
         'clock_out' => 'string|max:255',

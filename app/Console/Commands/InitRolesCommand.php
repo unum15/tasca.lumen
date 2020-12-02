@@ -9,35 +9,15 @@ use App\Role;
 
 class InitRolesCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+    
     protected $signature = 'init:roles';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Create initial roles for Tasca.';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         
@@ -47,11 +27,17 @@ class InitRolesCommand extends Command
         $admin->description  = 'User is allowed to manage and edit everything';
         $admin->save();
 
-        $employee = new Role();
-        $employee->name         = 'employee';
-        $employee->display_name = 'Employee';
-        $employee->description  = 'User is an employee of this company.';
-        $employee->save();
+        $laborer = new Role();
+        $laborer->name         = 'laborer';
+        $laborer->display_name = 'Laborer';
+        $laborer->description  = 'Can view own assignments';
+        $laborer->save();
+
+        $scheduler = new Role();
+        $scheduler->name         = 'scheduler';
+        $scheduler->display_name = 'Scheduler';
+        $scheduler->description  = 'Can schedule and view all jobs and clients';
+        $scheduler->save();
 
         $clientAdmin = new Role();
         $clientAdmin->name         = 'client-admin';
@@ -126,9 +112,22 @@ class InitRolesCommand extends Command
         $editProjects->description = 'Edit and create projects, orders, and tasks for associated clients';
         $editProjects->save();
         
-        $admin->attachPermissions([$viewClients, $editClients, $editSettings, $clockIn, $editTimeCards, $viewSchedule]);
-        $employee->attachPermissions([$viewClients, $clockIn, $viewSchedule]);
-        $clientAdmin->attachPermissions([$viewClient, $editClient, $viewProjects, $editProjects]);
-        $clientEmployee->attachPermissions([$viewClient, $viewProjects, $editProjects]);
+        $employeeLogin = new Permission();
+        $employeeLogin->name = 'login-employee';
+        $employeeLogin->display_name = 'Employee Login';
+        $employeeLogin->description = 'Login to the employee interface';
+        $employeeLogin->save();
+        
+        $clientLogin = new Permission();
+        $clientLogin->name = 'login-client';
+        $clientLogin->display_name = 'Client Login';
+        $clientLogin->description = 'Login to the client interface';
+        $clientLogin->save();
+        
+        $admin->attachPermissions([$employeeLogin, $viewClients, $editClients, $editSettings, $clockIn, $editTimeCards, $viewSchedule]);
+        $laborer->attachPermissions([$employeeLogin, $viewAssignments, $clockIn]);
+        $scheduler->attachPermissions([$employeeLogin, $viewClients, $clockIn, $viewSchedule]);
+        $clientAdmin->attachPermissions([$clientLogin, $viewClient, $editClient, $viewProjects, $editProjects]);
+        $clientEmployee->attachPermissions([$clientLogin, $viewClient, $viewProjects, $editProjects]);
     }
 }

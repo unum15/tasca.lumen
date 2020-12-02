@@ -18,6 +18,7 @@ $router->get('/', function () use ($router) {
 $router->post('/auth', 'AuthController@auth');
 $router->post('/unauth', 'AuthController@unauth');
 $router->get('/status', 'AuthController@status');
+$router->get('/password/reset', ['uses' => 'AuthController@passwordReset', 'as' => 'password.reset']);
 
 $router->get('/activity_levels', 'ActivityLevelController@index');
 $router->post('/activity_level', 'ActivityLevelController@create');
@@ -149,6 +150,9 @@ $router->get('/contacts', 'ContactController@index');
 $router->post('/contact', 'ContactController@create');
 $router->get('/contact/{id:[0-9]+}', 'ContactController@read');
 $router->patch('/contact/{id:[0-9]+}', 'ContactController@update');
+$router->post('/contact/{id:[0-9]+}/account', 'ContactController@createAccount');
+$router->post('/contact/{id:[0-9]+}/password', 'ContactController@resetPassword');
+$router->put('/contact/{id:[0-9]+}/roles', 'ContactController@updateRoles');
 $router->delete('/contact/{id:[0-9]+}', 'ContactController@delete');
 
 $router->get('/emails', 'EmailController@index');
@@ -402,6 +406,7 @@ $router->get('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryContr
 $router->patch('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@update', 'as' => 'overhead_category.update']);
 $router->delete('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@delete', 'as' => 'overhead_category.delete']);
 
+<<<<<<< HEAD
 $router->get('/asset_types', ['uses' => 'AssetTypeController@index', 'as' => 'asset_type.index']);
 $router->post('/asset_type', ['uses' => 'AssetTypeController@create', 'as' => 'asset_type.create']);
 $router->get('/asset_type/{id:[0-9]+}', ['uses' => 'AssetTypeController@read', 'as' => 'asset_type.read']);
@@ -466,3 +471,10 @@ $router->post('/asset_unit', ['uses' => 'AssetUnitController@create', 'as' => 'a
 $router->get('/asset_unit/{id:[0-9]+}', ['uses' => 'AssetUnitController@read', 'as' => 'asset_unit.read']);
 $router->patch('/asset_unit/{id:[0-9]+}', ['uses' => 'AssetUnitController@update', 'as' => 'asset_unit.update']);
 $router->delete('/asset_unit/{id:[0-9]+}', ['uses' => 'AssetUnitController@delete', 'as' => 'asset_unit.delete']);
+
+$router->get('/roles', ['uses' => 'RoleController@index', 'as' => 'role.index']);
+$router->post('/role', ['uses' => 'RoleController@create', 'as' => 'role.create']);
+$router->get('/role/{id:[0-9]+}', ['uses' => 'RoleController@read', 'as' => 'role.read']);
+$router->patch('/role/{id:[0-9]+}', ['uses' => 'RoleController@update', 'as' => 'role.update']);
+$router->delete('/role/{id:[0-9]+}', ['uses' => 'RoleController@delete', 'as' => 'role.delete']);
+
