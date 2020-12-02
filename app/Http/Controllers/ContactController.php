@@ -6,6 +6,8 @@ use App\Client;
 use App\Contact;
 use Illuminate\Http\Request;
 use App\Traits\SendsPasswordResetEmails;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -121,28 +123,12 @@ class ContactController extends Controller
     
     public function resetPassword($id, Request $request)
     {
-        $this->validate($request, $this->validation);     
         $item = Contact::findOrFail($id);
-        $values = $request->only(array_keys($this->validation));
-        $values['updater_id'] = $request->user()->id;
-        if(!empty($values['password'])) {
-            $values['password'] = password_hash($values['password'], PASSWORD_DEFAULT);
-        }
-        $item->update($values);
-        $client_id = $request->input('client_id');
-        if($client_id) {
-            if(!$item->clients->contains($client_id)) {
-                $this->validate($request, ['contact_type_id' => 'required|integer|exists:contact_types,id']);
-                $contact_type_id = $request->input('contact_type_id');
-                $client = Client::findOrFail($client_id);
-                $item->clients()->attach($client, ['contact_type_id' => $contact_type_id]);
-            }
-        }
-        $properties = $request->only('properties');
-        if($properties) {
-            $item->properties()->sync($properties['properties']);
-        }
-        return $item;
+        Mail::to('unum@unum5.org')->send('stuff');
+        $response = $this->broker()->sendResetLink(['login' => $item->login]);
+        return $response == Password::RESET_LINK_SENT
+                    ? $this->sendResetLinkResponse($request, $response)
+                    : $this->sendResetLinkFailedResponse($request, $response);
     }
     
     public function updateRoles($id, Request $request)

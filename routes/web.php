@@ -18,6 +18,7 @@ $router->get('/', function () use ($router) {
 $router->post('/auth', 'AuthController@auth');
 $router->post('/unauth', 'AuthController@unauth');
 $router->get('/status', 'AuthController@status');
+$router->get('/password/reset', ['uses' => 'AuthController@passwordReset', 'as' => 'password.reset']);
 
 $router->get('/activity_levels', 'ActivityLevelController@index');
 $router->post('/activity_level', 'ActivityLevelController@create');
