@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\Contact;
 use App\Project;
@@ -17,18 +19,16 @@ use App\TaskStatus;
 use App\TaskAction;
 Use App\TaskCategory;
 use App\WorkType;
+use Faker\Factory;
+use Illuminate\Support\Facades\DB;
 
 class ProjectsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
+
     public function run()
     {
         DB::table('projects')->delete();
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         $properties = Property::all();
         $contacts = Contact::pluck('id')->toArray();
         $service_order_categories = OrderCategory::pluck('id')->toArray();

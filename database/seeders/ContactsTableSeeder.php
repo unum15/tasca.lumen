@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\ActivityLevel;
 use App\Client;
@@ -12,18 +14,15 @@ Use App\PhoneNumber;
 Use App\PhoneNumberType;
 Use App\PropertyType;
 Use App\Role;
+Use Faker\Factory;
 
 
 class ContactsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
+
     public function run()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         $activity_levels = ActivityLevel::pluck('id')->toArray();
         $clients = Client::pluck('id')->toArray();
         $contact_methods = ContactMethod::pluck('id')->toArray();

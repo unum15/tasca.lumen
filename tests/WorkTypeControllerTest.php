@@ -1,6 +1,9 @@
 <?php
+namespace Tests;
 
 use App\WorkType;
+use Laravel\LegacyFactories\Factory;
+use TestCase;
 
 class WorkTypeControllerTest extends TestCase
 {

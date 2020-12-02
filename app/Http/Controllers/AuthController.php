@@ -7,10 +7,18 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Contact;
 use App\LogIn;
+use App\Traits\SendsPasswordResetEmails;
 
 class AuthController extends Controller
 {
-    
+
+    use SendsPasswordResetEmails;
+
+    public function __construct()
+    {
+        $this->broker = 'users';
+    }
+  
     public function auth(Request $request)
     {
         try{
@@ -94,7 +102,7 @@ class AuthController extends Controller
             'fluid_containers'
             ]
         )
-            ->with('roles', 'roles.perms')
+            //->with('roles', 'roles.perms')
             ->findOrFail($id);
         return $user->toArray();
     }

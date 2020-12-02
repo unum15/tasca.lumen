@@ -1,19 +1,18 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\Client;
 use App\Property;
+use Faker\Factory;
 
 class ClientPropertyTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
+
     public function run()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         $clients = Client::all();
         $properties = Property::all();
 
