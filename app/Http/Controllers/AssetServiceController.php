@@ -59,22 +59,20 @@ class AssetServiceController extends Controller
        'asset_id' => 'integer|exists:assets,id',
        'asset_service_type_id' => 'integer|exists:asset_service_types,id',
        'description' => 'string|max:1073741824',
-       'quantity' => 'integer',
-       'asset_usage_type_id' => 'integer|exists:asset_usage_types,id',
-       'asset_unit_id' => 'integer|exists:asset_units,id',
-       'usage_interval' => 'integer',
+       'quantity' => 'integer|nullable',
+       'asset_usage_type_id' => 'integer|exists:asset_usage_types,id|nullable',
+       'asset_unit_id' => 'integer|exists:asset_units,id|nullable',
+       'usage_interval' => 'integer|nullable',
        'part_number' => 'string|max:1020|nullable',
        'notes' => 'string|max:1073741824|nullable',
-       'time_interval' => 'regex:/\d+\s+\w+/|nullable',
+       'time_usage_interval' => 'integer|nullable',
+       'asset_time_unit_id' => 'integer|exists:asset_time_units,id|nullable',
     ];
     
     protected $model_validation_required = [
        'asset_id' => 'required',
        'asset_service_type_id' => 'required',
        'description' => 'required',
-       'quantity' => 'required',
-       'asset_usage_type_id' => 'required',
-       'usage_interval' => 'required',
     ];
 
     protected $model_includes = [

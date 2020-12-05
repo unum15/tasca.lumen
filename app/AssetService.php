@@ -16,7 +16,8 @@ class AssetService extends Model
         'usage_interval',
         'part_number',
         'notes',
-        'time_interval'
+        'time_usage_interval',
+        'asset_time_unit_id',
     ];
 
     public function asset()

@@ -7,7 +7,7 @@ use App\AssetServiceType;
 use App\AssetUsageType;
 use App\AssetType;
 use App\AssetUnit;
-
+use App\AssetTimeUnit;
 
 
 class InitAssetTypesCommand extends Command
@@ -75,6 +75,20 @@ class InitAssetTypesCommand extends Command
         $sort = 1;
         foreach($names as $name){
             AssetUnit::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+
+        $names = [
+            "Day",
+            "Week",
+            "Month",
+            "Year"
+        ];
+        $sort = 1;
+        foreach($names as $name){
+            AssetTimeUnit::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);

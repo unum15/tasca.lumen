@@ -1,6 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use App\Asset;
 use App\AssetType;
 use App\AssetUsageType;
@@ -8,6 +11,7 @@ use App\AssetFueling;
 use App\AssetService;
 use App\AssetServiceType;
 use App\AssetUnit;
+use App\AssetTimeUnit;
 use App\AssetMaintenance;
 
 class AssetsTableSeeder extends Seeder
@@ -16,11 +20,12 @@ class AssetsTableSeeder extends Seeder
     public function run()
     {
         DB::table('assets')->delete();
-        $faker = Faker\Factory::create();
+        $faker = \Faker\Factory::create();
         $types = AssetType::pluck('id')->toArray();
         $usage_types = AssetUsageType::pluck('id')->toArray();
         $service_types = AssetServiceType::pluck('id')->toArray();
         $units = AssetUnit::pluck('id')->toArray();
+        $time_units = AssetTimeUnit::pluck('id')->toArray();
         for($x=0;$x<10;$x++){
             Asset::create(
                 [
@@ -60,7 +65,8 @@ class AssetsTableSeeder extends Seeder
                     'asset_unit_id' => $faker->randomElement($units),
                     'asset_usage_type_id' => $faker->randomElement($usage_types),
                     'usage_interval' => $faker->randomNumber,
-                    'time_interval' => $faker->randomDigitNotNull . ' mons',
+                    'time_usage_interval' => $faker->randomDigitNotNull,
+                    'asset_time_unit_id' => $faker->randomElement($time_units),
                     'part_number' => $faker->regexify('/[\w\d]{3,10}/'),
                     'notes' => $faker->text()
                 ]);
