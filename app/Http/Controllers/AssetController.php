@@ -75,7 +75,8 @@ class AssetController extends Controller
 
     protected $model_includes = [
        'asset_usage_type',
-       'asset_type'
+       'asset_type',
+       'parent_asset'
     ];
     
 }
