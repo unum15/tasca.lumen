@@ -28,4 +28,9 @@ class Asset extends Model
     {
         return $this->belongsTo('App\AssetUsageType');
     }
+    
+    public function parent_asset()
+    {
+        return $this->belongsTo('App\Asset','parent_asset_id');
+    }
 }
