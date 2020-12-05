@@ -406,7 +406,6 @@ $router->get('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryContr
 $router->patch('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@update', 'as' => 'overhead_category.update']);
 $router->delete('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@delete', 'as' => 'overhead_category.delete']);
 
-<<<<<<< HEAD
 $router->get('/asset_types', ['uses' => 'AssetTypeController@index', 'as' => 'asset_type.index']);
 $router->post('/asset_type', ['uses' => 'AssetTypeController@create', 'as' => 'asset_type.create']);
 $router->get('/asset_type/{id:[0-9]+}', ['uses' => 'AssetTypeController@read', 'as' => 'asset_type.read']);
@@ -478,3 +477,16 @@ $router->get('/role/{id:[0-9]+}', ['uses' => 'RoleController@read', 'as' => 'rol
 $router->patch('/role/{id:[0-9]+}', ['uses' => 'RoleController@update', 'as' => 'role.update']);
 $router->delete('/role/{id:[0-9]+}', ['uses' => 'RoleController@delete', 'as' => 'role.delete']);
 
+
+
+$router->get('/asset_time_units', ['uses' => 'AssetTimeUnitController@index', 'as' => 'asset_time_unit.index']);
+$router->post('/asset_time_unit', ['uses' => 'AssetTimeUnitController@create', 'as' => 'asset_time_unit.create']);
+$router->get('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController@read', 'as' => 'asset_time_unit.read']);
+$router->patch('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController@update', 'as' => 'asset_time_unit.update']);
+$router->delete('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController@delete', 'as' => 'asset_time_unit.delete']);
+
+$router->get('/asset_time_units', ['uses' => 'AssetTimeUnitController@index', 'as' => 'asset_time_unit.index']);
+$router->post('/asset_time_unit', ['uses' => 'AssetTimeUnitController@create', 'as' => 'asset_time_unit.create']);
+$router->get('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController@read', 'as' => 'asset_time_unit.read']);
+$router->patch('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController@update', 'as' => 'asset_time_unit.update']);
+$router->delete('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController@delete', 'as' => 'asset_time_unit.delete']);
