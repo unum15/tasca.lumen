@@ -96,7 +96,9 @@ class AssetMaintenanceController extends Controller
 
     protected $model_includes = [
        'asset_usage_type',
-       'asset_service'
+       'asset_service',
+       'asset_service.asset',
+       'asset_service.asset.asset_type'
     ];
     
 }
