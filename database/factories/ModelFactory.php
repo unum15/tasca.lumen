@@ -861,3 +861,41 @@ $factory->define(App\AssetTimeUnit::class, function (Faker\Generator $faker) {
         'sort_order' => $faker->randomDigitNotNull
     ];
 });
+
+$factory->define(App\AssetLocation::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\AssetPicture::class, function (Faker\Generator $faker) {
+    $asset = factory(App\Asset::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'filename' => $faker->word,
+        'original_filename' => $faker->word,
+        'notes' => $faker->word
+    ];
+});
+
+$factory->define(App\AssetAppraisal::class, function (Faker\Generator $faker) {
+    $asset = factory(App\Asset::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'date' => $faker->word,
+        'appraisal' => $faker->word
+    ];
+});
+
+$factory->define(App\AssetImprovement::class, function (Faker\Generator $faker) {
+    $asset = factory(App\Asset::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'description' => $faker->word,
+        'details' => $faker->word,
+        'date' => $faker->word,
+        'cost' => $faker->word
+    ];
+});

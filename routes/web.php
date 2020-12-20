@@ -477,3 +477,27 @@ $router->get('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController
 $router->patch('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController@update', 'as' => 'asset_time_unit.update']);
 $router->delete('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController@delete', 'as' => 'asset_time_unit.delete']);
 
+$router->get('/asset_locations', ['uses' => 'AssetLocationController@index', 'as' => 'asset_location.index']);
+$router->post('/asset_location', ['uses' => 'AssetLocationController@create', 'as' => 'asset_location.create']);
+$router->get('/asset_location/{id:[0-9]+}', ['uses' => 'AssetLocationController@read', 'as' => 'asset_location.read']);
+$router->patch('/asset_location/{id:[0-9]+}', ['uses' => 'AssetLocationController@update', 'as' => 'asset_location.update']);
+$router->delete('/asset_location/{id:[0-9]+}', ['uses' => 'AssetLocationController@delete', 'as' => 'asset_location.delete']);
+
+$router->get('/asset_pictures', ['uses' => 'AssetPictureController@index', 'as' => 'asset_picture.index']);
+$router->post('/asset_picture', ['uses' => 'AssetPictureController@create', 'as' => 'asset_picture.create']);
+$router->get('/asset_picture/{id:[0-9]+}', ['uses' => 'AssetPictureController@read', 'as' => 'asset_picture.read']);
+$router->patch('/asset_picture/{id:[0-9]+}', ['uses' => 'AssetPictureController@update', 'as' => 'asset_picture.update']);
+$router->delete('/asset_picture/{id:[0-9]+}', ['uses' => 'AssetPictureController@delete', 'as' => 'asset_picture.delete']);
+
+$router->get('/asset_appraisals', ['uses' => 'AssetAppraisalController@index', 'as' => 'asset_appraisal.index']);
+$router->post('/asset_appraisal', ['uses' => 'AssetAppraisalController@create', 'as' => 'asset_appraisal.create']);
+$router->get('/asset_appraisal/{id:[0-9]+}', ['uses' => 'AssetAppraisalController@read', 'as' => 'asset_appraisal.read']);
+$router->patch('/asset_appraisal/{id:[0-9]+}', ['uses' => 'AssetAppraisalController@update', 'as' => 'asset_appraisal.update']);
+$router->delete('/asset_appraisal/{id:[0-9]+}', ['uses' => 'AssetAppraisalController@delete', 'as' => 'asset_appraisal.delete']);
+
+$router->get('/asset_improvements', ['uses' => 'AssetImprovementController@index', 'as' => 'asset_improvement.index']);
+$router->post('/asset_improvement', ['uses' => 'AssetImprovementController@create', 'as' => 'asset_improvement.create']);
+$router->get('/asset_improvement/{id:[0-9]+}', ['uses' => 'AssetImprovementController@read', 'as' => 'asset_improvement.read']);
+$router->patch('/asset_improvement/{id:[0-9]+}', ['uses' => 'AssetImprovementController@update', 'as' => 'asset_improvement.update']);
+$router->delete('/asset_improvement/{id:[0-9]+}', ['uses' => 'AssetImprovementController@delete', 'as' => 'asset_improvement.delete']);
+
