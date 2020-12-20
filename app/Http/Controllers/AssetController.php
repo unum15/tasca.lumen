@@ -66,6 +66,11 @@ class AssetController extends Controller
        'vin' => 'string|max:1020|nullable',
        'parent_asset_id' => 'integer|nullable',
        'notes' => 'string|max:1073741824|nullable',
+       'asset_location_id' => 'integer|exists:asset_locations,id|nullable',
+       'manufacture' => 'string|max:1020|nullable',
+       'number' => 'string|max:1020|nullable',
+       'purchase_cost' => 'numeric|nullable',
+       'purchase_date' => 'date|nullable'
     ];
     
     protected $model_validation_required = [
@@ -76,7 +81,8 @@ class AssetController extends Controller
     protected $model_includes = [
        'asset_usage_type',
        'asset_type',
-       'parent_asset'
+       'parent_asset',
+       'asset_location'
     ];
     
 }
