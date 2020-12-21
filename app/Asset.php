@@ -16,12 +16,22 @@ class Asset extends Model
         'trim',
         'vin',
         'parent_asset_id',
-        'notes'
+        'notes',
+        'asset_location_id',
+        'manufacture',
+        'number',
+        'purchase_cost',
+        'purchase_date'
     ];
 
     public function asset_type()
     {
         return $this->belongsTo('App\AssetType');
+    }
+
+    public function asset_location()
+    {
+        return $this->belongsTo('App\AssetLocation');
     }
 
     public function asset_usage_type()
