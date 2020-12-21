@@ -123,9 +123,8 @@ class ContactController extends Controller
     
     public function resetPassword($id, Request $request)
     {
-        $item = Contact::findOrFail($id);
-        Mail::to('unum@unum5.org')->send('stuff');
-        $response = $this->broker()->sendResetLink(['login' => $item->login]);
+        $contact = Contact::findOrFail($id);
+        $response = $this->broker()->sendResetLink(['login' => $contact->login]);
         return $response == Password::RESET_LINK_SENT
                     ? $this->sendResetLinkResponse($request, $response)
                     : $this->sendResetLinkFailedResponse($request, $response);
@@ -145,6 +144,6 @@ class ContactController extends Controller
         $item = Contact::findOrFail($id);
         $item->delete();
         return response([], 204);
-    }    
+    }
 
 }

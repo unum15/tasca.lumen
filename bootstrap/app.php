@@ -84,7 +84,8 @@ $app->singleton(
  $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
  $app->register(niklasravnsborg\LaravelPdf\PdfServiceProvider::class);
- $app->register(App\Providers\MailServiceProvider::class);
+ //$app->register(App\Providers\MailServiceProvider::class);
+ $app->register(Illuminate\Mail\MailServiceProvider::class);
  $app->register(Illuminate\Auth\Passwords\PasswordResetServiceProvider::class);
  $app->register(Illuminate\Notifications\NotificationServiceProvider::class);
  $env = env('APP_ENV', '');
@@ -94,13 +95,13 @@ $app->singleton(
 // $app->register(App\Providers\EventServiceProvider::class);
 
  $app->alias('mail.manager', \Illuminate\Mail\MailManager::class);
- //$app->alias('mail.manager', \Illuminate\Contracts\Mail\Factory::class);
+ $app->alias('mail.manager', \Illuminate\Contracts\Mail\Factory::class);
  
  $app->alias('mailer', \Illuminate\Mail\Mailer::class);
- //$app->alias('mailer', \Illuminate\Contracts\Mail\Mailer::class);
-// $app->alias('mailer', \Illuminate\Contracts\Mail\MailQueue::class);
+ $app->alias('mailer', \Illuminate\Contracts\Mail\Mailer::class);
+ $app->alias('mailer', \Illuminate\Contracts\Mail\MailQueue::class);
 
-  $app->configure('mail');
+ $app->configure('mail');
 
 
 /*

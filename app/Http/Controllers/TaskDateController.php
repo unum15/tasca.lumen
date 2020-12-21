@@ -362,6 +362,15 @@ class TaskDateController extends Controller
         $item = TaskDate::findOrFail($id);
         $item->delete();
         return response([], 204);
-    }    
+    }
+
+    public function mailAppointment($id){
+        $data = $contact->toArray();
+        $data['date'] = '2021-01-01';
+        $data['time'] = '12:00:00 pm';
+        Mail::send('mail.appointment', $data, function($message) use ($contact) {
+            $message->to($contact->login, $contact->name)->subject('Scheduled Appointment');
+        });
+    }
 
 }
