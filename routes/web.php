@@ -18,7 +18,9 @@ $router->get('/', function () use ($router) {
 $router->post('/auth', 'AuthController@auth');
 $router->post('/unauth', 'AuthController@unauth');
 $router->get('/status', 'AuthController@status');
-$router->get('/password/reset', ['uses' => 'AuthController@passwordReset', 'as' => 'password.reset']);
+$router->get('/auth/password/reset', ['uses' => 'AuthController@passwordReset', 'as' => 'password.reset']);
+$router->post('/auth/password/email', 'AuthController@sendResetLinkEmail');
+$router->post('/auth/password/reset', 'AuthController@reset');
 
 $router->get('/activity_levels', 'ActivityLevelController@index');
 $router->post('/activity_level', 'ActivityLevelController@create');
@@ -151,7 +153,6 @@ $router->post('/contact', 'ContactController@create');
 $router->get('/contact/{id:[0-9]+}', 'ContactController@read');
 $router->patch('/contact/{id:[0-9]+}', 'ContactController@update');
 $router->post('/contact/{id:[0-9]+}/account', 'ContactController@createAccount');
-$router->post('/contact/{id:[0-9]+}/password', 'ContactController@resetPassword');
 $router->put('/contact/{id:[0-9]+}/roles', 'ContactController@updateRoles');
 $router->delete('/contact/{id:[0-9]+}', 'ContactController@delete');
 
@@ -463,7 +464,6 @@ $router->get('/asset_maintenance/last/', ['uses' => 'AssetMaintenanceController@
 $router->patch('/asset_maintenance/{id:[0-9]+}', ['uses' => 'AssetMaintenanceController@update', 'as' => 'asset_maintenance.update']);
 $router->delete('/asset_maintenance/{id:[0-9]+}', ['uses' => 'AssetMaintenanceController@delete', 'as' => 'asset_maintenance.delete']);
 $router->get('/asset_maintenances/unique/{field:\w+}', ['uses' => 'AssetMaintenanceController@unique', 'as' => 'asset_maintenance.unique']);
-
 
 $router->get('/asset_units', ['uses' => 'AssetUnitController@index', 'as' => 'asset_unit.index']);
 $router->post('/asset_unit', ['uses' => 'AssetUnitController@create', 'as' => 'asset_unit.create']);

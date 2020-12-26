@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\Auth;
 use App\Contact;
 use App\LogIn;
 use App\Traits\SendsPasswordResetEmails;
+use App\Traits\ResetsPasswords;
 
 class AuthController extends Controller
 {
 
-    use SendsPasswordResetEmails;
+    use SendsPasswordResetEmails,ResetsPasswords;
 
     public function __construct()
     {
