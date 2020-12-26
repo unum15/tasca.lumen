@@ -87,7 +87,7 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
         return true;
     }
     
-    public function getEmailForPasswordReset() {
+    public function getEmailAttribute(){
         return $this->login;
     }
     

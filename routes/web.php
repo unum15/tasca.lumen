@@ -7,7 +7,9 @@ $router->get('/', function () use ($router) {
 $router->post('/auth', 'AuthController@auth');
 $router->post('/unauth', 'AuthController@unauth');
 $router->get('/status', 'AuthController@status');
-$router->get('/password/reset', ['uses' => 'AuthController@passwordReset', 'as' => 'password.reset']);
+$router->get('/auth/password/reset', ['uses' => 'AuthController@passwordReset', 'as' => 'password.reset']);
+$router->post('/auth/password/email', 'AuthController@sendResetLinkEmail');
+$router->post('/auth/password/reset', 'AuthController@reset');
 
 $router->get('/activity_levels', 'ActivityLevelController@index');
 $router->post('/activity_level', 'ActivityLevelController@create');
@@ -140,7 +142,6 @@ $router->post('/contact', 'ContactController@create');
 $router->get('/contact/{id:[0-9]+}', 'ContactController@read');
 $router->patch('/contact/{id:[0-9]+}', 'ContactController@update');
 $router->post('/contact/{id:[0-9]+}/account', 'ContactController@createAccount');
-$router->post('/contact/{id:[0-9]+}/password', 'ContactController@resetPassword');
 $router->put('/contact/{id:[0-9]+}/roles', 'ContactController@updateRoles');
 $router->delete('/contact/{id:[0-9]+}', 'ContactController@delete');
 

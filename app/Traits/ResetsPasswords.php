@@ -11,23 +11,14 @@ use Illuminate\Support\Str;
 
 trait ResetsPasswords
 {
-    use RedirectsUsers;
     public function reset(Request $request)
     {
-        $request->validate($this->rules(), $this->validationErrorMessages());
-
-        // Here we will attempt to reset the user's password. If it is successful we
-        // will update the password on an actual user model and persist it to the
-        // database. Otherwise we will parse the error and return the response.
+        $this->validate($request, $this->rules(), $this->validationErrorMessages());
         $response = $this->broker()->reset(
             $this->credentials($request), function ($user, $password) {
                 $this->resetPassword($user, $password);
             }
         );
-
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
         return $response == Password::PASSWORD_RESET
                     ? $this->sendResetResponse($request, $response)
                     : $this->sendResetFailedResponse($request, $response);
@@ -58,13 +49,9 @@ trait ResetsPasswords
     {
         $this->setUserPassword($user, $password);
 
-        $user->setRememberToken(Str::random(60));
-
         $user->save();
 
         event(new PasswordReset($user));
-
-        $this->guard()->login($user);
     }
 
     protected function setUserPassword($user, $password)
@@ -74,15 +61,13 @@ trait ResetsPasswords
 
     protected function sendResetResponse(Request $request, $response)
     {
-        return redirect($this->redirectPath())
-                            ->with('status', trans($response));
+        $login = $request->only('login');
+        return response(['message' => 'You may now login with your new password using login: ' . $login['login']]);
     }
 
     protected function sendResetFailedResponse(Request $request, $response)
     {
-        return redirect()->back()
-                    ->withInput($request->only('login'))
-                    ->withErrors(['email' => trans($response)]);
+        return response(['message' => $response], 422);
     }
 
     public function broker()

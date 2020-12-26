@@ -43,6 +43,13 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'auth_mode' => null,
+            'stream' => [
+            'ssl' => [
+                'allow_self_signed' => env('MAIL_SELF_SIGNED',false),
+                'verify_peer' => env('MAIL_PEER',true),
+                'verify_peer_name' => env('MAIL_VERIFY_PEER',true),
+            ],
+        ],
         ],
 
         'sendmail' => [

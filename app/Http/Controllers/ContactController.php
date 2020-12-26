@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\ActivityLevel;
 use App\Client;
 use App\Contact;
 use Illuminate\Http\Request;
 use App\Traits\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Mail;
+use Log;
 
 class ContactController extends Controller
 {
@@ -28,7 +30,6 @@ class ContactController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->broker='contacts';
     }
 
     public function index(Request $request)
@@ -115,22 +116,12 @@ class ContactController extends Controller
         $this->validate($request, ['login' => 'required|string|max:255']);
         $values = $request->only(['login','roles']);
         $values['updater_id'] = $request->user()->id;
+        $values['show_maximium_activity_level_id'] = ActivityLevel::orderBy('id')->first()->id;
         $item->update($values);
-        $this->broker()->sendResetLink($values);
         //$item->roles()->sync($values['roles']);
-        return $item;
+        return $this->sendResetLinkEmail($request);
     }
-    
-    public function resetPassword($id, Request $request)
-    {
-        $item = Contact::findOrFail($id);
-        Mail::to('unum@unum5.org')->send('stuff');
-        $response = $this->broker()->sendResetLink(['login' => $item->login]);
-        return $response == Password::RESET_LINK_SENT
-                    ? $this->sendResetLinkResponse($request, $response)
-                    : $this->sendResetLinkFailedResponse($request, $response);
-    }
-    
+
     public function updateRoles($id, Request $request)
     {
         $item = Contact::findOrFail($id);
@@ -145,6 +136,6 @@ class ContactController extends Controller
         $item = Contact::findOrFail($id);
         $item->delete();
         return response([], 204);
-    }    
+    }
 
 }

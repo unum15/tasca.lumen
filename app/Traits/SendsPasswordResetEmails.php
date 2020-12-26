@@ -4,18 +4,16 @@ namespace app\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Log;
 
 trait SendsPasswordResetEmails
 {
     public function sendResetLinkEmail(Request $request)
     {
-        $this->validateEmail($request);
+        $this->validate($request,['login' => 'required|email']);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $response = $this->broker()->sendResetLink(
-            $this->credentials($request)
+        $response = Password::broker()->sendResetLink(
+            $request->only('login')
         );
 
         return $response == Password::RESET_LINK_SENT
@@ -23,19 +21,10 @@ trait SendsPasswordResetEmails
                     : $this->sendResetLinkFailedResponse($request, $response);
     }
 
-    protected function validateEmail(Request $request)
-    {
-        $request->validate(['login' => 'required|email']);
-    }
-
-    protected function credentials(Request $request)
-    {
-        return $request->only('login');
-    }
-
     protected function sendResetLinkResponse(Request $request, $response)
     {
-        return response(['message' => 'sent']);
+        $login = $request->only('login');
+        return response(['message' => 'Reset link sent to ' . $login['login']]);
     }
 
     protected function sendResetLinkFailedResponse(Request $request, $response)
@@ -43,8 +32,4 @@ trait SendsPasswordResetEmails
         return response(['message' => $response], 422);
     }
 
-    public function broker()
-    {
-        return Password::broker();
-    }
 }
