@@ -18,7 +18,12 @@ class SignInsToClockIns extends Migration
         Schema::table('clock_ins', function (Blueprint $table) {
             $table->renameColumn('sign_in','clock_in');
             $table->renameColumn('sign_out','clock_out');
+            $table->foreign('task_date_id')
+                ->references('id')->on('task_dates')
+                ->onDelete('cascade');
         });
+        
+        
     }
 
     /**
