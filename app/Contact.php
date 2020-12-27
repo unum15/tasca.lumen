@@ -5,13 +5,15 @@ namespace App;
 use Illuminate\Auth\Authenticatable;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class Contact extends Model implements AuthenticatableContract, AuthorizableContract
+class Contact extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, EntrustUserTrait;
+    use Authenticatable, CanResetPassword, Notifiable;
 
     protected $fillable = [
         'name',
@@ -79,6 +81,14 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
     public function logIns()
     {
         return $this->hasMany('App\LogIn');
+    }
+    
+    public function can($ability, $arguments = []){
+        return true;
+    }
+    
+    public function getEmailAttribute(){
+        return $this->login;
     }
     
 }

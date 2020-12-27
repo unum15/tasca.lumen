@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\ActivityLevel;
 use App\Client;
 use App\Contact;
 use Illuminate\Http\Request;
+use App\Traits\SendsPasswordResetEmails;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Mail;
+use Log;
 
 class ContactController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
+    use SendsPasswordResetEmails;
+
     private $validation = [
         'name' => 'string|min:1|max:255',
         'notes' => 'nullable|string|max:255',
@@ -107,11 +110,32 @@ class ContactController extends Controller
         return $item;
     }
     
+    public function createAccount($id, Request $request)
+    {
+        $item = Contact::findOrFail($id);
+        $this->validate($request, ['login' => 'required|string|max:255']);
+        $values = $request->only(['login','roles']);
+        $values['updater_id'] = $request->user()->id;
+        $values['show_maximium_activity_level_id'] = ActivityLevel::orderBy('id')->first()->id;
+        $item->update($values);
+        //$item->roles()->sync($values['roles']);
+        return $this->sendResetLinkEmail($request);
+    }
+
+    public function updateRoles($id, Request $request)
+    {
+        $item = Contact::findOrFail($id);
+        $this->validate($request, ['roles' => 'required|array']);
+        $roles = $request->only('roles');
+        $item->roles()->sync($roles['roles']);
+        return $item;
+    }
+    
     public function delete($id)
     {
         $item = Contact::findOrFail($id);
         $item->delete();
         return response([], 204);
-    }    
+    }
 
 }

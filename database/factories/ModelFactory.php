@@ -1,17 +1,7 @@
 <?php
+use \Faker\Generator as Faker;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| Here you may define all of your model factories. Model factories give
-| you a convenient way to create models for testing and seeding your
-| database. Just tell the factory how a default model should look.
-|
-*/
-
-$factory->define(App\Contact::class, function (Faker\Generator $faker) {
+$factory->define(App\Contact::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'creator_id' => 0,
@@ -19,13 +9,13 @@ $factory->define(App\Contact::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\ActivityLevel::class, function (Faker\Generator $faker) {
+$factory->define(App\ActivityLevel::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
-$factory->define(App\Client::class, function (Faker\Generator $faker) {
+$factory->define(App\Client::class, function (Faker $faker) {
     $contact = factory(App\Contact::class)->create();
     return [
         'name' => $faker->name,
@@ -34,26 +24,26 @@ $factory->define(App\Client::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\ClientType::class, function (Faker\Generator $faker) {
+$factory->define(App\ClientType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
-$factory->define(App\ContactMethod::class, function (Faker\Generator $faker) {
+$factory->define(App\ContactMethod::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
-$factory->define(App\ContactType::class, function (Faker\Generator $faker) {
+$factory->define(App\ContactType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
 
-$factory->define(App\Email::class, function (Faker\Generator $faker) {
+$factory->define(App\Email::class, function (Faker $faker) {
     $contact = factory(App\Contact::class)->create();
     $type = factory(App\EmailType::class)->create();
     return [
@@ -65,12 +55,12 @@ $factory->define(App\Email::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\EmailType::class, function (Faker\Generator $faker) {
+$factory->define(App\EmailType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
-$factory->define(App\Order::class, function (Faker\Generator $faker) {
+$factory->define(App\Order::class, function (Faker $faker) {
     $contact = factory(App\Contact::class)->create();
     $project = factory(App\Project::class)->create();
     $order_status_type = factory(App\OrderStatusType::class)->create();
@@ -124,51 +114,51 @@ $factory->define(App\Order::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
+$factory->define(App\OrderStatus::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
-$factory->define(App\OrderStatusType::class, function (Faker\Generator $faker) {
+$factory->define(App\OrderStatusType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
-$factory->define(App\OrderAction::class, function (Faker\Generator $faker) {
+$factory->define(App\OrderAction::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
-$factory->define(App\OrderPriority::class, function (Faker\Generator $faker) {
+$factory->define(App\OrderPriority::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
-$factory->define(App\OrderCategory::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->word,
-    ];
-});
-
-
-$factory->define(App\OrderStatus::class, function (Faker\Generator $faker) {
-    return [
-        'name' => $faker->word,
-    ];
-});
-
-$factory->define(App\OrderType::class, function (Faker\Generator $faker) {
+$factory->define(App\OrderCategory::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
 
-$factory->define(App\PhoneNumber::class, function (Faker\Generator $faker) {
+$factory->define(App\OrderStatus::class, function (Faker $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+$factory->define(App\OrderType::class, function (Faker $faker) {
+    return [
+        'name' => $faker->word,
+    ];
+});
+
+
+$factory->define(App\PhoneNumber::class, function (Faker $faker) {
     $contact = factory(App\Contact::class)->create();
     $type = factory(App\PhoneNumberType::class)->create();
     return [
@@ -180,13 +170,13 @@ $factory->define(App\PhoneNumber::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\PhoneNumberType::class, function (Faker\Generator $faker) {
+$factory->define(App\PhoneNumberType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
-$factory->define(App\Property::class, function (Faker\Generator $faker) {
+$factory->define(App\Property::class, function (Faker $faker) {
     $activity_level = factory(App\ActivityLevel::class)->create();
     $contact = factory(App\Contact::class)->create();
     $client = factory(App\Client::class)->create();
@@ -201,14 +191,14 @@ $factory->define(App\Property::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\PropertyType::class, function (Faker\Generator $faker) {
+$factory->define(App\PropertyType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
 
-$factory->define(App\Project::class, function (Faker\Generator $faker) {
+$factory->define(App\Project::class, function (Faker $faker) {
     $contact = factory(App\Contact::class)->create();
     $client = factory(App\Client::class)->create();
     return [
@@ -220,7 +210,7 @@ $factory->define(App\Project::class, function (Faker\Generator $faker) {
 });
 
 
-$factory->define(App\Task::class, function (Faker\Generator $faker) {
+$factory->define(App\Task::class, function (Faker $faker) {
     $contact = factory(App\Contact::class)->create();
     return [
         'name' => $faker->word,
@@ -229,13 +219,13 @@ $factory->define(App\Task::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\TaskAction::class, function (Faker\Generator $faker) {
+$factory->define(App\TaskAction::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
-$factory->define(App\TaskDate::class, function (Faker\Generator $faker) {
+$factory->define(App\TaskDate::class, function (Faker $faker) {
     $contact = factory(App\Contact::class)->create();
     $task = factory(App\Task::class)->create();
     return [
@@ -247,19 +237,19 @@ $factory->define(App\TaskDate::class, function (Faker\Generator $faker) {
 });
 
 
-$factory->define(App\TaskType::class, function (Faker\Generator $faker) {
+$factory->define(App\TaskType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
-$factory->define(App\WorkType::class, function (Faker\Generator $faker) {
+$factory->define(App\WorkType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
     ];
 });
 
-$factory->define(App\Vehicle::class, function (Faker\Generator $faker) {
+$factory->define(App\Vehicle::class, function (Faker $faker) {
     $type = factory('App\VehicleType')->create();
     return [
         'name' => $faker->word,
@@ -273,7 +263,7 @@ $factory->define(App\Vehicle::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\VehicleType::class, function (Faker\Generator $faker) {
+$factory->define(App\VehicleType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
@@ -281,7 +271,7 @@ $factory->define(App\VehicleType::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Fueling::class, function (Faker\Generator $faker) {
+$factory->define(App\Fueling::class, function (Faker $faker) {
     $vehicle = factory('App\Vehicle')->create();
     return [
         'vehicle_id' => $vehicle->id,
@@ -294,7 +284,7 @@ $factory->define(App\Fueling::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Part::class, function (Faker\Generator $faker) {
+$factory->define(App\Part::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'on_hand' => $faker->randomDigitNotNull,
@@ -302,7 +292,7 @@ $factory->define(App\Part::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Repair::class, function (Faker\Generator $faker) {
+$factory->define(App\Repair::class, function (Faker $faker) {
     $vehicle = factory('App\Vehicle')->create();
     return [
         'vehicle_id' => $vehicle->id,
@@ -315,7 +305,7 @@ $factory->define(App\Repair::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\ServiceType::class, function (Faker\Generator $faker) {
+$factory->define(App\ServiceType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
@@ -323,7 +313,7 @@ $factory->define(App\ServiceType::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Service::class, function (Faker\Generator $faker) {
+$factory->define(App\Service::class, function (Faker $faker) {
     $vehicle = factory('App\Vehicle')->create();
     $serviceType = factory('App\ServiceType')->create();
     $usageType = factory('App\UsageType')->create();
@@ -340,7 +330,7 @@ $factory->define(App\Service::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\UsageType::class, function (Faker\Generator $faker) {
+$factory->define(App\UsageType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
@@ -348,7 +338,7 @@ $factory->define(App\UsageType::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Maintenance::class, function (Faker\Generator $faker) {
+$factory->define(App\Maintenance::class, function (Faker $faker) {
     $service = factory('App\Service')->create();
     return [
         'service_id' => $service->id,
@@ -361,7 +351,7 @@ $factory->define(App\Maintenance::class, function (Faker\Generator $faker) {
 });
 
 
-$factory->define(App\BackflowAssemblyTest::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowAssemblyTest::class, function (Faker $faker) {
     $installStatus = factory('App\BackflowInstallationStatus')->create();
     $testStatus = factory('App\BackflowTestStatus')->create();
     return [
@@ -379,7 +369,7 @@ $factory->define(App\BackflowAssemblyTest::class, function (Faker\Generator $fak
 });
 
 
-$factory->define(App\BackflowCertification::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowCertification::class, function (Faker $faker) {
     return [
         'backflow_assembly_id' => $faker->randomDigitNotNull,
         'visual_inspection_notes' => $faker->word,
@@ -387,7 +377,7 @@ $factory->define(App\BackflowCertification::class, function (Faker\Generator $fa
     ];
 });
 
-$factory->define(App\BackflowWaterSystem::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowWaterSystem::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'address' => $faker->word,
@@ -402,7 +392,7 @@ $factory->define(App\BackflowWaterSystem::class, function (Faker\Generator $fake
     ];
 });
 
-$factory->define(App\BackflowManufacturer::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowManufacturer::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
@@ -410,7 +400,7 @@ $factory->define(App\BackflowManufacturer::class, function (Faker\Generator $fak
     ];
 });
 
-$factory->define(App\BackflowType::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowType::class, function (Faker $faker) {
     $superType = factory('App\BackflowSuperType')->create();
     return [
         'backflow_super_type_id' => $superType->id,
@@ -420,7 +410,7 @@ $factory->define(App\BackflowType::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\BackflowTypeValve::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowTypeValve::class, function (Faker $faker) {
     return [
         'backflow_type_id' => $faker->randomDigitNotNull,
         'name' => $faker->word,
@@ -430,7 +420,7 @@ $factory->define(App\BackflowTypeValve::class, function (Faker\Generator $faker)
     ];
 });
 
-$factory->define(App\BackflowSize::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowSize::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
@@ -438,7 +428,7 @@ $factory->define(App\BackflowSize::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\BackflowAssembly::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowAssembly::class, function (Faker $faker) {
     $property = factory('App\Property')->create();
     $contact = factory('App\Contact')->create();
     $type = factory('App\BackflowType')->create();
@@ -467,7 +457,7 @@ $factory->define(App\BackflowAssembly::class, function (Faker\Generator $faker) 
     ];
 });
 
-$factory->define(App\BackflowModel::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowModel::class, function (Faker $faker) {
     $manufacturer = factory('App\BackflowManufacturer')->create();
     $type = factory('App\BackflowType')->create();
     return [
@@ -479,7 +469,7 @@ $factory->define(App\BackflowModel::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\BackflowOld::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowOld::class, function (Faker $faker) {
     return [
         'active' => $faker->word,
         'prt' => $faker->word,
@@ -511,7 +501,7 @@ $factory->define(App\BackflowOld::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\BackflowValvePart::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowValvePart::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
@@ -519,7 +509,7 @@ $factory->define(App\BackflowValvePart::class, function (Faker\Generator $faker)
     ];
 });
 
-$factory->define(App\BackflowTestReport::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowTestReport::class, function (Faker $faker) {
     $assembly = factory('App\BackflowAssembly')->create();
     return [
         'backflow_assembly_id' => $assembly->id,
@@ -532,7 +522,7 @@ $factory->define(App\BackflowTestReport::class, function (Faker\Generator $faker
     ];
 });
 
-$factory->define(App\BackflowValve::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowValve::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
@@ -540,7 +530,7 @@ $factory->define(App\BackflowValve::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\BackflowTest::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowTest::class, function (Faker $faker) {
     $report = factory('App\BackflowTestReport')->create();
     $contact = factory('App\Contact')->create();
     return [
@@ -554,7 +544,7 @@ $factory->define(App\BackflowTest::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\BackflowSuperType::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowSuperType::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
@@ -562,7 +552,7 @@ $factory->define(App\BackflowSuperType::class, function (Faker\Generator $faker)
     ];
 });
 
-$factory->define(App\BackflowRepair::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowRepair::class, function (Faker $faker) {
     $report = factory('App\BackflowTestReport')->create();
     $contact = factory('App\Contact')->create();
     $valve = factory('App\BackflowValve')->create();
@@ -576,7 +566,7 @@ $factory->define(App\BackflowRepair::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\BackflowCleaning::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowCleaning::class, function (Faker $faker) {
     $report = factory('App\BackflowTestReport')->create();
     $contact = factory('App\Contact')->create();
     $valve = factory('App\BackflowValve')->create();
@@ -590,7 +580,7 @@ $factory->define(App\BackflowCleaning::class, function (Faker\Generator $faker) 
     ];
 });
 
-$factory->define(App\PropertyUnit::class, function (Faker\Generator $faker) {
+$factory->define(App\PropertyUnit::class, function (Faker $faker) {
     $property = factory('App\Property')->create();
     return [
         'property_id' => $property->id,
@@ -601,13 +591,13 @@ $factory->define(App\PropertyUnit::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\IrrigationWaterType::class, function (Faker\Generator $faker) {
+$factory->define(App\IrrigationWaterType::class, function (Faker $faker) {
     return [
         'name' => $faker->word
     ];
 });
 
-$factory->define(App\IrrigationSystem::class, function (Faker\Generator $faker) {
+$factory->define(App\IrrigationSystem::class, function (Faker $faker) {
     $property = factory('App\Property')->create();
     $type = factory('App\IrrigationWaterType')->create();
     $backflow = factory('App\BackflowAssembly')->create();
@@ -624,7 +614,7 @@ $factory->define(App\IrrigationSystem::class, function (Faker\Generator $faker) 
     ];
 });
 
-$factory->define(App\IrrigationController::class, function (Faker\Generator $faker) {
+$factory->define(App\IrrigationController::class, function (Faker $faker) {
     $system = factory('App\IrrigationSystem')->create();
     $location = factory('App\IrrigationControllerLocation')->create();
     return [
@@ -642,13 +632,13 @@ $factory->define(App\IrrigationController::class, function (Faker\Generator $fak
     ];
 });
 
-$factory->define(App\IrrigationControllerLocation::class, function (Faker\Generator $faker) {
+$factory->define(App\IrrigationControllerLocation::class, function (Faker $faker) {
     return [
         'name' => $faker->word
     ];
 });
 
-$factory->define(App\IrrigationSystemOther::class, function (Faker\Generator $faker) {
+$factory->define(App\IrrigationSystemOther::class, function (Faker $faker) {
     $system = factory('App\IrrigationSystem')->create();
     return [
         'irrigation_system_id' => $system->id,
@@ -657,7 +647,7 @@ $factory->define(App\IrrigationSystemOther::class, function (Faker\Generator $fa
     ];
 });
 
-$factory->define(App\IrrigationControllerOther::class, function (Faker\Generator $faker) {
+$factory->define(App\IrrigationControllerOther::class, function (Faker $faker) {
     $controller = factory('App\IrrigationController')->create();
     return [
         'irrigation_controller_id' => $controller->id,
@@ -666,7 +656,7 @@ $factory->define(App\IrrigationControllerOther::class, function (Faker\Generator
     ];
 });
 
-$factory->define(App\IrrigationZone::class, function (Faker\Generator $faker) {
+$factory->define(App\IrrigationZone::class, function (Faker $faker) {
     $controller = factory('App\IrrigationController')->create();
     return [
         'irrigation_controller_id' => $controller->id,
@@ -680,7 +670,7 @@ $factory->define(App\IrrigationZone::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\PropertyAccount::class, function (Faker\Generator $faker) {
+$factory->define(App\PropertyAccount::class, function (Faker $faker) {
     $property = factory('App\Property')->create();
     return [
         'property_id' => $property->id,
@@ -693,7 +683,7 @@ $factory->define(App\PropertyAccount::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\BackflowPicture::class, function (Faker\Generator $faker) {
+$factory->define(App\BackflowPicture::class, function (Faker $faker) {
     $backflow = factory('App\BackflowAssembly')->create();
     return [
         'backflow_assembly_id' => $backflow->id,
@@ -703,7 +693,7 @@ $factory->define(App\BackflowPicture::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\ClockIn::class, function (Faker\Generator $faker) {
+$factory->define(App\ClockIn::class, function (Faker $faker) {
     $clock_in = $faker->dateTimeBetween('-30 days');
     $clock_out = clone $clock_in;
     $clock_out->modify('+8 hours');
@@ -718,7 +708,7 @@ $factory->define(App\ClockIn::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\OverheadAssignment::class, function (Faker\Generator $faker) {
+$factory->define(App\OverheadAssignment::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
@@ -727,11 +717,185 @@ $factory->define(App\OverheadAssignment::class, function (Faker\Generator $faker
     ];
 });
 
-$factory->define(App\OverheadCategory::class, function (Faker\Generator $faker) {
+$factory->define(App\OverheadCategory::class, function (Faker $faker) {
     return [
         'name' => $faker->word,
         'notes' => $faker->text,
         'parent_id' => null,
         'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\AssetType::class, function (Faker $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\AssetUsageType::class, function (Faker $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+
+$factory->define(App\AssetPart::class, function (Faker $faker) {
+    return [
+        'name' => $faker->word,
+        'on_hand' => $faker->randomDigitNotNull,
+        'notes' => $faker->text
+    ];
+});
+
+$factory->define(App\AssetServiceType::class, function (Faker $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\AssetService::class, function (Faker $faker) {
+    $asset = factory(App\Asset::class)->create();
+    $asset_service_type = factory(App\AssetServiceType::class)->create();
+    $asset_usage_type = factory(App\AssetUsageType::class)->create();
+    $asset_unit = factory(App\AssetUnit::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'asset_service_type_id' => $asset_service_type->id,
+        'description' => $faker->text,
+        'quantity' => $faker->randomDigitNotNull,
+        'asset_usage_type_id' => $asset_usage_type->id,
+        'asset_unit_id' => $asset_unit->id,
+        'usage_interval' => $faker->randomDigitNotNull,
+        'part_number' => $faker->word,
+        'notes' => $faker->text,
+        'time_interval' => ($faker->randomDigitNotNull + 1) . ' mons'
+    ];
+});
+
+$factory->define(App\AssetFueling::class, function (Faker $faker) {
+    $asset = factory(App\Asset::class)->create();
+    $asset_usage_type = factory(App\AssetUsageType::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'asset_usage_type_id' => $asset_usage_type->id,
+        'usage' => $faker->randomDigitNotNull,
+        'date' => $faker->date,
+        'gallons' => $faker->randomFloat."",
+        'amount' => $faker->randomFloat."",
+        'notes' => $faker->text
+    ];
+});
+
+$factory->define(App\Asset::class, function (Faker $faker) {
+    $asset_type = factory(App\AssetType::class)->create();
+    $asset_usage_type = factory(App\AssetUsageType::class)->create();
+    return [
+        'name' => $faker->word,
+        'asset_type_id' => $asset_type->id,
+        'asset_usage_type_id' => $asset_usage_type->id,
+        'year' => $faker->randomDigitNotNull,
+        'make' => $faker->word,
+        'model' => $faker->word,
+        'trim' => $faker->word,
+        'vin' => $faker->word,
+        'parent_asset_id' => $faker->randomDigitNotNull,
+        'notes' => $faker->text
+    ];
+});
+
+$factory->define(App\AssetRepair::class, function (Faker $faker) {
+    $asset = factory(App\Asset::class)->create();
+    $asset_usage_type = factory(App\AssetUsageType::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'asset_usage_type_id' => $asset_usage_type->id,
+        'usage' => $faker->randomDigitNotNull,
+        'repair' => $faker->word,
+        'date' => $faker->date,
+        'amount' => $faker->randomFloat."",
+        'where' => $faker->word,
+        'notes' => $faker->text
+    ];
+});
+
+$factory->define(App\AssetMaintenance::class, function (Faker $faker) {
+    $asset_service = factory(App\AssetService::class)->create();
+    $asset_usage_type = factory(App\AssetUsageType::class)->create();
+    return [
+        'asset_service_id' => $asset_service->id,
+        'asset_usage_type_id' => $asset_usage_type->id,
+        'usage' => $faker->randomDigitNotNull,
+        'date' => $faker->date,
+        'amount' => $faker->randomFloat."",
+        'where' => $faker->word,
+        'notes' => $faker->text
+    ];
+});
+
+$factory->define(App\AssetUnit::class, function (Faker $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\AssetTimeUnit::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\AssetTimeUnit::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\AssetLocation::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'notes' => $faker->text,
+        'sort_order' => $faker->randomDigitNotNull
+    ];
+});
+
+$factory->define(App\AssetPicture::class, function (Faker\Generator $faker) {
+    $asset = factory(App\Asset::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'filename' => $faker->word,
+        'original_filename' => $faker->word,
+        'notes' => $faker->word
+    ];
+});
+
+$factory->define(App\AssetAppraisal::class, function (Faker\Generator $faker) {
+    $asset = factory(App\Asset::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'date' => $faker->word,
+        'appraisal' => $faker->word
+    ];
+});
+
+$factory->define(App\AssetImprovement::class, function (Faker\Generator $faker) {
+    $asset = factory(App\Asset::class)->create();
+    return [
+        'asset_id' => $asset->id,
+        'description' => $faker->word,
+        'details' => $faker->word,
+        'date' => $faker->word,
+        'cost' => $faker->word
     ];
 });
