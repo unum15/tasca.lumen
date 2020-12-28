@@ -45,6 +45,14 @@ class OverheadAssignmentController extends Controller
         $item->update($values);
         return ['data' => $item];
     }
+    
+    public function categories($id, Request $request)
+    {
+        $item = OverheadAssignment::findOrFail($id);
+        $values = $request->only('categories');
+        $item->overhead_categories()->sync($values['categories']);
+        return ['data' => $item];
+    }
 
     public function delete(Request $request, $id)
     {
