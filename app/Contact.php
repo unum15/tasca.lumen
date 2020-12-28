@@ -95,10 +95,12 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
     public function sendPasswordResetNotification($token) {
         $notification = new ResetPassword($token);
         $notification->createUrlUsing(function ($token) {
-            return  $url = url(route('password.reset', [
+            $link =  $url = url(route('password.reset', [
                 'token' => $this->token,
                 'email' => $this->login,
             ], false));
+            $link = preg_replace('/\/api/','',$link);
+            return $link;
         });
         $this->notify($notification);
     }
