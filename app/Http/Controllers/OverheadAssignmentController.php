@@ -20,6 +20,8 @@ class OverheadAssignmentController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $items_query->orderBy('sort_order');
+        $items_query->orderBy('name');
         $items = $items_query->get();
         return ['data' => $items];
     }
