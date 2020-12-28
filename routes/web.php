@@ -400,6 +400,7 @@ $router->post('/overhead_assignment', ['uses' => 'OverheadAssignmentController@c
 $router->get('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@read', 'as' => 'overhead_assignment.read']);
 $router->patch('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@update', 'as' => 'overhead_assignment.update']);
 $router->delete('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@delete', 'as' => 'overhead_assignment.delete']);
+$router->put('/overhead_assignment/{id:[0-9]+}/overhead_categories', ['uses' => 'OverheadAssignmentController@categories', 'as' => 'overhead_assignment.update']);
 
 $router->get('/overhead_categories', ['uses' => 'OverheadCategoryController@index', 'as' => 'overhead_category.index']);
 $router->post('/overhead_category', ['uses' => 'OverheadCategoryController@create', 'as' => 'overhead_category.create']);
