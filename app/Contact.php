@@ -10,6 +10,8 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Log;
 
 class Contact extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -89,6 +91,19 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
     
     public function getEmailAttribute(){
         return $this->login;
+    }
+    
+    public function sendPasswordResetNotification($token) {
+        $notification = new ResetPassword($token);
+        $notification->createUrlUsing(function ($token) use ($notification){
+            $url = url(route('password.reset', [
+                'token' => $notification->token,
+                'email' => $this->login,
+            ], false));
+            $url = preg_replace('/\/api/','',$url);
+            return $url;
+        });
+        $this->notify($notification);
     }
     
 }
