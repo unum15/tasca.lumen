@@ -8,6 +8,7 @@ use App\AssetUsageType;
 use App\AssetType;
 use App\AssetUnit;
 use App\AssetTimeUnit;
+use App\AssetLocation;
 
 
 class InitAssetTypesCommand extends Command
@@ -89,6 +90,19 @@ class InitAssetTypesCommand extends Command
         $sort = 1;
         foreach($names as $name){
             AssetTimeUnit::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
+        
+        $names = [
+                'Shop',
+                'Garage',
+                'Trailer'
+        ];
+        $sort = 1;
+        foreach($names as $name){
+            AssetLocation::create([
                 'name' => $name,
                 'sort_order' => $sort++
             ]);

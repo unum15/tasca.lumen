@@ -9,6 +9,7 @@ use App\ActivityLevel;
 use App\ClientType;
 use App\ContactMethod;
 use App\ContactType;
+use App\Crew;
 use App\EmailType;
 use App\PhoneNumberType;
 use App\PropertyType;
@@ -27,35 +28,14 @@ use App\TaskCategory;
 
 class InitSettingsCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'init:settings';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Create initial settings for Tasca.';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         Setting::create([
@@ -342,6 +322,22 @@ Budget and bid information.
         Setting::create([
             'name' => 'default_order_type_id',
             'value' => OrderType::where('name', 'Estimate')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'default_crew_id',
+            'value' => Crew::where('name', 'A')->first()->id
+        ]);
+        Setting::create([
+            'name' => 'phreebooks',
+            'value' => 'false'
+        ]);
+        Setting::create([
+            'name' => 'backflows',
+            'value' => 'false'
+        ]);
+        Setting::create([
+            'name' => 'irrigation_systems',
+            'value' => 'false'
         ]);
     }
 }

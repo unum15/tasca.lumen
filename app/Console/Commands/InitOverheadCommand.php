@@ -22,21 +22,10 @@ class InitOverheadCommand extends Command
             [
                 'name' => 'Stores',
                 'children' => [
-                    [
-                        'name' =>'Durks',
-                    ],
-                    [
-                        'name' =>'SSC',
-                    ],
-                    [
-                        'name' =>'MLS',
-                    ],
-                    [
-                        'name' => 'SW'
-                    ]
                 ],
                 'categories' => [
-                    'Driving'
+                    'Driving',
+                    'Shopping'
                 ],
             ],
             [
@@ -45,7 +34,8 @@ class InitOverheadCommand extends Command
                     'Shop',
                     'Gas',
                     'Wash',
-                    'Repairing'
+                    'Repairing',
+                    'Driving'
                 ]
             ],
             [
@@ -89,6 +79,9 @@ class InitOverheadCommand extends Command
             ],
             [
                 'name' => 'Shop',
+            ],
+            [
+                'name' => 'Shopping',
             ],
             [
                 'name' => 'Gas',
