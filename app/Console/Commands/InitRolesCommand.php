@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 
 use App\Permission;
 use App\Role;
+use Illuminate\Support\Facades\DB;
 
 class InitRolesCommand extends Command
 {
@@ -20,114 +21,121 @@ class InitRolesCommand extends Command
 
     public function handle()
     {
-        
-        $admin = new Role();
-        $admin->name         = 'admin';
-        $admin->display_name = 'Tasca Administrator';
-        $admin->description  = 'User is allowed to manage and edit everything';
-        $admin->save();
+        DB::table('roles')->delete();
+        DB::table('permissions')->delete();
+        $admin = Role::create([
+            'name'         => 'admin',
+            'display_name' => 'Tasca Administrator',
+            'description'  => 'User is allowed to manage and edit everything',
+        ]);
 
-        $laborer = new Role();
-        $laborer->name         = 'laborer';
-        $laborer->display_name = 'Laborer';
-        $laborer->description  = 'Can view own assignments';
-        $laborer->save();
+        $laborer = Role::create([
+            'name' => 'laborer',
+            'display_name' => 'Laborer',
+            'description' => 'Can view own assignments and clock in',
+        ]);
 
-        $scheduler = new Role();
-        $scheduler->name         = 'scheduler';
-        $scheduler->display_name = 'Scheduler';
-        $scheduler->description  = 'Can schedule and view all jobs and clients';
-        $scheduler->save();
+        $scheduler = Role::create([
+            'name' => 'scheduler',
+            'display_name' => 'Scheduler',
+            'description' => 'Can schedule and view all jobs and clients',
+        ]);
 
-        $clientAdmin = new Role();
-        $clientAdmin->name         = 'client-admin';
-        $clientAdmin->display_name = 'Client Administrator';
-        $clientAdmin->description  = 'User is allowed to manage and edit everything for specified client.';
-        $clientAdmin->save();
+        $clientAdmin = Role::create([
+            'name' => 'client-admin',
+            'display_name' => 'Client Administrator',
+            'description' => 'User is allowed to manage and edit everything for specified client.',
+        ]);
 
-        $clientEmployee = new Role();
-        $clientEmployee->name         = 'client-employee';
-        $clientEmployee->display_name = 'Client Employee';
-        $clientEmployee->description  = 'User is an employee of specified client.';
-        $clientEmployee->save();
+        $clientEmployee = Role::create([
+            'name' => 'client-employee',
+            'display_name' => 'Client Employee',
+            'description' => 'User is an employee of specified client.',
+        ]);
 
-        $viewClients = new Permission();
-        $viewClients->name = 'view-clients';
-        $viewClients->display_name = 'View Clients';
-        $viewClients->description = 'View clients and related data.';
-        $viewClients->save();
+        $viewClients = Permission::create([
+            'name' => 'view-clients',
+            'display_name' => 'View Clients',
+            'description' => 'View clients and related data.',
+        ]);
         
-        $editClients = new Permission();
-        $editClients->name = 'edit-clients';
-        $editClients->display_name = 'Edit Clients';
-        $editClients->description = 'Edit and create clients and existing data';
-        $editClients->save();
+        $editClients = Permission::create([
+            'name' => 'edit-clients',
+            'display_name' => 'Edit Clients',
+            'description' => 'Edit and create clients and existing data',
+        ]);
         
-        $editSettings = new Permission();
-        $editSettings->name = 'edit-settings';
-        $editSettings->display_name = 'Edit Settings';
-        $editSettings->description = 'Edit settings';
-        $editSettings->save();
+        $editSettings = Permission::create([
+            'name' => 'edit-settings',
+            'display_name' => 'Edit Settings',
+            'description' => 'Edit settings',
+        ]);
         
-        $clockIn = new Permission();
-        $clockIn->name = 'clock-in';
-        $clockIn->display_name = 'clock-in';
-        $clockIn->description = 'clock-in';
-        $clockIn->save();
+        $clockIn = Permission::create([
+            'name' => 'clock-in',
+            'display_name' => 'clock-in',
+            'description' => 'clock-in',
+        ]);
         
-        $editTimeCards = new Permission();
-        $editTimeCards->name = 'edit-time-cards';
-        $editTimeCards->display_name = 'Edit Time Cards';
-        $editTimeCards->description = 'Edit Time Cards';
-        $editTimeCards->save();
+        $editTimeCards = Permission::create([
+            'name' => 'edit-time-cards',
+            'display_name' => 'Edit Time Cards',
+            'description' => 'Edit Time Cards',
+        ]);
         
-        $viewSchedule = new Permission();
-        $viewSchedule->name = 'view-schedule';
-        $viewSchedule->display_name = 'View Schedule';
-        $viewSchedule->description = 'View schedule and tasks.';
-        $viewSchedule->save();
+        $viewAssignments = Permission::create([
+            'name' => 'view-assignments',
+            'display_name' => 'View Assignments',
+            'description' => 'View assignments and tasks.',
+        ]);
+        
+        $viewSchedule = Permission::create([
+            'name' => 'view-schedule',
+            'display_name' => 'View Schedule',
+            'description' => 'View schedule and tasks.',
+        ]);
         
         
-        $viewClient = new Permission();
-        $viewClient->name = 'view-client';
-        $viewClient->display_name = 'View Client';
-        $viewClient->description = 'View associated client and related data.';
-        $viewClient->save();
+        $viewClient = Permission::create([
+            'name' => 'view-client',
+            'display_name' => 'View Client',
+            'description' => 'View associated client and related data.',
+        ]);
         
-        $editClient = new Permission();
-        $editClient->name = 'edit-client';
-        $editClient->display_name = 'Edit Client';
-        $editClient->description = 'Edit associated client and existing data';
-        $editClient->save();
+        $editClient = Permission::create([
+            'name' => 'edit-client',
+            'display_name' => 'Edit Client',
+            'description' => 'Edit associated client and existing data',
+        ]);
         
-        $viewProjects = new Permission();
-        $viewProjects->name = 'view-projects';
-        $viewProjects->display_name = 'View Projects';
-        $viewProjects->description = 'View projects and related data.';
-        $viewProjects->save();
+        $viewProjects = Permission::create([
+            'name' => 'view-projects',
+            'display_name' => 'View Projects',
+            'description' => 'View projects and related data.',
+        ]);
         
-        $editProjects = new Permission();
-        $editProjects->name = 'edit-projects';
-        $editProjects->display_name = 'Edit Projects';
-        $editProjects->description = 'Edit and create projects, orders, and tasks for associated clients';
-        $editProjects->save();
+        $editProjects = Permission::create([
+            'name' => 'edit-projects',
+            'display_name' => 'Edit Projects',
+            'description' => 'Edit and create projects, orders, and tasks for associated clients',
+        ]);
         
-        $employeeLogin = new Permission();
-        $employeeLogin->name = 'login-employee';
-        $employeeLogin->display_name = 'Employee Login';
-        $employeeLogin->description = 'Login to the employee interface';
-        $employeeLogin->save();
+        $employeeLogin = Permission::create([
+            'name' => 'login-employee',
+            'display_name' => 'Employee Login',
+            'description' => 'Login to the employee interface',
+        ]);
         
-        $clientLogin = new Permission();
-        $clientLogin->name = 'login-client';
-        $clientLogin->display_name = 'Client Login';
-        $clientLogin->description = 'Login to the client interface';
-        $clientLogin->save();
-        
-        $admin->attachPermissions([$employeeLogin, $viewClients, $editClients, $editSettings, $clockIn, $editTimeCards, $viewSchedule]);
-        $laborer->attachPermissions([$employeeLogin, $viewAssignments, $clockIn]);
-        $scheduler->attachPermissions([$employeeLogin, $viewClients, $clockIn, $viewSchedule]);
-        $clientAdmin->attachPermissions([$clientLogin, $viewClient, $editClient, $viewProjects, $editProjects]);
-        $clientEmployee->attachPermissions([$clientLogin, $viewClient, $viewProjects, $editProjects]);
+        $clientLogin = Permission::create([
+            'name' => 'login-client',
+            'display_name' => 'Client Login',
+            'description' => 'Login to the client interface',
+        ]);
+
+        $admin->permissions()->sync([$employeeLogin->id, $viewClients->id, $editClients->id, $editSettings->id, $clockIn->id, $editTimeCards->id, $viewSchedule->id, $viewAssignments->id]);
+        $laborer->permissions()->sync([$employeeLogin->id, $viewAssignments->id, $clockIn->id]);
+        $scheduler->permissions()->sync([$employeeLogin->id, $viewClients->id, $clockIn->id, $viewSchedule->id]);
+        $clientAdmin->permissions()->sync([$clientLogin->id, $viewClient->id, $editClient->id, $viewProjects->id, $editProjects->id]);
+        $clientEmployee->permissions()->sync([$clientLogin->id, $viewClient->id, $viewProjects->id, $editProjects->id]);
     }
 }

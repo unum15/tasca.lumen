@@ -45,12 +45,12 @@ class InitSettingsCommand extends Command
         
         Setting::create([
             'name' => 'help_contact',
-            'value' => 'A contact represent and individual.  Contacts can be associated with multiple clients and with multiple properties for each client.'
+            'value' => 'A contact represents and individual.  Contacts can be associated with multiple clients and with multiple properties for each client.'
         ]);
         
         Setting::create([
             'name' => 'help_property',
-            'value' => 'A property represent a physical location. Whether that location is a work, billing or administrative location.'
+            'value' => 'A property represents a physical location. Whether that location is a work, billing or administrative location.'
         ]);
         
         Setting::create([

@@ -477,6 +477,7 @@ $router->post('/role', ['uses' => 'RoleController@create', 'as' => 'role.create'
 $router->get('/role/{id:[0-9]+}', ['uses' => 'RoleController@read', 'as' => 'role.read']);
 $router->patch('/role/{id:[0-9]+}', ['uses' => 'RoleController@update', 'as' => 'role.update']);
 $router->delete('/role/{id:[0-9]+}', ['uses' => 'RoleController@delete', 'as' => 'role.delete']);
+$router->put('/role/{id:[0-9]+}/permissions', ['uses' => 'RoleController@updatePermissions', 'as' => 'role.update.permissions']);
 
 $router->get('/asset_time_units', ['uses' => 'AssetTimeUnitController@index', 'as' => 'asset_time_unit.index']);
 $router->post('/asset_time_unit', ['uses' => 'AssetTimeUnitController@create', 'as' => 'asset_time_unit.create']);
@@ -513,3 +514,9 @@ $router->post('/asset_improvement', ['uses' => 'AssetImprovementController@creat
 $router->get('/asset_improvement/{id:[0-9]+}', ['uses' => 'AssetImprovementController@read', 'as' => 'asset_improvement.read']);
 $router->patch('/asset_improvement/{id:[0-9]+}', ['uses' => 'AssetImprovementController@update', 'as' => 'asset_improvement.update']);
 $router->delete('/asset_improvement/{id:[0-9]+}', ['uses' => 'AssetImprovementController@delete', 'as' => 'asset_improvement.delete']);
+
+$router->get('/permissions', ['uses' => 'PermissionController@index', 'as' => 'permission.index']);
+$router->post('/permission', ['uses' => 'PermissionController@create', 'as' => 'permission.create']);
+$router->get('/permission/{id:[0-9]+}', ['uses' => 'PermissionController@read', 'as' => 'permission.read']);
+$router->patch('/permission/{id:[0-9]+}', ['uses' => 'PermissionController@update', 'as' => 'permission.update']);
+$router->delete('/permission/{id:[0-9]+}', ['uses' => 'PermissionController@delete', 'as' => 'permission.delete']);

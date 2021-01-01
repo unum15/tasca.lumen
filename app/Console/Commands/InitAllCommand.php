@@ -17,7 +17,7 @@ class InitAllCommand extends Command
 
     public function handle()
     {
-//        $this->call('init:roles');
+        $this->call('init:roles');
         $this->call('init:types');
         $this->call('init:admin');
         $this->call('init:settings');

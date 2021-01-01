@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Role;
+use App\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class RoleController extends Controller
+class PermissionController extends Controller
 {
     public function __construct()
     {
+        Log::debug('PermissionController Constructed');
         $this->middleware('auth');
     }
 
@@ -17,11 +18,10 @@ class RoleController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
-        $items_query = Role::with($includes);
+        $items_query = Permission::with($includes);
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
-        $items_query->orderBy('name');
         $items = $items_query->get();
         return ['data' => $items];
     }
@@ -29,36 +29,28 @@ class RoleController extends Controller
     public function create(Request $request)
     {
         $values = $this->validateModel($request, true);
-        $item = Role::create($values);
-        return response(['data' => $item], 201, ['Location' => route('role.read', ['id' => $item->id])]);
+        $item = Permission::create($values);
+        return response(['data' => $item], 201, ['Location' => route('permission.read', ['id' => $item->id])]);
     }
 
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = Role::with($includes)->find($id);
+        $item = Permission::with($includes)->find($id);
         return ['data' => $item];
     }
 
     public function update($id, Request $request)
     {
-        $item = Role::findOrFail($id);
+        $item = Permission::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
         return ['data' => $item];
     }
 
-    public function updatePermissions($id, Request $request)
-    {
-        $item = Role::findOrFail($id);
-        $values = $request->only('permissions');
-        $item->permissions()->sync($values['permissions']);
-        return ['data' => $item];
-    }
-    
     public function delete(Request $request, $id)
     {
-        $item = Role::findOrFail($id);
+        $item = Permission::findOrFail($id);
         $item->delete();
         return response([], 204);
     }
@@ -71,10 +63,5 @@ class RoleController extends Controller
     
     protected $model_validation_required = [
        'name' => 'required',
-    ];
-    
-    protected $model_includes = [
-       'permissions',
-       'contacts'
     ];
 }

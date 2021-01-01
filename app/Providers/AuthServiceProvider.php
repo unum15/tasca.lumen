@@ -39,5 +39,14 @@ class AuthServiceProvider extends ServiceProvider
                 })->first();
             }
         });
+
+        Gate::define('edit-settings', function (Contact $contact) {
+            $perm_count = 0;
+            $roles = $contact->roles;
+            $roles->map(function ($role){
+                $perm_count += $role->permissions()->where('name','edit-settings')->count;
+            });
+            return $perm_count;
+        });
     }
 }
