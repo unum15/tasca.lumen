@@ -76,6 +76,7 @@ class ClientController extends Controller
         $item = Client::with(
             'contacts',
             'contacts.properties',
+            'contacts.roles',
             'properties',
             'properties.contacts',
             'properties.propertyUnits'

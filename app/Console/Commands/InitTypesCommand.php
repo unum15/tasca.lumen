@@ -7,6 +7,7 @@ use App\ActivityLevel;
 use App\ClientType;
 use App\ContactMethod;
 use App\ContactType;
+use App\Crew;
 use App\EmailType;
 use App\PhoneNumberType;
 use App\PropertyType;
@@ -24,35 +25,14 @@ use App\TaskCategory;
 
 class InitTypesCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'init:types';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Create initial types for Tasca.';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
         $activity_levels = [
@@ -141,6 +121,16 @@ class InitTypesCommand extends Command
                 'sort_order' => $sort++
             ]);
         }
+        $names = [
+            "A"
+        ];
+        $sort = 1;
+        foreach($names as $name){
+            Crew::create([
+                'name' => $name,
+                'sort_order' => $sort++
+            ]);
+        }
 
         $names = [
             'Home',
@@ -215,18 +205,10 @@ class InitTypesCommand extends Command
         }
         
         $names = [
-            "Irrigation",
-            "Landscape",
             "Renovation",
             "Consulting",
-            "Backflow",
             "Lighting",
-            "Planting",
-            "Water Feature",
             "Other Projects",
-            "Weekly Lawn Care",
-            "Landscape Care",
-            "Annual Lawn Care"
         ];
         $sort = 1;
         foreach($names as $name){

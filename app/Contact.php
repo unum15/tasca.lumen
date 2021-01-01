@@ -84,9 +84,24 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
     {
         return $this->hasMany('App\LogIn');
     }
+    public function roles(){
+        return $this->belongsToMany('App\Role');
+    }
     
     public function can($ability, $arguments = []){
-        return true;
+        if(empty($ablity)){
+            return true;
+        }
+        $perm_count = 0;
+        $roles = $this->roles;
+        $roles->map(function ($role){
+            $perm_count += $role->permissions()->where('name',$ability)->count;
+        });
+        return $perm_count;
+    }
+    
+    public function cannot($ability, $arguments = []){
+        return !$this->can($ability,$arguments);
     }
     
     public function getEmailAttribute(){

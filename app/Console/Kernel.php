@@ -12,7 +12,6 @@ use App\Console\Commands\InitRolesCommand;
 use App\Console\Commands\InitSettingsCommand;
 use App\Console\Commands\InitTypesCommand;
 use App\Console\Commands\InitAssetTypesCommand;
-use App\Console\Commands\InitAssetLocationsCommand;
 use App\Console\Commands\InitBackflowTypesCommand;
 use App\Console\Commands\InitOverheadCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
@@ -36,7 +35,6 @@ class Kernel extends ConsoleKernel
         InitSettingsCommand::class,
         InitTypesCommand::class,
         InitAssetTypesCommand::class,
-        InitAssetLocationsCommand::class,
         InitBackflowTypesCommand::class,
         InitOverheadCommand::class,
         CreateTaskDatesCommand::class,

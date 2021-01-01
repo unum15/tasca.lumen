@@ -4,21 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SettingController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     private $validation = [
         'name' => 'string|required|min:1|max:255'
     ];
 
     public function __construct()
     {
-        $this->middleware('auth');
+
     }
 
     public function index()
@@ -29,8 +25,9 @@ class SettingController extends Controller
     
     public function create(Request $request)
     {
-        if(!$request->user()->can('edit-settings')) {
-            return response(['Unauthorized(permissions)'], 401);
+        $this->middleware('auth');
+        if($request->user()->cannot('edit-settings')) {
+            abort(403);
         }
         $this->validate($request, $this->validation);
         $item = ContactMethod::Setting($request->input());
@@ -42,18 +39,12 @@ class SettingController extends Controller
         $item = Setting::findOrFail($id);
         return $item;
     }
-    /*    
-    public function update($id, Request $request){
-        $this->validate($request, $this->validation);
-        $item = Setting::findOrFail($id);
-        $item->update($request->input());
-        return $item;
-    }
-    */
+
     public function update(Request $request)
     {
-        if(!$request->user()->can('edit-settings')) {
-            return response(['Unauthorized(permissions)'], 401);
+        $this->middleware('auth');
+        if($request->user()->cannot('edit-settings')) {
+            abort(403);
         }
         $settings = $request->all();
         foreach($settings as $setting => $value){
@@ -64,6 +55,7 @@ class SettingController extends Controller
     
     public function delete($id)
     {
+        $this->middleware('auth');
         if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }

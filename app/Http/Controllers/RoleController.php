@@ -21,6 +21,7 @@ class RoleController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $items_query->orderBy('name');
         $items = $items_query->get();
         return ['data' => $items];
     }
@@ -47,6 +48,14 @@ class RoleController extends Controller
         return ['data' => $item];
     }
 
+    public function updatePermissions($id, Request $request)
+    {
+        $item = Role::findOrFail($id);
+        $values = $request->only('permissions');
+        $item->permissions()->sync($values['permissions']);
+        return ['data' => $item];
+    }
+    
     public function delete(Request $request, $id)
     {
         $item = Role::findOrFail($id);
@@ -62,5 +71,10 @@ class RoleController extends Controller
     
     protected $model_validation_required = [
        'name' => 'required',
+    ];
+    
+    protected $model_includes = [
+       'permissions',
+       'contacts'
     ];
 }
