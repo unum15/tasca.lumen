@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Client;
 
 class SettingController extends Controller
 {
@@ -20,6 +21,7 @@ class SettingController extends Controller
     public function index()
     {
         $items = Setting::pluck('value', 'name');
+        $items['operating_company'] = Client::find($items['operating_company_client_id']);
         return $items;
     }
     
