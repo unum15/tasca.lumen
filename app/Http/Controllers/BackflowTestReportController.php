@@ -486,6 +486,7 @@ class BackflowTestReportController extends Controller
                     <div class="info"><span class="header">Address:</span> ' . $report->backflow_assembly->property->address1 . ' ' . $report->backflow_assembly->property->address_2 . '&nbsp;&nbsp;&nbsp;<span class="header">City:</span> ' . $report->backflow_assembly->property->city . '&nbsp;&nbsp;&nbsp;<span class="header">State:</span> ' . $report->backflow_assembly->property->state . '&nbsp;&nbsp;&nbsp;<span class="header">Zip:</span> ' . $report->backflow_assembly->property->zip . '</div>
                     <br />
                     <div class="info"><span class="header">Assembly Placement:</span> ' . $report->backflow_assembly->placement . '&nbsp;&nbsp;&nbsp;<span class="header">Use:</span> ' . $report->backflow_assembly->use . '</div>
+                    <div class="info">' . $report->backflow_assembly->notes . '</div>
                     <div class="info"><span class="header">Assembly Style:</span> ' . $report->backflow_assembly->backflow_type->name . '&nbsp;&nbsp;&nbsp;<span class="header">Manufacturer:</span> ' . $report->backflow_assembly->backflow_manufacturer->name . '</div>
                     <div class="info"><span class="header">Size:</span> ' . $report->backflow_assembly->backflow_size->name . '"&nbsp;&nbsp;&nbsp;<span class="header">Model:</span> ' . $report->backflow_assembly->backflow_model->name . '&nbsp;&nbsp;&nbsp;<span class="header">Serial No.:</span> ' . $report->backflow_assembly->serial_number . '</div>
                     <div class="info"><span class="header">Proper installation and use:</span> ' . ($report->backflow_installed_to_code ? 'To Code' : 'Not To Code') . '</div>
@@ -843,7 +844,11 @@ class BackflowTestReportController extends Controller
         $html = $this->html($id, $request);
         $pdf = Pdf::loadHtml($html);
         $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property','backflow_assembly.backflow_water_system')->findOrFail($id);
-        $filename = $report->backflow_assembly->property->client->name.'_'.$report->backflow_assembly->property->name.'_'.$report->backflow_assembly->backflow_water_system->name.'_'.$report->report_date;
+        $filename = $report->backflow_assembly->property->client->name . '_';
+        $filename .= $report->backflow_assembly->property->abbreviation ? $report->backflow_assembly->property->abbreviation : $report->backflow_assembly->property->name;
+        $filename .= '_';
+        $filename .= $report->backflow_assembly->backflow_water_system->abbreviation ? $report->backflow_assembly->backflow_water_system->abbreviation : $report->backflow_assembly->backflow_water_system->name;
+        $filename .= '_'.$report->report_date;
         return $pdf->stream($filename . '.pdf');
     }
     
