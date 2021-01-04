@@ -38,6 +38,7 @@ class ClientsTableSeeder extends Seeder
                 'updater_id' => $admin->id
             ]);
             if($x==0){
+                Setting::where(['name' => 'operating_company_client_id'])->delete();
                 Setting::create(['name' => 'operating_company_client_id', 'value' => $client->id]);
             }
         }
