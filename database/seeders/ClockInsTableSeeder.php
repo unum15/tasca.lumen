@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\ClockIn;
 use App\TaskDate;
@@ -7,6 +9,8 @@ use App\Contact;
 use App\OverheadAssignment;
 use App\OverheadCategory;
 use App\Setting;
+use Illuminate\Support\Facades\DB;
+Use Faker\Factory;
 
 class ClockInsTableSeeder extends Seeder
 {
@@ -21,7 +25,7 @@ class ClockInsTableSeeder extends Seeder
                 }
             )->pluck('id');
         $assignments = OverheadAssignment::all();
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         foreach($task_dates as $task_date){
             $clock_in = $faker->dateTimeThisMonth();
             $clock_out = $faker->dateTimeInInterval($clock_in, '2 hours');
