@@ -4,14 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Property;
 use Illuminate\Http\Request;
+use Log;
 
 class PropertyController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     private $validation = [
         'name' => 'string|min:1|max:255',
         'client_id' => 'integer|exists:clients,id',
@@ -25,7 +21,8 @@ class PropertyController extends Controller
         'work_property' => 'boolean',
         'address_type_id' => 'integer|exists:address_types,id', 
         'activity_level_id' => 'integer|exists:activity_levels,id',
-        'property_type_id' => 'integer|exists:property_types,id'
+        'property_type_id' => 'integer|exists:property_types,id',
+        'abbreviation' => 'nullable|string|max:255',
     ];
 
     public function __construct()
