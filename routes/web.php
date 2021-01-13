@@ -106,12 +106,6 @@ $router->get('/order_type/{id:[0-9]+}', 'OrderTypeController@read');
 $router->patch('/order_type/{id:[0-9]+}', 'OrderTypeController@update');
 $router->delete('/order_type/{id:[0-9]+}', 'OrderTypeController@delete');
 
-$router->get('/task_actions', 'TaskActionController@index');
-$router->post('/task_action', 'TaskActionController@create');
-$router->get('/task_action/{id:[0-9]+}', 'TaskActionController@read');
-$router->patch('/task_action/{id:[0-9]+}', 'TaskActionController@update');
-$router->delete('/task_action/{id:[0-9]+}', 'TaskActionController@delete');
-
 $router->get('/task_statuses', 'TaskStatusController@index');
 $router->post('/task_status', 'TaskStatusController@create');
 $router->get('/task_status/{id:[0-9]+}', 'TaskStatusController@read');
@@ -123,18 +117,6 @@ $router->post('/appointment_status', 'AppointmentStatusController@create');
 $router->get('/appointment_status/{id:[0-9]+}', 'AppointmentStatusController@read');
 $router->patch('/appointment_status/{id:[0-9]+}', 'AppointmentStatusController@update');
 $router->delete('/appointment_status/{id:[0-9]+}', 'AppointmentStatusController@delete');
-
-$router->get('/task_categories', 'TaskCategoryController@index');
-$router->post('/task_category', 'TaskCategoryController@create');
-$router->get('/task_category/{id:[0-9]+}', 'TaskCategoryController@read');
-$router->patch('/task_category/{id:[0-9]+}', 'TaskCategoryController@update');
-$router->delete('/task_category/{id:[0-9]+}', 'TaskCategoryController@delete');
-
-$router->get('/task_types', 'TaskTypeController@index');
-$router->post('/task_type', 'TaskTypeController@create');
-$router->get('/task_type/{id:[0-9]+}', 'TaskTypeController@read');
-$router->patch('/task_type/{id:[0-9]+}', 'TaskTypeController@update');
-$router->delete('/task_type/{id:[0-9]+}', 'TaskTypeController@delete');
 
 $router->get('/work_types', 'WorkTypeController@index');
 $router->post('/work_type', 'WorkTypeController@create');
@@ -193,13 +175,6 @@ $router->post('/task', 'TaskController@create');
 $router->get('/task/{id:[0-9]+}', 'TaskController@read');
 $router->patch('/task/{id:[0-9]+}', 'TaskController@update');
 $router->delete('/task/{id:[0-9]+}', 'TaskController@delete');
-
-$router->get('/task_dates', 'TaskDateController@index');
-$router->get('/schedule', 'TaskDateController@schedule');
-$router->post('/task_date', 'TaskDateController@create');
-$router->get('/task_date/{id:[0-9]+}', 'TaskDateController@read');
-$router->patch('/task_date/{id:[0-9]+}', 'TaskDateController@update');
-$router->delete('/task_date/{id:[0-9]+}', 'TaskDateController@delete');
 
 $router->get('/settings', 'SettingController@index');
 $router->patch('/settings', 'SettingController@update');
@@ -520,3 +495,28 @@ $router->post('/permission', ['uses' => 'PermissionController@create', 'as' => '
 $router->get('/permission/{id:[0-9]+}', ['uses' => 'PermissionController@read', 'as' => 'permission.read']);
 $router->patch('/permission/{id:[0-9]+}', ['uses' => 'PermissionController@update', 'as' => 'permission.update']);
 $router->delete('/permission/{id:[0-9]+}', ['uses' => 'PermissionController@delete', 'as' => 'permission.delete']);
+
+$router->get('/appointments', ['uses' => 'AppointmentController@index', 'as' => 'appointment.index']);
+$router->post('/appointment', ['uses' => 'AppointmentController@create', 'as' => 'appointment.create']);
+$router->get('/appointment/{id:[0-9]+}', ['uses' => 'AppointmentController@read', 'as' => 'appointment.read']);
+$router->patch('/appointment/{id:[0-9]+}', ['uses' => 'AppointmentController@update', 'as' => 'appointment.update']);
+$router->delete('/appointment/{id:[0-9]+}', ['uses' => 'AppointmentController@delete', 'as' => 'appointment.delete']);
+$router->get('/schedule', 'AppointmentController@schedule');
+
+$router->get('/labor_types', ['uses' => 'LaborTypeController@index', 'as' => 'labor_type.index']);
+$router->post('/labor_type', ['uses' => 'LaborTypeController@create', 'as' => 'labor_type.create']);
+$router->get('/labor_type/{id:[0-9]+}', ['uses' => 'LaborTypeController@read', 'as' => 'labor_type.read']);
+$router->patch('/labor_type/{id:[0-9]+}', ['uses' => 'LaborTypeController@update', 'as' => 'labor_type.update']);
+$router->delete('/labor_type/{id:[0-9]+}', ['uses' => 'LaborTypeController@delete', 'as' => 'labor_type.delete']);
+
+$router->get('/labor_activities', ['uses' => 'LaborActivityController@index', 'as' => 'labor_activity.index']);
+$router->post('/labor_activity', ['uses' => 'LaborActivityController@create', 'as' => 'labor_activity.create']);
+$router->get('/labor_activity/{id:[0-9]+}', ['uses' => 'LaborActivityController@read', 'as' => 'labor_activity.read']);
+$router->patch('/labor_activity/{id:[0-9]+}', ['uses' => 'LaborActivityController@update', 'as' => 'labor_activity.update']);
+$router->delete('/labor_activity/{id:[0-9]+}', ['uses' => 'LaborActivityController@delete', 'as' => 'labor_activity.delete']);
+
+$router->get('/labor_assignments', ['uses' => 'LaborAssignmentController@index', 'as' => 'labor_assignment.index']);
+$router->post('/labor_assignment', ['uses' => 'LaborAssignmentController@create', 'as' => 'labor_assignment.create']);
+$router->get('/labor_assignment/{id:[0-9]+}', ['uses' => 'LaborAssignmentController@read', 'as' => 'labor_assignment.read']);
+$router->patch('/labor_assignment/{id:[0-9]+}', ['uses' => 'LaborAssignmentController@update', 'as' => 'labor_assignment.update']);
+$router->delete('/labor_assignment/{id:[0-9]+}', ['uses' => 'LaborAssignmentController@delete', 'as' => 'labor_assignment.delete']);

@@ -22,7 +22,7 @@ class OrderController extends Controller
         'date' => 'date',
         'notes' => 'nullable|string|max:255',
         'approval_date' => 'nullable|date',
-        'completion_date' => 'nullable|date',
+        'close_date' => 'nullable|date',
         'expiration_date' => 'nullable|date',
         'order_category_id' => 'nullable|integer:exists:order_categories,id',
         'order_priority_id' => 'nullable|integer:exists:order_priorities,id',
@@ -49,7 +49,8 @@ class OrderController extends Controller
         'notification_lead' => 'nullable|max:255',
         'renewal_message' => 'nullable|string|max:255',
         'recurring_interval' => 'nullable|string|max:255',
-        'renewal_interval' => 'nullable|string|max:255'
+        'renewal_interval' => 'nullable|string|max:255',
+        'work_days' => 'nullable|string|max:255'
     ];
 
     public function __construct()
@@ -61,7 +62,7 @@ class OrderController extends Controller
     {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties', 'tasks', 'tasks.dates', 'tasks.dates.clockIns')
+        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties', 'tasks', 'tasks.appointments', 'tasks.appointments.clockIns')
         ->orderBy('date');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
@@ -69,7 +70,7 @@ class OrderController extends Controller
         $completed = $request->input('completed');
         if($completed == 'false') {
             
-            $items_query->whereNull('completion_date');
+            $items_query->whereNull('close_date');
         }
         
         $expired = $request->input('expired');
@@ -89,17 +90,17 @@ class OrderController extends Controller
                         ->where(function ($q){
                             $date = date_create();
                             $date->modify('-14 days');
-                            $q->where('completion_date', '>=', $date->format('Y-m-d'))
-                            ->orWhereNull('completion_date');
+                            $q->where('close_date', '>=', $date->format('Y-m-d'))
+                            ->orWhereNull('close_date');
                         });
             switch ($status) {
                 case 'Completed' :
                     $items_query
                     ->whereDoesntHave('tasks', function($q){
-                        $q->whereNull('completion_date');
+                        $q->whereNull('close_date');
                     })
                     ->whereHas('tasks', function($q){
-                        $q->whereNotNull('completion_date');
+                        $q->whereNotNull('close_date');
                         $q->where(function ($q){
                             $date = date_create();
                             $date->modify('-14 days');
@@ -110,10 +111,10 @@ class OrderController extends Controller
                     break;
                 case 'Non-Completed' :
                     $items_query->whereHas('tasks', function($query){
-                        $query->whereNull('completion_date');
+                        $query->whereNull('close_date');
                     })
                     ->whereHas('tasks', function($q){
-                        $q->whereNotNull('completion_date');
+                        $q->whereNotNull('close_date');
                     });
                     break;
             }
@@ -131,7 +132,7 @@ class OrderController extends Controller
         $values = $request->input();
         $values['approval_date'] = isset($values['approval_date']) && $values['approval_date'] != "" ? $values['approval_date'] : null;
         $values['start_date'] = isset($values['start_date']) && $values['start_date'] != "" ? $values['start_date'] : null;
-        $values['completion_date'] = isset($values['completion_date']) && $values['completion_date'] != "" ? $values['completion_date'] : null;
+        $values['close_date'] = isset($values['close_date']) && $values['close_date'] != "" ? $values['close_date'] : null;
         $values['expiration_date'] = isset($values['expiration_date']) && $values['expiration_date'] != "" ? $values['expiration_date'] : null;
         $values['renewal_date'] = isset($values['renewal_date']) && $values['renewal_date'] != "" ? $values['renewal_date'] : null;
         $values['creator_id'] = $request->user()->id;
@@ -185,10 +186,11 @@ class OrderController extends Controller
         $values = $request->input();
         $values['approval_date'] = isset($values['approval_date']) && $values['approval_date'] != "" ? $values['approval_date'] : null;
         $values['start_date'] = isset($values['start_date']) && $values['start_date'] != "" ? $values['start_date'] : null;
-        $values['completion_date'] = isset($values['completion_date']) && $values['completion_date'] != "" ? $values['completion_date'] : null;
+        $values['close_date'] = isset($values['close_date']) && $values['close_date'] != "" ? $values['close_date'] : null;
         $values['expiration_date'] = isset($values['expiration_date']) && $values['expiration_date'] != "" ? $values['expiration_date'] : null;
         $values['renewal_date'] = isset($values['renewal_date']) && $values['renewal_date'] != "" ? $values['renewal_date'] : null;
         $values['updater_id'] = $request->user()->id;
+        Log::debug(print_r($item,true));
         if(($item->order_status_type_id != 1) || ($values['order_status_type_id'] == 1)){
             $item->update($values);
             $this->syncProperties($item, $request);
@@ -281,7 +283,7 @@ class OrderController extends Controller
         $new_values['recurring'] = false;
         $new_values['renewable'] = false;
         unset($new_values['id']);
-        unset($new_values['completion_date']);
+        unset($new_values['close_date']);
         $items = [];
         $properties = $request->only('properties');
         if(isset($properties['properties'])){
@@ -333,7 +335,7 @@ class OrderController extends Controller
             array_push($items, Order::findOrFail($original_order->id));
         }
         else{
-            $original_order->update(['completion_date' => date('Y-m-d')]);
+            $original_order->update(['close_date' => date('Y-m-d')]);
             array_push($items, Order::findOrFail($original_order->id));
         }
         return $items;
@@ -359,14 +361,14 @@ class OrderController extends Controller
     {
         $items_query = Order::with('project', 'project.contact', 'project.client', 'properties', 'tasks', 'tasks.dates', 'tasks.dates.clockIns')
         ->orderBy('date');
-        $items_query->whereNull('completion_date')
+        $items_query->whereNull('close_date')
         ->where(function ($query) {
             $date = date_create();
             $query->whereNull('expiration_date')
-            ->orWhere('completion_date', '>=', $date->format('Y-m-d'));
+            ->orWhere('close_date', '>=', $date->format('Y-m-d'));
         })
         ->whereDoesntHave('tasks', function($q){
-            $q->whereNull('completion_date');
+            $q->whereNull('close_date');
         })
         ->has('tasks')
         ;

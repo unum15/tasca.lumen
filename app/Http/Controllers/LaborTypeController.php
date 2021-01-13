@@ -2,32 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\OverheadAssignment;
+use App\LaborType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
-class OverheadAssignmentController extends Controller
+class LaborTypeController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth');
+        Log::debug('LaborTypeController Constructed');
+        $this->middleware('auth');
     }
 
     public function index(Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
-        $items_query = OverheadAssignment::whereNull('parent_id')
-            ->with('overhead_categories')
-            ->with('children')
-            ->with('children.overhead_categories')
-            ->with('children.children')
-            ->with('children.children.children')
-            ->with('children.children.children.children');
+        $items_query = LaborType::with($includes);
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
-        $items_query->orderBy('sort_order');
-        $items_query->orderBy('name');
         $items = $items_query->get();
         return ['data' => $items];
     }
@@ -35,36 +29,28 @@ class OverheadAssignmentController extends Controller
     public function create(Request $request)
     {
         $values = $this->validateModel($request, true);
-        $item = OverheadAssignment::create($values);
-        return response(['data' => $item], 201, ['Location' => route('overhead_assignment.read', ['id' => $item->id])]);
+        $item = LaborType::create($values);
+        return response(['data' => $item], 201, ['Location' => route('labor_type.read', ['id' => $item->id])]);
     }
 
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = OverheadAssignment::with($includes)->find($id);
+        $item = LaborType::with($includes)->find($id);
         return ['data' => $item];
     }
 
     public function update($id, Request $request)
     {
-        $item = OverheadAssignment::findOrFail($id);
+        $item = LaborType::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
-        return ['data' => $item];
-    }
-    
-    public function categories($id, Request $request)
-    {
-        $item = OverheadAssignment::findOrFail($id);
-        $values = $request->only('categories');
-        $item->overhead_categories()->sync($values['categories']);
         return ['data' => $item];
     }
 
     public function delete(Request $request, $id)
     {
-        $item = OverheadAssignment::findOrFail($id);
+        $item = LaborType::findOrFail($id);
         $item->delete();
         return response([], 204);
     }
@@ -73,7 +59,6 @@ class OverheadAssignmentController extends Controller
        'name' => 'string|max:1020',
        'notes' => 'string|max:1073741824|nullable',
        'sort_order' => 'integer|nullable',
-       'parent_id' => 'integer|nullable',
     ];
     
     protected $model_validation_required = [

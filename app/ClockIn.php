@@ -3,14 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ClockIn extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'task_date_id',
+        'appointment_id',
         'contact_id',
-        'overhead_assignment_id',
-        'overhead_category_id',
+        'labor_activity_id',
         'clock_in',
         'clock_out',
         'notes',
@@ -18,23 +20,18 @@ class ClockIn extends Model
         'updater_id'
     ];
     
-    function taskDate()
+    function appointment()
     {
-        return $this->belongsTo('App\TaskDate');
+        return $this->belongsTo('App\Appointment');
     }
     
     function contact()
     {
         return $this->belongsTo('App\Contact');
     }
-    
-    function overheadAssignment()
+     
+    function labor_activity()
     {
-        return $this->belongsTo('App\OverheadAssignment');
-    }
-    
-    function overheadCategory()
-    {
-        return $this->belongsTo('App\OverheadCategory');
+        return $this->belongsTo('App\LaborActivity');
     }
 }

@@ -3,20 +3,24 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Task extends Model
 {
+    use HasFactory;
+
     protected $fillable =  [
       'order_id',
       'name',
       'description',
-      'task_type_id',
+      'labor_type_id',
       'task_status_id',
       'task_action_id',
-      'task_category_id',
+      'labor_assignment_id',
       'completion_date',
       'job_hours',
       'crew_hours',
+      'task_hours',
       'crew_id',
       'notes',
       'group',
@@ -25,7 +29,8 @@ class Task extends Model
       'invoiced_date',
       'hold_date',
       'creator_id',
-      'updater_id'
+      'updater_id',
+      'hide'
     ];
   
     public function order()
@@ -33,29 +38,29 @@ class Task extends Model
         return $this->belongsTo('App\Order');
     }
   
-    public function taskAction()
+    public function task_action()
     {
         return $this->belongsTo('App\TaskAction');
     }
   
-    public function taskCategory()
+    public function labor_assignment()
     {
-        return $this->belongsTo('App\TaskCategory');
+        return $this->belongsTo('App\LaborAssignment');
     }
-  
-    public function taskStatus()
+    
+    public function task_status()
     {
         return $this->belongsTo('App\TaskStatus');
     }
   
-    public function taskType()
+    public function labor_type()
     {
-        return $this->belongsTo('App\TaskType');
+        return $this->belongsTo('App\LaborType');
     }
   
-    public function dates()
+    public function appointments()
     {
-        return $this->hasMany('App\TaskDate');
+        return $this->hasMany('App\Appointment');
     }
   
     public function crew()

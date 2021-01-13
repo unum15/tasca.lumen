@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\TaskDate;
+use App\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class TaskDateController extends Controller
+class AppointmentController extends Controller
 {
     
     private $validation = [
@@ -16,6 +16,7 @@ class TaskDateController extends Controller
         'date' => 'nullable|date',
         'sort_order' => 'nullable|string|max:255',
         'time' => 'nullable|string|max:255',
+        'hours' => 'nullable|string|max:255',
         'notes' => 'nullable|string|max:255',
         'appointment_status_id' => 'nullable|integer:exists:appointment_statuses,id'        
     ];
@@ -29,16 +30,17 @@ class TaskDateController extends Controller
     {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = TaskDate::with(
+        $items_query = Appointment::with(
             'task',
             'task.order',
             'task.order.project',
             'task.order.properties',
             'task.order.project.contact',
             'task.order.project.client',
-            'task.TaskCategory',
-            'task.TaskStatus',
-            'task.TaskAction',
+            'task.labor_assignment',
+            'task.labor_type',
+            'task.task_status',
+            'task.task_action',
             'task.order.orderPriority',
             'task.order.orderCategory'
         )
@@ -50,7 +52,7 @@ class TaskDateController extends Controller
         if((!empty($active_only)) && ($active_only['active_only'] == 'true')) {
             $items_query->whereHas(
                 'task.order', function ($q) {
-                    $q->whereNull('completion_date');
+                    $q->whereNull('close_date');
                     $q->whereNull('expiration_date');
                     $q->whereNotNull('approval_date');
                 }
@@ -84,21 +86,21 @@ class TaskDateController extends Controller
         $date = $request->input('date', date('Y-m-d'));
         $crew_id = $request->input('crew_id');
         $items_query = DB::table('tasks')
-            ->leftJoin('task_dates', 'tasks.id', '=', 'task_dates.task_id')
+            ->leftJoin('appointments', 'tasks.id', '=', 'appointments.task_id')
             ->leftJoin('orders', 'tasks.order_id', '=', 'orders.id')
             ->leftJoin('projects', 'orders.project_id', '=', 'projects.id')
             ->leftJoin('order_property', 'orders.id', '=', 'order_property.order_id')
             ->leftJoin('properties', 'order_property.property_id', '=', 'properties.id')
             ->leftJoin('contacts', 'projects.contact_id', '=', 'contacts.id')
             ->leftJoin('clients', 'projects.client_id', '=', 'clients.id')
-            ->leftJoin('appointment_statuses', 'task_dates.appointment_status_id', '=', 'appointment_statuses.id')
+            ->leftJoin('appointment_statuses', 'appointments.appointment_status_id', '=', 'appointment_statuses.id')
             ->leftJoin('order_priorities', 'orders.order_priority_id', '=', 'order_priorities.id')
             ->leftJoin('task_categories', 'tasks.task_category_id', '=', 'task_categories.id')
             ->leftJoin('task_statuses', 'tasks.task_status_id', '=', 'task_statuses.id')
             ->leftJoin('task_actions', 'tasks.task_action_id', '=', 'task_actions.id')
             ->leftJoin('crews', 'tasks.crew_id', '=', 'crews.id')
             ->select(
-                'task_dates.id',
+                'appointments.id',
                 DB::raw('row_number() OVER () AS row'),
                 'tasks.id AS task_id',
                 'orders.start_date',
@@ -109,7 +111,7 @@ class TaskDateController extends Controller
                 'orders.date AS order_date',
                 'orders.approval_date',
                 'orders.expiration_date',
-                'orders.completion_date AS order_completion_date',
+                'orders.close_date AS order_close_date',
                 'orders.project_id',
                 'projects.client_id',
                 'tasks.order_id',
@@ -127,11 +129,11 @@ class TaskDateController extends Controller
                 'task_category_id',
                 'task_status_id',
                 'task_action_id',
-                'task_dates.day',
-                'task_dates.date',
-                'task_dates.sort_order',
-                'task_dates.time',
-                'task_dates.notes',
+                'appointments.day',
+                'appointments.date',
+                'appointments.sort_order',
+                'appointments.time',
+                'appointments.notes',
                 'tasks.completion_date',
                 'tasks.closed_date',
                 'tasks.billed_date',
@@ -161,7 +163,7 @@ class TaskDateController extends Controller
             $current_view_date = $date_obj->modify('+' . $current_view_days . 'days')->format('Y-m-d');
             switch($status){
                 case 'service':
-                    $items_query->whereNull('orders.completion_date')
+                    $items_query->whereNull('orders.close_date')
                     ->where(
                         function ($q) {
                             $q->whereNull('orders.expiration_date')
@@ -170,8 +172,8 @@ class TaskDateController extends Controller
                     )
                     ->where(
                         function ($q) use ($date){
-                            $q->where('task_dates.date', '>=', $date)
-                            ->orWhereNull('task_dates.date');
+                            $q->where('appointments.date', '>=', $date)
+                            ->orWhereNull('appointments.date');
                         }
                     )
                     ->where(
@@ -192,7 +194,7 @@ class TaskDateController extends Controller
 
                 case 'current':
                     $items_query->whereNotNull('orders.start_date')
-                    ->whereNull('orders.completion_date')
+                    ->whereNull('orders.close_date')
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
                     ->where(
@@ -204,13 +206,13 @@ class TaskDateController extends Controller
                     $items_query->where(
                         function ($q) use ($current_view_date) {
                             $q->where('orders.start_date', '<=', $current_view_date)
-                            ->orWhereNotNull('task_dates.date');
+                            ->orWhereNotNull('appointments.date');
                         }
                     );
                     $items_query->where(
                         function ($q) use ($date) {
-                                $q->where('task_dates.date', '>=', $date)
-                                ->orWhereNull('task_dates.date');
+                                $q->where('appointments.date', '>=', $date)
+                                ->orWhereNull('appointments.date');
                         }
                     );
                     break;
@@ -227,8 +229,8 @@ class TaskDateController extends Controller
                     )
                     ->where(
                         function ($q) use ($date){
-                            $q->where('task_dates.date', '>=', $date)
-                            ->orWhereNull('task_dates.date');
+                            $q->where('appointments.date', '>=', $date)
+                            ->orWhereNull('appointments.date');
                         }
                     );
                     $items_query->orderBy('orders.start_date');
@@ -246,8 +248,8 @@ class TaskDateController extends Controller
                     )
                     ->where(
                         function ($q) use ($date){
-                            $q->where('task_dates.date', '>=', $date)
-                            ->orWhereNull('task_dates.date');
+                            $q->where('appointments.date', '>=', $date)
+                            ->orWhereNull('appointments.date');
                         }
                     );
                     
@@ -255,7 +257,7 @@ class TaskDateController extends Controller
                     $items_query->orderBy('orders.start_date');
                     break;
                 case 'today':
-                    $items_query->where('task_dates.date', '=', $date);
+                    $items_query->where('appointments.date', '=', $date);
                     break;
                 case 'all' :
                     $items_query->whereNotNull('orders.start_date')
@@ -270,8 +272,8 @@ class TaskDateController extends Controller
                     )
                     ->where(
                         function ($q) use ($date){
-                            $q->where('task_dates.date', '>=', $date)
-                            ->orWhereNull('task_dates.date');
+                            $q->where('appointments.date', '>=', $date)
+                            ->orWhereNull('appointments.date');
                         }
                     );
                     $items_query->orderBy('orders.start_date');
@@ -279,7 +281,7 @@ class TaskDateController extends Controller
             }
             
         }
-        $items_query->orderBy('task_dates.id');
+        $items_query->orderBy('appointments.id');
         return $items_query->get();
     }
     
@@ -295,7 +297,7 @@ class TaskDateController extends Controller
             }
         }
         if(!$has_value) {
-            return;//quitely return
+            return;
         }
         $dates = ['date', 'completion_date', 'billed_date'];
         foreach($dates as $date){
@@ -305,14 +307,14 @@ class TaskDateController extends Controller
         }
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
-        $item = TaskDate::create($values);
-        $item = TaskDate::findOrFail($item->id);
-        return $item;
+        $item = Appointment::create($values);
+
+        return response(['data' => $item], 201, ['Location' => route('appointment.read', ['id' => $item->id])]);
     }
     
     public function read($id)
     {
-        $item = TaskDate::with(
+        $item = Appointment::with(
             'task',
             'task.order',
             'task.order.project',
@@ -329,9 +331,9 @@ class TaskDateController extends Controller
             'task.order.properties.contacts',
             'task.order.properties.contacts.phoneNumbers',
             'task.order.properties.contacts.phoneNumbers.phoneNumberType',
-            'task.TaskCategory',
-            'task.TaskStatus',
-            'task.TaskAction',
+            'task.labor_assignment',
+            'task.task_status',
+            'task.task_action',
             'task.order.orderPriority',
             'task.order.orderCategory'
         )
@@ -342,7 +344,7 @@ class TaskDateController extends Controller
     public function update($id, Request $request)
     {
         $this->validate($request, $this->validation);     
-        $item = TaskDate::findOrFail($id);
+        $item = Appointment::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
         //should be a better way to set blank to null
         $dates = ['date', 'completion_date', 'billed_date', 'time'];
@@ -359,7 +361,7 @@ class TaskDateController extends Controller
     
     public function delete($id)
     {
-        $item = TaskDate::findOrFail($id);
+        $item = Appointment::findOrFail($id);
         $item->delete();
         return response([], 204);
     }

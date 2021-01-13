@@ -1,17 +1,14 @@
 <?php
 
 use App\ClockIn;
-use Laravel\Lumen\Testing\WithoutMiddleware;
 
 class ClockInControllerTest extends TestCase
 {
 
-    use WithoutMiddleware;
-   
     public function testIndex()
     {
-        $items = factory('App\ClockIn', 2)->create();
-        $response = $this->get('/clock_ins');
+        $items = ClockIn::factory(2)->create();
+        $response = $this->actingAs($this->getAdminUser())->get('/clock_ins');
         $response->seeStatusCode(200);
         $response->seeJson($items[0]->toArray());
         $response->seeJson($items[1]->toArray());
@@ -19,19 +16,18 @@ class ClockInControllerTest extends TestCase
     
     public function testCreate()
     {
-        $item = factory('App\ClockIn')->make();
-        unset($item['creator_id']);
-        unset($item['updater_id']);
-        $response = $this->actingAs($this->getAdminUser())->post('/clock_in', $item->toArray());
-        $response->seeStatusCode(200);
+        $user = $this->getAdminUser();
+        $item = ClockIn::factory(['creator_id'=>$user->id,'updater_id'=>$user->id])->make();
+        $response = $this->actingAs($user)->post('/clock_in', $item->toArray());
+        $response->seeStatusCode(201);
         $response->seeJson($item->toArray());
         $this->seeInDatabase('clock_ins', $item->toArray());
     }
     
     public function testRead()
     {
-        $item = factory('App\ClockIn')->create();
-        $response = $this->get('/clock_in/' . $item->id);
+        $item = ClockIn::factory()->create();
+        $response = $this->actingAs($this->getAdminUser())->get('/clock_in/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
         $this->seeInDatabase('clock_ins', $item->toArray());
@@ -39,7 +35,7 @@ class ClockInControllerTest extends TestCase
     
     public function testUpdate()
     {
-        $item = factory('App\ClockIn')->create();
+        $item = ClockIn::factory()->create();
         $update = ['notes' => 'test'];
         $response = $this->actingAs($this->getAdminUser())->patch('/clock_in/' . $item->id, $update);
         $response->seeStatusCode(200);
@@ -51,8 +47,8 @@ class ClockInControllerTest extends TestCase
     
     public function testDelete()
     {
-        $item = factory('App\ClockIn')->create();
-        $response = $this->delete('/clock_in/' . $item->id);
+        $item = ClockIn::factory()->create();
+        $response = $this->actingAs($this->getAdminUser())->delete('/clock_in/' . $item->id);
         $response->seeStatusCode(204);
         $this->notSeeInDatabase('clock_ins', $item->toArray());
     }

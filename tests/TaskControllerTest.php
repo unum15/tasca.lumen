@@ -3,114 +3,54 @@
 use App\Task;
 
 class TaskControllerTest extends TestCase
-{    
+{
+
     public function testIndex()
     {
-        $item = factory('App\Task')->create();
+        $items = Task::factory(2)->create();
         $response = $this->actingAs($this->getAdminUser())->get('/tasks');
         $response->seeStatusCode(200);
-        $response->seeJson($item->toArray());
-    }
+        $response->seeJson($items[0]->toArray());
+        $response->seeJson($items[1]->toArray());
+    }    
     
     public function testCreate()
     {
-        $item = [
-            'name' => 'Test Task'
-        ];
-        $response = $this->actingAs($this->getAdminUser())->post('/task', $item);
-        $response->seeStatusCode(200);
-        $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
-        $dbitem = Task::find($response_array->id);
-        $response->seeJson($dbitem->toArray());
-    }
-    
-    
-    public function testCreateFull()
-    {
-        $item = [
-            'name' => 'Test Task',
-            'notes' => 'foo'        ];
-        $response = $this->actingAs($this->getAdminUser())->post('/task', $item);
-        $response->seeStatusCode(200);
-        $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
-        $dbitem = Task::find($response_array->id);
-        $response->seeJson($dbitem->toArray());
-    }    
-    
-    public function testCreateBad()
-    {
-        $item = [
-            'name' => null,
-        ];
-        $response = $this->actingAs($this->getAdminUser())->post('/task', $item);
-        $response->seeStatusCode(422);                
-        $response->seeJson(["name" => ["The name field is required."]]);
-    }
-    
-    public function testCreateInjection()
-    {
-        $item = [
-            'name' => "a'; DROP TABLE tasks CASCADE; --"
-        ];
-        $response = $this->actingAs($this->getAdminUser())->post('/task', $item);
-        $response->seeStatusCode(200);
-        $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
-        $dbitem = Task::find($response_array->id);
-        $response->seeJson($dbitem->toArray());
-        $dbitem->delete();
-    }
-    
-    public function testCreateLong()
-    {
-        $item = [
-            'name' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-        ];
-        $response = $this->actingAs($this->getAdminUser())->post('/task', $item);
-        $response->seeStatusCode(422);                
-        $response->seeJson(['name' => ["The name may not be greater than 255 characters."]]);
+        $user = $this->getAdminUser();
+        $item = Task::factory(['creator_id'=>$user->id,'updater_id'=>$user->id])->make();
+        $response = $this->actingAs($user)->post('/task', $item->toArray());
+        $response->seeStatusCode(201);
+        $response->seeJson($item->toArray());
+        $this->seeInDatabase('tasks', $item->toArray());
     }
     
     public function testRead()
     {
-        $item = factory('App\Task')->create();
+        $item = Task::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/task/' . $item->id);
         $response->seeStatusCode(200);
-        $response->seeJson($item->toArray());        
-        $dbitem = Task::find($item->id);
-        $response->seeJson($dbitem->toArray());
-        $dbitem->delete();
-    }    
-    
-    public function testReadBad()
-    {
-        $response = $this->actingAs($this->getAdminUser())->get('/task/a');
-        $response->seeStatusCode(404);        
-    }    
+        $response->seeJson($item->toArray());
+        $this->seeInDatabase('tasks', $item->toArray());
+    }
     
     public function testUpdate()
     {
-        $item = factory('App\Task')->create();
-        $patch = ['name' => 'Test Task 2'];
-        $response = $this->actingAs($this->getAdminUser())->patch('/task/' . $item->id, $patch);
+        $item = Task::factory()->create();
+        $update = ['group' => 'test'];
+        $response = $this->actingAs($this->getAdminUser())->patch('/task/' . $item->id, $update);
         $response->seeStatusCode(200);
-        $response->seeJson($patch);
-        $dbitem = Task::find($item->id);
-        $response->seeJsonEquals($dbitem->toArray());
+        $item = $item->find($item->id);
+        $updated_array = array_merge($item->toArray(), $update);
+        $response->seeJson($updated_array);
+        $this->seeInDatabase('tasks', $updated_array);
     }
     
     public function testDelete()
     {
-        $item = factory('App\Task')->create();
+        $item = Task::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/task/' . $item->id);
         $response->seeStatusCode(204);
-    }
-    
-    public function testAuth()
-    {
-        $response = $this->get('/tasks');
-        $response->seeStatusCode(401);
+        $this->notSeeInDatabase('tasks', $item->toArray());
     }
 }
+
