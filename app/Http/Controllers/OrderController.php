@@ -161,14 +161,14 @@ class OrderController extends Controller
             'properties.contacts.phoneNumbers.phoneNumberType',
             'approver',
             'tasks',
-            'tasks.taskCategory',
-            'tasks.taskStatus',
-            'tasks.taskAction',
-            'tasks.taskType',
+            'tasks.labor_assignment',
+            'tasks.task_status',
+            'tasks.task_action',
+            'tasks.labor_type',
             'orderPriority',
             'orderCategory',
-            'tasks.dates.clockIns',
-            'tasks.dates.clockIns.contact'
+            'tasks.appointments.clockIns',
+            'tasks.appointments.clockIns.contact'
         )
             ->where('id', $id)
             ->first();

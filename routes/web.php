@@ -520,3 +520,9 @@ $router->post('/labor_assignment', ['uses' => 'LaborAssignmentController@create'
 $router->get('/labor_assignment/{id:[0-9]+}', ['uses' => 'LaborAssignmentController@read', 'as' => 'labor_assignment.read']);
 $router->patch('/labor_assignment/{id:[0-9]+}', ['uses' => 'LaborAssignmentController@update', 'as' => 'labor_assignment.update']);
 $router->delete('/labor_assignment/{id:[0-9]+}', ['uses' => 'LaborAssignmentController@delete', 'as' => 'labor_assignment.delete']);
+
+$router->get('/task_actions', ['uses' => 'TaskActionController@index', 'as' => 'task_action.index']);
+$router->post('/task_action', ['uses' => 'TaskActionController@create', 'as' => 'task_action.create']);
+$router->get('/task_action/{id:[0-9]+}', ['uses' => 'TaskActionController@read', 'as' => 'task_action.read']);
+$router->patch('/task_action/{id:[0-9]+}', ['uses' => 'TaskActionController@update', 'as' => 'task_action.update']);
+$router->delete('/task_action/{id:[0-9]+}', ['uses' => 'TaskActionController@delete', 'as' => 'task_action.delete']);

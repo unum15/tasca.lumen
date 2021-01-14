@@ -22,6 +22,7 @@ class LaborAssignmentController extends Controller
             ->with('labor_activities')
             ->with('children')
             ->with('children.labor_activities')
+            ->with('labor_types')
             ->with($includes);
         foreach($values as $field => $value){
             $items_query->where($field, $value);

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class ClockInController extends Controller
 {
     private $validation = [
-        'appoint_id' => 'integer|exists:task_dates,id',
+        'appointment_id' => 'integer|exists:appointments,id',
         'contact_id' => 'integer|exists:contacts,id',
         'labor_activity_id' => 'integer|exists:labor_activities,id|nullable',
         'clock_in' => 'string|max:255',

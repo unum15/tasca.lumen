@@ -25,7 +25,7 @@ class TaskActionController extends Controller
 
     public function index()
     {
-        $items = TaskAction::with('taskTypes')->get();
+        $items = TaskAction::with('labor_types')->get();
         return $items;
     }
     
