@@ -155,8 +155,8 @@ class RenameTimeCardTables extends Migration
                 ->references('id')->on('tasks')
                 ->onDelete('cascade');
         });
-        $db->update("UPDATE settings SET setting='default_nonbilling_labor_assignment_id' WHERE name='default_nonbilling_task_category_id';");
-        $db->update("UPDATE settings SET setting='default_billing_labor_assignment_id' WHERE name='default_billing_task_category_id';");
+        $db->update("UPDATE settings SET name='default_nonbilling_labor_assignment_id' WHERE name='default_nonbilling_task_category_id';");
+        $db->update("UPDATE settings SET name='default_billing_labor_assignment_id' WHERE name='default_billing_task_category_id';");
     }
 
     public function down()
@@ -276,7 +276,7 @@ class RenameTimeCardTables extends Migration
             $table->dropForeign(['order_status_id']);
             $table->dropForeign(['order_action_id']);
         });
-        $db->update("UPDATE settings SET setting='default_nonbilling_task_category_id' WHERE name='default_nonbilling_labor_assignment_id';");
-        $db->update("UPDATE settings SET setting='default_billing_task_category_id' WHERE name='default_billing_labor_assignment_id';");
+        $db->update("UPDATE settings SET name='default_nonbilling_task_category_id' WHERE name='default_nonbilling_labor_assignment_id';");
+        $db->update("UPDATE settings SET name='default_billing_task_category_id' WHERE name='default_billing_labor_assignment_id';");
     }
 }
