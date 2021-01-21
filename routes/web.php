@@ -370,19 +370,6 @@ $router->delete('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@delete', 
 $router->get('/clock_in/current', ['uses' => 'ClockInController@current', 'as' => 'clock_in.current']);
 $router->get('/clock_ins/by_employee', 'ClockInController@by_employee');
 
-$router->get('/overhead_assignments', ['uses' => 'OverheadAssignmentController@index', 'as' => 'overhead_assignment.index']);
-$router->post('/overhead_assignment', ['uses' => 'OverheadAssignmentController@create', 'as' => 'overhead_assignment.create']);
-$router->get('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@read', 'as' => 'overhead_assignment.read']);
-$router->patch('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@update', 'as' => 'overhead_assignment.update']);
-$router->delete('/overhead_assignment/{id:[0-9]+}', ['uses' => 'OverheadAssignmentController@delete', 'as' => 'overhead_assignment.delete']);
-$router->put('/overhead_assignment/{id:[0-9]+}/overhead_categories', ['uses' => 'OverheadAssignmentController@categories', 'as' => 'overhead_assignment.update']);
-
-$router->get('/overhead_categories', ['uses' => 'OverheadCategoryController@index', 'as' => 'overhead_category.index']);
-$router->post('/overhead_category', ['uses' => 'OverheadCategoryController@create', 'as' => 'overhead_category.create']);
-$router->get('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@read', 'as' => 'overhead_category.read']);
-$router->patch('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@update', 'as' => 'overhead_category.update']);
-$router->delete('/overhead_category/{id:[0-9]+}', ['uses' => 'OverheadCategoryController@delete', 'as' => 'overhead_category.delete']);
-
 $router->get('/asset_types', ['uses' => 'AssetTypeController@index', 'as' => 'asset_type.index']);
 $router->post('/asset_type', ['uses' => 'AssetTypeController@create', 'as' => 'asset_type.create']);
 $router->get('/asset_type/{id:[0-9]+}', ['uses' => 'AssetTypeController@read', 'as' => 'asset_type.read']);
@@ -520,6 +507,8 @@ $router->post('/labor_assignment', ['uses' => 'LaborAssignmentController@create'
 $router->get('/labor_assignment/{id:[0-9]+}', ['uses' => 'LaborAssignmentController@read', 'as' => 'labor_assignment.read']);
 $router->patch('/labor_assignment/{id:[0-9]+}', ['uses' => 'LaborAssignmentController@update', 'as' => 'labor_assignment.update']);
 $router->delete('/labor_assignment/{id:[0-9]+}', ['uses' => 'LaborAssignmentController@delete', 'as' => 'labor_assignment.delete']);
+$router->put('/labor_assignment/{id:[0-9]+}/labor_activities', ['uses' => 'LaborAssignmentController@updateLaborActivities', 'as' => 'labor_assignment.update.labor_activities']);
+$router->put('/labor_assignment/{id:[0-9]+}/labor_types', ['uses' => 'LaborAssignmentController@updateLaborTypes', 'as' => 'labor_assignment.update.labor_types']);
 
 $router->get('/task_actions', ['uses' => 'TaskActionController@index', 'as' => 'task_action.index']);
 $router->post('/task_action', ['uses' => 'TaskActionController@create', 'as' => 'task_action.create']);

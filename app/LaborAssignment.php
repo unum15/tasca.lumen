@@ -30,4 +30,9 @@ class LaborAssignment extends Model
     {
         return $this->belongsToMany('App\LaborType');
     }
+    
+    public function order()
+    {
+        return $this->belongsTo('App\Order');
+    }
 }

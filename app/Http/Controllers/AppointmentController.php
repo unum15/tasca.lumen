@@ -95,7 +95,7 @@ class AppointmentController extends Controller
             ->leftJoin('clients', 'projects.client_id', '=', 'clients.id')
             ->leftJoin('appointment_statuses', 'appointments.appointment_status_id', '=', 'appointment_statuses.id')
             ->leftJoin('order_priorities', 'orders.order_priority_id', '=', 'order_priorities.id')
-            ->leftJoin('task_categories', 'tasks.task_category_id', '=', 'task_categories.id')
+            ->leftJoin('labor_assignments', 'tasks.labor_assignment_id', '=', 'labor_assignments.id')
             ->leftJoin('task_statuses', 'tasks.task_status_id', '=', 'task_statuses.id')
             ->leftJoin('task_actions', 'tasks.task_action_id', '=', 'task_actions.id')
             ->leftJoin('crews', 'tasks.crew_id', '=', 'crews.id')
@@ -122,11 +122,11 @@ class AppointmentController extends Controller
                 DB::raw("COALESCE(properties.address1,'')||' '||COALESCE(properties.address2,'')||' - '||COALESCE(properties.city,'') AS address"),
                 'tasks.description',
                 'order_priorities.name AS order_priority',
-                'task_categories.name AS task_category',
+                'labor_assignments.name AS labor_assignment',
                 'task_statuses.name AS task_status',
                 'task_actions.name AS task_action',
                 'order_priority_id',
-                'task_category_id',
+                'labor_assignment_id',
                 'task_status_id',
                 'task_action_id',
                 'appointments.day',
@@ -137,7 +137,7 @@ class AppointmentController extends Controller
                 'tasks.completion_date',
                 'tasks.closed_date',
                 'tasks.billed_date',
-                'tasks.task_type_id',
+                'tasks.labor_type_id',
                 'orders.order_status_type_id',
                 'tasks.crew_hours',
                 'crew_id',
@@ -287,6 +287,7 @@ class AppointmentController extends Controller
     
     public function create(Request $request)
     {
+        $this->validate($request, ['task_id' => 'required']);
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $has_value = false;

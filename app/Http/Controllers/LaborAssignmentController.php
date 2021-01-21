@@ -10,7 +10,6 @@ class LaborAssignmentController extends Controller
 {
     public function __construct()
     {
-        Log::debug('LaborAssignmentController Constructed');
         $this->middleware('auth');
     }
 
@@ -23,7 +22,9 @@ class LaborAssignmentController extends Controller
             ->with('children')
             ->with('children.labor_activities')
             ->with('labor_types')
-            ->with($includes);
+            ->with('order')
+            ->with($includes)
+            ->orderBy('name');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
@@ -50,6 +51,22 @@ class LaborAssignmentController extends Controller
         $item = LaborAssignment::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+        return ['data' => $item];
+    }
+    
+    public function updateLaborActivities($id, Request $request)
+    {
+        $item = LaborAssignment::findOrFail($id);
+        $values = $request->only('labor_activities');
+        $item->labor_activities()->sync($values['labor_activities']);
+        return ['data' => $item];
+    }
+    
+    public function updateLaborTypes($id, Request $request)
+    {
+        $item = LaborAssignment::findOrFail($id);
+        $values = $request->only('labor_types');
+        $item->labor_types()->sync($values['labor_types']);
         return ['data' => $item];
     }
 

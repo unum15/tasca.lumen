@@ -103,6 +103,7 @@ class ClockInController extends Controller
     public function create(Request $request)
     {
         $this->validate($request, $this->validation);
+        $this->validate($request, ['clock_in' => 'required', 'appointment_id' => 'required']);
         $values = $request->only(array_keys($this->validation));
         $values = $request->input();
         $values['creator_id'] = $request->user()->id;
@@ -110,11 +111,13 @@ class ClockInController extends Controller
         $item = ClockIn::create($values);
         $item = ClockIn::with(
             'appointment',
-            'appointment.Task',
+            'appointment.task',
+            'appointment.task.order',
+            'appointment.task.labor_assignment',
             'labor_activity',
-            'Contact'
+            'contact'
         )
-            ->findOrFail($item->id);
+        ->findOrFail($item->id);
         return response(['data' => $item], 201, ['Location' => route('clock_in.read', ['id' => $item->id])]);
     }
     
@@ -122,9 +125,11 @@ class ClockInController extends Controller
     {
         $item = ClockIn::with(
             'appointment',
-            'appointment.Task',
+            'appointment.task',
+            'appointment.task.order',
+            'appointment.task.labor_assignment',
             'labor_activity',
-            'Contact'
+            'contact'
         )
         ->findOrFail($id);
         return $item;
@@ -135,10 +140,11 @@ class ClockInController extends Controller
     {
         $item = ClockIn::with([
             'appointment',
-            'appointment.Task',
-            'appointment.Task.Order',
+            'appointment.task',
+            'appointment.task.order',
+            'appointment.task.labor_assignment',
             'labor_activity',
-            'Contact'
+            'contact'
         ])
         ->where('contact_id', $request->user()->id)
         ->whereNull('clock_out')
