@@ -28,12 +28,13 @@ class ClockInController extends Controller
         $values = $request->only(array_keys($this->validation));
         $items_query = ClockIn::with(
             'appointment',
-            'appointment.Task',
-            'appointment.Task.Order',
+            'appointment.task',
+            'appointment.task.order',
+            'appointment.task.labor_assignment',
             'labor_activity',
             'Contact',
-            'appointment.Task.Order.Project',
-            'appointment.Task.Order.Project.Client'
+            'appointment.task.order.Project',
+            'appointment.task.order.Project.Client'
         )
         ->orderBy('clock_in');
         foreach($values as $field => $value){
