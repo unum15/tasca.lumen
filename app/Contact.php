@@ -11,11 +11,12 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Log;
 
 class Contact extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, Notifiable;
+    use Authenticatable, CanResetPassword, Notifiable, HasFactory;
 
     protected $fillable = [
         'name',

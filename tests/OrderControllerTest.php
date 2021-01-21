@@ -1,14 +1,15 @@
 <?php
 
 use App\Order;
+use App\Property;
 
 class OrderControllerTest extends TestCase
 {
 
     public function testIndex()
     {
-        $item = factory('App\Order')->create();
-        $item = factory('App\Order')->create();
+        $item = Order::factory()->create();
+        $item = Order::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/orders');
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
@@ -16,78 +17,20 @@ class OrderControllerTest extends TestCase
 
     public function testCreate()
     {
-        $project = factory(App\Project::class)->create();
-        $item = [
-            'name' => 'Test ServiceOrder',
-            'project_id' => $project->id
-        ];
-        $response = $this->actingAs($this->getAdminUser())->post('/order', $item);
+        $user = $this->getAdminUser();
+        $item = Order::factory(['creator_id'=>$user->id,'updater_id'=>$user->id])->make();
+        $response = $this->actingAs($this->getAdminUser())->post('/order', $item->toArray());
         $response->seeStatusCode(200);
-        $response->seeJson($item);
+        $response->seeJson($item->toArray());
         $response_array = json_decode($response->response->getContent());
         $dbitem = Order::find($response_array->id);
         $response->seeJson($dbitem->toArray());
         $dbitem->delete();
     }
-    
-    
-    public function testCreateFull()
-    {
-        $project = factory(App\Project::class)->create();
-        $item = [
-            'name' => 'Test ServiceOrder',
-            'project_id' => $project->id,
-            'notes' => 'foo'
-        ];
-        $response = $this->actingAs($this->getAdminUser())->post('/order', $item);
-        $response->seeStatusCode(200);
-        $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
-        $dbitem = Order::find($response_array->id);
-        $response->seeJson($dbitem->toArray());
-    }
-    
-    public function testCreateBad()
-    {
-        $item = [
-            'name' => ''
-        ];
-        $response = $this->actingAs($this->getAdminUser())->post('/order', $item);
-        $response->seeStatusCode(422);                
-        $response->seeJson(["name" => ["The name field is required."]]);
-    }
-    
-    public function testCreateInjection()
-    {
-        $project = factory(App\Project::class)->create();
-        $item = [
-            'name' => "a'; DROP TABLE service_orders CASCADE; --",
-            'project_id' => $project->id
-        ];
-        $response = $this->actingAs($this->getAdminUser())->post('/order', $item);
-        $response->seeStatusCode(200);
-        $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
-        $dbitem = Order::find($response_array->id);
-        $response->seeJson($dbitem->toArray());
-        $dbitem->delete();
-    }
-    
-    public function testCreateLong()
-    {
-        $project = factory(App\Project::class)->create();
-        $item = [
-            'name' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-            'project_id' => $project->id
-        ];
-        $response = $this->actingAs($this->getAdminUser())->post('/order', $item);
-        $response->seeStatusCode(422);                
-        $response->seeJson(['name' => ["The name may not be greater than 255 characters."]]);
-    }
-    
+
     public function testRead()
     {
-        $item = factory('App\Order')->create();
+        $item = Order::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/order/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
@@ -95,16 +38,10 @@ class OrderControllerTest extends TestCase
         $response->seeJson($dbitem->toArray());
         $dbitem->delete();
     }    
-    
-    public function testReadBad()
-    {        
-        $response = $this->actingAs($this->getAdminUser())->get('/order/a');
-        $response->seeStatusCode(404);        
-    }    
-    
+       
     public function testUpdate()
     {
-        $item = factory('App\Order')->create();
+        $item = Order::factory()->create();
         $patch = ['name' => 'Test ServiceOrder 2'];
         $response = $this->actingAs($this->getAdminUser())->patch('/order/' . $item->id, $patch);
         $response->seeStatusCode(200);
@@ -115,62 +52,58 @@ class OrderControllerTest extends TestCase
     
     public function testConversion()
     {
-        $item = factory('App\Order')->create(['recurring' => false, 'renewable'=> false]);
-        $item['completion_date'] = date('Y-m-d');
+        $item = Order::factory()->create(['recurring' => false, 'renewable'=> false, 'close_date' => null]);
+        $item['close_date'] = date('Y-m-d');
         $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id);
         $response->seeStatusCode(200);
         $itemArray = $item->toArray();
-        //$itemArray['completion_date'] = date('Y-m-d');
         $response->seeJsonEquals([$itemArray]);
     }
     
     public function testRenewal()
     {
-        $item = factory('App\Order')->create(['recurring' => false, 'renewable'=> true]);
-        $prop1 = factory('App\Property')->create();
-        $prop2 = factory('App\Property')->create();
+        $item = Order::factory('App\Order')->create(['recurring' => false, 'renewable'=> true, 'close_date' => null]);
+        $prop1 = Property::factory()->create();
+        $prop2 = Property::factory()->create();
         $item->properties()->sync([$prop1->id, $prop2->id]);
-        $item['completion_date'] = date('Y-m-d');
+        $item['close_date'] = date('Y-m-d');
         $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id);
         $response->seeStatusCode(200);
         $itemArray = $item->toArray();
-        //$itemArray['completion_date'] = date('Y-m-d');
         $response->seeJsonEquals([$itemArray]);
     }
     
     public function testConversionRecurring()
     {
-        $item = factory('App\Order')->create(['recurring' => true, 'renewable'=> false]);
-        $prop1 = factory('App\Property')->create();
-        $prop2 = factory('App\Property')->create();
+        $item = Order::factory('App\Order')->create(['recurring' => true, 'renewable'=> false]);
+        $prop1 = Property::factory()->create();
+        $prop2 = Property::factory()->create();
         $item->properties()->sync([$prop1->id, $prop2->id]);
-        $item['completion_date'] = date('Y-m-d');
+        $item['close_date'] = date('Y-m-d');
         $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id);
         $response->seeStatusCode(200);
         $itemArray = $item->toArray();
-        //$itemArray['completion_date'] = date('Y-m-d');
         $response->seeJsonEquals([$itemArray]);
     }
     
     public function testConversionProperties()
     {
-        $item = factory('App\Order')->create(['recurring' => false, 'renewable'=> false]);
-        $prop1 = factory('App\Property')->create();
-        $prop2 = factory('App\Property')->create();
+        $item = Order::factory('App\Order')->create(['recurring' => false, 'renewable'=> false]);
+        $prop1 = Property::factory()->create();
+        $prop2 = Property::factory()->create();
         $item->properties()->sync([$prop1->id, $prop2->id]);
         $item->save();
         $dbitem = Order::with('properties')->find($item->id);
-        $item['completion_date'] = date('Y-m-d');
+        $item['close_date'] = date('Y-m-d');
         $response = $this->actingAs($this->getAdminUser())->post('/order/convert/' . $item->id, $dbitem->toArray());
         $response->seeStatusCode(200);
         $itemArray = $item->toArray();
-        //$itemArray['completion_date'] = date('Y-m-d');
         $response->seeJson($itemArray);
     }
     
     public function testDelete()
     {
-        $item = factory('App\Order')->create();
+        $item = Order::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/order/' . $item->id);
         $response->seeStatusCode(204);
     }

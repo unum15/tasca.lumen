@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Property extends Model
 {
+    use HasFactory;
 
     protected $fillable = [
         'name',
@@ -51,14 +53,12 @@ class Property extends Model
             ->orderBy('name')
             ->withTimestamps();
     }
-    
 
     public function backflow_assemblies()
     {
         return $this->hasMany('App\BackflowAssembly');
     }
     
-
     public function propertyUnits()
     {
         return $this->hasMany('App\PropertyUnit');

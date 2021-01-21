@@ -38,7 +38,7 @@ class BackflowPictureController extends Controller
         $values = $this->validateModel($request, true);
         $values['filename'] = uniqid();
         $values['original_filename'] = $request->file('picture')->getClientOriginalName();
-        $request->file('picture')->move('uploads/backflows/pictures/', $values['filename']);
+        $request->file('picture')->move(public_path().'/uploads/backflows/pictures/', $values['filename']);
         $item = BackflowPicture::create($values);
         return response(['data' => $item], 201, ['Location' => route('backflow_picture.read', ['id' => $item->id])]);
     }

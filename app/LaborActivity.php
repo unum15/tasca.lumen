@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class OverheadAssignment extends Model
+class LaborActivity extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'name',
         'notes',
@@ -17,7 +20,7 @@ class OverheadAssignment extends Model
         return $this->hasMany(self::class, 'parent_id');
     }
     
-    public function overhead_categories(){
-        return $this->belongsToMany('App\OverheadCategory');
+    public function labor_assignments(){
+        return $this->belongsToMany('App\LaborAssignment');
     }
 }

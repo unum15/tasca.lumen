@@ -3,16 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'project_id',
         'order_status_type_id',
         'approver_id',
         'name',
         'date',
-        'completion_date',
+        'close_date',
         'expiration_date',
         'approval_date',
         'start_date',
@@ -45,7 +48,8 @@ class Order extends Model
         'progress_percentage',
         'contact_id',
         'creator_id',
-        'updater_id'
+        'updater_id',
+        'work_days'
     ];
     
     function project()

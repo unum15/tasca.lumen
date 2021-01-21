@@ -7,21 +7,16 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     
     private $validation = [
         'order_id' => 'integer|exists:orders,id',
         'description' => 'nullable|string|max:255',
         'name' => 'nullable|string|max:255',
         'billable' => 'nullable|boolean',
-        'task_type_id' => 'nullable|integer|exists:task_types,id',
+        'labor_type_id' => 'nullable|integer|exists:labor_types,id',
         'task_status_id' => 'nullable|integer|exists:task_statuses,id',
         'task_action_id' => 'nullable|integer|exists:task_actions,id',
-        'task_category_id' => 'nullable|integer|exists:task_categories,id',
+        'labor_assignment_id' => 'nullable|integer|exists:labor_assignments,id',
         'completion_date' => 'nullable|date',
         'closed_date' => 'nullable|date',
         'invoiced_date' => 'nullable|date',
@@ -33,7 +28,8 @@ class TaskController extends Controller
         'notes' => 'nullable|string|max:255',
         'order_id' => 'integer|exists:orders,id',
         'notes' => 'nullable|string|max:1024',
-        'group' => 'nullable|string|max:255'
+        'group' => 'nullable|string|max:255',
+        'hide'  => 'nullable|boolean'
     ];
 
     public function __construct()
@@ -51,18 +47,18 @@ class TaskController extends Controller
             'order.properties',
             'order.project.contact',
             'order.project.client',
-            'TaskCategory',
-            'TaskStatus',
-            'TaskAction',
+            'labor_assignment',
+            'task_status',
+            'task_action',
             'order.orderPriority',
             'order.orderCategory',
             'crew',
-            'dates',
-            'dates.clockIns',
-            'dates.AppointmentStatus'
+            'appointments',
+            'appointments.clockIns',
+            'appointments.AppointmentStatus'
         )
         ->orderBy('id');
-        //->orderByRaw('tasks.closed_date NULLS FIRST');
+
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
@@ -116,8 +112,7 @@ class TaskController extends Controller
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = Task::create($values);
-        $item = Task::findOrFail($item->id);
-        return $item;
+        return response(['data' => $item], 201, ['Location' => route('asset.read', ['id' => $item->id])]);
     }
     
     public function read($id)
@@ -135,12 +130,12 @@ class TaskController extends Controller
             'order.properties.contacts.phoneNumbers.phoneNumberType',
             'order.properties.contacts.emails',
             'order.properties.contacts.emails.emailType',
-            'TaskCategory',
-            'TaskStatus',
-            'TaskAction',
+            'labor_assignment',
+            'task_status',
+            'task_action',
             'order.orderPriority',
             'order.orderCategory',
-            'dates'
+            'appointments'
         )
         ->findOrFail($id);
         return $item;

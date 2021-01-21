@@ -3,19 +3,23 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class TaskDate extends Model
+class Appointment extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-    'task_id',
-    'date',
-    'time',
-    'day',
-    'notes',
-    'sort_order',
-    'appointment_status_id',
-    'creator_id',
-    'updater_id'
+        'task_id',
+        'date',
+        'time',
+        'day',
+        'notes',
+        'hours',
+        'sort_order',
+        'appointment_status_id',
+        'creator_id',
+        'updater_id'
     ];
     
     public function task()

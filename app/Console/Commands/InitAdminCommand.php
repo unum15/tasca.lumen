@@ -50,7 +50,7 @@ class InitAdminCommand extends Command
             'name' => 'operating_company_client_id',
             'value' => $adminCompany->id
         ]);
-//        $admin = Role::where('name', 'admin')->first();
-//        $adminUser->attachRole($admin);
+        $admin = Role::where('name', 'admin')->first();
+        $adminUser->roles()->attach($admin);
     }
 }
