@@ -118,12 +118,6 @@ $router->get('/appointment_status/{id:[0-9]+}', 'AppointmentStatusController@rea
 $router->patch('/appointment_status/{id:[0-9]+}', 'AppointmentStatusController@update');
 $router->delete('/appointment_status/{id:[0-9]+}', 'AppointmentStatusController@delete');
 
-$router->get('/work_types', 'WorkTypeController@index');
-$router->post('/work_type', 'WorkTypeController@create');
-$router->get('/work_type/{id:[0-9]+}', 'WorkTypeController@read');
-$router->patch('/work_type/{id:[0-9]+}', 'WorkTypeController@update');
-$router->delete('/work_type/{id:[0-9]+}', 'WorkTypeController@delete');
-
 $router->get('/clients', 'ClientController@index');
 $router->post('/client', 'ClientController@create');
 $router->get('/client/{id:[0-9]+}', 'ClientController@read');

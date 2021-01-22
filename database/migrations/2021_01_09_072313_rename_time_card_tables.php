@@ -178,7 +178,7 @@ class RenameTimeCardTables extends Migration
                 ->references('id')->on('tasks')
                 ->onDelete('cascade');
         });
-        
+        Schema::dropIfExists('work_types');
 
 
 
