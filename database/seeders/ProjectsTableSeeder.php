@@ -57,10 +57,6 @@ class ProjectsTableSeeder extends Seeder
         $next_year = date_create();
         $next_year->modify('+1 year');
         
-        
-        
-        //$priorities = Priority::pluck('id')->toArray();;
-        $work_types = WorkType::pluck('id')->toArray();;
         foreach($properties as $property){
             $projects_total= rand(1,5);
             for($project_count=0;$project_count<5;$project_count++){

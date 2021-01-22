@@ -218,7 +218,7 @@ class AppointmentController extends Controller
                     break;
                 case 'pending':
                     $items_query->where('orders.start_date','>=',$current_view_date)
-                    ->whereNull('orders.completion_date')
+                    ->whereNull('orders.close_date')
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
                     ->where(
@@ -237,7 +237,7 @@ class AppointmentController extends Controller
                     break;
                 case 'on hold':
                     $items_query->whereNotNull('orders.start_date')
-                    ->whereNull('orders.completion_date')
+                    ->whereNull('orders.close_date')
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
                     ->where(
@@ -261,7 +261,7 @@ class AppointmentController extends Controller
                     break;
                 case 'all' :
                     $items_query->whereNotNull('orders.start_date')
-                    ->whereNull('orders.completion_date')
+                    ->whereNull('orders.close_date')
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
                     ->where(

@@ -104,9 +104,10 @@ class ClockInController extends Controller
     public function create(Request $request)
     {
         $this->validate($request, $this->validation);
-        $this->validate($request, ['clock_in' => 'required', 'appointment_id' => 'required']);
+        $this->validate($request, ['clock_in' => 'required', 'appointment_id' => 'required', 'contact_id' => 'required']);
         $values = $request->only(array_keys($this->validation));
         $values = $request->input();
+        ClockIn::where('contact_id', $values['contact_id'])->whereNull('clock_out')->update(['clock_out' =>  DB::raw('NOW()')]);
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = ClockIn::create($values);
