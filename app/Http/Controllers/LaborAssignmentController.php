@@ -28,6 +28,13 @@ class LaborAssignmentController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $labor_type_id = $request->only('labor_type_id');
+        if($labor_type_id){
+            Log::debug($labor_type_id);
+            $items_query->whereHas('labor_types', function($q) use($labor_type_id) {
+                $q->where('id', $labor_type_id['labor_type_id']);
+            });
+        }
         $items = $items_query->get();
         return ['data' => $items];
     }
