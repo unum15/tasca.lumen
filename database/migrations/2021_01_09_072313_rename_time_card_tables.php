@@ -134,6 +134,7 @@ class RenameTimeCardTables extends Migration
         $billing_id = $billing[0]->id;
         $db->insert("INSERT INTO settings (name,value) VALUES ('overhead_labor_type_id',?);",[$overhead_id]);
         $db->insert("INSERT INTO settings (name,value) VALUES ('default_labor_type_id',?);",[$billing_id]);
+        $db->insert("INSERT INTO settings (name,value) VALUES ('default_state','UT');");
         $sql="
             SELECT
                 *
@@ -322,5 +323,6 @@ class RenameTimeCardTables extends Migration
         });
         $db->delete("DELETE FROM settings WHERE name='overhead_labor_type_id';");
         $db->delete("DELETE FROM settings WHERE name='default_labor_type_id';");
+        $db->delete("DELETE FROM settings WHERE name='default_state';");
     }
 }
