@@ -10,6 +10,7 @@ class RenameTimeCardTables extends Migration
     public function up()
     {
         $db = DB::connection();
+        $db->delete("DELETE FROM task_dates WHERE id=ANY(SELECT task_dates.id FROM task_dates LEFT JOIN tasks ON (task_dates.task_id=tasks.id) WHERE tasks.id IS NULL);");
         $db->delete("DELETE FROM clock_ins WHERE id=ANY(SELECT clock_ins.id FROM clock_ins LEFT JOIN task_dates ON (clock_ins.task_date_id=task_dates.id) WHERE task_dates.id IS NULL);");
         Schema::rename('task_dates', 'appointments');
         Schema::rename('task_types', 'labor_types');
@@ -119,7 +120,6 @@ class RenameTimeCardTables extends Migration
             ";
         $db->insert($sql);
         $overhead_id = DB::getPdo()->lastInsertId();
-        $db->insert("INSERT INTO settings (name,value) VALUES ('overhead_labor_type_id',?);",[$overhead_id]);
         
         $db->insert("INSERT INTO labor_assignment_labor_type SELECT id,? FROM labor_assignments;",[$overhead_id]);
         $orders = $db->select("SELECT id FROM orders WHERE name='Overhead'");
@@ -132,7 +132,8 @@ class RenameTimeCardTables extends Migration
         $nonbilling_id = $nonbilling[0]->id;
         $billing = $db->select("SELECT id FROM labor_types WHERE name='Billing'");
         $billing_id = $billing[0]->id;
-        
+        $db->insert("INSERT INTO settings (name,value) VALUES ('overhead_labor_type_id',?);",[$overhead_id]);
+        $db->insert("INSERT INTO settings (name,value) VALUES ('default_labor_type_id',?);",[$billing_id]);
         $sql="
             SELECT
                 *
@@ -320,5 +321,6 @@ class RenameTimeCardTables extends Migration
             $table->dropForeign(['order_action_id']);
         });
         $db->delete("DELETE FROM settings WHERE name='overhead_labor_type_id';");
+        $db->delete("DELETE FROM settings WHERE name='default_labor_type_id';");
     }
 }
