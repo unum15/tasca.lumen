@@ -13,22 +13,26 @@ class LaborAssignment extends Model
         'name',
         'notes',
         'sort_order',
-        'parent_id',
-        'order_id'
+        'parent_id'
     ];
     
     public function children(){
-        return $this->hasMany(self::class, 'parent_id');
+        return $this->hasMany(self::class, 'parent_id')
+        ->orderBy('sort_order')
+        ->orderBy('name');
     }
     
     public function labor_activities()
     {
-        return $this->belongsToMany('App\LaborActivity');
+        return $this->belongsToMany('App\LaborActivity')
+        ->orderBy('sort_order')
+        ->orderBy('name');
     }
     
     public function labor_types()
     {
-        return $this->belongsToMany('App\LaborType');
+        return $this->belongsToMany('App\LaborType')
+        ->withPivot('order_id');
     }
     
     public function order()

@@ -18,7 +18,7 @@ class LaborTypeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
-        $items_query = LaborType::with($includes);
+        $items_query = LaborType::with($includes)->orderBy('sort_order')->orderBy('name');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }

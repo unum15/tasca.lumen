@@ -842,6 +842,7 @@ class BackflowTestReportController extends Controller
     {
         class_alias('Illuminate\Support\Facades\Config', 'Config');//needed for PDF stuff to work, but conflicts with phpunit
         $html = $this->html($id, $request);
+	$html = preg_replace('|/api/images/w_logo.jpg|',public_path().'/images/w_logo.jpg',$html);
         $pdf = Pdf::loadHtml($html);
         $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property','backflow_assembly.backflow_water_system')->findOrFail($id);
         $filename = $report->backflow_assembly->property->client->name . '_';
@@ -868,6 +869,7 @@ class BackflowTestReportController extends Controller
     {
         class_alias('Illuminate\Support\Facades\Config', 'Config');//needed for PDF stuff to work, but conflicts with phpunit
         $html = $this->htmls($request);
+	$html = preg_replace('|/api/images/w_logo.jpg|',public_path().'/images/w_logo.jpg',$html);
         $pdf = Pdf::loadHtml($html);
         $ids = $request->input('backflow_test_report_id');
         $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property')->findOrFail($ids[0]);

@@ -10,19 +10,17 @@ class Client extends Model
     use HasFactory;
 
     protected $fillable =[
-    'name',
-    'notes',
-    'client_type_id',
-    'activity_level_id',
-    'billing_contact_id',        
-    'main_mailing_property_id',        
-    'contact_method_id',
-    //        'bill_to',
-    //        'attention_to',
-    'referred_by',
-    'creator_id',
-    'updater_id',
-    'phreebooks_id'
+        'name',
+        'notes',
+        'client_type_id',
+        'activity_level_id',
+        'billing_contact_id',        
+        'main_mailing_property_id',        
+        'contact_method_id',
+        'referred_by',
+        'creator_id',
+        'updater_id',
+        'phreebooks_id'
     ];
     
     public function activityLevel()
