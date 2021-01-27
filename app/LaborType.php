@@ -17,7 +17,8 @@ class LaborType extends Model
     
     public function labor_assignments()
     {
-        return $this->belongsToMany('App\LaborAssignment');
+        return $this->belongsToMany('App\LaborAssignment')
+            ->withPivot('order_id');
     }
     
     public function task_actions()

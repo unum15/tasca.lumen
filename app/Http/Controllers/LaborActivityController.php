@@ -22,7 +22,9 @@ class LaborActivityController extends Controller
             ->with('labor_assignments')
             ->with('children')
             ->with('children.labor_assignments')
-            ->with($includes);
+            ->with($includes)
+            ->orderBy('sort_order')
+            ->orderBy('name');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }

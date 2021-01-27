@@ -24,6 +24,7 @@ class LaborAssignmentController extends Controller
             ->with('labor_types')
             ->with('order')
             ->with($includes)
+            ->orderBy('sort_order')
             ->orderBy('name');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
