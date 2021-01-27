@@ -35,8 +35,9 @@ class LaborAssignment extends Model
         ->withPivot('order_id');
     }
     
-    public function order()
+    public function orders()
     {
-        return $this->belongsTo('App\Order');
+        return $this->belongsToMany('App\Order','labor_assignment_labor_type')
+        ->withPivot('labor_type_id');
     }
 }
