@@ -13,7 +13,9 @@ class LaborAssignment extends Model
         'name',
         'notes',
         'sort_order',
-        'parent_id'
+        'parent_id',
+        'order_id',
+        'labor_type_id'
     ];
     
     public function children(){
@@ -29,15 +31,13 @@ class LaborAssignment extends Model
         ->orderBy('name');
     }
     
-    public function labor_types()
+    public function labor_type()
     {
-        return $this->belongsToMany('App\LaborType')
-        ->withPivot('order_id');
+        return $this->belongsTo('App\LaborType');
     }
     
-    public function orders()
+    public function order()
     {
-        return $this->belongsToMany('App\Order','labor_assignment_labor_type')
-        ->withPivot('labor_type_id');
+        return $this->belongsTo('App\Order');
     }
 }
