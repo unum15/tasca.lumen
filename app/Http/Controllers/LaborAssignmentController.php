@@ -21,20 +21,13 @@ class LaborAssignmentController extends Controller
             ->with('labor_activities')
             ->with('children')
             ->with('children.labor_activities')
-            ->with('labor_types')
-            ->with('orders')
+            ->with('labor_type')
+            ->with('order')
             ->with($includes)
             ->orderBy('sort_order')
             ->orderBy('name');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
-        }
-        $labor_type_id = $request->only('labor_type_id');
-        if($labor_type_id){
-            Log::debug($labor_type_id);
-            $items_query->whereHas('labor_types', function($q) use($labor_type_id) {
-                $q->where('id', $labor_type_id['labor_type_id']);
-            });
         }
         $items = $items_query->get();
         return ['data' => $items];
@@ -70,14 +63,6 @@ class LaborAssignmentController extends Controller
         return ['data' => $item];
     }
     
-    public function updateLaborTypes($id, Request $request)
-    {
-        $item = LaborAssignment::findOrFail($id);
-        $values = $request->only('labor_types');
-        $item->labor_types()->sync($values['labor_types']);
-        return ['data' => $item];
-    }
-
     public function delete(Request $request, $id)
     {
         $item = LaborAssignment::findOrFail($id);
@@ -91,10 +76,12 @@ class LaborAssignmentController extends Controller
        'sort_order' => 'integer|nullable',
        'parent_id' => 'integer|nullable',
        'order_id' => 'integer|nullable|exists:orders,id',
+       'labor_type_id' => 'integer|nullable|exists:labor_types,id',
     ];
     
     protected $model_validation_required = [
        'name' => 'required',
+       'labor_type_id' => 'required'
     ];
 
     protected $model_includes = [
