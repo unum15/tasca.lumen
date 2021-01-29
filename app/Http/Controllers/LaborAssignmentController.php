@@ -29,6 +29,12 @@ class LaborAssignmentController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $assigned = $request->input('assigned');
+        if(!empty($assigned)){
+            $items_query->whereHas('labor_type', function($q){
+                $q->where('assigned',true);
+            });
+        }
         $items = $items_query->get();
         return ['data' => $items];
     }
