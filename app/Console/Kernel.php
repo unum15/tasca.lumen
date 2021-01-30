@@ -16,9 +16,9 @@ use App\Console\Commands\InitBackflowTypesCommand;
 use App\Console\Commands\InitOverheadCommand;
 use App\Console\Commands\TruncateDatabaseCommand;
 use App\Console\Commands\ResetHelpCommand;
-use App\Console\Commands\CreateTaskDatesCommand;
-use App\Console\Commands\CloseOrdersCommand;
-use App\Console\Commands\UpdateOrderStatusCommand;
+use App\Console\Commands\AppointmentCreateCommand;
+use App\Console\Commands\OrderCloseCommand;
+use App\Console\Commands\OrderStatusCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -37,9 +37,9 @@ class Kernel extends ConsoleKernel
         InitAssetTypesCommand::class,
         InitBackflowTypesCommand::class,
         InitOverheadCommand::class,
-        CreateTaskDatesCommand::class,
-        CloseOrdersCommand::class,
-        UpdateOrderStatusCommand::class
+        AppointmentCreateCommand::class,
+        OrderCloseCommand::class,
+        OrderStatusCommand::class
     ];
 
     /**
@@ -50,8 +50,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-       $schedule->command('db:createTaskDates')->timezone(env("TIMEZONE", 'America/Denver'));
-       $schedule->command('db:updateOrderStatus')->timezone(env("TIMEZONE", 'America/Denver'));
+       $schedule->command('Appointment:Create')->timezone(env("TIMEZONE", 'America/Denver'));
+       $schedule->command('Order:Status')->timezone(env("TIMEZONE", 'America/Denver'));
        //$schedule->command('db:closeOrders')->timezone(env("TIMEZONE", 'America/Denver'));
     }
 }

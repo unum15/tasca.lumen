@@ -4,44 +4,22 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use App\Task;
-use App\TaskDate;
 
-class CloseOrdersCommand extends Command
+class OrderCloseCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'db:closeOrders';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+    protected $signature = 'order:close';
     protected $description = 'Closes all orders older than 30 days for which there is no open tasks.';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();
     }
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
+
     public function handle()
     {
         $sql = "
             UPDATE orders
-            SET completion_date = oo.last_closed_date + '30 days'::INTERVAL
+            SET close_date = oo.last_closed_date + '30 days'::INTERVAL
             FROM (SELECT
                 o.id,
                 t.last_closed_date
@@ -58,7 +36,7 @@ class CloseOrdersCommand extends Command
                         order_id
                 ) t ON (o.id = t.order_id)
             WHERE
-                o.completion_date IS NULL
+                o.close_date IS NULL
                 AND (o.expiration_date >= NOW()::DATE OR o.expiration_date IS NULL)
                 AND last_closed_date IS NOT NULL
                 AND open_tasks = 0
