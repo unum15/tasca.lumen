@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\ClockIn;
+use App\LaborAssignment;
+use App\Order;
+use App\Task;
+use App\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -178,6 +182,73 @@ class ClockInController extends Controller
         $item = ClockIn::findOrFail($id);
         $item->delete();
         return response([], 204);
+    }
+    
+    public function createAssigned(Request $request)
+    {
+        $validation = [
+            'contact_id' => 'integer|exists:contacts,id|required',
+            'labor_activity_id' => 'integer|exists:labor_activities,id|nullable|required',
+            'labor_assignment_id' => 'integer|exists:labor_assignments,id|nullable|required',
+            'clock_in' => 'string|max:255|required',
+            'clock_out' => 'string|max:255',
+            'notes' => 'nullable|string|max:255'
+        ];
+
+        $this->validate($request, $validation);
+        $values = $request->only(array_keys($validation));
+        $assignment = LaborAssignment::find($values['labor_assignment_id']);
+        if(!$assignment->order_id){
+            return response(['message' => "No order has been associated with assignment " . $assignment->name], 422);
+        }
+        ClockIn::where('contact_id', $values['contact_id'])->whereNull('clock_out')->update(['clock_out' =>  DB::raw('NOW()')]);
+        $task = Task::create([
+           'order_id' => $assignment->order_id,
+           'name' => $assignment->name,
+           'labor_type_id' => $assignment->labor_type_id,
+           'completion_date' => $values['clock_in'],
+           'close_date' => $values['clock_in'],
+           'creator_id' => $request->user()->id,
+           'updater_id' => $request->user()->id
+        ]);
+        $appointment = Appointment::create([
+           'task_id' => $task->id,
+           'date' => $values['clock_in'],
+           'time' => $values['clock_in'],
+           'creator_id' => $request->user()->id,
+           'updater_id' => $request->user()->id
+        ]);
+        $values['appointment_id'] = $appointment->id;
+        $values['creator_id'] = $request->user()->id;
+        $values['updater_id'] = $request->user()->id;
+        $item = ClockIn::create($values);
+        $item = ClockIn::with(
+            'appointment',
+            'appointment.task',
+            'appointment.task.order',
+            'appointment.task.labor_assignment',
+            'labor_activity',
+            'contact'
+        )
+        ->findOrFail($item->id);
+        return response(['data' => $item], 201, ['Location' => route('clock_in.read', ['id' => $item->id])]);
+    }
+    
+    public function updateAssigned($id, Request $request)
+    {
+        $this->validate($request, $this->validation);     
+        $item = ClockIn::findOrFail($id);
+        $values = $request->only(array_keys($this->validation));
+        $values['updater_id'] = $request->user()->id;
+        $item->update($values);
+        $item = ClockIn::with(
+            'appointment',
+            'appointment.Task',
+            'labor_activity',
+            'Contact'
+        )
+        ->findOrFail($id);
+        return $item;
     }
     
 }
