@@ -364,7 +364,7 @@ $router->delete('/clock_in/{id:[0-9]+}', ['uses' => 'ClockInController@delete', 
 $router->get('/clock_in/current', ['uses' => 'ClockInController@current', 'as' => 'clock_in.current']);
 $router->get('/clock_ins/by_employee', 'ClockInController@by_employee');
 $router->post('/clock_in/assigned', ['uses' => 'ClockInController@createAssigned', 'as' => 'clock_in.create_assigned']);
-$router->patch('/clock_in/assigned/{id:[0-9]+}', ['uses' => 'ClockInController@updateAssigned', 'as' => 'clock_in.update_assigned']);
+$router->patch('/clock_out/assigned/{id:[0-9]+}', ['uses' => 'ClockInController@clockOutAssigned', 'as' => 'clock_in.update_assigned']);
 
 $router->get('/asset_types', ['uses' => 'AssetTypeController@index', 'as' => 'asset_type.index']);
 $router->post('/asset_type', ['uses' => 'AssetTypeController@create', 'as' => 'asset_type.create']);
