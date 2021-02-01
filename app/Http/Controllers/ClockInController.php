@@ -156,7 +156,7 @@ class ClockInController extends Controller
         ])
         ->where('contact_id', $request->user()->id)
         ->whereNull('clock_out')
-        ->whereRaw("clock_in::DATE=NOW() AS timezone '$timezone'::DATE")
+        ->whereRaw("clock_in::DATE=timezone('$timezone',NOW())::DATE")
         ->orderByDesc('clock_in')
         ->first();
         return $item;
