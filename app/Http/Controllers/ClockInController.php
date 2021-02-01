@@ -233,8 +233,6 @@ class ClockInController extends Controller
         $this->validate($request, $validation);
         $values = $request->only(array_keys($validation));
         $item = ClockIn::findOrFail($id);
-        Log::debug($item->appointment->task->labor_assignment_id);
-        Log::debug($values['labor_assignment_id']);
         if($item->appointment->task->labor_assignment_id != $values['labor_assignment_id']){
             Log::debug('changed');
             $assignment = LaborAssignment::find($values['labor_assignment_id']);
@@ -254,7 +252,6 @@ class ClockInController extends Controller
             'Contact'
         )
         ->findOrFail($id);
-        Log::debug(print_r($item->toArray(),true));
         return $item;
     }
     
