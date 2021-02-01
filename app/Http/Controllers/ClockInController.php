@@ -145,6 +145,7 @@ class ClockInController extends Controller
     
     public function current(Request $request)
     {
+        $timezone = env('APP_TIMEZONE');
         $item = ClockIn::with([
             'appointment',
             'appointment.task',
@@ -155,7 +156,7 @@ class ClockInController extends Controller
         ])
         ->where('contact_id', $request->user()->id)
         ->whereNull('clock_out')
-        ->whereRaw('clock_in::DATE=NOW()::DATE')
+        ->whereRaw("clock_in::DATE=NOW() AS timezone '$timezone'::DATE")
         ->orderByDesc('clock_in')
         ->first();
         return $item;
