@@ -10,7 +10,6 @@ class AssetTypeController extends Controller
 {
     public function __construct()
     {
-        Log::debug('AssetTypeController Constructed');
         $this->middleware('auth');
     }
 
@@ -29,6 +28,8 @@ class AssetTypeController extends Controller
     public function create(Request $request)
     {
         $values = $this->validateModel($request, true);
+        $values['creator_id'] = $request->user()->id;
+        $values['updater_id'] = $request->user()->id;
         $item = AssetType::create($values);
         return response(['data' => $item], 201, ['Location' => route('asset_type.read', ['id' => $item->id])]);
     }
@@ -43,6 +44,7 @@ class AssetTypeController extends Controller
     public function update($id, Request $request)
     {
         $item = AssetType::findOrFail($id);
+        $values['updater_id'] = $request->user()->id;
         $values = $this->validateModel($request);
         $item->update($values);
         return ['data' => $item];
@@ -58,10 +60,19 @@ class AssetTypeController extends Controller
     protected $model_validation = [
        'name' => 'string|max:1020',
        'notes' => 'string|max:1073741824|nullable',
-       'sort_order' => 'integer|nullable',
+       'sort_order' => 'string|max:1020|nullable',
+       'asset_brand_id' => 'integer|exists:asset_brands,id',
+       'number' => 'string|max:1',
     ];
     
     protected $model_validation_required = [
        'name' => 'required',
+       'asset_brand_id' => 'required',
+       'number' => 'required',
     ];
+
+    protected $model_includes = [
+       'asset_brand'
+    ];
+    
 }

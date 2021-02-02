@@ -225,6 +225,56 @@ class ClockInControllerTest extends TestCase
         
     }
     
+    public function testCreateAssignedMultipleExistingTaskExistingAppointment()
+    {
+        $contact = Contact::factory()->create();
+        $labor_activity = LaborActivity::factory()->create();
+        $labor_assignment = LaborAssignment::factory()->create();
+        $task = Task::factory()->create(['order_id' => $labor_assignment->order_id, 'labor_assignment_id' => $labor_assignment->id, 'labor_type_id' => $labor_assignment->labor_type_id,'name' => $labor_assignment->name ]);
+        $appointment = Appointment::factory()->create(['task_id' => $task->id, 'date' => date('Y-m-d')]);
+        
+        for($x=0;$x<10;$x++){
+            $extra_labor_assignment = LaborAssignment::factory()->create(['order_id' => $labor_assignment->order_id]);
+            $extra_task = Task::factory()->create(['order_id' => $extra_labor_assignment->order_id, 'labor_assignment_id' => $extra_labor_assignment->id, 'labor_type_id' => $extra_labor_assignment->labor_type_id,'name' => $extra_labor_assignment->name ]);
+            Appointment::factory()->create(['task_id' => $extra_task->id, 'date' => date('Y-m-d')]);
+        }
+        for($x=1;$x<10;$x++){
+            $extra_task = Task::factory()->create(['order_id' => $labor_assignment->order_id, 'labor_assignment_id' => $labor_assignment->id, 'labor_type_id' => $labor_assignment->labor_type_id,'name' => $labor_assignment->name ]);
+            Appointment::factory()->create(['task_id' => $extra_task->id, 'date' => date('Y-m-d',strtotime("-$x days"))]);
+        }
+        for($x=1;$x<10;$x++){
+            Appointment::factory()->create(['task_id' => $task->id, 'date' => date('Y-m-d',strtotime("-$x days"))]);
+        }
+        $user = $this->getAdminUser();
+        $item = [
+          'contact_id' => $contact->id,
+          'clock_in' => date('Y-m-d H:i:s'),
+          'labor_activity_id' => $labor_activity->id,
+          'labor_assignment_id' => $labor_assignment->id
+        ];
+        $response = $this->actingAs($user)->post('/clock_in/assigned', $item);
+        $response->seeStatusCode(201);
+        $task_array = [
+            'labor_assignment_id' => $task->labor_assignment_id,
+            'completion_date' => date('Y-m-d',strtotime($item['clock_in'])),
+            'closed_date' => date('Y-m-d',strtotime($item['clock_in'])),
+            'order_id' => $task->order_id,
+            'name' => $task->name,
+            'labor_type_id' => $task->labor_type_id,
+        ];
+        $this->seeInDatabase('tasks', $task_array);
+        unset($item['labor_assignment_id']);
+        $response->seeJson($item);
+        $clock_in_array = [
+            'appointment_id' => $appointment->id,
+            'contact_id' => $contact->id,
+            'clock_in' => $item['clock_in'],
+            'labor_activity_id' => $labor_activity->id
+        ];
+        $this->seeInDatabase('clock_ins', $clock_in_array);
+        
+    }
+    
     public function testClockOutAssignedNoActivity()
     {
         $user = $this->getAdminUser();

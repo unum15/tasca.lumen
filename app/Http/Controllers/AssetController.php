@@ -57,7 +57,11 @@ class AssetController extends Controller
     
     protected $model_validation = [
        'name' => 'string|max:1020',
-       'asset_type_id' => 'integer|exists:asset_types,id',
+       'asset_category_id' => 'integer|exists:asset_categories,id|nullable',
+       'asset_brand_id' => 'integer|exists:asset_brands,id|nullable',
+       'asset_type_id' => 'integer|exists:asset_types,id|nullable',
+       'asset_group_id' => 'integer|exists:asset_groups,id|nullable',
+       'asset_sub_id' => 'integer|exists:asset_subs,id|nullable',
        'asset_usage_type_id' => 'integer|exists:asset_usage_types,id|nullable',
        'year' => 'integer|nullable',
        'make' => 'string|max:1020|nullable',
@@ -80,7 +84,11 @@ class AssetController extends Controller
 
     protected $model_includes = [
        'asset_usage_type',
+       'asset_category',
+       'asset_brand',
        'asset_type',
+       'asset_group',
+       'asset_sub',
        'parent_asset',
        'asset_location'
     ];
