@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\AssetType;
+use App\AssetGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class AssetTypeController extends Controller
+class AssetGroupController extends Controller
 {
     public function __construct()
     {
@@ -17,7 +17,7 @@ class AssetTypeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
-        $items_query = AssetType::with($includes);
+        $items_query = AssetGroup::with($includes);
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
@@ -30,20 +30,20 @@ class AssetTypeController extends Controller
         $values = $this->validateModel($request, true);
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
-        $item = AssetType::create($values);
-        return response(['data' => $item], 201, ['Location' => route('asset_type.read', ['id' => $item->id])]);
+        $item = AssetGroup::create($values);
+        return response(['data' => $item], 201, ['Location' => route('asset_group.read', ['id' => $item->id])]);
     }
 
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = AssetType::with($includes)->find($id);
+        $item = AssetGroup::with($includes)->find($id);
         return ['data' => $item];
     }
 
     public function update($id, Request $request)
     {
-        $item = AssetType::findOrFail($id);
+        $item = AssetGroup::findOrFail($id);
         $values['updater_id'] = $request->user()->id;
         $values = $this->validateModel($request);
         $item->update($values);
@@ -52,27 +52,27 @@ class AssetTypeController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $item = AssetType::findOrFail($id);
+        $item = AssetGroup::findOrFail($id);
         $item->delete();
         return response([], 204);
     }
     
     protected $model_validation = [
+       'asset_type_id' => 'integer|exists:asset_types,id',
        'name' => 'string|max:1020',
+       'number' => 'string|max:1',
        'notes' => 'string|max:1073741824|nullable',
        'sort_order' => 'string|max:1020|nullable',
-       'asset_brand_id' => 'integer|exists:asset_brands,id',
-       'number' => 'string|max:1',
     ];
     
     protected $model_validation_required = [
+       'asset_type_id' => 'required',
        'name' => 'required',
-       'asset_brand_id' => 'required',
        'number' => 'required',
     ];
 
     protected $model_includes = [
-       'asset_brand'
+       'asset_type'
     ];
     
 }

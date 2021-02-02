@@ -366,12 +366,6 @@ $router->get('/clock_ins/by_employee', 'ClockInController@by_employee');
 $router->post('/clock_in/assigned', ['uses' => 'ClockInController@createAssigned', 'as' => 'clock_in.create_assigned']);
 $router->patch('/clock_out/assigned/{id:[0-9]+}', ['uses' => 'ClockInController@clockOutAssigned', 'as' => 'clock_in.update_assigned']);
 
-$router->get('/asset_types', ['uses' => 'AssetTypeController@index', 'as' => 'asset_type.index']);
-$router->post('/asset_type', ['uses' => 'AssetTypeController@create', 'as' => 'asset_type.create']);
-$router->get('/asset_type/{id:[0-9]+}', ['uses' => 'AssetTypeController@read', 'as' => 'asset_type.read']);
-$router->patch('/asset_type/{id:[0-9]+}', ['uses' => 'AssetTypeController@update', 'as' => 'asset_type.update']);
-$router->delete('/asset_type/{id:[0-9]+}', ['uses' => 'AssetTypeController@delete', 'as' => 'asset_type.delete']);
-
 $router->get('/asset_usage_types', ['uses' => 'AssetUsageTypeController@index', 'as' => 'asset_usage_type.index']);
 $router->post('/asset_usage_type', ['uses' => 'AssetUsageTypeController@create', 'as' => 'asset_usage_type.create']);
 $router->get('/asset_usage_type/{id:[0-9]+}', ['uses' => 'AssetUsageTypeController@read', 'as' => 'asset_usage_type.read']);
@@ -510,3 +504,33 @@ $router->post('/task_action', ['uses' => 'TaskActionController@create', 'as' => 
 $router->get('/task_action/{id:[0-9]+}', ['uses' => 'TaskActionController@read', 'as' => 'task_action.read']);
 $router->patch('/task_action/{id:[0-9]+}', ['uses' => 'TaskActionController@update', 'as' => 'task_action.update']);
 $router->delete('/task_action/{id:[0-9]+}', ['uses' => 'TaskActionController@delete', 'as' => 'task_action.delete']);
+
+$router->get('/asset_categories', ['uses' => 'AssetCategoryController@index', 'as' => 'asset_category.index']);
+$router->post('/asset_category', ['uses' => 'AssetCategoryController@create', 'as' => 'asset_category.create']);
+$router->get('/asset_category/{id:[0-9]+}', ['uses' => 'AssetCategoryController@read', 'as' => 'asset_category.read']);
+$router->patch('/asset_category/{id:[0-9]+}', ['uses' => 'AssetCategoryController@update', 'as' => 'asset_category.update']);
+$router->delete('/asset_category/{id:[0-9]+}', ['uses' => 'AssetCategoryController@delete', 'as' => 'asset_category.delete']);
+
+$router->get('/asset_brands', ['uses' => 'AssetBrandController@index', 'as' => 'asset_brand.index']);
+$router->post('/asset_brand', ['uses' => 'AssetBrandController@create', 'as' => 'asset_brand.create']);
+$router->get('/asset_brand/{id:[0-9]+}', ['uses' => 'AssetBrandController@read', 'as' => 'asset_brand.read']);
+$router->patch('/asset_brand/{id:[0-9]+}', ['uses' => 'AssetBrandController@update', 'as' => 'asset_brand.update']);
+$router->delete('/asset_brand/{id:[0-9]+}', ['uses' => 'AssetBrandController@delete', 'as' => 'asset_brand.delete']);
+
+$router->get('/asset_types', ['uses' => 'AssetTypeController@index', 'as' => 'asset_type.index']);
+$router->post('/asset_type', ['uses' => 'AssetTypeController@create', 'as' => 'asset_type.create']);
+$router->get('/asset_type/{id:[0-9]+}', ['uses' => 'AssetTypeController@read', 'as' => 'asset_type.read']);
+$router->patch('/asset_type/{id:[0-9]+}', ['uses' => 'AssetTypeController@update', 'as' => 'asset_type.update']);
+$router->delete('/asset_type/{id:[0-9]+}', ['uses' => 'AssetTypeController@delete', 'as' => 'asset_type.delete']);
+
+$router->get('/asset_groups', ['uses' => 'AssetGroupController@index', 'as' => 'asset_group.index']);
+$router->post('/asset_group', ['uses' => 'AssetGroupController@create', 'as' => 'asset_group.create']);
+$router->get('/asset_group/{id:[0-9]+}', ['uses' => 'AssetGroupController@read', 'as' => 'asset_group.read']);
+$router->patch('/asset_group/{id:[0-9]+}', ['uses' => 'AssetGroupController@update', 'as' => 'asset_group.update']);
+$router->delete('/asset_group/{id:[0-9]+}', ['uses' => 'AssetGroupController@delete', 'as' => 'asset_group.delete']);
+
+$router->get('/asset_subs', ['uses' => 'AssetSubController@index', 'as' => 'asset_sub.index']);
+$router->post('/asset_sub', ['uses' => 'AssetSubController@create', 'as' => 'asset_sub.create']);
+$router->get('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@read', 'as' => 'asset_sub.read']);
+$router->patch('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@update', 'as' => 'asset_sub.update']);
+$router->delete('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@delete', 'as' => 'asset_sub.delete']);

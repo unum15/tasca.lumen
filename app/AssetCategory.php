@@ -5,20 +5,14 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class AssetType extends Model
+class AssetCategory extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
+        'number',
         'notes',
-        'sort_order',
-        'asset_brand_id',
-        'number'
+        'sort_order'
     ];
-
-    public function asset_brand()
-    {
-        return $this->belongsTo('App\AssetBrand');
-    }
 }

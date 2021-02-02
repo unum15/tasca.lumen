@@ -8,7 +8,11 @@ class Asset extends Model
 {
     protected $fillable = [
         'name',
+        'asset_category_id',
+        'asset_brand_id',
         'asset_type_id',
+        'asset_group_id',
+        'asset_sub_id',
         'asset_usage_type_id',
         'year',
         'make',
@@ -24,9 +28,29 @@ class Asset extends Model
         'purchase_date'
     ];
 
+    public function asset_category()
+    {
+        return $this->belongsTo('App\AssetCategory');
+    }
+    
+    public function asset_brand()
+    {
+        return $this->belongsTo('App\AssetBrand');
+    }
+    
     public function asset_type()
     {
         return $this->belongsTo('App\AssetType');
+    }
+    
+    public function asset_group()
+    {
+        return $this->belongsTo('App\AssetGroup');
+    }
+    
+    public function asset_sub()
+    {
+        return $this->belongsTo('App\AssetSub');
     }
 
     public function asset_location()
