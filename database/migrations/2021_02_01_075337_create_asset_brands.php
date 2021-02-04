@@ -13,7 +13,7 @@ class CreateAssetBrands extends Migration
             $table->id();
             $table->bigInteger('asset_category_id');
             $table->string('name');
-            $table->char('number');
+            $table->char('number',1);
             $table->text('notes')->nullable();
             $table->string('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();

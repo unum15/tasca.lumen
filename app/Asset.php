@@ -13,6 +13,7 @@ class Asset extends Model
         'asset_type_id',
         'asset_group_id',
         'asset_sub_id',
+        'item_number',
         'asset_usage_type_id',
         'year',
         'make',
