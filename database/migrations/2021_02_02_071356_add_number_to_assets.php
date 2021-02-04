@@ -12,11 +12,13 @@ class AddNumberToAssets extends Migration
     {
         DB::table('assets')->delete();
         Schema::table('assets', function (Blueprint $table) {
+            $table->dropColumn('number');
             $table->bigInteger('asset_category_id')->nullable();
             $table->bigInteger('asset_brand_id')->nullable();
             $table->bigInteger('asset_type_id')->nullable()->change();
             $table->bigInteger('asset_group_id')->nullable();
             $table->bigInteger('asset_sub_id')->nullable();
+            $table->char('item_number',1)->nullable();
             $table->foreign('asset_category_id')
                 ->references('id')->on('asset_categories')
                 ->onDelete('cascade');
@@ -39,6 +41,8 @@ class AddNumberToAssets extends Migration
             $table->dropColumn('asset_brand_id');
             $table->dropColumn('asset_group_id');
             $table->dropColumn('asset_sub_id');
+            $table->dropColumn('item_number');
+            $table->string('number')->nullable();
         });
     }
 }

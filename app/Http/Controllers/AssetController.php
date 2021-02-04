@@ -63,6 +63,7 @@ class AssetController extends Controller
        'asset_group_id' => 'integer|exists:asset_groups,id|nullable',
        'asset_sub_id' => 'integer|exists:asset_subs,id|nullable',
        'asset_usage_type_id' => 'integer|exists:asset_usage_types,id|nullable',
+       'item_number' => 'string|max:1|nullable',
        'year' => 'integer|nullable',
        'make' => 'string|max:1020|nullable',
        'model' => 'string|max:1020|nullable',
@@ -78,8 +79,7 @@ class AssetController extends Controller
     ];
     
     protected $model_validation_required = [
-       'name' => 'required',
-       'asset_type_id' => 'required'
+       'name' => 'required'
     ];
 
     protected $model_includes = [

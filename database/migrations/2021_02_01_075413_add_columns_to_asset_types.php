@@ -12,7 +12,7 @@ class AddColumnsToAssetTypes extends Migration
         DB::table('asset_types')->delete();
         Schema::table('asset_types', function (Blueprint $table) {
             $table->bigInteger('asset_brand_id');
-            $table->char('number');
+            $table->char('number',1);
             $table->string('sort_order')->change();
             $table->foreign('asset_brand_id')
                 ->references('id')->on('asset_brands')
