@@ -375,6 +375,7 @@ $router->delete('/asset_usage_type/{id:[0-9]+}', ['uses' => 'AssetUsageTypeContr
 $router->get('/assets', ['uses' => 'AssetController@index', 'as' => 'asset.index']);
 $router->post('/asset', ['uses' => 'AssetController@create', 'as' => 'asset.create']);
 $router->get('/asset/{id:[0-9]+}', ['uses' => 'AssetController@read', 'as' => 'asset.read']);
+$router->get('/asset/number/{number:[0-9A-Z]+}', ['uses' => 'AssetController@readNumber', 'as' => 'asset.read_number']);
 $router->patch('/asset/{id:[0-9]+}', ['uses' => 'AssetController@update', 'as' => 'asset.update']);
 $router->delete('/asset/{id:[0-9]+}', ['uses' => 'AssetController@delete', 'as' => 'asset.delete']);
 

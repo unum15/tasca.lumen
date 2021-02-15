@@ -39,6 +39,40 @@ class AssetController extends Controller
         $item = Asset::with($includes)->find($id);
         return ['data' => $item];
     }
+    
+    public function readNumber($number, Request $request)
+    {
+        $includes = $this->validateIncludes($request->input('includes'));
+        $item_query = Asset::with($includes);
+        list($category,$brand,$type,$group,$sub,$item_num) = str_split($number);
+        Log::debug($brand);
+        if($category){
+            $item_query = $item_query->whereHas('asset_category', function($q) use ($category){
+                $q->where('number', $category);
+            });
+        }
+        else{
+            $item_query = $item_query->whereNull('asset_category_id');
+        }
+        if($brand){
+            Log::debug('true');
+            $item_query = $item_query->whereHas('asset_brand', function($q) use ($brand){
+                $q->where('number', $brand);
+            });
+        }
+        else{
+            Log::debug('false');
+            $item_query = $item_query->whereNull('asset_brand_id');
+        }
+        if($item_num){
+            $item_query = $item_query->where('item_number',$item_num);
+        }
+        else{
+            $item_query = $item_query->whereNull('item_number');
+        }
+        $item = $item_query->get()->first();
+        return ['data' => $item];
+    }
 
     public function update($id, Request $request)
     {
