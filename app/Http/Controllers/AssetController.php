@@ -22,6 +22,7 @@ class AssetController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $items_query->orderBy('id','DESC');
         $items = $items_query->get();
         return ['data' => $items];
     }
@@ -45,7 +46,6 @@ class AssetController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $item_query = Asset::with($includes);
         list($category,$brand,$type,$group,$sub,$item_num) = str_split($number);
-        Log::debug($brand);
         if($category){
             $item_query = $item_query->whereHas('asset_category', function($q) use ($category){
                 $q->where('number', $category);
@@ -55,13 +55,11 @@ class AssetController extends Controller
             $item_query = $item_query->whereNull('asset_category_id');
         }
         if($brand){
-            Log::debug('true');
             $item_query = $item_query->whereHas('asset_brand', function($q) use ($brand){
                 $q->where('number', $brand);
             });
         }
         else{
-            Log::debug('false');
             $item_query = $item_query->whereNull('asset_brand_id');
         }
         if($item_num){
