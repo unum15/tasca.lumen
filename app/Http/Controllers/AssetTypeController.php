@@ -21,6 +21,7 @@ class AssetTypeController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $items_query->orderBy('number');
         $items = $items_query->get();
         return ['data' => $items];
     }

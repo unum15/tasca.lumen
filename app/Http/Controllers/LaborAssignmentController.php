@@ -23,6 +23,7 @@ class LaborAssignmentController extends Controller
             ->with('children.labor_activities')
             ->with('labor_type')
             ->with('order')
+            ->with('children.order')
             ->with($includes)
             ->orderBy('sort_order')
             ->orderBy('name');

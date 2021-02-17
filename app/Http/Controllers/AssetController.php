@@ -22,6 +22,7 @@ class AssetController extends Controller
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
+        $items_query->orderBy('id','DESC');
         $items = $items_query->get();
         return ['data' => $items];
     }
@@ -37,6 +38,37 @@ class AssetController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = Asset::with($includes)->find($id);
+        return ['data' => $item];
+    }
+    
+    public function readNumber($number, Request $request)
+    {
+        $includes = $this->validateIncludes($request->input('includes'));
+        $item_query = Asset::with($includes);
+        list($category,$brand,$type,$group,$sub,$item_num) = str_split($number);
+        if($category){
+            $item_query = $item_query->whereHas('asset_category', function($q) use ($category){
+                $q->where('number', $category);
+            });
+        }
+        else{
+            $item_query = $item_query->whereNull('asset_category_id');
+        }
+        if($brand){
+            $item_query = $item_query->whereHas('asset_brand', function($q) use ($brand){
+                $q->where('number', $brand);
+            });
+        }
+        else{
+            $item_query = $item_query->whereNull('asset_brand_id');
+        }
+        if($item_num){
+            $item_query = $item_query->where('item_number',$item_num);
+        }
+        else{
+            $item_query = $item_query->whereNull('item_number');
+        }
+        $item = $item_query->get()->first();
         return ['data' => $item];
     }
 
