@@ -62,6 +62,30 @@ class AssetController extends Controller
         else{
             $item_query = $item_query->whereNull('asset_brand_id');
         }
+        if($type){
+            $item_query = $item_query->whereHas('asset_type', function($q) use ($type){
+                $q->where('number', $type);
+            });
+        }
+        else{
+            $item_query = $item_query->whereNull('asset_type_id');
+        }
+        if($group){
+            $item_query = $item_query->whereHas('asset_group', function($q) use ($group){
+                $q->where('number', $group);
+            });
+        }
+        else{
+            $item_query = $item_query->whereNull('asset_group_id');
+        }
+        if($sub){
+            $item_query = $item_query->whereHas('asset_sub', function($q) use ($sub){
+                $q->where('number', $sub);
+            });
+        }
+        else{
+            $item_query = $item_query->whereNull('asset_sub_id');
+        }
         if($item_num){
             $item_query = $item_query->where('item_number',$item_num);
         }
