@@ -21,6 +21,9 @@ class AssetNumberCheck extends Migration
         SELECT number INTO sub FROM asset_subs WHERE id = NEW.asset_sub_id;
             IF (sub != '0') THEN
                 SELECT id INTO conflict FROM assets WHERE asset_sub_id = NEW.asset_sub_id AND item_number = NEW.item_number;
+                IF (conflict != NULL) THEN
+                    RAISE 'Duplicate asset number' USING ERRCODE = 'unique_violation';
+                END IF;
             END IF;
         END IF;
         RETURN NEW;
