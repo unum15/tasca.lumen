@@ -8,6 +8,21 @@ class AssetNumberCheck extends Migration
 {
     public function up()
     {
+        Schema::table('asset_categories', function (Blueprint $table) {
+            $table->unique('number');
+        });
+        Schema::table('asset_brands', function (Blueprint $table) {
+            $table->unique(['asset_category_id', 'number']);
+        });
+        Schema::table('asset_types', function (Blueprint $table) {
+            $table->unique(['asset_brand_id', 'number']);
+        });
+        Schema::table('asset_groups', function (Blueprint $table) {
+            $table->unique(['asset_type_id', 'number']);
+        });
+        Schema::table('asset_subs', function (Blueprint $table) {
+            $table->unique(['asset_group_id', 'number']);
+        });
         $sql = "
     CREATE FUNCTION verify_asset_number() 
     RETURNS TRIGGER 
