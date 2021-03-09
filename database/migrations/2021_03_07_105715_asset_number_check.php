@@ -30,13 +30,13 @@ class AssetNumberCheck extends Migration
     AS $$
     DECLARE
         sub CHARACTER;
-        conflict INTEGER;
+        existing INTEGER;
     BEGIN
         IF (NEW.item_number != '0') THEN
         SELECT number INTO sub FROM asset_subs WHERE id = NEW.asset_sub_id;
             IF (sub != '0') THEN
-                SELECT id INTO conflict FROM assets WHERE asset_sub_id = NEW.asset_sub_id AND item_number = NEW.item_number;
-                IF (conflict != NULL) THEN
+                SELECT id INTO existing FROM assets WHERE asset_sub_id = NEW.asset_sub_id AND item_number = NEW.item_number;
+                IF (existing IS NOT NULL) THEN
                     RAISE 'Duplicate asset number' USING ERRCODE = 'unique_violation';
                 END IF;
             END IF;
