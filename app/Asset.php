@@ -68,4 +68,9 @@ class Asset extends Model
     {
         return $this->belongsTo('App\Asset','parent_asset_id');
     }
+    
+    public function asset_exports()
+    {
+        return $this->hasMany('App\AssetExport')->orderBy('exported_at','DESC');
+    }
 }
