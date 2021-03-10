@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Asset;
+use App\AssetExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -31,6 +32,17 @@ class AssetController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = Asset::create($values);
+        return response(['data' => $item], 201, ['Location' => route('asset.read', ['id' => $item->id])]);
+    }
+    
+    public function createExport($id)
+    {
+        $values = [
+          'asset_id' => $id,
+          'exported_at' => date('Y-m-d H:i:s')
+        ];
+        AssetExport::create($values);
+        $item = Asset::with(['asset_exports'])->find($id);
         return response(['data' => $item], 201, ['Location' => route('asset.read', ['id' => $item->id])]);
     }
 
@@ -146,7 +158,8 @@ class AssetController extends Controller
        'asset_group',
        'asset_sub',
        'parent_asset',
-       'asset_location'
+       'asset_location',
+       'asset_exports'
     ];
     
 }

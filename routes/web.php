@@ -378,6 +378,7 @@ $router->get('/asset/{id:[0-9]+}', ['uses' => 'AssetController@read', 'as' => 'a
 $router->get('/asset/number/{number:[0-9A-Z]+}', ['uses' => 'AssetController@readNumber', 'as' => 'asset.read_number']);
 $router->patch('/asset/{id:[0-9]+}', ['uses' => 'AssetController@update', 'as' => 'asset.update']);
 $router->delete('/asset/{id:[0-9]+}', ['uses' => 'AssetController@delete', 'as' => 'asset.delete']);
+$router->post('/asset/{id:[0-9]+}/export', ['uses' => 'AssetController@createExport', 'as' => 'asset.create.export']);
 
 $router->get('/asset_fuelings', ['uses' => 'AssetFuelingController@index', 'as' => 'asset_fueling.index']);
 $router->post('/asset_fueling', ['uses' => 'AssetFuelingController@create', 'as' => 'asset_fueling.create']);
