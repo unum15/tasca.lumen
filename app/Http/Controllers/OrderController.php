@@ -97,10 +97,10 @@ class OrderController extends Controller
                 case 'Completed' :
                     $items_query
                     ->whereDoesntHave('tasks', function($q){
-                        $q->whereNull('close_date');
+                        $q->whereNull('closed_date');
                     })
                     ->whereHas('tasks', function($q){
-                        $q->whereNotNull('close_date');
+                        $q->whereNotNull('closed_date');
                         $q->where(function ($q){
                             $date = date_create();
                             $date->modify('-14 days');
@@ -111,10 +111,10 @@ class OrderController extends Controller
                     break;
                 case 'Non-Completed' :
                     $items_query->whereHas('tasks', function($query){
-                        $query->whereNull('close_date');
+                        $query->whereNull('closed_date');
                     })
                     ->whereHas('tasks', function($q){
-                        $q->whereNotNull('close_date');
+                        $q->whereNotNull('closed_date');
                     });
                     break;
             }
