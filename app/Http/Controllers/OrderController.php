@@ -97,24 +97,24 @@ class OrderController extends Controller
                 case 'Completed' :
                     $items_query
                     ->whereDoesntHave('tasks', function($q){
-                        $q->whereNull('closed_date');
+                        $q->whereNull('completion_date');
                     })
                     ->whereHas('tasks', function($q){
-                        $q->whereNotNull('closed_date');
+                        $q->whereNotNull('completion_date');
                         $q->where(function ($q){
                             $date = date_create();
                             $date->modify('-14 days');
-                            $q->where('closed_date', '>=', $date->format('Y-m-d'))
-                            ->orWhereNull('closed_date');
+                            $q->where('completion_date', '>=', $date->format('Y-m-d'))
+                            ->orWhereNull('completion_date');
                         });
                     });
                     break;
                 case 'Non-Completed' :
                     $items_query->whereHas('tasks', function($query){
-                        $query->whereNull('closed_date');
+                        $query->whereNull('completion_date');
                     })
                     ->whereHas('tasks', function($q){
-                        $q->whereNotNull('closed_date');
+                        $q->whereNotNull('completion_date');
                     });
                     break;
             }
