@@ -35,7 +35,7 @@ class AssetNumberCheck extends Migration
         IF (NEW.item_number != '0') THEN
         SELECT number INTO sub FROM asset_subs WHERE id = NEW.asset_sub_id;
             IF (sub != '0') THEN
-                SELECT id INTO existing FROM assets WHERE asset_sub_id = NEW.asset_sub_id AND item_number = NEW.item_number;
+                SELECT id INTO existing FROM assets WHERE asset_sub_id = NEW.asset_sub_id AND item_number = NEW.item_number AND id != NEW.id;
                 IF (existing IS NOT NULL) THEN
                     RAISE 'Duplicate asset number' USING ERRCODE = 'unique_violation';
                 END IF;

@@ -143,7 +143,7 @@ class AppointmentController extends Controller
                 'crew_id',
                 'crews.name AS crew'
         );
-        if(!empty($crew_id)){
+        if(isset($crew_id)){
             switch($crew_id){
                 case '*':
                     break;

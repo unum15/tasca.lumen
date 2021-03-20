@@ -26,16 +26,14 @@ class BackflowAssemblyController extends Controller
         if($recent_reports){
             $recent_report_date = date_create();
             $recent_report_date->modify("-$recent_reports days");
-            //echo $recent_report_date->format('Y-m-d');
             $items_query->with(['backflow_test_reports' => function ($query) use ($recent_report_date) {
                 $query->where('report_date', '>=', $recent_report_date);
                 $query->orderBy('created_at');
             }],'backflow_test_reports.backflow_tests','backflow_test_reports.backflow_repairs','backflow_test_reports.backflow_cleanings');
-            //$items_query->with([]);
         }
         $test_date = $request->input('test_date');
         if($test_date){
-            $items_query->whereHas('property.orders.tasks.dates', function ($query) use ($test_date) {
+            $items_query->whereHas('property.orders.tasks.appointments', function ($query) use ($test_date) {
                 $query->where('date', '=', $test_date);
             });
         }
@@ -189,7 +187,9 @@ class BackflowAssemblyController extends Controller
 </html>';
 	$pdf = PDF::loadHtml($html, ['format' => 'Letter']);
         $backflow_assembly = BackflowAssembly::findOrFail($id);
-        $filename = $backflow_assembly->property->name . '-' . $backflow_assembly->backflow_water_system->name . '-' .$backflow_assembly->use;
+        $filename = $backflow_assembly->property->abbreviation ? $backflow_assembly->property->abbreviation : $backflow_assembly->property->name;
+        $filename .= '-'.($backflow_assembly->backflow_water_system->abbreviation ? $backflow_assembly->backflow_water_system->abbreviation : $backflow_assembly->backflow_water_system->name);
+        $filename .= '-' .$backflow_assembly->use;        
         return $pdf->stream($filename . '.pdf');
     }
     

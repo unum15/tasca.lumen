@@ -478,8 +478,7 @@ class BackflowTestReportController extends Controller
                 <div style="text-align:center"><h3>Backflow Assembly Test Report</h3></div>
                 <div style="float:left;width:68%;font-size:11px;padding:5px;">
                     <div class="info"><span class="header">Water System:</span> ' . $report->backflow_assembly->backflow_water_system->name . '</div>
-                    <div class="info"><span class="header">Owner:</span> ' . $property->client->name . '</div>
-                    <div class="info"><span class="header">Contact Person:</span> ' . $backflow_assembly_contact_name . '&nbsp;&nbsp;&nbsp;<span class="header">Phone:</span> ' . $number . '</div>
+                    <div class="info"><span class="header">Owner:</span> ' . $property->client->name . '&nbsp;&nbsp;&nbsp;<span class="header">Contact Person:</span> ' . $backflow_assembly_contact_name . '&nbsp;&nbsp;&nbsp;<span class="header">Phone:</span> ' . $number . '</div>
                     <div class="info"><span class="header">Address:</span> ' . $billing_property->address1 . ' ' . $billing_property->address_2 . '&nbsp;&nbsp;&nbsp;<span class="header">City:</span> ' . $billing_property->city . '&nbsp;&nbsp;&nbsp;<span class="header">State:</span> ' . $billing_property->state . '&nbsp;&nbsp;&nbsp;<span class="header">Zip:</span> ' . $billing_property->zip . '</div>
                     <br />
                     <div class="info"><span class="header">Assembly Location:</span> ' . $property->name . '</div>
@@ -825,15 +824,13 @@ class BackflowTestReportController extends Controller
                     <tr><td class="header">Repaired By:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($repair_contact['name'],42)  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($repair_contact['cert'],16)  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($repair_contact['date'],18)  . '</td></tr>
                     <tr><td class="header">Final Test By:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['name'],42)  . '</td><td class="header">Certification No.</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['cert'],16)  . '</td><td class="header">Date:</td><td style="text-align:left;text-decoration:underline;">' . self::formatString($final_contact['date'],18)  . '</td></tr>
                 </table>
-                <div class="info">
-                <div style="font-weight:bold;">Report Notes</div>
-                '. $report->notes .'
+                <div class="info"><span class="header">Report Notes:</span>'. $report->notes .'</div>
+                <div style="float:left;width:68%;font-size:11px;padding:5px;">                
+                    <div class="info">This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.self::checked($initial_test_results['satisfactory']).'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.self::checked($initial_test_results['unsatisfactory']).'/></div>
+                    <div class="info">This assembly\'s <span class="header">FINAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.self::checked($final_test_results['satisfactory']).' /> <span class="header">Unsatisfactory</span><input type="checkbox" /></div>
+                    <div class="info">I certify the above test has been performed and I am aware of the final performance.</div>
+                    <div class="info">BY: ________________________________________ Assembly Owner Representative Assembly</div>
                 </div>
-                <br />
-                <div class="info">This assembly\'s <span class="header">INITIAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.self::checked($initial_test_results['satisfactory']).'/> <span class="header">Unsatisfactory</span> <input type="checkbox" '.self::checked($initial_test_results['unsatisfactory']).'/></div>
-                <div class="info">This assembly\'s <span class="header">FINAL TEST</span> performance was: <span class="header">Satisfactory</span> <input type="checkbox" '.self::checked($final_test_results['satisfactory']).' /> <span class="header">Unsatisfactory</span><input type="checkbox" /></div>
-                <div class="info">I certify the above test has been performed and I am aware of the final performance.</div>
-                <div class="info">BY: ________________________________________ Assembly Owner Representative Assembly</div>
         ';
         return $html;
     }
@@ -869,11 +866,14 @@ class BackflowTestReportController extends Controller
     {
         class_alias('Illuminate\Support\Facades\Config', 'Config');//needed for PDF stuff to work, but conflicts with phpunit
         $html = $this->htmls($request);
-	$html = preg_replace('|/api/images/w_logo.jpg|',public_path().'/images/w_logo.jpg',$html);
+        $html = preg_replace('|/api/images/w_logo.jpg|',public_path().'/images/w_logo.jpg',$html);
         $pdf = Pdf::loadHtml($html);
         $ids = $request->input('backflow_test_report_id');
         $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property')->findOrFail($ids[0]);
-        $filename = $report->backflow_assembly->property->client->name.'_'.$report->backflow_assembly->property->name.'_'.$report->backflow_assembly->backflow_water_system->name.'_'.$report->report_date;
+        $filename = $report->backflow_assembly->property->client->name;
+        $filename .= '_'.($report->backflow_assembly->property->abbreviation ? $report->backflow_assembly->property->abbreviation : $report->backflow_assembly->property->name);
+        $filename .= '_'.($report->backflow_assembly->backflow_water_system->abbreviation ? $report->backflow_assembly->backflow_water_system->abbreviation : $report->backflow_assembly->backflow_water_system->name);
+        $filename .= '_'.$report->report_date;
         return $pdf->stream($filename . '.pdf');
     }
     
