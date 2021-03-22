@@ -20,7 +20,8 @@ class Client extends Model
         'referred_by',
         'creator_id',
         'updater_id',
-        'phreebooks_id'
+        'phreebooks_id',
+        'abbreviation'
     ];
     
     public function activityLevel()

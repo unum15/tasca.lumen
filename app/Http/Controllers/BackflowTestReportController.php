@@ -839,14 +839,9 @@ class BackflowTestReportController extends Controller
     {
         class_alias('Illuminate\Support\Facades\Config', 'Config');//needed for PDF stuff to work, but conflicts with phpunit
         $html = $this->html($id, $request);
-	$html = preg_replace('|/api/images/w_logo.jpg|',public_path().'/images/w_logo.jpg',$html);
+        $html = preg_replace('|/api/images/w_logo.jpg|',public_path().'/images/w_logo.jpg',$html);
         $pdf = Pdf::loadHtml($html);
-        $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property','backflow_assembly.backflow_water_system')->findOrFail($id);
-        $filename = $report->backflow_assembly->property->client->name . '_';
-        $filename .= $report->backflow_assembly->property->abbreviation ? $report->backflow_assembly->property->abbreviation : $report->backflow_assembly->property->name;
-        $filename .= '_';
-        $filename .= $report->backflow_assembly->backflow_water_system->abbreviation ? $report->backflow_assembly->backflow_water_system->abbreviation : $report->backflow_assembly->backflow_water_system->name;
-        $filename .= '_'.$report->report_date;
+        $filename = $this->pdfName($id,$request);
         return $pdf->stream($filename . '.pdf');
     }
     
@@ -861,7 +856,7 @@ class BackflowTestReportController extends Controller
         $html .= $this->htmlFooter();
         return $html;
     }
-    
+
     public function pdfs(Request $request)
     {
         class_alias('Illuminate\Support\Facades\Config', 'Config');//needed for PDF stuff to work, but conflicts with phpunit
@@ -869,14 +864,27 @@ class BackflowTestReportController extends Controller
         $html = preg_replace('|/api/images/w_logo.jpg|',public_path().'/images/w_logo.jpg',$html);
         $pdf = Pdf::loadHtml($html);
         $ids = $request->input('backflow_test_report_id');
-        $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property')->findOrFail($ids[0]);
-        $filename = $report->backflow_assembly->property->client->name;
-        $filename .= '_'.($report->backflow_assembly->property->abbreviation ? $report->backflow_assembly->property->abbreviation : $report->backflow_assembly->property->name);
-        $filename .= '_'.($report->backflow_assembly->backflow_water_system->abbreviation ? $report->backflow_assembly->backflow_water_system->abbreviation : $report->backflow_assembly->backflow_water_system->name);
-        $filename .= '_'.$report->report_date;
+        $filename = $this->pdfName($ids[0],$request);
         return $pdf->stream($filename . '.pdf');
     }
     
+    public function pdfName($id,$request){
+        $use = $request->only(['use_client','use_property']);
+        $report = BackflowTestReport::with('backflow_assembly','backflow_assembly.property','backflow_assembly.backflow_water_system')->findOrFail($id);
+        $filename = '';
+        if(empty($use['use_client'])||($use['use_client'] == 'true')){
+            $filename = $report->backflow_assembly->property->client->abbreviation ? $report->backflow_assembly->property->client->abbreviation : $report->backflow_assembly->property->client->name;
+            $filename .= '_';
+        }
+        if(empty($use['use_property'])||($use['use_property'] == 'true')){
+            $filename .= $report->backflow_assembly->property->abbreviation ? $report->backflow_assembly->property->abbreviation : $report->backflow_assembly->property->name;
+            $filename .= '_';
+        }
+        $filename .= $report->backflow_assembly->backflow_water_system->abbreviation ? $report->backflow_assembly->backflow_water_system->abbreviation : $report->backflow_assembly->backflow_water_system->name;
+        $filename .= '_'.$report->report_date;
+        return $filename;
+    }
+
     protected $model_validation = [
        'backflow_assembly_id' => 'integer|exists:backflow_assemblies,id',
        'visual_inspection_notes' => 'string|max:1020|nullable',
