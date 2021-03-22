@@ -29,7 +29,8 @@ class Property extends Model
         'updater_id',
         'updater_id',
         'phreebooks_id',
-        'abbreviation'
+        'abbreviation',
+        'coordinates'
     ];
     
     public function client()

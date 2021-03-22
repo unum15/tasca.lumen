@@ -23,6 +23,7 @@ class PropertyController extends Controller
         'activity_level_id' => 'integer|exists:activity_levels,id',
         'property_type_id' => 'integer|exists:property_types,id',
         'abbreviation' => 'nullable|string|max:255',
+        'coordinates' => 'nullable|string|max:255',
     ];
 
     public function __construct()
