@@ -99,6 +99,20 @@ class AppointmentController extends Controller
             ->leftJoin('task_statuses', 'tasks.task_status_id', '=', 'task_statuses.id')
             ->leftJoin('task_actions', 'tasks.task_action_id', '=', 'task_actions.id')
             ->leftJoin('crews', 'tasks.crew_id', '=', 'crews.id')
+            ->join(DB::raw('(
+                SELECT
+                    appointment_id,
+                    SUM(COALESCE(clock_out,NOW())-clock_in) AS total_hours
+                FROM
+                    clock_ins
+                GROUP BY
+                    appointment_id
+                )
+                AS total_hours'), 
+                function($join)
+                {
+                   $join->on('appointments.id', '=', 'total_hours.appointment_id');
+                })            
             ->select(
                 'appointments.id',
                 DB::raw('row_number() OVER () AS row'),
@@ -139,6 +153,8 @@ class AppointmentController extends Controller
                 'tasks.billed_date',
                 'tasks.labor_type_id',
                 'orders.order_status_type_id',
+                'total_hours.total_hours',
+                'tasks.task_hours',
                 'tasks.crew_hours',
                 'crew_id',
                 'crews.name AS crew'
