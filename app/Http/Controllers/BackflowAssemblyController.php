@@ -187,9 +187,11 @@ class BackflowAssemblyController extends Controller
 </html>';
 	$pdf = PDF::loadHtml($html, ['format' => 'Letter']);
         $backflow_assembly = BackflowAssembly::findOrFail($id);
-        $filename = $backflow_assembly->property->abbreviation ? $backflow_assembly->property->abbreviation : $backflow_assembly->property->name;
-        $filename .= '-'.($backflow_assembly->backflow_water_system->abbreviation ? $backflow_assembly->backflow_water_system->abbreviation : $backflow_assembly->backflow_water_system->name);
-        $filename .= '-' .$backflow_assembly->use;        
+        $filename = $report->backflow_assembly->property->client->abbreviation ? $report->backflow_assembly->property->client->abbreviation : $report->backflow_assembly->property->client->name;
+        $filename .= ' ';
+        $filename .= $backflow_assembly->property->abbreviation ? $backflow_assembly->property->abbreviation : $backflow_assembly->property->name;
+        $filename .= ' '.($backflow_assembly->backflow_water_system->abbreviation ? $backflow_assembly->backflow_water_system->abbreviation : $backflow_assembly->backflow_water_system->name);
+        $filename .= ' TAG';        
         return $pdf->stream($filename . '.pdf');
     }
     
