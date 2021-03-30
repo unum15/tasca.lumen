@@ -190,7 +190,6 @@ class BackflowAssemblyController extends Controller
         $filename = $backflow_assembly->property->client->abbreviation ? $backflow_assembly->property->client->abbreviation : $backflow_assembly->property->client->name;
         $filename .= ' ';
         $filename .= $backflow_assembly->property->abbreviation ? $backflow_assembly->property->abbreviation : $backflow_assembly->property->name;
-        $filename .= ' '.($backflow_assembly->backflow_water_system->abbreviation ? $backflow_assembly->backflow_water_system->abbreviation : $backflow_assembly->backflow_water_system->name);
         $filename .= ' TAG';        
         return $pdf->stream($filename . '.pdf');
     }
