@@ -185,11 +185,19 @@ class BackflowAssemblyController extends Controller
         </div>
     </body>
 </html>';
-	$pdf = PDF::loadHtml($html, ['format' => 'Letter']);
+        $pdf = PDF::loadHtml($html, ['format' => 'Letter']);
         $backflow_assembly = BackflowAssembly::findOrFail($id);
-        $filename = $backflow_assembly->property->abbreviation ? $backflow_assembly->property->abbreviation : $backflow_assembly->property->name;
-        $filename .= '-'.($backflow_assembly->backflow_water_system->abbreviation ? $backflow_assembly->backflow_water_system->abbreviation : $backflow_assembly->backflow_water_system->name);
-        $filename .= '-' .$backflow_assembly->use;        
+        $use = $request->only(['use_client','use_property']);
+        $filename = '';
+        if(empty($use['use_client'])||($use['use_client'] == 'true')){
+            $filename .= $backflow_assembly->property->client->abbreviation ? $backflow_assembly->property->client->abbreviation : $backflow_assembly->property->client->name;
+            $filename .= ' ';
+        }
+        if(empty($use['use_property'])||($use['use_property'] == 'true')){
+            $filename .= $backflow_assembly->property->abbreviation ? $backflow_assembly->property->abbreviation : $backflow_assembly->property->name;
+            $filename .= ' ';
+        }
+        $filename .= 'TAGS';
         return $pdf->stream($filename . '.pdf');
     }
     
