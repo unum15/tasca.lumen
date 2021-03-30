@@ -874,14 +874,14 @@ class BackflowTestReportController extends Controller
         $filename = '';
         if(empty($use['use_client'])||($use['use_client'] == 'true')){
             $filename = $report->backflow_assembly->property->client->abbreviation ? $report->backflow_assembly->property->client->abbreviation : $report->backflow_assembly->property->client->name;
-            $filename .= '_';
+            $filename .= ' ';
         }
         if(empty($use['use_property'])||($use['use_property'] == 'true')){
             $filename .= $report->backflow_assembly->property->abbreviation ? $report->backflow_assembly->property->abbreviation : $report->backflow_assembly->property->name;
-            $filename .= '_';
+            $filename .= ' ';
         }
         $filename .= $report->backflow_assembly->backflow_water_system->abbreviation ? $report->backflow_assembly->backflow_water_system->abbreviation : $report->backflow_assembly->backflow_water_system->name;
-        $filename .= '_'.$report->report_date;
+        $filename .= ' '.$report->report_date;
         return $filename;
     }
 
