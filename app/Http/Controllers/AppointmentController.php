@@ -102,7 +102,7 @@ class AppointmentController extends Controller
             ->join(DB::raw('(
                 SELECT
                     appointment_id,
-                    SUM(COALESCE(clock_out,NOW())-clock_in) AS total_hours
+                    ROUND((EXTRACT(epoch FROM (SUM(COALESCE(clock_out,NOW())-clock_in))))::NUMERIC/3600,2) AS total_hours
                 FROM
                     clock_ins
                 GROUP BY
