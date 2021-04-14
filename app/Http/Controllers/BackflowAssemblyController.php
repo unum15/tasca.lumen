@@ -102,15 +102,12 @@ class BackflowAssemblyController extends Controller
             $year_table .= '
                 </tr>';
         }
-        $src = '/api/images/w_logo.jpg';
-        if(env('APP_ENV')=='local'){
-            $src = '/images/w_logo.jpg';
-        }
         $html = '
         <div style="border:1px solid black;padding-bottom:3px;padding-top:3px;padding-left:5px;">
             <div style="width:51%;float:left;position:relative;border-right:1px solid black;">
                 This assembly is tested annually by<br />
-                <img src="' . $src . '" style="width:40%;float:left;margin-right:10px;margin-bottom:20px;" />Waters Contracting<br />
+		<img src="data:image/jpg;base64, ' . base64_encode(file_get_contents(public_path() . '/images/w_logo.jpg')) . '" style="width:40%;float:left;margin-right:10px;margin-bottom:20px;" />
+		Waters Contracting<br />
                 801-546-0844<br />
                 License # 17193<br />
                 License # 96005<br />
