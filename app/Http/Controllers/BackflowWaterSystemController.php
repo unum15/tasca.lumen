@@ -15,7 +15,7 @@ class BackflowWaterSystemController extends Controller
     public function index(Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $items = BackflowWaterSystem::with($includes)->get();
+        $items = BackflowWaterSystem::with($includes)->orderBy('name')->get();
         return ['data' => $items];
     }
 
