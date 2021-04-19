@@ -259,7 +259,7 @@ class OrderController extends Controller
                 $properties = $properties['properties'];
             }
             else{
-                $properties = [];
+                return;
             }
         }
         else{
@@ -268,7 +268,7 @@ class OrderController extends Controller
                 $properties = [$property['property']];
             }
             else{
-                $properties = [];
+                return;
             }
         }
         $properties = array_filter($properties);
