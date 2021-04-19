@@ -184,11 +184,21 @@ class OrderController extends Controller
         $item = Order::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
         $values = $request->input();
-        $values['approval_date'] = isset($values['approval_date']) && $values['approval_date'] != "" ? $values['approval_date'] : null;
-        $values['start_date'] = isset($values['start_date']) && $values['start_date'] != "" ? $values['start_date'] : null;
-        $values['close_date'] = isset($values['close_date']) && $values['close_date'] != "" ? $values['close_date'] : null;
-        $values['expiration_date'] = isset($values['expiration_date']) && $values['expiration_date'] != "" ? $values['expiration_date'] : null;
-        $values['renewal_date'] = isset($values['renewal_date']) && $values['renewal_date'] != "" ? $values['renewal_date'] : null;
+        if(isset($values['approval_date']) && $values['approval_date'] == ""){
+            $values['approval_date'] = null;
+        }
+        if(isset($values['start_date']) && $values['start_date'] == ""){
+            $values['start_date'] =  null;
+        }
+        if(isset($values['close_date']) && $values['close_date'] == ""){
+            $values['close_date'] = null;
+        }
+        if(isset($values['expiration_date']) && $values['expiration_date'] == ""){
+            $values['expiration_date'] = null;
+        }
+        if(isset($values['renewal_date']) && $values['renewal_date'] == ""){
+            $values['renewal_date'] = null;
+        }
         $values['updater_id'] = $request->user()->id;
         Log::debug(print_r($item,true));
         if(($item->order_status_type_id != 1) || ($values['order_status_type_id'] == 1)){
