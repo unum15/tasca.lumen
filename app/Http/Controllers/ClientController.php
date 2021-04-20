@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use Illuminate\Http\Request;
+use log;
 
 class ClientController extends Controller
 {
@@ -52,6 +53,11 @@ class ClientController extends Controller
             $query->whereHas('properties', function($query) use ($zip){
                 $query->where('zip', 'like', "$zip%");
             });
+        }
+        $values = $request->only(array_keys($this->validation));
+        foreach($values as $field => $value){
+            log::Debug($value);
+            $query->where($field, $value);
         }
         $items = $query->get();
         return $items;
