@@ -35,7 +35,9 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
         'google_calendar_token',
         'google_calendar_id',
         'backflow_certification_number',
-        'phreebooks_id'
+        'phreebooks_id',
+        'crew_id',
+        'labor_rate'
     ];
     
     protected $hidden = [
