@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Setting;
 use App\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
@@ -164,4 +166,16 @@ class TaskController extends Controller
         return response([], 204);
     }    
 
+    public function unique($field)
+    {
+        if(!in_array($field,array_keys($this->validation))){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'field' => ['Field is not a valid field for Project'],
+            ]);
+            throw $error;
+        }
+        $mininium = Setting::where('name','mininium-auto-suggest-count')->first();
+        $items = Task::whereNotNull($field)->where($field,'!=','')->groupBy($field)->having(DB::raw('COUNT(*)'),'>=',$mininium['value'])->orderBy($field)->pluck($field);
+        return ['data' => $items];
+    }
 }

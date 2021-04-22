@@ -4,14 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Project;
 use Illuminate\Http\Request;
+use App\Setting;
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
     private $validation = [
         'name' => 'string|min:1|max:255',
         'client_id' => 'integer|exists:clients,id',
@@ -79,4 +77,16 @@ class ProjectController extends Controller
         return response([], 204);
     }    
 
+    public function unique($field)
+    {
+        if(!in_array($field,array_keys($this->validation))){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'field' => ['Field is not a valid field for Project'],
+            ]);
+            throw $error;
+        }
+        $mininium = Setting::where('name','mininium-auto-suggest-count')->first();
+        $items = Project::whereNotNull($field)->where($field,'!=','')->groupBy($field)->having(DB::raw('COUNT(*)'),'>=',$mininium['value'])->orderBy($field)->pluck($field);
+        return ['data' => $items];
+    }
 }
