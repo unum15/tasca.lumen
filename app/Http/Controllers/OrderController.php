@@ -160,6 +160,7 @@ class OrderController extends Controller
             'properties.contacts',
             'properties.contacts.phoneNumbers',
             'properties.contacts.phoneNumbers.phoneNumberType',
+            'properties.contacts.clientContactTypes',
             'approver',
             'tasks',
             'tasks.labor_assignment',
