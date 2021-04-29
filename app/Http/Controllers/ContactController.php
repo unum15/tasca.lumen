@@ -54,6 +54,10 @@ class ContactController extends Controller
         if(!empty($max_activity_level)) {
             $items_query->where('activity_level_id','<=',$max_activity_level);
         }
+        $values = $request->only(array_keys($this->validation));
+        foreach($values as $field => $value){
+            $items_query->where($field, $value);
+        }
         $items = $items_query->get();
         return $items;
     }
