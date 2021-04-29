@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Setting;
 use Illuminate\Http\Request;
 use log;
+use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
 {
@@ -115,4 +117,16 @@ class ClientController extends Controller
         return response([], 204);
     }    
 
+    public function unique($field)
+    {
+        if(!in_array($field,array_keys($this->validation))){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'field' => ['Field is not a valid field for Project'],
+            ]);
+            throw $error;
+        }
+        $mininium = Setting::where('name','mininium-auto-suggest-count')->first();
+        $items = Client::whereNotNull($field)->where($field,'!=','')->groupBy($field)->having(DB::raw('COUNT(*)'),'>=',$mininium['value'])->orderBy($field)->pluck($field);
+        return ['data' => $items];
+    }
 }

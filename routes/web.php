@@ -123,6 +123,7 @@ $router->post('/client', 'ClientController@create');
 $router->get('/client/{id:[0-9]+}', 'ClientController@read');
 $router->patch('/client/{id:[0-9]+}', 'ClientController@update');
 $router->delete('/client/{id:[0-9]+}', 'ClientController@delete');
+$router->get('/clients/unique/{field:\w+}', ['uses' => 'ClientController@unique', 'as' => 'client.unique']);
 
 $router->get('/contacts', 'ContactController@index');
 $router->post('/contact', 'ContactController@create');
@@ -149,6 +150,7 @@ $router->post('/project', 'ProjectController@create');
 $router->get('/project/{id:[0-9]+}', 'ProjectController@read');
 $router->patch('/project/{id:[0-9]+}', 'ProjectController@update');
 $router->delete('/project/{id:[0-9]+}', 'ProjectController@delete');
+$router->get('/projects/unique/{field:\w+}', ['uses' => 'ProjectController@unique', 'as' => 'project.unique']);
 
 $router->get('/properties', 'PropertyController@index');
 $router->post('/property', 'PropertyController@create');
@@ -163,12 +165,14 @@ $router->get('/order/{id:[0-9]+}', 'OrderController@read');
 $router->patch('/order/{id:[0-9]+}', 'OrderController@update');
 $router->delete('/order/{id:[0-9]+}', 'OrderController@delete');
 $router->get('/orders/closable', 'OrderController@closable');
+$router->get('/orders/unique/{field:\w+}', ['uses' => 'OrderController@unique', 'as' => 'order.unique']);
 
 $router->get('/tasks', 'TaskController@index');
 $router->post('/task', 'TaskController@create');
 $router->get('/task/{id:[0-9]+}', 'TaskController@read');
 $router->patch('/task/{id:[0-9]+}', 'TaskController@update');
 $router->delete('/task/{id:[0-9]+}', 'TaskController@delete');
+$router->get('/tasks/unique/{field:\w+}', ['uses' => 'TaskController@unique', 'as' => 'task.unique']);
 
 $router->get('/settings', 'SettingController@index');
 $router->patch('/settings', 'SettingController@update');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\Property;
+use App\Setting;
 use App\Task;
 use App\TaskDate;
 use Illuminate\Http\Request;
@@ -385,5 +386,18 @@ class OrderController extends Controller
         ;
         $items = $items_query->get();
         return $items;
+    }
+
+    public function unique($field)
+    {
+        if(!in_array($field,array_keys($this->validation))){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'field' => ['Field is not a valid field for Project'],
+            ]);
+            throw $error;
+        }
+        $mininium = Setting::where('name','mininium-auto-suggest-count')->first();
+        $items = Order::whereNotNull($field)->where($field,'!=','')->groupBy($field)->having(DB::raw('COUNT(*)'),'>=',$mininium['value'])->orderBy($field)->pluck($field);
+        return ['data' => $items];
     }
 }
