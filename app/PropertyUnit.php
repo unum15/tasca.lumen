@@ -11,7 +11,8 @@ class PropertyUnit extends Model
         'name',
         'number',
         'phone',
-        'notes'
+        'notes',
+        'coordinates'
     ];
 
     public function property()
