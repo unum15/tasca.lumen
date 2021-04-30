@@ -140,7 +140,7 @@ class AppointmentController extends Controller
                 'tasks.labor_type_id',
                 'orders.order_status_type_id',
                 'tasks.crew_hours',
-                'crew_id',
+                'tasks.crew_id',
                 'crews.name AS crew'
         );
         if(isset($crew_id)){
@@ -197,6 +197,7 @@ class AppointmentController extends Controller
                     ->whereNull('orders.close_date')
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
+                    ->where('tasks.hold_date', '<=', $date)
                     ->where(
                         function ($q) use ($date) {
                             $q->whereNull('orders.expiration_date')
@@ -253,7 +254,7 @@ class AppointmentController extends Controller
                         }
                     );
                     
-                    $items_query->where('tasks.hold_date', '>=', $date);
+                    $items_query->where('tasks.hold_date', '>', $date);
                     $items_query->orderBy('orders.start_date');
                     break;
                 case 'today':
