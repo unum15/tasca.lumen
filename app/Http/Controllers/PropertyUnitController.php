@@ -59,6 +59,7 @@ class PropertyUnitController extends Controller
        'number' => 'string|max:1020|nullable',
        'phone' => 'string|max:1020|nullable',
        'notes' => 'string|max:1020|nullable',
+       'coordinates' => 'string|max:1020|nullable',
     ];
     
     protected $model_validation_required = [
