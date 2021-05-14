@@ -135,6 +135,7 @@ class TaskController extends Controller
             'labor_assignment',
             'task_status',
             'task_action',
+            'labor_type',
             'order.orderPriority',
             'order.orderCategory',
             'appointments'

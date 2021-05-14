@@ -90,7 +90,7 @@ class ClockInController extends Controller
             ->leftJoin('orders', 'tasks.order_id', '=', 'orders.id')
             ->leftJoin('contacts', 'clock_ins.contact_id', '=', 'contacts.id')
             ->select(
-                DB::raw('ROUND((EXTRACT(EPOCH FROM SUM(clock_out-clock_in))/3600)::NUMERIC, 2) AS hours'),
+                DB::raw('ROUND((EXTRACT(EPOCH FROM SUM(COALESCE(clock_out,NOW())-clock_in))/3600)::NUMERIC, 2) AS hours'),
                 'contacts.id',
                 'contacts.name',
                 DB::raw('10.00 AS rate')

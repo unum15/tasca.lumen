@@ -215,6 +215,12 @@ class AppointmentController extends Controller
                     ->WhereNull('tasks.closed_date')
                     ->where(
                         function ($q) use ($date) {
+                            $q->whereNull('tasks.hold_date')
+                            ->orWhere('tasks.hold_date','<=',$date);
+                        }
+                    )
+                    ->where(
+                        function ($q) use ($date) {
                             $q->whereNull('orders.expiration_date')
                             ->orWhere('orders.expiration_date','>=',$date);
                         }
@@ -269,7 +275,7 @@ class AppointmentController extends Controller
                         }
                     );
                     
-                    $items_query->where('tasks.hold_date', '>=', $date);
+                    $items_query->where('tasks.hold_date', '>', $date);
                     $items_query->orderBy('orders.start_date');
                     break;
                 case 'today':
