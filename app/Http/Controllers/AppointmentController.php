@@ -99,7 +99,7 @@ class AppointmentController extends Controller
             ->leftJoin('task_statuses', 'tasks.task_status_id', '=', 'task_statuses.id')
             ->leftJoin('task_actions', 'tasks.task_action_id', '=', 'task_actions.id')
             ->leftJoin('crews', 'tasks.crew_id', '=', 'crews.id')
-            ->join(DB::raw('(
+            ->leftJoin(DB::raw('(
                 SELECT
                     appointment_id,
                     ROUND((EXTRACT(epoch FROM (SUM(COALESCE(clock_out,NOW())-clock_in))))::NUMERIC/3600,2) AS total_hours
