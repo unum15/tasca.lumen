@@ -203,11 +203,6 @@ class AppointmentController extends Controller
                     ->whereNull('orders.start_date')
                     ->WhereNull('orders.approval_date');
                     break;
-                            //On Hold, All Task, Pending Task, Current Task tab
-            //Start Date and (Blank Close, or expiration date), and the Tasks that have a (blank completion or closed date).
-            //Show blank and future task dates from the date on the calendar on the page.
-
-
                 case 'current':
                     $items_query->whereNotNull('orders.start_date')
                     ->whereNull('orders.close_date')
