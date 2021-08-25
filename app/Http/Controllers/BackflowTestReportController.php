@@ -91,7 +91,6 @@ class BackflowTestReportController extends Controller
         $item = BackflowTestReport::findOrFail($id);
         $parts = $request->input('parts');
         if(!is_array($parts)){
-            Log::debug($parts);
             return response(['error' => 'Invalid parts array:'.print_r($parts,true)], 401);
         }
         if(empty($contact_id)){
@@ -487,7 +486,7 @@ class BackflowTestReportController extends Controller
                     <div class="info"><span class="header">Owner:</span> ' . $property->client->name . '&nbsp;&nbsp;&nbsp;<span class="header">Contact Person:</span> ' . $backflow_assembly_contact_name . '&nbsp;&nbsp;&nbsp;<span class="header">Phone:</span> ' . $number . '</div>
                     <div class="info"><span class="header">Address:</span> ' . $billing_property->address1 . ' ' . $billing_property->address_2 . '&nbsp;&nbsp;&nbsp;<span class="header">City:</span> ' . $billing_property->city . '&nbsp;&nbsp;&nbsp;<span class="header">State:</span> ' . $billing_property->state . '&nbsp;&nbsp;&nbsp;<span class="header">Zip:</span> ' . $billing_property->zip . '</div>
                     <br />
-                    <div class="info"><span class="header">Assembly Location:</span> ' . $property->name . '</div>
+                    <div class="info"><span class="header">Assembly Location:</span> ' . $property->name .  ' ' . $report->backflow_assembly->property_unit->name . '</div>
                     <div class="info"><span class="header">Address:</span> ' . $report->backflow_assembly->property->address1 . ' ' . $report->backflow_assembly->property->address_2 . '&nbsp;&nbsp;&nbsp;<span class="header">City:</span> ' . $report->backflow_assembly->property->city . '&nbsp;&nbsp;&nbsp;<span class="header">State:</span> ' . $report->backflow_assembly->property->state . '&nbsp;&nbsp;&nbsp;<span class="header">Zip:</span> ' . $report->backflow_assembly->property->zip . '</div>
                     <br />
                     <div class="info"><span class="header">Assembly Placement:</span> ' . $report->backflow_assembly->placement . '&nbsp;&nbsp;&nbsp;<span class="header">Use:</span> ' . $report->backflow_assembly->use . '</div>
