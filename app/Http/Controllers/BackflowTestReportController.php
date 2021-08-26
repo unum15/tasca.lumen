@@ -14,7 +14,7 @@ class BackflowTestReportController extends Controller
 {
     public function __construct()
     {
-//        $this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -68,10 +68,10 @@ class BackflowTestReportController extends Controller
         $repaired_on = $request->input('repaired_on');
         if(!is_array($parts)){
             Log::debug($parts);
-            return response(['error' => 'Invalid parts array:'.print_r($parts,true)], 401);
+            return response(['error' => 'Invalid parts array:'.print_r($parts,true)], 422);
         }
         if(empty($contact_id)){
-            return response(['error' => 'Please Choose Repairs By'], 401);
+            return response(['error' => 'Please Choose Repairs By'], 422);
         }
         BackflowRepair::where('backflow_test_report_id',$item->id)->where('backflow_valve_id',$valve_id)->delete();
         foreach($parts as $part_id){
@@ -90,15 +90,15 @@ class BackflowTestReportController extends Controller
     {
         $item = BackflowTestReport::findOrFail($id);
         $parts = $request->input('parts');
-        if(!is_array($parts)){
-            return response(['error' => 'Invalid parts array:'.print_r($parts,true)], 401);
-        }
-        if(empty($contact_id)){
-            return response(['error' => 'Please Choose Repairs By'], 401);
-        }
         $valve_id = $request->input('valve_id');
         $contact_id = $request->input('contact_id');
         $cleaned_on = $request->input('cleaned_on');
+        if(!is_array($parts)){
+            return response(['error' => 'Invalid parts array:'.print_r($parts,true)], 422);
+        }
+        if(empty($contact_id)){
+            return response(['error' => 'Please Choose Repairs By'], 422);
+        }
         BackflowCleaning::where('backflow_test_report_id',$item->id)->where('backflow_valve_id',$valve_id)->delete();
         foreach($parts as $part_id){
             BackflowCleaning::create([
