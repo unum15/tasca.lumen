@@ -41,7 +41,8 @@ class ClockInController extends Controller
             'appointment.task.order.Project',
             'appointment.task.order.Project.Client'
         )
-        ->orderBy('clock_in');
+        ->orderBy('clock_in')
+        ->orderBy('clock_out');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
@@ -67,7 +68,7 @@ class ClockInController extends Controller
         }
         $stop_date = $request->input('stop_date');
         if(!empty($stop_date)) {
-            $items_query->where(DB::raw('clock_out::DATE'), '<=', $stop_date);
+            $items_query->where(DB::raw('clock_in::DATE'), '<=', $stop_date);
         }
 
         return $items_query->get();
@@ -89,7 +90,7 @@ class ClockInController extends Controller
             ->leftJoin('orders', 'tasks.order_id', '=', 'orders.id')
             ->leftJoin('contacts', 'clock_ins.contact_id', '=', 'contacts.id')
             ->select(
-                DB::raw('ROUND((EXTRACT(EPOCH FROM SUM(clock_out-clock_in))/3600)::NUMERIC, 2) AS hours'),
+                DB::raw('ROUND((EXTRACT(EPOCH FROM SUM(COALESCE(clock_out,NOW())-clock_in))/3600)::NUMERIC, 2) AS hours'),
                 'contacts.id',
                 'contacts.name',
                 DB::raw('10.00 AS rate')

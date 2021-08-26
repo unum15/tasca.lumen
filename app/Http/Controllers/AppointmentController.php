@@ -99,6 +99,20 @@ class AppointmentController extends Controller
             ->leftJoin('task_statuses', 'tasks.task_status_id', '=', 'task_statuses.id')
             ->leftJoin('task_actions', 'tasks.task_action_id', '=', 'task_actions.id')
             ->leftJoin('crews', 'tasks.crew_id', '=', 'crews.id')
+            ->leftJoin(DB::raw('(
+                SELECT
+                    appointment_id,
+                    ROUND((EXTRACT(epoch FROM (SUM(COALESCE(clock_out,NOW())-clock_in))))::NUMERIC/3600,2) AS total_hours
+                FROM
+                    clock_ins
+                GROUP BY
+                    appointment_id
+                )
+                AS total_hours'), 
+                function($join)
+                {
+                   $join->on('appointments.id', '=', 'total_hours.appointment_id');
+                })            
             ->select(
                 'appointments.id',
                 DB::raw('row_number() OVER () AS row'),
@@ -139,6 +153,8 @@ class AppointmentController extends Controller
                 'tasks.billed_date',
                 'tasks.labor_type_id',
                 'orders.order_status_type_id',
+                'total_hours.total_hours',
+                'tasks.task_hours',
                 'tasks.crew_hours',
                 'tasks.crew_id',
                 'crews.name AS crew'
@@ -187,11 +203,6 @@ class AppointmentController extends Controller
                     ->whereNull('orders.start_date')
                     ->WhereNull('orders.approval_date');
                     break;
-                            //On Hold, All Task, Pending Task, Current Task tab
-            //Start Date and (Blank Close, or expiration date), and the Tasks that have a (blank completion or closed date).
-            //Show blank and future task dates from the date on the calendar on the page.
-
-
                 case 'current':
                     $items_query->whereNotNull('orders.start_date')
                     ->whereNull('orders.close_date')

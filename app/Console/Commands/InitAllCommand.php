@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 
 class InitAllCommand extends Command
 {
-
     protected $signature = 'init:all';
     protected $description = 'Populate default data for Tasca.';
 

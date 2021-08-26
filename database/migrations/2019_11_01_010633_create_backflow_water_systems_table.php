@@ -6,6 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateBackflowWaterSystemsTable extends Migration
 {
+
     public function up()
     {
         Schema::create('backflow_water_systems', function (Blueprint $table) {

@@ -24,7 +24,9 @@ class ContactController extends Controller
         'show_help' => 'boolean',
         'show_maximium_activity_level_id' => 'integer|exists:activity_levels,id|nullable',
         'login' => 'nullable|string|max:255',
-        'password' => 'nullable|string|max:255'
+        'password' => 'nullable|string|max:255',
+        'crew_id' => 'nullable|integer|exists:crews,id',
+        'labor_rate' => 'nullable|regex:/[\d\.]+/'
     ];
 
     public function __construct()
@@ -97,6 +99,7 @@ class ContactController extends Controller
         if(!empty($values['password'])) {
             $values['password'] = password_hash($values['password'], PASSWORD_DEFAULT);
         }
+        Log::Debug(print_r($values, true));
         $item->update($values);
         $client_id = $request->input('client_id');
         if($client_id) {
