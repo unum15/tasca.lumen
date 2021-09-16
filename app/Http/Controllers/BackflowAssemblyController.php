@@ -6,6 +6,7 @@ use App\BackflowAssembly;
 use Illuminate\Http\Request;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
 use Log;
+use Illuminate\Support\Facades\DB;
 
 class BackflowAssemblyController extends Controller
 {
@@ -33,8 +34,12 @@ class BackflowAssemblyController extends Controller
         }
         $test_date = $request->input('test_date');
         if($test_date){
-            $items_query->whereHas('property.orders.tasks.appointments', function ($query) use ($test_date) {
-                $query->where('date', '=', $test_date);
+            $items_query->join('order_property','backflow_assemblies.property_id','=','order_property.property_id');
+            $items_query->join('orders','order_property.order_id','=','orders.id');
+            $items_query->join('tasks','orders.id','=','tasks.order_id');
+            $items_query->rightJoin('appointments', function ($query) use ($test_date) {
+                $query->on('tasks.id', '=', 'appointments.task_id');
+                $query->on('appointments.date', '=', DB::raw("'$test_date'"));
             });
         }
         $items = $items_query->get();
