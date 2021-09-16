@@ -37,14 +37,11 @@ class BackflowAssemblyController extends Controller
             $items_query->join('order_property','backflow_assemblies.property_id','=','order_property.property_id');
             $items_query->join('orders','order_property.order_id','=','orders.id');
             $items_query->join('tasks','orders.id','=','tasks.order_id');
-            $items_query->join('backflow_test_reports',function ($query) use ($test_date) {
-                $query->on('backflow_assemblies.id', '=', 'backflow_test_reports.backflow_assembly_id');
-                $query->on('backflow_test_reports.report_date', '=', DB::raw("'$test_date'"));
-            });
             $items_query->rightJoin('appointments', function ($query) use ($test_date) {
                 $query->on('tasks.id', '=', 'appointments.task_id');
                 $query->on('appointments.date', '=', DB::raw("'$test_date'"));
             });
+            $items_query->select(['*','backflow_assemblies.id AS id']);
         }
         $items = $items_query->get();
         return ['data' => $items];
