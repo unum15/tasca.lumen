@@ -164,10 +164,10 @@ class AppointmentController extends Controller
                 case '*':
                     break;
                 case '':
-                    $items_query->whereNull('crew_id');
+                    $items_query->whereNull('tasks.crew_id');
                     break;
                 default:
-                    $items_query->where('crew_id',$crew_id);
+                    $items_query->where('tasks.crew_id',$crew_id);
             }
         }
         $status = strtolower($request->input('status'));

@@ -68,10 +68,10 @@ class BackflowTestReportController extends Controller
         $repaired_on = $request->input('repaired_on');
         if(!is_array($parts)){
             Log::debug($parts);
-            return response(['error' => 'Invalid parts array:'.print_r($parts,true)], 401);
+            return response(['error' => 'Invalid parts array:'.print_r($parts,true)], 422);
         }
         if(empty($contact_id)){
-            return response(['error' => 'Please Choose Repairs By'], 401);
+            return response(['error' => 'Please Choose Repairs By'], 422);
         }
         BackflowRepair::where('backflow_test_report_id',$item->id)->where('backflow_valve_id',$valve_id)->delete();
         foreach($parts as $part_id){
@@ -90,15 +90,15 @@ class BackflowTestReportController extends Controller
     {
         $item = BackflowTestReport::findOrFail($id);
         $parts = $request->input('parts');
-        if(!is_array($parts)){
-            return response(['error' => 'Invalid parts array:'.print_r($parts,true)], 401);
-        }
-        if(empty($contact_id)){
-            return response(['error' => 'Please Choose Repairs By'], 401);
-        }
         $valve_id = $request->input('valve_id');
         $contact_id = $request->input('contact_id');
         $cleaned_on = $request->input('cleaned_on');
+        if(!is_array($parts)){
+            return response(['error' => 'Invalid parts array:'.print_r($parts,true)], 422);
+        }
+        if(empty($contact_id)){
+            return response(['error' => 'Please Choose Repairs By'], 422);
+        }
         BackflowCleaning::where('backflow_test_report_id',$item->id)->where('backflow_valve_id',$valve_id)->delete();
         foreach($parts as $part_id){
             BackflowCleaning::create([
@@ -488,7 +488,7 @@ class BackflowTestReportController extends Controller
                     <br />
                     <div class="info"><span class="header">Assembly Location:</span> ' . $property->name . '</div>
                     <div class="info"><span class="header">Address:</span> ' . $report->backflow_assembly->property->address1 . ' ' . $report->backflow_assembly->property->address_2 . '&nbsp;&nbsp;&nbsp;<span class="header">City:</span> ' . $report->backflow_assembly->property->city . '&nbsp;&nbsp;&nbsp;<span class="header">State:</span> ' . $report->backflow_assembly->property->state . '&nbsp;&nbsp;&nbsp;<span class="header">Zip:</span> ' . $report->backflow_assembly->property->zip . '</div>
-                    <div class="info">' .  ($report->backflow_assembly->property_unit_id ? $report->backflow_assembly->property_unit->number:' ')  . '</div>
+                    <div class="info">' .  ($report->backflow_assembly->property_unit_id ? $report->backflow_assembly->property_unit->name :'<br />')  . '</div>
                     <div class="info"><span class="header">Assembly Placement:</span> ' . $report->backflow_assembly->placement . '&nbsp;&nbsp;&nbsp;<span class="header">Use:</span> ' . $report->backflow_assembly->use . '</div>
                     <div class="info">' . $report->backflow_assembly->notes . '</div>
                     <div class="info"><span class="header">Assembly Style:</span> ' . $report->backflow_assembly->backflow_type->name . '&nbsp;&nbsp;&nbsp;<span class="header">Manufacturer:</span> ' . $report->backflow_assembly->backflow_manufacturer->name . '</div>
