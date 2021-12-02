@@ -15,7 +15,11 @@ class IrrigationSystem extends Model
         'filter_model',
         'filter_location',
         'property_unit_id',
-        'notes'
+        'notes',
+        'start_up_cost',
+        'management_cost',
+        'winterizing_cost',
+        'visits_count'
     ];
 
     public function irrigation_water_type()
