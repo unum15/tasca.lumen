@@ -19,6 +19,7 @@ use App\Console\Commands\ResetHelpCommand;
 use App\Console\Commands\AppointmentCreateCommand;
 use App\Console\Commands\OrderCloseCommand;
 use App\Console\Commands\OrderStatusCommand;
+use App\Console\Commands\ReminderClockOutCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -39,7 +40,8 @@ class Kernel extends ConsoleKernel
         InitOverheadCommand::class,
         AppointmentCreateCommand::class,
         OrderCloseCommand::class,
-        OrderStatusCommand::class
+        OrderStatusCommand::class,
+        ReminderClockOutCommand::class
     ];
 
     /**
@@ -52,6 +54,7 @@ class Kernel extends ConsoleKernel
     {
        $schedule->command('Appointment:Create')->timezone(env("TIMEZONE", 'America/Denver'));
        $schedule->command('Order:Status')->timezone(env("TIMEZONE", 'America/Denver'));
+       $schedule->command('Reminder:Email')->timezone(env("TIMEZONE", 'America/Denver'))->hourly();
        //$schedule->command('db:closeOrders')->timezone(env("TIMEZONE", 'America/Denver'));
     }
 }
