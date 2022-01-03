@@ -36,6 +36,7 @@ class ClockInController extends Controller
             'appointment.task',
             'appointment.task.order',
             'appointment.task.labor_assignment',
+            'appointment.task.labor_type',
             'labor_activity',
             'Contact',
             'appointment.task.order.Project',
