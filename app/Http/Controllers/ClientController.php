@@ -73,6 +73,10 @@ class ClientController extends Controller
         $this->validate($request, ['name' => 'required']);
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
+	#sometimes the form saves while loading 
+	if(!$values['client_type_id']){
+		return;
+	}
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = Client::create($values);
