@@ -69,8 +69,7 @@ class OrderController extends Controller
             $items_query->where($field, $value);
         }
         $completed = $request->input('completed');
-        if($completed == 'false') {
-            
+        if($completed == 'false') {            
             $items_query->whereNull('close_date');
         }
         
@@ -79,6 +78,25 @@ class OrderController extends Controller
             $items_query->where(
                 function ($q) {
                     $q->where('expiration_date', '>=', date('Y-m-d'))
+                        ->orWhereNull('expiration_date');
+                }
+            );
+        }
+        
+        
+        $closed_in_days = $request->input(['closed_in_days']);
+        if($closed_in_days) {
+            $date = date_create();
+            $date->modify("-$closed_in_days days");
+            $items_query->where(
+                function ($q) use ($date){
+                    $q->where('close_date', '>=', $date)
+                        ->orWhereNull('close_date');
+                }
+            );
+            $items_query->where(
+                function ($q) use ($date){
+                    $q->where('expiration_date', '>=', $date)
                         ->orWhereNull('expiration_date');
                 }
             );
