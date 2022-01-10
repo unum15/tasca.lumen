@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 
 class ReminderClockOutCommand extends Command
 {
-    protected $signature = 'reminders:clockout';
+    protected $signature = 'reminder:clockout';
     protected $description = 'Closes all orders older than 30 days for which there is no open tasks.';
 
     public function __construct()
