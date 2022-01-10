@@ -328,6 +328,10 @@ Budget and bid information.
             'value' => Crew::where('name', 'A')->first()->id
         ]);
         Setting::create([
+            'name' => 'default_closed_orders_days',
+            'value' => 400
+        ]);
+        Setting::create([
             'name' => 'phreebooks',
             'value' => 'false'
         ]);
