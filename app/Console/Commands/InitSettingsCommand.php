@@ -332,6 +332,22 @@ Budget and bid information.
             'value' => 400
         ]);
         Setting::create([
+            'name' => 'clock_in_reminder_minutes',
+            'value' => 240
+        ]);
+        Setting::create([
+            'name' => 'clock_in_reminder_color',
+            'value' => '#ff0000'
+        ]);
+        Setting::create([
+            'name' => 'clock_in_second_reminder_minutes',
+            'value' => 60
+        ]);
+        Setting::create([
+            'name' => 'clock_in_current_color',
+            'value' => '#0000ff'
+        ]);
+        Setting::create([
             'name' => 'phreebooks',
             'value' => 'false'
         ]);
