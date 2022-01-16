@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use App\ClockIn;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
+use App\Setting;
+use Illuminate\Support\Facades\DB;
 
 class ReminderClockOutCommand extends Command
 {
@@ -18,11 +20,14 @@ class ReminderClockOutCommand extends Command
 
     public function handle()
     {
+        $setting = Setting::where('name','clock_in_reminder_minutes')->first();
+        $minutes = $setting->value;
         $clock_ins = ClockIn::with(
             'contact',
             'contact.emails'
         )
         ->whereNull('clock_out')
+        ->whereRaw("EXTRACT(epoch FROM AGE(clock_in,NOW()))/60 > $minutes")
         ->get();
 
         $from_address = env('MAIL_FROM_ADDRESS','admin@tasca.app');
