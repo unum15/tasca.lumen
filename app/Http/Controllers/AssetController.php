@@ -6,13 +6,14 @@ use App\Asset;
 use App\AssetExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use DB;
 
 class AssetController extends Controller
 {
     public function __construct()
     {
         Log::debug('AssetController Constructed');
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -58,53 +59,35 @@ class AssetController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $item_query = Asset::with($includes);
         list($category,$brand,$type,$group,$sub,$item_num) = str_split($number);
-        if($category){
             $item_query = $item_query->whereHas('asset_category', function($q) use ($category){
                 $q->where('number', $category);
             });
-        }
-        else{
-            $item_query = $item_query->whereNull('asset_category_id');
-        }
-        if($brand){
             $item_query = $item_query->whereHas('asset_brand', function($q) use ($brand){
                 $q->where('number', $brand);
             });
-        }
-        else{
-            $item_query = $item_query->whereNull('asset_brand_id');
-        }
-        if($type){
             $item_query = $item_query->whereHas('asset_type', function($q) use ($type){
                 $q->where('number', $type);
             });
-        }
-        else{
-            $item_query = $item_query->whereNull('asset_type_id');
-        }
-        if($group){
             $item_query = $item_query->whereHas('asset_group', function($q) use ($group){
                 $q->where('number', $group);
             });
-        }
-        else{
-            $item_query = $item_query->whereNull('asset_group_id');
-        }
-        if($sub){
             $item_query = $item_query->whereHas('asset_sub', function($q) use ($sub){
                 $q->where('number', $sub);
             });
-        }
-        else{
-            $item_query = $item_query->whereNull('asset_sub_id');
-        }
-        if($item_num){
+            $item_query = $item_query->whereHas('asset_sub', function($q) use ($sub){
+                $q->where('number', $sub);
+            });
             $item_query = $item_query->where('item_number',$item_num);
-        }
-        else{
-            $item_query = $item_query->whereNull('item_number');
-        }
+        DB::connection()->enableQueryLog();
+
+
+
         $item = $item_query->get()->first();
+        $queries    = DB::getQueryLog();
+$lastQuery = end($queries);
+
+//dd($lastQuery);
+
         return ['data' => $item];
     }
 
