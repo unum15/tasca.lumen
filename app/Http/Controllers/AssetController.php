@@ -12,7 +12,6 @@ class AssetController extends Controller
 {
     public function __construct()
     {
-        Log::debug('AssetController Constructed');
         //$this->middleware('auth');
     }
 
@@ -54,39 +53,44 @@ class AssetController extends Controller
         return ['data' => $item];
     }
     
+    public function unique($field)
+    {
+        if(!in_array($field,array_keys($this->model_validation))){
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+                'field' => ['Field is not a valid field for Asset'],
+            ]);
+            throw $error;
+        }
+        $items = Asset::whereNotNull($field)->groupBy($field)->having(DB::raw('count(*)'),'>=',2)->pluck($field);
+        return ['data' => $items];
+    }
+
     public function readNumber($number, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item_query = Asset::with($includes);
         list($category,$brand,$type,$group,$sub,$item_num) = str_split($number);
-            $item_query = $item_query->whereHas('asset_category', function($q) use ($category){
-                $q->where('number', $category);
-            });
-            $item_query = $item_query->whereHas('asset_brand', function($q) use ($brand){
-                $q->where('number', $brand);
-            });
-            $item_query = $item_query->whereHas('asset_type', function($q) use ($type){
-                $q->where('number', $type);
-            });
-            $item_query = $item_query->whereHas('asset_group', function($q) use ($group){
-                $q->where('number', $group);
-            });
-            $item_query = $item_query->whereHas('asset_sub', function($q) use ($sub){
-                $q->where('number', $sub);
-            });
-            $item_query = $item_query->whereHas('asset_sub', function($q) use ($sub){
-                $q->where('number', $sub);
-            });
-            $item_query = $item_query->where('item_number',$item_num);
-        DB::connection()->enableQueryLog();
-
-
+        $item_query = $item_query->whereHas('asset_category', function($q) use ($category){
+            $q->where('number', $category);
+        });
+        $item_query = $item_query->whereHas('asset_brand', function($q) use ($brand){
+            $q->where('number', $brand);
+        });
+        $item_query = $item_query->whereHas('asset_type', function($q) use ($type){
+            $q->where('number', $type);
+        });
+        $item_query = $item_query->whereHas('asset_group', function($q) use ($group){
+            $q->where('number', $group);
+        });
+        $item_query = $item_query->whereHas('asset_sub', function($q) use ($sub){
+            $q->where('number', $sub);
+        });
+        $item_query = $item_query->whereHas('asset_sub', function($q) use ($sub){
+            $q->where('number', $sub);
+        });
+        $item_query = $item_query->where('item_number',$item_num);
 
         $item = $item_query->get()->first();
-        $queries    = DB::getQueryLog();
-$lastQuery = end($queries);
-
-//dd($lastQuery);
 
         return ['data' => $item];
     }
@@ -120,6 +124,7 @@ $lastQuery = end($queries);
        'model' => 'string|max:1020|nullable',
        'trim' => 'string|max:1020|nullable',
        'vin' => 'string|max:1020|nullable',
+       'home' => 'string|max:1020|nullable',
        'parent_asset_id' => 'integer|nullable',
        'notes' => 'string|max:1073741824|nullable',
        'asset_location_id' => 'integer|exists:asset_locations,id|nullable',

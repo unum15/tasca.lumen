@@ -26,7 +26,8 @@ class Asset extends Model
         'manufacture',
         'number',
         'purchase_cost',
-        'purchase_date'
+        'purchase_date',
+        'home'
     ];
 
     public function asset_category()
