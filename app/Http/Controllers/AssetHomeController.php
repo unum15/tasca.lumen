@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\AssetLocation;
+use App\AssetHome;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class AssetLocationController extends Controller
+class AssetHomeController extends Controller
 {
     public function __construct()
     {
-        Log::debug('AssetLocationController Constructed');
+        Log::debug('AssetHomeController Constructed');
         $this->middleware('auth');
     }
 
@@ -18,7 +18,7 @@ class AssetLocationController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
-        $items_query = AssetLocation::with($includes);
+        $items_query = AssetHome::with($includes);
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
@@ -29,20 +29,20 @@ class AssetLocationController extends Controller
     public function create(Request $request)
     {
         $values = $this->validateModel($request, true);
-        $item = AssetLocation::create($values);
-        return response(['data' => $item], 201, ['Location' => route('asset_location.read', ['id' => $item->id])]);
+        $item = AssetHome::create($values);
+        return response(['data' => $item], 201, ['Home' => route('asset_home.read', ['id' => $item->id])]);
     }
 
     public function read($id, Request $request)
     {
         $includes = $this->validateIncludes($request->input('includes'));
-        $item = AssetLocation::with($includes)->find($id);
+        $item = AssetHome::with($includes)->find($id);
         return ['data' => $item];
     }
 
     public function update($id, Request $request)
     {
-        $item = AssetLocation::findOrFail($id);
+        $item = AssetHome::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
         return ['data' => $item];
@@ -50,7 +50,7 @@ class AssetLocationController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $item = AssetLocation::findOrFail($id);
+        $item = AssetHome::findOrFail($id);
         $item->delete();
         return response([], 204);
     }

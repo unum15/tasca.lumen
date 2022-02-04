@@ -32,7 +32,7 @@ class AssetController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = Asset::create($values);
-        return response(['data' => $item], 201, ['Location' => route('asset.read', ['id' => $item->id])]);
+        return response(['data' => $item], 201, ['Home' => route('asset.read', ['id' => $item->id])]);
     }
     
     public function createExport($id)
@@ -43,7 +43,7 @@ class AssetController extends Controller
         ];
         AssetExport::create($values);
         $item = Asset::with(['asset_exports'])->find($id);
-        return response(['data' => $item], 201, ['Location' => route('asset.read', ['id' => $item->id])]);
+        return response(['data' => $item], 201, ['Home' => route('asset.read', ['id' => $item->id])]);
     }
 
     public function read($id, Request $request)
@@ -124,10 +124,10 @@ class AssetController extends Controller
        'model' => 'string|max:1020|nullable',
        'trim' => 'string|max:1020|nullable',
        'vin' => 'string|max:1020|nullable',
-       'home' => 'string|max:1020|nullable',
+       'location' => 'string|max:1020|nullable',
        'parent_asset_id' => 'integer|nullable',
        'notes' => 'string|max:1073741824|nullable',
-       'asset_location_id' => 'integer|exists:asset_locations,id|nullable',
+       'asset_home_id' => 'integer|exists:asset_homes,id|nullable',
        'manufacture' => 'string|max:1020|nullable',
        'number' => 'string|max:1020|nullable',
        'purchase_cost' => 'numeric|nullable',
@@ -146,7 +146,7 @@ class AssetController extends Controller
        'asset_group',
        'asset_sub',
        'parent_asset',
-       'asset_location',
+       'asset_home',
        'asset_exports'
     ];
     

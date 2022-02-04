@@ -439,11 +439,11 @@ $router->get('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController
 $router->patch('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController@update', 'as' => 'asset_time_unit.update']);
 $router->delete('/asset_time_unit/{id:[0-9]+}', ['uses' => 'AssetTimeUnitController@delete', 'as' => 'asset_time_unit.delete']);
 
-$router->get('/asset_locations', ['uses' => 'AssetLocationController@index', 'as' => 'asset_location.index']);
-$router->post('/asset_location', ['uses' => 'AssetLocationController@create', 'as' => 'asset_location.create']);
-$router->get('/asset_location/{id:[0-9]+}', ['uses' => 'AssetLocationController@read', 'as' => 'asset_location.read']);
-$router->patch('/asset_location/{id:[0-9]+}', ['uses' => 'AssetLocationController@update', 'as' => 'asset_location.update']);
-$router->delete('/asset_location/{id:[0-9]+}', ['uses' => 'AssetLocationController@delete', 'as' => 'asset_location.delete']);
+$router->get('/asset_homes', ['uses' => 'AssetHomeController@index', 'as' => 'asset_home.index']);
+$router->post('/asset_home', ['uses' => 'AssetHomeController@create', 'as' => 'asset_home.create']);
+$router->get('/asset_home/{id:[0-9]+}', ['uses' => 'AssetHomeController@read', 'as' => 'asset_home.read']);
+$router->patch('/asset_home/{id:[0-9]+}', ['uses' => 'AssetHomeController@update', 'as' => 'asset_home.update']);
+$router->delete('/asset_home/{id:[0-9]+}', ['uses' => 'AssetHomeController@delete', 'as' => 'asset_home.delete']);
 
 $router->get('/asset_pictures', ['uses' => 'AssetPictureController@index', 'as' => 'asset_picture.index']);
 $router->post('/asset_picture', ['uses' => 'AssetPictureController@create', 'as' => 'asset_picture.create']);

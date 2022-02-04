@@ -22,12 +22,12 @@ class Asset extends Model
         'vin',
         'parent_asset_id',
         'notes',
-        'asset_location_id',
+        'asset_home_id',
         'manufacture',
         'number',
         'purchase_cost',
         'purchase_date',
-        'home'
+        'location'
     ];
 
     public function asset_category()
@@ -55,9 +55,9 @@ class Asset extends Model
         return $this->belongsTo('App\AssetSub');
     }
 
-    public function asset_location()
+    public function asset_home()
     {
-        return $this->belongsTo('App\AssetLocation');
+        return $this->belongsTo('App\AssetHome');
     }
 
     public function asset_usage_type()
