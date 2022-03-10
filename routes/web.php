@@ -530,3 +530,10 @@ $router->post('/asset_sub', ['uses' => 'AssetSubController@create', 'as' => 'ass
 $router->get('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@read', 'as' => 'asset_sub.read']);
 $router->patch('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@update', 'as' => 'asset_sub.update']);
 $router->delete('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@delete', 'as' => 'asset_sub.delete']);
+
+
+$router->get('/asset_accessories', ['uses' => 'AssetAccessoryController@index', 'as' => 'asset_accessory.index']);
+$router->post('/asset_accessory', ['uses' => 'AssetAccessoryController@create', 'as' => 'asset_accessory.create']);
+$router->get('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@read', 'as' => 'asset_accessory.read']);
+$router->patch('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@update', 'as' => 'asset_accessory.update']);
+$router->delete('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@delete', 'as' => 'asset_accessory.delete']);
