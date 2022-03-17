@@ -59,6 +59,7 @@ class AssetAccessoryController extends Controller
     
     protected $model_validation = [
        'asset_id' => 'integer|exists:assets,id',
+       'quantity' => 'integer',
        'name' => 'string|max:1020',
        'notes' => 'string|max:1020|nullable',
        'value' => 'numeric|nullable',

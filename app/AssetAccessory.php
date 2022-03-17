@@ -11,6 +11,7 @@ class AssetAccessory extends Model
 
     protected $fillable = [
         'asset_id',
+        'quantity',
         'name',
         'notes',
         'value'

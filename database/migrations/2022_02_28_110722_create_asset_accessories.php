@@ -11,6 +11,7 @@ class CreateAssetAccessories extends Migration
         Schema::create('asset_accessories', function (Blueprint $table) {
             $table->id();
             $table->integer('asset_id');
+            $table->integer('quantity')->nullable();
             $table->string('name');
             $table->string('notes')->nullable();
             $table->decimal('value')->nullable();
