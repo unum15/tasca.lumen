@@ -234,10 +234,20 @@ class AppointmentController extends Controller
                     );
                     break;
                 case 'pending':
-                    $items_query->where('orders.start_date','>=',$current_view_date)
+                    $items_query
                     ->whereNull('orders.close_date')
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
+                    ->where(
+                        function ($q) use ($current_view_date) {
+                            $q->where('orders.start_date','>=',$current_view_date)
+                            ->orWhere(
+                                function ($q) {
+                                    $q->whereNull('orders.start_date')
+                                    ->whereNotNull('orders.approval_date');
+                                });
+                        }
+                    )
                     ->where(
                         function ($q) use ($date) {
                             $q->whereNull('orders.expiration_date')
@@ -277,10 +287,19 @@ class AppointmentController extends Controller
                     $items_query->where('appointments.date', '=', $date);
                     break;
                 case 'all' :
-                    $items_query->whereNotNull('orders.start_date')
-                    ->whereNull('orders.close_date')
+                    $items_query->whereNull('orders.close_date')
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
+                    ->where(
+                        function ($q) {
+                            $q->whereNotNull('orders.start_date')
+                            ->orWhere(
+                                function ($q) {
+                                    $q->whereNull('orders.start_date')
+                                    ->whereNotNull('orders.approval_date');
+                                });
+                        }
+                    )
                     ->where(
                         function ($q) use ($date) {
                             $q->whereNull('orders.expiration_date')
