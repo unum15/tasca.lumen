@@ -157,6 +157,7 @@ class AppointmentController extends Controller
                 'tasks.task_hours',
                 'tasks.crew_hours',
                 'tasks.crew_id',
+                'tasks.hold_date',
                 'crews.name AS crew'
         );
         if(isset($crew_id)){
