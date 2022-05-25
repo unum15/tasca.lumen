@@ -39,8 +39,8 @@ class ClockInController extends Controller
             'appointment.task.labor_type',
             'labor_activity',
             'Contact',
-            'appointment.task.order.Project',
-            'appointment.task.order.Project.Client'
+            'appointment.task.order.project',
+            'appointment.task.order.project.client'
         )
         ->orderBy('clock_in')
         ->orderBy('clock_out');
@@ -138,7 +138,8 @@ class ClockInController extends Controller
             'appointment.task.order',
             'appointment.task.labor_assignment',
             'labor_activity',
-            'contact'
+            'contact',
+            'appointment.task.order.project'
         )
         ->findOrFail($id);
         return $item;
