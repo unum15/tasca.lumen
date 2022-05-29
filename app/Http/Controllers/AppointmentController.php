@@ -209,7 +209,7 @@ class AppointmentController extends Controller
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
                     ->where(
-                        function ($q) use ($date) {
+                        function ($q) use ($date,$current_view_date) {
                             $q->whereNull('tasks.hold_date')
                             ->orWhere('tasks.hold_date','<=',$current_view_date);
                         }
