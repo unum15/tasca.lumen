@@ -240,38 +240,35 @@ class AppointmentController extends Controller
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
                     ->where(
-                        function ($q) use ($date,$current_view_date) {
+                        function ($q) use ($current_view_date) {
                             $q->where(
-                                function ($q) use ($date,$current_view_date) {
-                                    $q->where(
-                                        function ($q) use ($current_view_date) {
-                                            $q->where('orders.start_date','>=',$current_view_date)
-                                            ->orWhere(
-                                                function ($q) {
-                                                    $q->whereNull('orders.start_date')
-                                                    ->whereNotNull('orders.approval_date');
-                                                });
-                                    })
-                                    ->where(
-                                        function ($q) use ($date) {
-                                            $q->whereNull('orders.expiration_date')
-                                            ->orWhere('orders.expiration_date','>=',$date);
-                                        }
-                                    )
-                                    ->where(
-                                        function ($q) use ($date){
-                                            $q->where('appointments.date', '>=', $date)
-                                            ->orWhereNull('appointments.date');
-                                        }
-                                    );
-                                })
-                            ->orWhere(
+                                function ($q) use ($current_view_date) {
+                                    $q->where('orders.start_date','>=',$current_view_date)
+                                    ->orWhere(
+                                        function ($q) {
+                                            $q->whereNull('orders.start_date')
+                                            ->whereNotNull('orders.approval_date');
+                                        });
+                            })->orWhere(
                                 function ($q) use ($current_view_date) {
                                     $q->whereNull('tasks.hold_date')
                                     ->orWhere('tasks.hold_date','>=',$current_view_date);
                                 }
                             );
-                        });
+                        }
+                    )
+                    ->where(
+                        function ($q) use ($date) {
+                            $q->whereNull('orders.expiration_date')
+                            ->orWhere('orders.expiration_date','>=',$date);
+                        }
+                    )
+                    ->where(
+                        function ($q) use ($date){
+                            $q->where('appointments.date', '>=', $date)
+                            ->orWhereNull('appointments.date');
+                        }
+                    );
                     $items_query->orderBy('orders.start_date');
                     break;
                 case 'on hold':
