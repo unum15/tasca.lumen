@@ -248,8 +248,7 @@ class AppointmentController extends Controller
                                     ->orWhereNull('orders.start_date');
                             })->orWhere(
                                 function ($q) use ($current_view_date) {
-                                    $q->whereNull('tasks.hold_date')
-                                    ->orWhere('tasks.hold_date','>',$current_view_date);
+                                    $q->where('tasks.hold_date','>',$current_view_date);
                                 }
                             );
                         }
