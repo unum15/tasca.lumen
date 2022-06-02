@@ -157,6 +157,7 @@ class AppointmentController extends Controller
                 'tasks.task_hours',
                 'tasks.crew_hours',
                 'tasks.crew_id',
+                'tasks.hold_date',
                 'crews.name AS crew'
         );
         if(isset($crew_id)){
@@ -209,9 +210,9 @@ class AppointmentController extends Controller
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
                     ->where(
-                        function ($q) use ($date) {
+                        function ($q) use ($current_view_date) {
                             $q->whereNull('tasks.hold_date')
-                            ->orWhere('tasks.hold_date','<=',$date);
+                            ->orWhere('tasks.hold_date','<=',$current_view_date);
                         }
                     )
                     ->where(
@@ -238,14 +239,18 @@ class AppointmentController extends Controller
                     ->whereNull('orders.close_date')
                     ->whereNull('tasks.completion_date')
                     ->WhereNull('tasks.closed_date')
+                    ->whereNotNull('orders.approval_date')
                     ->where(
                         function ($q) use ($current_view_date) {
-                            $q->where('orders.start_date','>=',$current_view_date)
-                            ->orWhere(
-                                function ($q) {
-                                    $q->whereNull('orders.start_date')
-                                    ->whereNotNull('orders.approval_date');
-                                });
+                            $q->where(
+                                function ($q) use ($current_view_date) {
+                                    $q->where('orders.start_date','>',$current_view_date)
+                                    ->orWhereNull('orders.start_date');
+                            })->orWhere(
+                                function ($q) use ($current_view_date) {
+                                    $q->where('tasks.hold_date','>',$current_view_date);
+                                }
+                            );
                         }
                     )
                     ->where(
