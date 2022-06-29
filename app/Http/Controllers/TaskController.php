@@ -149,7 +149,7 @@ class TaskController extends Controller
         $this->validate($request, $this->validation);     
         $item = Task::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
-        $dates = ['completion_date', 'billed_date', 'closed_date'];
+        $dates = ['completion_date', 'billed_date', 'closed_date','hold_date'];
         foreach($dates as $date){
             if(isset($values[$date])) {
                 $values[$date] = $values[$date] != "" ? $values[$date] : null;
