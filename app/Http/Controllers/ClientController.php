@@ -38,6 +38,9 @@ class ClientController extends Controller
             ->with('activityLevel')
             ->with('billingContact')
             ->with('billingProperty')
+            ->with('properties')
+            ->with('contacts')
+            ->with('contacts.phoneNumbers')
             ->orderBy('name');
         $max_activity_level = $request->input('maximium_activity_level_id');
         if(!empty($max_activity_level)) {
