@@ -170,6 +170,11 @@ $router->get('/calendar/status', 'GoogleCalendarController@status');
 $router->get('/calendar/url', 'GoogleCalendarController@url');
 $router->post('/calendar/callback', 'GoogleCalendarController@callback');
 
+$router->get('/google/status', 'GoogleController@status');
+$router->get('/google/url', 'GoogleController@url');
+$router->post('/google/callback', 'GoogleController@callback');
+
+
 $router->get('/backflow_valve_parts', ['uses' => 'BackflowValvePartController@index', 'as' => 'backflow_valve_part.index']);
 $router->post('/backflow_valve_part', ['uses' => 'BackflowValvePartController@create', 'as' => 'backflow_valve_part.create']);
 $router->get('/backflow_valve_part/{id:[0-9]+}', ['uses' => 'BackflowValvePartController@read', 'as' => 'backflow_valve_part.read']);
