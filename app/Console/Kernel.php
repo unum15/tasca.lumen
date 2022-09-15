@@ -20,6 +20,7 @@ use App\Console\Commands\AppointmentCreateCommand;
 use App\Console\Commands\OrderCloseCommand;
 use App\Console\Commands\OrderStatusCommand;
 use App\Console\Commands\ReminderClockOutCommand;
+use App\Console\Commands\SendPhreebooksEmailCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -41,7 +42,8 @@ class Kernel extends ConsoleKernel
         AppointmentCreateCommand::class,
         OrderCloseCommand::class,
         OrderStatusCommand::class,
-        ReminderClockOutCommand::class
+        ReminderClockOutCommand::class,
+	SendPhreebooksEmailCommand::class,
     ];
 
     /**
