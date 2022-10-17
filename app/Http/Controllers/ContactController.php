@@ -43,6 +43,7 @@ class ContactController extends Controller
             ->with('contactMethod')
             ->with('emails')
             ->with('phoneNumbers')
+            ->with('phoneNumbers.phoneNumberType')
             ->orderBy('name');
         $client_id = $request->input('client_id');
         if($client_id) {
