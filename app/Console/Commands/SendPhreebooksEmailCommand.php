@@ -19,7 +19,7 @@ class SendPhreebooksEmailCommand extends Command
 
     public function handle()
     {
-        $phreebooksdb = DB::connection('phreebooks');
+        /*$phreebooksdb = DB::connection('phreebooks');
                 
         $sql="
             SELECT
@@ -32,7 +32,7 @@ class SendPhreebooksEmailCommand extends Command
         
         
         foreach($emails as $email){
-        }
+        }*/
 
 	$client = new \Google_Client();
         $client->setApplicationName('Tasca');
