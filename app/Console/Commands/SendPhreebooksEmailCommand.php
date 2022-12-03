@@ -34,7 +34,7 @@ class SendPhreebooksEmailCommand extends Command
         $service = new \Google_Service_Gmail($client);
 
 
-        /*$phreebooksdb = DB::connection('phreebooks');
+        $phreebooksdb = DB::connection('phreebooks');
                 
         $sql="
             SELECT
@@ -44,25 +44,18 @@ class SendPhreebooksEmailCommand extends Command
         ";
         
         $emails = $phreebooksdb->select($sql);
-        */
+        
         $from = $contact->name."<".$contact->login.">";
-        $emails = [
-            [
-                'to' => 'Kyle Waters<unum@unum5.org>',
-                'subject' => 'Email Subject',
-                'body' => 'Email Body',
-            ]
-        ];
         
         foreach($emails as $email){
             $message = new \Google_Service_Gmail_Message();
             $rawMessageString = "From: $from\r\n";
-            $rawMessageString .= "To: ".$email['to']."\r\n";
-            $rawMessageString .= 'Subject: =?utf-8?B?' . base64_encode($email['subject']) . "?=\r\n";
+            $rawMessageString .= "To: ".$email->to_name."<".$email->to_address.">\r\n";
+            $rawMessageString .= 'Subject: =?utf-8?B?' . base64_encode($email->subject) . "?=\r\n";
             $rawMessageString .= "MIME-Version: 1.0\r\n";
             $rawMessageString .= "Content-Type: text/html; charset=utf-8\r\n";
             $rawMessageString .= 'Content-Transfer-Encoding: quoted-printable' . "\r\n\r\n";
-            $rawMessageString .= $email['body'];
+            $rawMessageString .= $email->body;
             $rawMessage = strtr(base64_encode($rawMessageString), array('+' => '-', '/' => '_'));
             $message->setRaw($rawMessage);
             $message = $service->users_messages->send($contact->login, $message);
