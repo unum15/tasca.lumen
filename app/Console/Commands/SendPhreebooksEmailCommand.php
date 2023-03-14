@@ -5,8 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use App\Contact;
-#use Google\Client;
-#use Google\Service\Gmail;
+use Log;
 
 class SendPhreebooksEmailCommand extends Command
 {
@@ -21,16 +20,17 @@ class SendPhreebooksEmailCommand extends Command
     public function handle()
     {
         
-        $contact = Contact::where('login', env('GOOGLE_EMAILER'))->first();
+	putenv("GOOGLE_APPLICATION_CREDENTIALS=" . env('GOOGLE_AUTH_CONFIG'));
 
-        $client = new \Google_Client();
+	$client = new \Google_Client();
+	$client->useApplicationDefaultCredentials();
+	$client->setSubject(env("GOOGLE_EMAILER"));
         $client->setApplicationName('Tasca');
-        $client->setScopes(["https://www.googleapis.com/auth/calendar.events","https://www.googleapis.com/auth/gmail.send"]);        
-        $client->setAccessType('offline');
-        $client->setDeveloperKey(env('GOOGLE_API_KEY'));
-        $client->setClientId(env('GOOGLE_CLIENT_ID'));
-        $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
-        $client->setAccessToken($contact->google_calendar_token);
+
+	$client->setScopes(["https://mail.google.com/",
+	                    "https://www.googleapis.com/auth/gmail.compose",
+                            "https://www.googleapis.com/auth/gmail.modify",
+                            "https://www.googleapis.com/auth/gmail.send"]);
         $service = new \Google_Service_Gmail($client);
 
 
@@ -41,24 +41,44 @@ class SendPhreebooksEmailCommand extends Command
                 *
             FROM
                 emails
+            WHERE
+               NOT sent
         ";
         
         $emails = $phreebooksdb->select($sql);
         
-        $from = $contact->name."<".$contact->login.">";
-        
         foreach($emails as $email){
+            $from = $email->from_name."<".env('GOOGLE_EMAIL_ALIAS').">";
+            $boundary = uniqid(rand(), true);
             $message = new \Google_Service_Gmail_Message();
             $rawMessageString = "From: $from\r\n";
             $rawMessageString .= "To: ".$email->to_name."<".$email->to_address.">\r\n";
             $rawMessageString .= 'Subject: =?utf-8?B?' . base64_encode($email->subject) . "?=\r\n";
             $rawMessageString .= "MIME-Version: 1.0\r\n";
+	    $rawMessageString .= 'Content-type: Multipart/Mixed; boundary="' . $boundary . '"' . "\r\n";
+            $rawMessageString .= "\r\n--{$boundary}\r\n";
+	    $rawMessageString .= 'Content-Type: application/pdf; name="'. $email->attachment_name .'";' . "\r\n";            
+	    $rawMessageString .= 'Content-ID: <' . $email->from_address . '>' . "\r\n";            
+            $rawMessageString .= 'Content-Description: ' . $email->attachment_name . ';' . "\r\n";
+	    $words = explode('/', $email->attachment_name);
+	    $filename = trim($words[count($words) - 1], '/');
+	    $rawMessageString .= 'Content-Disposition: attachment; filename="' . $filename . '.pdf"; size=' . strlen($email->attachment). ';' . "\r\n";
+	    $rawMessageString .= 'Content-Transfer-Encoding: base64' . "\r\n\r\n";
+	    $rawMessageString .= chunk_split(base64_encode($email->attachment), 76, "\n") . "\r\n";
+	    $rawMessageString .= "--{$boundary}\r\n";
             $rawMessageString .= "Content-Type: text/html; charset=utf-8\r\n";
             $rawMessageString .= 'Content-Transfer-Encoding: quoted-printable' . "\r\n\r\n";
-            $rawMessageString .= $email->body;
+            $rawMessageString .= $email->body . "\r\n";
             $rawMessage = strtr(base64_encode($rawMessageString), array('+' => '-', '/' => '_'));
             $message->setRaw($rawMessage);
-            $message = $service->users_messages->send($contact->login, $message);
+	    try {
+		    $success = $service->users_messages->send("me", $message);
+	    	    if($success){
+                        $emails = $phreebooksdb->update("UPDATE emails SET sent=true WHERE id=?",[$email->id]);			    
+                    }
+            } catch (Exception $e) {
+		    Log::error($e->getMessage());
+            }
         }
     }       
 }
