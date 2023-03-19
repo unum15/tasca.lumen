@@ -21,7 +21,23 @@ class GoogleController extends Controller
     function getClient()
     {
         $client = new \Google_Client();
-        $client->setApplicationName('Tasca');
+        $client->setApplicationName('Tasca Client');
+        $client->setScopes(["https://www.googleapis.com/auth/calendar.events","https://www.googleapis.com/auth/gmail.send"]);
+        //$client->setIncludeGrantedScopes(true);
+
+        $client->setAccessType('offline');
+
+        $client->setDeveloperKey(env('GOOGLE_API_KEY'));
+        $client->setClientId(env('GOOGLE_CLIENT_ID'));
+        $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+        $client->setRedirectUri('http://'.env('GOOGLE_CLIENT_HOST', $_SERVER['HTTP_HOST']).'/google/authorization');
+        return $client;
+    }
+    
+    function getClientSimple()
+    {
+        $client = new \Google_Client();
+        $client->setApplicationName('Tasca Client');
         $client->setScopes(["https://www.googleapis.com/auth/calendar.events","https://www.googleapis.com/auth/gmail.send"]);        
 
         $client->setAccessType('offline');
@@ -66,7 +82,8 @@ class GoogleController extends Controller
         $user = $request->user();
         $code = $request->only('code');
         $client = $this->getClient();
-        $accessToken = $client->fetchAccessTokenWithAuthCode(rawurlencode($code['code']));
+        //$client->setAuthConfig(env('GOOGLE_CLIENT_SECRET'));
+        $accessToken = $client->fetchAccessTokenWithAuthCode($code['code']);
         if(isset($accessToken['error'])) {
             error_log($code['code']);
             error_log(print_r($accessToken, true));
