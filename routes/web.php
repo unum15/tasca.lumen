@@ -541,3 +541,10 @@ $router->post('/asset_accessory', ['uses' => 'AssetAccessoryController@create', 
 $router->get('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@read', 'as' => 'asset_accessory.read']);
 $router->patch('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@update', 'as' => 'asset_accessory.update']);
 $router->delete('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@delete', 'as' => 'asset_accessory.delete']);
+
+
+$router->get('/stock_text_messages', ['uses' => 'StockTextMessageController@index', 'as' => 'stock_text_message.index']);
+$router->post('/stock_text_message', ['uses' => 'StockTextMessageController@create', 'as' => 'stock_text_message.create']);
+$router->get('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@read', 'as' => 'stock_text_message.read']);
+$router->patch('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@update', 'as' => 'stock_text_message.update']);
+$router->delete('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@delete', 'as' => 'stock_text_message.delete']);
