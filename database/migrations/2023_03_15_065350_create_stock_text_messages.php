@@ -12,6 +12,7 @@ class CreateStockTextMessages extends Migration
             $table->id();
             $table->text('message');
             $table->integer('sort_order')->nullable();
+            $table->enum('message_type',['work','appointment']);
             $table->timestamps();
         });
     }
