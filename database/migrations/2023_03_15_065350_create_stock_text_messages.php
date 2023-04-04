@@ -12,13 +12,18 @@ class CreateStockTextMessages extends Migration
             $table->id();
             $table->text('message');
             $table->integer('sort_order')->nullable();
-            $table->enum('message_type',['work','appointment']);
+            $table->integer('message_type_id');
             $table->timestamps();
+            $table->foreign('message_type_id')
+                ->references('id')
+                ->on('message_types')
+                ->onDelete('cascade');
         });
     }
 
     public function down()
     {
         Schema::dropIfExists('stock_text_messages');
+        $db->delete("DELETE FROM settings WHERE name='default_stock_text_message'");
     }
 }

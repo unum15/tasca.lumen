@@ -548,3 +548,9 @@ $router->post('/stock_text_message', ['uses' => 'StockTextMessageController@crea
 $router->get('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@read', 'as' => 'stock_text_message.read']);
 $router->patch('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@update', 'as' => 'stock_text_message.update']);
 $router->delete('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@delete', 'as' => 'stock_text_message.delete']);
+
+$router->get('/sms_message_types', ['uses' => 'SmsMessageTypeController@index', 'as' => 'sms_message_type.index']);
+$router->post('/sms_message_type', ['uses' => 'SmsMessageTypeController@create', 'as' => 'sms_message_type.create']);
+$router->get('/sms_message_type/{id:[0-9]+}', ['uses' => 'SmsMessageTypeController@read', 'as' => 'sms_message_type.read']);
+$router->patch('/sms_message_type/{id:[0-9]+}', ['uses' => 'SmsMessageTypeController@update', 'as' => 'sms_message_type.update']);
+$router->delete('/sms_message_type/{id:[0-9]+}', ['uses' => 'SmsMessageTypeController@delete', 'as' => 'sms_message_type.delete']);
