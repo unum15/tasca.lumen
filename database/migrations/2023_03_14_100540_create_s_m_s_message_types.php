@@ -16,14 +16,15 @@ class CreateSMSMessageTypes extends Migration
             $table->timestamps();
         });
         $db = DB::connection();
-        $db->insert("INSERT INTO settings (name,value) VALUES ('deault_date_text_message_type',1)");
-        $db->insert("INSERT INTO settings (name,value) VALUES ('deault_nondate_text_message_type',1)");
+        $db->insert("INSERT INTO settings (name,value) VALUES ('deault_date_sms_message_type',1)");
+        $db->insert("INSERT INTO settings (name,value) VALUES ('deault_nondate_sms_message_type',1)");
     }
 
     public function down()
     {
         Schema::dropIfExists('sms_message_types');
         $db = DB::connection();
-        $db->delete("DELETE FROM settings WHERE name='default_text_message_type'");
+        $db->delete("DELETE FROM settings WHERE name='deault_date_sms_message_type'");
+        $db->delete("DELETE FROM settings WHERE name='deault_nondate_sms_message_type'");
     }
 }

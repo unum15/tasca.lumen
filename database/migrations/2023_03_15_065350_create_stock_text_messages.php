@@ -16,7 +16,7 @@ class CreateStockTextMessages extends Migration
             $table->timestamps();
             $table->foreign('message_type_id')
                 ->references('id')
-                ->on('message_types')
+                ->on('sms_message_types')
                 ->onDelete('cascade');
         });
     }
@@ -24,6 +24,5 @@ class CreateStockTextMessages extends Migration
     public function down()
     {
         Schema::dropIfExists('stock_text_messages');
-        $db->delete("DELETE FROM settings WHERE name='default_stock_text_message'");
     }
 }
