@@ -536,9 +536,21 @@ $router->get('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@read', 'as
 $router->patch('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@update', 'as' => 'asset_sub.update']);
 $router->delete('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@delete', 'as' => 'asset_sub.delete']);
 
-
 $router->get('/asset_accessories', ['uses' => 'AssetAccessoryController@index', 'as' => 'asset_accessory.index']);
 $router->post('/asset_accessory', ['uses' => 'AssetAccessoryController@create', 'as' => 'asset_accessory.create']);
 $router->get('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@read', 'as' => 'asset_accessory.read']);
 $router->patch('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@update', 'as' => 'asset_accessory.update']);
 $router->delete('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@delete', 'as' => 'asset_accessory.delete']);
+
+
+$router->get('/stock_text_messages', ['uses' => 'StockTextMessageController@index', 'as' => 'stock_text_message.index']);
+$router->post('/stock_text_message', ['uses' => 'StockTextMessageController@create', 'as' => 'stock_text_message.create']);
+$router->get('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@read', 'as' => 'stock_text_message.read']);
+$router->patch('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@update', 'as' => 'stock_text_message.update']);
+$router->delete('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@delete', 'as' => 'stock_text_message.delete']);
+
+$router->get('/sms_message_types', ['uses' => 'SmsMessageTypeController@index', 'as' => 'sms_message_type.index']);
+$router->post('/sms_message_type', ['uses' => 'SmsMessageTypeController@create', 'as' => 'sms_message_type.create']);
+$router->get('/sms_message_type/{id:[0-9]+}', ['uses' => 'SmsMessageTypeController@read', 'as' => 'sms_message_type.read']);
+$router->patch('/sms_message_type/{id:[0-9]+}', ['uses' => 'SmsMessageTypeController@update', 'as' => 'sms_message_type.update']);
+$router->delete('/sms_message_type/{id:[0-9]+}', ['uses' => 'SmsMessageTypeController@delete', 'as' => 'sms_message_type.delete']);
