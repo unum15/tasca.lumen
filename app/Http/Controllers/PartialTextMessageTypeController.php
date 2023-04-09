@@ -17,7 +17,7 @@ class PartialTextMessageTypeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
-        $items_query = PartialTextMessageType::with($includes);
+        $items_query = PartialTextMessageType::with($includes)->orderBy('sort_order')->orderBy('id');
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
