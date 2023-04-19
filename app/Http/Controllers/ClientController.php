@@ -9,19 +9,7 @@ use log;
 use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
-{
-    private $validation = [
-        'name'                      => 'string|min:1|max:255',
-        'notes'                     => 'nullable|string|max:255',
-        'client_type_id'            => 'nullable|integer|exists:client_types,id',
-        'activity_level_id'         => 'nullable|integer|exists:activity_levels,id',
-        'billing_contact_id'        => 'nullable|integer|exists:contacts,id',
-        'main_mailing_property_id'  => 'nullable|integer|exists:properties,id',
-        'contact_method_id'         => 'nullable|integer|exists:contact_methods,id',
-        'referred_by'               => 'nullable|string|max:255',
-        'abbreviation'              => 'nullable|string|max:255'
-    ];
-    
+{  
     public function __construct(Request $request)
     {
         $this->middleware('auth');
@@ -34,14 +22,8 @@ class ClientController extends Controller
     {
         $this->validate($request, $this->validation);
         $this->validate($request, ['maximium_activity_level_id' => 'nullable|integer|exists:activity_levels,id']);
-        $query = Client::with('clientType')
-            ->with('activityLevel')
-            ->with('billingContact')
-            ->with('billingProperty')
-            ->with('properties')
-            ->with('contacts')
-            ->with('contacts.phoneNumbers')
-            ->orderBy('name');
+        $includes = $this->validateIncludes($request->input('includes'));
+        $query = Client::with($includes)->orderBy('name');
         $max_activity_level = $request->input('maximium_activity_level_id');
         if(!empty($max_activity_level)) {
             $query->where('activity_level_id','<=',$max_activity_level);
@@ -61,7 +43,6 @@ class ClientController extends Controller
         }
         $values = $request->only(array_keys($this->validation));
         foreach($values as $field => $value){
-            log::Debug($value);
             $query->where($field, $value);
         }
         $items = $query->get();
@@ -76,10 +57,10 @@ class ClientController extends Controller
         $this->validate($request, ['name' => 'required']);
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-	#sometimes the form saves while loading 
-	if(!$values['client_type_id']){
-		return;
-	}
+        #sometimes the form saves while loading 
+        if(!$values['client_type_id']){
+            return;
+        }
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = Client::create($values);
@@ -136,4 +117,26 @@ class ClientController extends Controller
         $items = Client::whereNotNull($field)->where($field,'!=','')->groupBy($field)->having(DB::raw('COUNT(*)'),'>=',$mininium['value'])->orderBy($field)->pluck($field);
         return ['data' => $items];
     }
+
+    private $validation = [
+        'name'                      => 'string|min:1|max:255',
+        'notes'                     => 'nullable|string|max:255',
+        'client_type_id'            => 'nullable|integer|exists:client_types,id',
+        'activity_level_id'         => 'nullable|integer|exists:activity_levels,id',
+        'billing_contact_id'        => 'nullable|integer|exists:contacts,id',
+        'main_mailing_property_id'  => 'nullable|integer|exists:properties,id',
+        'contact_method_id'         => 'nullable|integer|exists:contact_methods,id',
+        'referred_by'               => 'nullable|string|max:255',
+        'abbreviation'              => 'nullable|string|max:255'
+    ];
+
+    protected $model_includes = [
+        'clientType',
+        'activityLevel',
+        'billingContact',
+        'billingProperty',
+        'properties',
+        'contacts',
+        'contacts.phoneNumbers'
+     ];
 }
