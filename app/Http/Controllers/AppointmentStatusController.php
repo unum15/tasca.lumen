@@ -25,7 +25,7 @@ class AppointmentStatusController extends Controller
 
     public function index()
     {
-        $items = AppointmentStatus::All();
+        $items = AppointmentStatus::orderBy('sort_order')->get();
         return $items;
     }
     
