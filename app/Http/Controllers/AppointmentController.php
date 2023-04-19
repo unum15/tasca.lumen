@@ -339,7 +339,7 @@ class AppointmentController extends Controller
             }
         }
         if(!$has_value) {
-            return;
+            return response([]);
         }
         $dates = ['date', 'completion_date', 'billed_date'];
         foreach($dates as $date){
