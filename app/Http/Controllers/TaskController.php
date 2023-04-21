@@ -57,7 +57,8 @@ class TaskController extends Controller
             'crew',
             'appointments',
             'appointments.clockIns',
-            'appointments.AppointmentStatus'
+            'appointments.AppointmentStatus',
+            'contacts'
         )
         ->orderBy('id');
 
@@ -114,6 +115,10 @@ class TaskController extends Controller
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = Task::create($values);
+        $contacts = $request->only('contacts');
+        if($contacts) {
+            $item->contacts()->sync($contacts['contacts']);
+        }
         return response(['data' => $item], 201, ['Location' => route('asset.read', ['id' => $item->id])]);
     }
     
@@ -138,7 +143,8 @@ class TaskController extends Controller
             'labor_type',
             'order.orderPriority',
             'order.orderCategory',
-            'appointments'
+            'appointments',
+            'contacts'
         )
         ->findOrFail($id);
         return $item;
@@ -157,6 +163,10 @@ class TaskController extends Controller
         }
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
+        $contacts = $request->only('contacts');
+        if($contacts) {
+            $item->contacts()->sync($contacts['contacts']);
+        }
         return $item;
     }
     
