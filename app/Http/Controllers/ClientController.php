@@ -56,8 +56,8 @@ class ClientController extends Controller
             return response(['Unauthorized(permissions)'], 401);
         }
         $this->validate($request, ['name' => 'required']);
-        $this->validate($request, $this->validation);
-        $values = $request->only(array_keys($this->validation));
+        $this->validate($request, $this->model_validation);
+        $values = $request->only(array_keys($this->model_validation));
         #sometimes the form saves while loading 
         if(!$values['client_type_id']){
             return;
