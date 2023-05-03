@@ -10,18 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
 {
-    private $validation = [
-        'name'                      => 'string|min:1|max:255',
-        'notes'                     => 'nullable|string|max:255',
-        'client_type_id'            => 'nullable|integer|exists:client_types,id',
-        'activity_level_id'         => 'nullable|integer|exists:activity_levels,id',
-        'billing_contact_id'        => 'nullable|integer|exists:contacts,id',
-        'main_mailing_property_id'  => 'nullable|integer|exists:properties,id',
-        'contact_method_id'         => 'nullable|integer|exists:contact_methods,id',
-        'referred_by'               => 'nullable|string|max:255',
-        'abbreviation'              => 'nullable|string|max:255'
-    ];
-    
     public function __construct(Request $request)
     {
         $this->middleware('auth');
@@ -32,23 +20,18 @@ class ClientController extends Controller
 
     public function index(Request $request)
     {
-        $this->validate($request, $this->validation);
+        $includes = $this->validateIncludes($request->input('includes'));
+        $this->validate($request, $this->model_validation);
         $this->validate($request, ['maximium_activity_level_id' => 'nullable|integer|exists:activity_levels,id']);
-        $query = Client::with('clientType')
-            ->with('activityLevel')
-            ->with('billingContact')
-            ->with('billingProperty')
-            ->with('properties')
-            ->with('contacts')
-            ->with('contacts.phoneNumbers')
-            ->orderBy('name');
+        $query = Client::orderBy('name');
+        $query->with($includes);
+        
         $max_activity_level = $request->input('maximium_activity_level_id');
         if(!empty($max_activity_level)) {
             $query->where('activity_level_id','<=',$max_activity_level);
         }
         $backflow_only = $request->input('backflow_only');
         if(!empty($backflow_only)&&$backflow_only=='true') {
-            #$query->has('properties.backflow_assemblies');
             $query->whereHas('properties.backflow_assemblies', function($query){
                 $query->where('active','true');
             });
@@ -59,9 +42,8 @@ class ClientController extends Controller
                 $query->where('zip', 'like', "$zip%");
             });
         }
-        $values = $request->only(array_keys($this->validation));
+        $values = $request->only(array_keys($this->model_validation));
         foreach($values as $field => $value){
-            log::Debug($value);
             $query->where($field, $value);
         }
         $items = $query->get();
@@ -74,8 +56,8 @@ class ClientController extends Controller
             return response(['Unauthorized(permissions)'], 401);
         }
         $this->validate($request, ['name' => 'required']);
-        $this->validate($request, $this->validation);
-        $values = $request->only(array_keys($this->validation));
+        $this->validate($request, $this->model_validation);
+        $values = $request->only(array_keys($this->model_validation));
 	#sometimes the form saves while loading 
 	if(!$values['client_type_id']){
 		return;
@@ -109,9 +91,9 @@ class ClientController extends Controller
         if(!$request->user()->can('edit-clients')) {
             return response(['Unauthorized(permissions)'], 401);
         }
-        $this->validate($request, $this->validation);     
+        $this->validate($request, $this->model_validation);     
         $item = Client::findOrFail($id);
-        $values = $request->only(array_keys($this->validation));
+        $values = $request->only(array_keys($this->model_validation));
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         return $item;
@@ -129,7 +111,7 @@ class ClientController extends Controller
 
     public function unique($field)
     {
-        if(!in_array($field,array_keys($this->validation))){
+        if(!in_array($field,array_keys($this->model_validation))){
             $error = \Illuminate\Validation\ValidationException::withMessages([
                 'field' => ['Field is not a valid field for Project'],
             ]);
@@ -161,4 +143,36 @@ class ClientController extends Controller
         $item->linkedProperties()->detach($property_id);
         return response([], 204);
     }
+}
+
+
+    protected $model_validation = [
+        'name'                      => 'string|min:1|max:255',
+        'notes'                     => 'nullable|string|max:255',
+        'client_type_id'            => 'nullable|integer|exists:client_types,id',
+        'activity_level_id'         => 'nullable|integer|exists:activity_levels,id',
+        'billing_contact_id'        => 'nullable|integer|exists:contacts,id',
+        'main_mailing_property_id'  => 'nullable|integer|exists:properties,id',
+        'contact_method_id'         => 'nullable|integer|exists:contact_methods,id',
+        'referred_by'               => 'nullable|string|max:255',
+        'abbreviation'              => 'nullable|string|max:255',
+        'phreebooks_id'             => 'nullable|integer',
+
+    ];
+    
+    protected $model_validation_required = [
+       'name' => 'required'
+    ];
+
+    protected $model_includes = [
+        'activityLevel',
+        'billingContact',
+        'billingProperty',
+        'clientType',
+        'contactMethod',
+        'contacts',
+        'properties',
+        'linkedProperties',
+        'contacts.phoneNumbers'
+    ];
 }
