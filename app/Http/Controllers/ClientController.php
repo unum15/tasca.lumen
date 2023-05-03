@@ -95,7 +95,10 @@ class ClientController extends Controller
             'contacts.roles',
             'properties',
             'properties.contacts',
-            'properties.propertyUnits'
+            'properties.propertyUnits',
+            'linkedProperties',
+            'linkedProperties.contacts',
+            'linkedProperties.propertyUnits'
         )
         ->findOrFail($id);
         return $item;
@@ -135,5 +138,27 @@ class ClientController extends Controller
         $mininium = Setting::where('name','mininium-auto-suggest-count')->first();
         $items = Client::whereNotNull($field)->where($field,'!=','')->groupBy($field)->having(DB::raw('COUNT(*)'),'>=',$mininium['value'])->orderBy($field)->pluck($field);
         return ['data' => $items];
+    }
+
+    public function addProperty($id, Request $request)
+    {
+        if(!$request->user()->can('edit-clients')) {
+            return response(['Unauthorized(permissions)'], 401);
+        }
+        $this->validate($request, ['property_id'  => 'nullable|integer|exists:properties,id']);
+        $values = $request->only(['property_id']);
+        $item = Client::findOrFail($id);
+        $item->linkedProperties()->attach($values['property_id']);
+        return $item;
+    }
+    
+    public function deleteProperty($id, $property_id, Request $request)
+    {
+        if(!$request->user()->can('edit-clients')) {
+            return response(['Unauthorized(permissions)'], 401);
+        }
+        $item = Client::findOrFail($id);
+        $item->linkedProperties()->detach($property_id);
+        return response([], 204);
     }
 }

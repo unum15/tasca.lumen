@@ -64,6 +64,10 @@ class IrrigationSystemController extends Controller
        'filter_location' => 'string|max:1020|nullable',
        'property_unit_id' => 'integer|nullable|exists:property_units,id',
        'notes' => 'string|max:1020|nullable',
+       'start_up_cost' => 'nullable',
+       'management_cost' => 'nullable',
+       'winterizing_cost' => 'nullable',
+       'visits_count' => 'string|nullable',
     ];
     
     protected $model_validation_required = [

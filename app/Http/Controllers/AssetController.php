@@ -131,7 +131,12 @@ class AssetController extends Controller
        'manufacture' => 'string|max:1020|nullable',
        'number' => 'string|max:1020|nullable',
        'purchase_cost' => 'numeric|nullable',
-       'purchase_date' => 'date|nullable'
+       'purchase_date' => 'date|nullable',
+       'needs_maintenances' => 'boolean|nullable',
+       'needs_parts' => 'boolean|nullable',
+        'needs_repairs' => 'boolean|nullable',
+        'needs_fuelings' => 'boolean|nullable',
+        'needs_services' => 'boolean|nullable'
     ];
     
     protected $model_validation_required = [

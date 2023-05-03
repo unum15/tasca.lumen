@@ -113,6 +113,8 @@ $router->get('/client/{id:[0-9]+}', 'ClientController@read');
 $router->patch('/client/{id:[0-9]+}', 'ClientController@update');
 $router->delete('/client/{id:[0-9]+}', 'ClientController@delete');
 $router->get('/clients/unique/{field:\w+}', ['uses' => 'ClientController@unique', 'as' => 'client.unique']);
+$router->post('/client/{id:[0-9]+}/properties', 'ClientController@addProperty');
+$router->delete('/client/{id}/property/{property_id}', 'ClientController@deleteProperty');
 
 $router->get('/contacts', 'ContactController@index');
 $router->post('/contact', 'ContactController@create');

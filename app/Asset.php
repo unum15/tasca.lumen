@@ -27,7 +27,12 @@ class Asset extends Model
         'number',
         'purchase_cost',
         'purchase_date',
-        'location'
+        'location',
+        'needs_maintenances',
+        'needs_parts',
+        'needs_repairs',
+        'needs_fuelings',
+        'needs_services'
     ];
 
     public function asset_category()
