@@ -56,12 +56,12 @@ class ClientController extends Controller
             return response(['Unauthorized(permissions)'], 401);
         }
         $this->validate($request, ['name' => 'required']);
-        $this->validate($request, $this->model_validation);
-        $values = $request->only(array_keys($this->model_validation));
-	#sometimes the form saves while loading 
-	if(!$values['client_type_id']){
-		return;
-	}
+        $this->validate($request, $this->validation);
+        $values = $request->only(array_keys($this->validation));
+        #sometimes the form saves while loading 
+        if(!$values['client_type_id']){
+            return;
+        }
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = Client::create($values);
@@ -143,10 +143,8 @@ class ClientController extends Controller
         $item->linkedProperties()->detach($property_id);
         return response([], 204);
     }
-}
 
-
-    protected $model_validation = [
+    private $model_validation = [
         'name'                      => 'string|min:1|max:255',
         'notes'                     => 'nullable|string|max:255',
         'client_type_id'            => 'nullable|integer|exists:client_types,id',
