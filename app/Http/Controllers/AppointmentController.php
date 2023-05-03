@@ -332,14 +332,14 @@ class AppointmentController extends Controller
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
         $has_value = false;
-        $not_empty = ['date', 'day', 'time', 'notes'];
+        $not_empty = ['date', 'day', 'time', 'notes', 'appointment_status_id'];
         foreach($not_empty as $field){
             if(!empty($values[$field])) {
                 $has_value = true;
             }
         }
         if(!$has_value) {
-            return;
+            return response([]);
         }
         $dates = ['date', 'completion_date', 'billed_date'];
         foreach($dates as $date){

@@ -170,6 +170,11 @@ $router->get('/calendar/status', 'GoogleCalendarController@status');
 $router->get('/calendar/url', 'GoogleCalendarController@url');
 $router->post('/calendar/callback', 'GoogleCalendarController@callback');
 
+$router->get('/google/status', 'GoogleController@status');
+$router->get('/google/url', 'GoogleController@url');
+$router->post('/google/callback', 'GoogleController@callback');
+
+
 $router->get('/backflow_valve_parts', ['uses' => 'BackflowValvePartController@index', 'as' => 'backflow_valve_part.index']);
 $router->post('/backflow_valve_part', ['uses' => 'BackflowValvePartController@create', 'as' => 'backflow_valve_part.create']);
 $router->get('/backflow_valve_part/{id:[0-9]+}', ['uses' => 'BackflowValvePartController@read', 'as' => 'backflow_valve_part.read']);
@@ -531,9 +536,32 @@ $router->get('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@read', 'as
 $router->patch('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@update', 'as' => 'asset_sub.update']);
 $router->delete('/asset_sub/{id:[0-9]+}', ['uses' => 'AssetSubController@delete', 'as' => 'asset_sub.delete']);
 
-
 $router->get('/asset_accessories', ['uses' => 'AssetAccessoryController@index', 'as' => 'asset_accessory.index']);
 $router->post('/asset_accessory', ['uses' => 'AssetAccessoryController@create', 'as' => 'asset_accessory.create']);
 $router->get('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@read', 'as' => 'asset_accessory.read']);
 $router->patch('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@update', 'as' => 'asset_accessory.update']);
 $router->delete('/asset_accessory/{id:[0-9]+}', ['uses' => 'AssetAccessoryController@delete', 'as' => 'asset_accessory.delete']);
+
+$router->get('/stock_text_messages', ['uses' => 'StockTextMessageController@index', 'as' => 'stock_text_message.index']);
+$router->post('/stock_text_message', ['uses' => 'StockTextMessageController@create', 'as' => 'stock_text_message.create']);
+$router->get('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@read', 'as' => 'stock_text_message.read']);
+$router->patch('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@update', 'as' => 'stock_text_message.update']);
+$router->delete('/stock_text_message/{id:[0-9]+}', ['uses' => 'StockTextMessageController@delete', 'as' => 'stock_text_message.delete']);
+
+$router->get('/sms_message_types', ['uses' => 'SmsMessageTypeController@index', 'as' => 'sms_message_type.index']);
+$router->post('/sms_message_type', ['uses' => 'SmsMessageTypeController@create', 'as' => 'sms_message_type.create']);
+$router->get('/sms_message_type/{id:[0-9]+}', ['uses' => 'SmsMessageTypeController@read', 'as' => 'sms_message_type.read']);
+$router->patch('/sms_message_type/{id:[0-9]+}', ['uses' => 'SmsMessageTypeController@update', 'as' => 'sms_message_type.update']);
+$router->delete('/sms_message_type/{id:[0-9]+}', ['uses' => 'SmsMessageTypeController@delete', 'as' => 'sms_message_type.delete']);
+
+$router->get('/partial_text_message_types', ['uses' => 'PartialTextMessageTypeController@index', 'as' => 'partial_text_message_type.index']);
+$router->post('/partial_text_message_type', ['uses' => 'PartialTextMessageTypeController@create', 'as' => 'partial_text_message_type.create']);
+$router->get('/partial_text_message_type/{id:[0-9]+}', ['uses' => 'PartialTextMessageTypeController@read', 'as' => 'partial_text_message_type.read']);
+$router->patch('/partial_text_message_type/{id:[0-9]+}', ['uses' => 'PartialTextMessageTypeController@update', 'as' => 'partial_text_message_type.update']);
+$router->delete('/partial_text_message_type/{id:[0-9]+}', ['uses' => 'PartialTextMessageTypeController@delete', 'as' => 'partial_text_message_type.delete']);
+
+$router->get('/partial_text_messages', ['uses' => 'PartialTextMessageController@index', 'as' => 'partial_text_message.index']);
+$router->post('/partial_text_message', ['uses' => 'PartialTextMessageController@create', 'as' => 'partial_text_message.create']);
+$router->get('/partial_text_message/{id:[0-9]+}', ['uses' => 'PartialTextMessageController@read', 'as' => 'partial_text_message.read']);
+$router->patch('/partial_text_message/{id:[0-9]+}', ['uses' => 'PartialTextMessageController@update', 'as' => 'partial_text_message.update']);
+$router->delete('/partial_text_message/{id:[0-9]+}', ['uses' => 'PartialTextMessageController@delete', 'as' => 'partial_text_message.delete']);

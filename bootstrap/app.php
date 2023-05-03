@@ -92,6 +92,7 @@ $app->singleton(
  if($env == 'local'){
   $app->register(Unum\Maker\MakerServiceProvider::class);
  }
+ $app->register(Unum\DID\DIDServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
  $app->alias('mail.manager', \Illuminate\Mail\MailManager::class);
