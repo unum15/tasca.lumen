@@ -54,9 +54,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-       $schedule->command('Appointment:Create')->timezone(env("TIMEZONE", 'America/Denver'));
-       $schedule->command('Order:Status')->timezone(env("TIMEZONE", 'America/Denver'));
-       $schedule->command('Reminder:Clockout')->timezone(env("TIMEZONE", 'America/Denver'))->hourly();
+       $schedule->command('appointment:reate')->timezone(env("TIMEZONE", 'America/Denver'));
+       $schedule->command('order:status')->timezone(env("TIMEZONE", 'America/Denver'));
+       $schedule->command('reminder:clockout')->timezone(env("TIMEZONE", 'America/Denver'))->hourly();
        $schedule->command('db:email')->timezone(env("TIMEZONE", 'America/Denver'));
        //$schedule->command('db:closeOrders')->timezone(env("TIMEZONE", 'America/Denver'));
     }
