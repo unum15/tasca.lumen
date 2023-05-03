@@ -67,5 +67,12 @@ class Task extends Model
     {
         return $this->belongsTo('App\Crew');
     }
+
+    public function contacts()
+    {
+        return $this->belongsToMany('App\Contact')
+            ->orderBy('name')
+            ->withTimestamps();
+    }
   
 }

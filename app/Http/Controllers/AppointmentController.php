@@ -91,7 +91,7 @@ class AppointmentController extends Controller
             ->leftJoin('projects', 'orders.project_id', '=', 'projects.id')
             ->leftJoin('order_property', 'orders.id', '=', 'order_property.order_id')
             ->leftJoin('properties', 'order_property.property_id', '=', 'properties.id')
-            ->leftJoin('contacts', 'projects.contact_id', '=', 'contacts.id')
+            ->leftJoin('contacts', 'orders.contact_id', '=', 'contacts.id')
             ->leftJoin('clients', 'projects.client_id', '=', 'clients.id')
             ->leftJoin('appointment_statuses', 'appointments.appointment_status_id', '=', 'appointment_statuses.id')
             ->leftJoin('order_priorities', 'orders.order_priority_id', '=', 'order_priorities.id')
@@ -126,12 +126,14 @@ class AppointmentController extends Controller
                 'orders.approval_date',
                 'orders.expiration_date',
                 'orders.close_date AS order_close_date',
+                'orders.contact_id',
                 'orders.project_id',
                 'projects.client_id',
                 'tasks.order_id',
                 'appointment_statuses.name AS appointment_status',
                 'appointment_status_id',
                 'clients.name AS client',
+                'properties.id as property_id',
                 'properties.name AS property',
                 DB::raw("COALESCE(properties.address1,'')||' '||COALESCE(properties.address2,'')||' - '||COALESCE(properties.city,'') AS address"),
                 'tasks.description',
