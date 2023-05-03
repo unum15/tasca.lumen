@@ -144,7 +144,7 @@ class ClientController extends Controller
         return response([], 204);
     }
 
-    private $model_validation = [
+    protected $model_validation = [
         'name'                      => 'string|min:1|max:255',
         'notes'                     => 'nullable|string|max:255',
         'client_type_id'            => 'nullable|integer|exists:client_types,id',
