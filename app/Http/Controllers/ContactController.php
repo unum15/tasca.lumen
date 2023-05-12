@@ -45,6 +45,7 @@ class ContactController extends Controller
             ->with('phoneNumbers')
             ->with('phoneNumbers.phoneNumberType')
             ->with('properties')
+            ->with('roles')
             ->orderBy('name');
         $client_id = $request->input('client_id');
         if($client_id) {

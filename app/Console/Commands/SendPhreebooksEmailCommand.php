@@ -52,7 +52,7 @@ class SendPhreebooksEmailCommand extends Command
             $boundary = uniqid(rand(), true);
             $message = new \Google_Service_Gmail_Message();
             $rawMessageString = "From: $from\r\n";
-            $rawMessageString .= "To: ".$email->to_name."<".$email->to_address.">\r\n";
+            $rawMessageString .= "To: \"".$email->to_name."\"<".$email->to_address.">\r\n";
             $rawMessageString .= 'Subject: =?utf-8?B?' . base64_encode($email->subject) . "?=\r\n";
             $rawMessageString .= "MIME-Version: 1.0\r\n";
 	    $rawMessageString .= 'Content-type: Multipart/Mixed; boundary="' . $boundary . '"' . "\r\n";
