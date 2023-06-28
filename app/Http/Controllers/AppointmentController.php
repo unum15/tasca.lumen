@@ -135,7 +135,7 @@ class AppointmentController extends Controller
                 'clients.name AS client',
                 'properties.id as property_id',
                 'properties.name AS property',
-                DB::raw("COALESCE(properties.address1,'')||' '||COALESCE(properties.address2,'')||', '||COALESCE(properties.city,'')||', '||COALESCE(properties.state,'')||', '||COALESCE(properties.zip,'') AS address"),
+                DB::raw("COALESCE(properties.address1,'')||(CASE WHEN (properties.address2 IS NULL OR properties.address2='') THEN '' ELSE ' ' || properties.address2 END)||', '||COALESCE(properties.city,'')||', '||COALESCE(properties.state,'')||', '||COALESCE(properties.zip,'') AS address"),
                 'tasks.description',
                 'order_priorities.name AS order_priority',
                 'labor_assignments.name AS labor_assignment',

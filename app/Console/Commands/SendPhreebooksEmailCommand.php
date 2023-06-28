@@ -46,6 +46,16 @@ class SendPhreebooksEmailCommand extends Command
         ";
         
         $emails = $phreebooksdb->select($sql);
+
+        $sql_attachments="
+            SELECT
+                *
+            FROM
+                emails_attachments
+            WHERE
+               email_id = ?
+        ";
+        
         
         foreach($emails as $email){
             $from = $email->from_name."<".env('GOOGLE_EMAIL_ALIAS').">";
@@ -55,17 +65,21 @@ class SendPhreebooksEmailCommand extends Command
             $rawMessageString .= "To: \"".$email->to_name."\"<".$email->to_address.">\r\n";
             $rawMessageString .= 'Subject: =?utf-8?B?' . base64_encode($email->subject) . "?=\r\n";
             $rawMessageString .= "MIME-Version: 1.0\r\n";
-	    $rawMessageString .= 'Content-type: Multipart/Mixed; boundary="' . $boundary . '"' . "\r\n";
-            $rawMessageString .= "\r\n--{$boundary}\r\n";
-	    $rawMessageString .= 'Content-Type: application/pdf; name="'. $email->attachment_name .'";' . "\r\n";            
-	    $rawMessageString .= 'Content-ID: <' . $email->from_address . '>' . "\r\n";            
-            $rawMessageString .= 'Content-Description: ' . $email->attachment_name . ';' . "\r\n";
-	    $words = explode('/', $email->attachment_name);
-	    $filename = trim($words[count($words) - 1], '/');
-	    $rawMessageString .= 'Content-Disposition: attachment; filename="' . $filename . '.pdf"; size=' . strlen($email->attachment). ';' . "\r\n";
-	    $rawMessageString .= 'Content-Transfer-Encoding: base64' . "\r\n\r\n";
-	    $rawMessageString .= chunk_split(base64_encode($email->attachment), 76, "\n") . "\r\n";
-	    $rawMessageString .= "--{$boundary}\r\n";
+	        $rawMessageString .= 'Content-type: Multipart/Mixed; boundary="' . $boundary . '"' . "\r\n";
+        
+            $attachments = $phreebooksdb->select($sql_attachments,[$email->id]);
+            foreach($attachments as $attachment){
+                $rawMessageString .= "\r\n--{$boundary}\r\n";
+                $rawMessageString .= 'Content-Type: application/pdf; name="'. $attachment->attachment_name .'";' . "\r\n";            
+                $rawMessageString .= 'Content-ID: <' . $email->from_address . '>' . "\r\n";            
+                $rawMessageString .= 'Content-Description: ' . $attachment->attachment_name . ';' . "\r\n";
+                $words = explode('/', $attachment->attachment_name);
+                $filename = trim($words[count($words) - 1], '/');
+                $rawMessageString .= 'Content-Disposition: attachment; filename="' . $filename . '.pdf"; size=' . strlen($attachment->attachment). ';' . "\r\n";
+                $rawMessageString .= 'Content-Transfer-Encoding: base64' . "\r\n\r\n";
+                $rawMessageString .= chunk_split(base64_encode($attachment->attachment), 76, "\n") . "\r\n";
+                $rawMessageString .= "--{$boundary}\r\n";
+            }
             $rawMessageString .= "Content-Type: text/html; charset=utf-8\r\n";
             $rawMessageString .= 'Content-Transfer-Encoding: quoted-printable' . "\r\n\r\n";
             $rawMessageString .= $email->body . "\r\n";
@@ -74,8 +88,8 @@ class SendPhreebooksEmailCommand extends Command
 	    try {
 		    $success = $service->users_messages->send("me", $message);
 	    	    if($success){
-                        $emails = $phreebooksdb->update("UPDATE emails SET sent=true WHERE id=?",[$email->id]);			    
-                    }
+                    $emails = $phreebooksdb->update("UPDATE emails SET sent=true WHERE id=?",[$email->id]);			    
+                }
             } catch (Exception $e) {
 		    Log::error($e->getMessage());
             }
