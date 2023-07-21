@@ -51,7 +51,8 @@ class OrderController extends Controller
         'renewal_message' => 'nullable|string|max:255',
         'recurring_interval' => 'nullable|string|max:255',
         'renewal_interval' => 'nullable|string|max:255',
-        'work_days' => 'nullable|string|max:255'
+        'work_days' => 'nullable|string|max:255',
+        'property_unit_id' => 'nullable|integer:exists:property_units,id',
     ];
 
     public function __construct()
@@ -182,7 +183,8 @@ class OrderController extends Controller
             'orderPriority',
             'orderCategory',
             'tasks.appointments.clockIns',
-            'tasks.appointments.clockIns.contact'
+            'tasks.appointments.clockIns.contact',
+            'propertyUnit'
         )
             ->where('id', $id)
             ->first();
@@ -214,7 +216,6 @@ class OrderController extends Controller
             $values['renewal_date'] = null;
         }
         $values['updater_id'] = $request->user()->id;
-        Log::debug(print_r($item,true));
         if(($item->order_status_type_id != 1) || ($values['order_status_type_id'] == 1)){
             $item->update($values);
             $this->syncProperties($item, $request);

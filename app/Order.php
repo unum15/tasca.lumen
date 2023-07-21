@@ -38,6 +38,7 @@ class Order extends Model
         'bid',
         'bid_plus_minus',
         'invoice_number',
+        'property_unit_id',
         'renewable',
         'renewal_count',
         'renewal_date',
@@ -101,6 +102,11 @@ class Order extends Model
     {
         return $this->belongsToMany('App\Property')
             ->withTimestamps();
+    }
+
+    function propertyUnit()
+    {
+        return $this->belongsTo('App\PropertyUnit');
     }
     
 }
