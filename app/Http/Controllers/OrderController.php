@@ -57,7 +57,7 @@ class OrderController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -114,13 +114,35 @@ class OrderController extends Controller
                             ->orWhereNull('close_date');
                         });
             switch ($status) {
-                case 'Completed' :
+                case 'Billing' :
                     $items_query
                     ->whereDoesntHave('tasks', function($q){
                         $q->whereNull('completion_date');
                     })
                     ->whereHas('tasks', function($q){
                         $q->whereNotNull('completion_date');
+                    })
+                    ->whereHas('tasks', function($q){
+                        $q->whereNull('billed_date')
+                        ->orWhereNull('invoiced_date');
+                    });
+                    break;
+                case 'Completed' :
+                    $items_query
+                    ->whereDoesntHave('tasks', function($q){
+                        $q->whereNull('completion_date');
+                    })
+                    ->whereDoesntHave('tasks', function($q){
+                        $q->whereNull('billed_date');
+                    })
+                    ->whereDoesntHave('tasks', function($q){
+                        $q->whereNull('invoiced_date');
+                    })
+
+                    ->whereHas('tasks', function($q){
+                        $q->whereNotNull('completion_date');
+                        $q->whereNotNull('billed_date');
+                        $q->whereNotNull('invoiced_date');
                     });
                     break;
                 case 'Non-Completed' :
