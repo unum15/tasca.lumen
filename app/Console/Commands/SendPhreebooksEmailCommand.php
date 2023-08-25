@@ -58,6 +58,9 @@ class SendPhreebooksEmailCommand extends Command
         
         
         foreach($emails as $email){
+            if($email->to_address == ""){
+                continue;
+            }
             $from = $email->from_name."<".env('GOOGLE_EMAIL_ALIAS').">";
             $boundary = uniqid(rand(), true);
             $message = new \Google_Service_Gmail_Message();
@@ -85,13 +88,16 @@ class SendPhreebooksEmailCommand extends Command
             $rawMessageString .= $email->body . "\r\n";
             $rawMessage = strtr(base64_encode($rawMessageString), array('+' => '-', '/' => '_'));
             $message->setRaw($rawMessage);
-	    try {
-		    $success = $service->users_messages->send("me", $message);
-	    	    if($success){
-                    $emails = $phreebooksdb->update("UPDATE emails SET sent=true WHERE id=?",[$email->id]);			    
-                }
-            } catch (Exception $e) {
-		    Log::error($e->getMessage());
+            try {	    
+		        $success = $service->users_messages->send("me", $message);
+            } catch (\Exception $e) {
+                $message = $e->getMessage();
+                $rawMessageString .= "To: $from\r\n";
+                $rawMessageString .= "Subject: Failed to send message:$message\r\n";
+                continue;
+            }
+            finally{
+                $phreebooksdb->update("UPDATE emails SET sent=true WHERE id=?",[$email->id]);
             }
         }
     }       
