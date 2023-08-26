@@ -94,7 +94,7 @@ class SendPhreebooksEmailCommand extends Command
                 $message = $e->getMessage();
                 $rawMessageString .= "To: $from\r\n";
                 $rawMessageString .= "Subject: Failed to send message:$message\r\n";
-                continue;
+                $service->users_messages->send("me", $message);
             }
             finally{
                 $phreebooksdb->update("UPDATE emails SET sent=true WHERE id=?",[$email->id]);
