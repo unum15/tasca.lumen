@@ -10,7 +10,6 @@ class PermissionController extends Controller
 {
     public function __construct()
     {
-        Log::debug('PermissionController Constructed');
         $this->middleware('auth');
     }
 

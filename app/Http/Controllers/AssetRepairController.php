@@ -10,7 +10,6 @@ class AssetRepairController extends Controller
 {
     public function __construct()
     {
-        Log::debug('AssetRepairController Constructed');
         $this->middleware('auth');
     }
 

@@ -10,7 +10,6 @@ class BackflowPictureController extends Controller
 {
     public function __construct()
     {
-        Log::debug('BackflowPictureController Constructed');
         $this->middleware('auth');
     }
 

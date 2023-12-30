@@ -432,7 +432,6 @@ class PhreeBooksController extends Controller
                     $results->push($client);
                 }
                 unset($pb_contacts[$client->phreebooks_id]);
-                //Log::error(print_r($pb_contacts[$client->phreebooks_id],true));
             }
             else{
                 if((($location == "Tasca")||($location == "Both"))&&(($synced == "Not Synced")||($synced == "Both"))){

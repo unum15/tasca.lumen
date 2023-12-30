@@ -10,7 +10,6 @@ class AssetPictureController extends Controller
 {
     public function __construct()
     {
-        Log::debug('AssetPictureController Constructed');
         $this->middleware('auth');
     }
 

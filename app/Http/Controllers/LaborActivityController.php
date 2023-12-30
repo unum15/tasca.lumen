@@ -10,7 +10,6 @@ class LaborActivityController extends Controller
 {
     public function __construct()
     {
-        Log::debug('LaborActivityController Constructed');
         $this->middleware('auth');
     }
 

@@ -10,7 +10,6 @@ class AssetAppraisalController extends Controller
 {
     public function __construct()
     {
-        Log::debug('AssetAppraisalController Constructed');
         $this->middleware('auth');
     }
 

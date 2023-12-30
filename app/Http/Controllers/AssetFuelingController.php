@@ -10,7 +10,6 @@ class AssetFuelingController extends Controller
 {
     public function __construct()
     {
-        Log::debug('AssetFuelingController Constructed');
         $this->middleware('auth');
     }
 

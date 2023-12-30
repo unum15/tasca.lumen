@@ -102,7 +102,6 @@ class ContactController extends Controller
         if(!empty($values['password'])) {
             $values['password'] = password_hash($values['password'], PASSWORD_DEFAULT);
         }
-        Log::Debug(print_r($values, true));
         $item->update($values);
         $client_id = $request->input('client_id');
         if($client_id) {
