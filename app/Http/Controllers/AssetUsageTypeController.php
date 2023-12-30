@@ -10,7 +10,6 @@ class AssetUsageTypeController extends Controller
 {
     public function __construct()
     {
-        Log::debug('AssetUsageTypeController Constructed');
         $this->middleware('auth');
     }
 

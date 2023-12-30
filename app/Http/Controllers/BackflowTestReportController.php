@@ -67,7 +67,6 @@ class BackflowTestReportController extends Controller
         $contact_id = $request->input('contact_id');
         $repaired_on = $request->input('repaired_on');
         if(!is_array($parts)){
-            Log::debug($parts);
             return response(['error' => 'Invalid parts array:'.print_r($parts,true)], 422);
         }
         if(empty($contact_id)){

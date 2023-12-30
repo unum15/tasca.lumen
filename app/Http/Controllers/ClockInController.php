@@ -238,7 +238,6 @@ class ClockInController extends Controller
         $values = $request->only(array_keys($validation));
         $item = ClockIn::findOrFail($id);
         if($item->appointment->task->labor_assignment_id != $values['labor_assignment_id']){
-            Log::debug('changed');
             $assignment = LaborAssignment::find($values['labor_assignment_id']);
             if(!$assignment->order_id){
                 return response(['message' => "No order has been associated with assignment " . $assignment->name], 422);

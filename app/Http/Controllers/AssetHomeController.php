@@ -10,7 +10,6 @@ class AssetHomeController extends Controller
 {
     public function __construct()
     {
-        Log::debug('AssetHomeController Constructed');
         $this->middleware('auth');
     }
 

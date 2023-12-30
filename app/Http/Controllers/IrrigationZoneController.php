@@ -10,7 +10,6 @@ class IrrigationZoneController extends Controller
 {
     public function __construct()
     {
-        Log::debug('IrrigationZoneController Constructed');
         $this->middleware('auth');
     }
 

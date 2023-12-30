@@ -10,7 +10,6 @@ class AssetServiceController extends Controller
 {
     public function __construct()
     {
-        Log::debug('AssetServiceController Constructed');
         $this->middleware('auth');
     }
 

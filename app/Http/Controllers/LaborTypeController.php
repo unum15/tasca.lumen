@@ -10,7 +10,6 @@ class LaborTypeController extends Controller
 {
     public function __construct()
     {
-        Log::debug('LaborTypeController Constructed');
         $this->middleware('auth');
     }
 

@@ -10,7 +10,6 @@ class AssetTimeUnitController extends Controller
 {
     public function __construct()
     {
-        Log::debug('AssetTimeUnitController Constructed');
         $this->middleware('auth');
     }
 
