@@ -42,6 +42,17 @@ class PropertyController extends Controller
             ->with('propertyUnits')
             ->orderBy('name');
         $values = $request->only(array_keys($this->validation));
+        if($values['client_id'] && $request['linked']){
+            $items_query->where(
+                function ($q) use ($values) {
+                    $q->where('properties.client_id',$values['client_id']);
+                    $q->orWhereHas('linkedClients', function ($q) use ($values) {
+                        $q->where('client_property.client_id',$values['client_id']);
+                    });
+                }
+            );
+            unset($values['client_id']);
+        }
         foreach($values as $field => $value){
             $items_query->where($field, $value);
         }
