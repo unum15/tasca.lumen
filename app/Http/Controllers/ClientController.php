@@ -80,7 +80,8 @@ class ClientController extends Controller
             'properties.propertyUnits',
             'linkedProperties',
             'linkedProperties.contacts',
-            'linkedProperties.propertyUnits'
+            'linkedProperties.propertyUnits',
+            'linkedProperties.client'
         )
         ->findOrFail($id);
         return $item;

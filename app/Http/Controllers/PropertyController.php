@@ -42,7 +42,7 @@ class PropertyController extends Controller
             ->with('propertyUnits')
             ->orderBy('name');
         $values = $request->only(array_keys($this->validation));
-        if($values['client_id'] && $request['linked']){
+        if(isset($values['client_id']) && isset($request['linked'])){
             $items_query->where(
                 function ($q) use ($values) {
                     $q->where('properties.client_id',$values['client_id']);
