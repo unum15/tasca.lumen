@@ -64,7 +64,7 @@ class OrderController extends Controller
     {
         $this->validate($request, $this->validation);
         $values = $request->only(array_keys($this->validation));
-        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties', 'tasks', 'tasks.appointments', 'tasks.appointments.clockIns')
+        $items_query = Order::with('project', 'project.contact', 'project.client', 'properties', 'tasks', 'tasks.appointments', 'tasks.appointments.clockIns', 'properties.client')
         ->orderBy('date');
         foreach($values as $field => $value){
             $items_query->where($field, $value);

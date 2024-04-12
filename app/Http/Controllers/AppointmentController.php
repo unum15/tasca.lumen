@@ -93,6 +93,7 @@ class AppointmentController extends Controller
             ->leftJoin('properties', 'order_property.property_id', '=', 'properties.id')
             ->leftJoin('contacts', 'orders.contact_id', '=', 'contacts.id')
             ->leftJoin('clients', 'projects.client_id', '=', 'clients.id')
+            ->leftJoin('clients as property_clients', 'properties.client_id', '=', 'property_clients.id')
             ->leftJoin('appointment_statuses', 'appointments.appointment_status_id', '=', 'appointment_statuses.id')
             ->leftJoin('order_priorities', 'orders.order_priority_id', '=', 'order_priorities.id')
             ->leftJoin('labor_assignments', 'tasks.labor_assignment_id', '=', 'labor_assignments.id')
@@ -136,6 +137,7 @@ class AppointmentController extends Controller
                 'properties.id as property_id',
                 'properties.name AS property',
                 DB::raw("COALESCE(properties.address1,'')||(CASE WHEN (properties.address2 IS NULL OR properties.address2='') THEN '' ELSE ' ' || properties.address2 END)||', '||COALESCE(properties.city,'')||', '||COALESCE(properties.state,'')||', '||COALESCE(properties.zip,'') AS address"),
+                'property_clients.name as property_client_name',
                 'tasks.description',
                 'order_priorities.name AS order_priority',
                 'labor_assignments.name AS labor_assignment',
