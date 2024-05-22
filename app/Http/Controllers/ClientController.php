@@ -49,8 +49,17 @@ class ClientController extends Controller
         $filter = $request->input('filter', '');
         if($filter != ''){
             $query->where('name', 'ilike', "%$filter%")
-            ->orWhereHas('billingContact', function ($query) use ($filter) {
+            ->orWhereHas('contacts', function ($query) use ($filter) {
                 $query->where('name', 'ilike', "%$filter%");
+            })
+            ->orWhereHas('contacts.phoneNumbers', function ($query) use ($filter) {
+                $query->where('phone_number', 'ilike', "%$filter%");
+            })
+            ->orWhereHas('properties', function ($query) use ($filter) {
+                $query->where('address1', 'ilike', "%$filter%")
+                ->orWhere('address2', 'ilike', "%$filter%")
+                ->orWhere('zip', 'ilike', "%$filter%")
+                ->orWhere('city', 'ilike', "%$filter%");
             });
         }
         $per_page = $request->input('per_page', 100000);
