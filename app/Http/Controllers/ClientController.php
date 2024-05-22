@@ -46,7 +46,16 @@ class ClientController extends Controller
         foreach($values as $field => $value){
             $query->where($field, $value);
         }
-        $items = $query->get();
+        $filter = $request->input('filter', '');
+        if($filter != ''){
+            $query->where('name', 'ilike', "%$filter%")
+            ->orWhereHas('billingContact', function ($query) use ($filter) {
+                $query->where('name', 'ilike', "%$filter%");
+            });
+        }
+        $per_page = $request->input('per_page', 100000);
+        $current_page = $request->input('current_page', 1);
+        $items = $query->paginate($per_page, ['*'], 'page', $current_page);
         return $items;
     }
     
