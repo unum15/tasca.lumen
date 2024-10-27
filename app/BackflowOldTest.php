@@ -15,6 +15,6 @@ class BackflowOldTest extends Model
         'rp_check_2',
         'rp',
         'ail',
-        'ch_1'
+        'ch_1',
     ];
 }

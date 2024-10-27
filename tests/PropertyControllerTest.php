@@ -1,10 +1,7 @@
 <?php
 
-use App\Property;
-
 class PropertyControllerTest extends TestCase
 {
-
     public function testIndex()
     {
         $items = factory('App\Property', 2)->create();
@@ -19,7 +16,7 @@ class PropertyControllerTest extends TestCase
         $activity_levels = factory('App\ActivityLevel', 5)->create();
         $property0 = factory('App\Property')->create(['activity_level_id' => $activity_levels[0]->id]);
         $property1 = factory('App\Property')->create(['activity_level_id' => $activity_levels[4]->id]);
-        $response = $this->actingAs($this->getAdminUser())->get('/properties?maximium_activity_level_id=' . $activity_levels[0]->id);
+        $response = $this->actingAs($this->getAdminUser())->get('/properties?maximium_activity_level_id='.$activity_levels[0]->id);
         $response->seeStatusCode(200);
         $response->seeJson($property0->toArray());
         $response->dontSeeJson(['name' => $property1->name]);
@@ -38,7 +35,7 @@ class PropertyControllerTest extends TestCase
     public function testRead()
     {
         $item = factory('App\Property')->create();
-        $response = $this->actingAs($this->getAdminUser())->get('/property/' . $item->id);
+        $response = $this->actingAs($this->getAdminUser())->get('/property/'.$item->id);
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
     }
@@ -47,15 +44,15 @@ class PropertyControllerTest extends TestCase
     {
         $item = factory('App\Property')->create();
         $patch = ['name' => 'Test Property 2'];
-        $response = $this->actingAs($this->getAdminUser())->patch('/property/' . $item->id, $patch);
+        $response = $this->actingAs($this->getAdminUser())->patch('/property/'.$item->id, $patch);
         $response->seeStatusCode(200);
         $response->seeJson($patch);
     }
-    
+
     public function testDelete()
     {
         $item = factory('App\Property')->create();
-        $response = $this->actingAs($this->getAdminUser())->delete('/property/' . $item->id);
+        $response = $this->actingAs($this->getAdminUser())->delete('/property/'.$item->id);
         $response->seeStatusCode(204);
     }
 

@@ -13,6 +13,6 @@ class PropertyAccount extends Model
         'address',
         'city',
         'access_code',
-        'notes'
+        'notes',
     ];
 }

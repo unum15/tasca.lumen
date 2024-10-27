@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ClientContactType extends Model
 {
-
     protected $table = 'client_contact';
+
     protected $fillable = [
         'client_id',
         'contact_id',
@@ -28,6 +28,4 @@ class ClientContactType extends Model
     {
         return $this->belongsTo('App\ContactType');
     }
-
-
 }

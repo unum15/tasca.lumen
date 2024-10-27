@@ -2,14 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use App\AssetLocation;
 use App\AssetServiceType;
-use App\AssetUsageType;
+use App\AssetTimeUnit;
 use App\AssetType;
 use App\AssetUnit;
-use App\AssetTimeUnit;
-use App\AssetLocation;
-
+use App\AssetUsageType;
+use Illuminate\Console\Command;
 
 class InitAssetTypesCommand extends Command
 {
@@ -25,86 +24,85 @@ class InitAssetTypesCommand extends Command
     public function handle()
     {
         $names = [
-                'Check',
-                'Change',
-                'Clean',
-                'Replace'
+            'Check',
+            'Change',
+            'Clean',
+            'Replace',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             AssetServiceType::create([
                 'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-        
-        
-        $names = [
-            'Miles',
-            'Hours'
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            AssetUsageType::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-        
-        $names = [
-            "Auto",
-            "Trailers",
-            "Equipment",
-            "Power tools",
-            "Hand tools",
-            "Specialty tools"
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            AssetType::create([
-                'name' => $name,
-                'sort_order' => $sort++
-            ]);
-        }
-        
-        $names = [
-            "OZ",
-            "Cups",
-            "Quarts",
-            "Gallons"
-        ];
-        $sort = 1;
-        foreach($names as $name){
-            AssetUnit::create([
-                'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
 
         $names = [
-            "Day",
-            "Week",
-            "Month",
-            "Year"
+            'Miles',
+            'Hours',
         ];
         $sort = 1;
-        foreach($names as $name){
-            AssetTimeUnit::create([
+        foreach ($names as $name) {
+            AssetUsageType::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
-        
+
         $names = [
-                'Shop',
-                'Garage',
-                'Trailer'
+            'Auto',
+            'Trailers',
+            'Equipment',
+            'Power tools',
+            'Hand tools',
+            'Specialty tools',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
+            AssetType::create([
+                'name' => $name,
+                'sort_order' => $sort++,
+            ]);
+        }
+
+        $names = [
+            'OZ',
+            'Cups',
+            'Quarts',
+            'Gallons',
+        ];
+        $sort = 1;
+        foreach ($names as $name) {
+            AssetUnit::create([
+                'name' => $name,
+                'sort_order' => $sort++,
+            ]);
+        }
+
+        $names = [
+            'Day',
+            'Week',
+            'Month',
+            'Year',
+        ];
+        $sort = 1;
+        foreach ($names as $name) {
+            AssetTimeUnit::create([
+                'name' => $name,
+                'sort_order' => $sort++,
+            ]);
+        }
+
+        $names = [
+            'Shop',
+            'Garage',
+            'Trailer',
+        ];
+        $sort = 1;
+        foreach ($names as $name) {
             AssetLocation::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
     }

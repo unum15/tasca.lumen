@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAssetServicesTable extends Migration
 {
@@ -38,7 +38,7 @@ class CreateAssetServicesTable extends Migration
                 ->references('id')
                 ->on('asset_usage_types')
                 ->onDelete('cascade');
-                
+
             $table->foreign('asset_time_unit_id')
                 ->references('id')
                 ->on('asset_time_units')

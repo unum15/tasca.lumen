@@ -32,29 +32,29 @@ class Asset extends Model
         'needs_parts',
         'needs_repairs',
         'needs_fuelings',
-        'needs_services'
+        'needs_services',
     ];
 
     public function asset_category()
     {
         return $this->belongsTo('App\AssetCategory');
     }
-    
+
     public function asset_brand()
     {
         return $this->belongsTo('App\AssetBrand');
     }
-    
+
     public function asset_type()
     {
         return $this->belongsTo('App\AssetType');
     }
-    
+
     public function asset_group()
     {
         return $this->belongsTo('App\AssetGroup');
     }
-    
+
     public function asset_sub()
     {
         return $this->belongsTo('App\AssetSub');
@@ -69,14 +69,14 @@ class Asset extends Model
     {
         return $this->belongsTo('App\AssetUsageType');
     }
-    
+
     public function parent_asset()
     {
-        return $this->belongsTo('App\Asset','parent_asset_id');
+        return $this->belongsTo('App\Asset', 'parent_asset_id');
     }
-    
+
     public function asset_exports()
     {
-        return $this->hasMany('App\AssetExport')->orderBy('exported_at','DESC');
+        return $this->hasMany('App\AssetExport')->orderBy('exported_at', 'DESC');
     }
 }

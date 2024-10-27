@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateClientsTable extends Migration
 {
@@ -26,7 +26,7 @@ class CreateClientsTable extends Migration
             $table->integer('creator_id');
             $table->integer('updater_id');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();            
+            $table->timestamp('updated_at')->useCurrent();
             $table->foreign('activity_level_id')
                 ->references('id')->on('activity_levels')
                 ->onDelete('SET NULL');
@@ -45,7 +45,7 @@ class CreateClientsTable extends Migration
             $table->foreign('billing_contact_id')
                 ->references('id')->on('contacts')
                 ->onDelete('RESTRICT');
-                
+
         });
     }
 

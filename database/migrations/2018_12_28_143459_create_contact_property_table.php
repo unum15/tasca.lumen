@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateContactPropertyTable extends Migration
 {
@@ -17,7 +17,7 @@ class CreateContactPropertyTable extends Migration
             $table->integer('contact_id');
             $table->integer('property_id');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();                        
+            $table->timestamp('updated_at')->useCurrent();
             $table->unique(['contact_id', 'property_id']);
             $table->foreign('contact_id')
                 ->references('id')->on('contacts')

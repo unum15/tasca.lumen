@@ -23,14 +23,14 @@ class BackflowAssembly extends Model
         'serial_number',
         'notes',
         'property_account_id',
-        'need_access'
+        'need_access',
     ];
 
     public function property()
     {
         return $this->belongsTo('App\Property');
     }
-    
+
     public function property_unit()
     {
         return $this->belongsTo('App\PropertyUnit');
@@ -65,7 +65,7 @@ class BackflowAssembly extends Model
     {
         return $this->belongsTo('App\BackflowModel');
     }
-    
+
     public function backflow_test_reports()
     {
         return $this->hasMany('App\BackflowTestReport')->orderBy('report_date', 'desc');

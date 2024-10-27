@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class AddHomeToAssets extends Migration
 {
-
     public function up()
     {
         Schema::table('assets', function (Blueprint $table) {

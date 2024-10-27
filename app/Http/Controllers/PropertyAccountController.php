@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\PropertyAccount;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class PropertyAccountController extends Controller
 {
@@ -18,10 +17,11 @@ class PropertyAccountController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = PropertyAccount::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -29,6 +29,7 @@ class PropertyAccountController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = PropertyAccount::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('property_account.read', ['id' => $item->id])]);
     }
 
@@ -36,6 +37,7 @@ class PropertyAccountController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = PropertyAccount::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -44,6 +46,7 @@ class PropertyAccountController extends Controller
         $item = PropertyAccount::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -51,21 +54,22 @@ class PropertyAccountController extends Controller
     {
         $item = PropertyAccount::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'property_id' => 'integer',
-       'number' => 'string|max:1020',
-       'name' => 'string|max:1020|nullable',
-       'address' => 'string|max:1020|nullable',
-       'city' => 'string|max:1020|nullable',
-       'access_code' => 'string|max:1020|nullable',
-       'notes' => 'string|max:1020|nullable',
+        'property_id' => 'integer',
+        'number' => 'string|max:1020',
+        'name' => 'string|max:1020|nullable',
+        'address' => 'string|max:1020|nullable',
+        'city' => 'string|max:1020|nullable',
+        'access_code' => 'string|max:1020|nullable',
+        'notes' => 'string|max:1020|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'property_id' => 'required',
-       'number' => 'required',
+        'property_id' => 'required',
+        'number' => 'required',
     ];
 }

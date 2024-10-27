@@ -12,9 +12,9 @@ class AddPropertyUnitIdToWorkOrder extends Migration
             $table->integer('property_unit_id')->nullable();
 
             $table->foreign('property_unit_id')
-            ->references('id')
-            ->on('property_units')
-            ->onDelete('cascade');
+                ->references('id')
+                ->on('property_units')
+                ->onDelete('cascade');
         });
 
         Schema::table('logs.orders', function (Blueprint $table) {

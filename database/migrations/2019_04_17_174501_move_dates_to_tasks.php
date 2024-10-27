@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class MoveDatesToTasks extends Migration
 {
@@ -18,9 +18,9 @@ class MoveDatesToTasks extends Migration
             $table->date('billed_date')->nullable();
         });
         $db = DB::connection();
-        $db->update("UPDATE tasks SET closed_date = completion_date");
-        $db->update("UPDATE tasks SET completion_date =  null");
-        $sql = "
+        $db->update('UPDATE tasks SET closed_date = completion_date');
+        $db->update('UPDATE tasks SET completion_date =  null');
+        $sql = '
             UPDATE 
                 tasks
             SET
@@ -39,7 +39,7 @@ class MoveDatesToTasks extends Migration
                 ) task_dates
             WHERE
                 tasks.id = task_dates.task_id
-        ";
+        ';
         $db->update($sql);
         Schema::table('task_dates', function (Blueprint $table) {
             $table->dropColumn('completion_date');
@@ -59,7 +59,7 @@ class MoveDatesToTasks extends Migration
             $table->date('billed_date')->nullable();
         });
         $db = DB::connection();
-        $sql = "
+        $sql = '
             UPDATE 
                 task_dates
             SET
@@ -76,9 +76,9 @@ class MoveDatesToTasks extends Migration
                 ) tasks
             WHERE
                 tasks.id = task_dates.task_id
-        ";
+        ';
         $db->update($sql);
-        $db->update("UPDATE tasks SET completion_date = closed_date");
+        $db->update('UPDATE tasks SET completion_date = closed_date');
         Schema::table('tasks', function (Blueprint $table) {
             $table->dropColumn('closed_date');
             $table->dropColumn('billed_date');

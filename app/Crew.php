@@ -10,6 +10,6 @@ class Crew extends Model
         'name',
         'notes',
         'sort_order',
-        'default'
+        'default',
     ];
 }

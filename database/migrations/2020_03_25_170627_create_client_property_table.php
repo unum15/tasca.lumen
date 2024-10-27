@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateClientPropertyTable extends Migration
 {
@@ -17,7 +17,7 @@ class CreateClientPropertyTable extends Migration
             $table->integer('client_id');
             $table->integer('property_id');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();                        
+            $table->timestamp('updated_at')->useCurrent();
             $table->unique(['client_id', 'property_id']);
             $table->foreign('client_id')
                 ->references('id')->on('clients')

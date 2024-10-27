@@ -2,17 +2,15 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\AssetGroup;
 use App\AssetType;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AssetGroupFactory extends Factory
 {
     protected $model = AssetGroup::class;
 
-    
-      public function definition()
+    public function definition()
     {
         $asset_type = AssetType::factory()->create();
 
@@ -21,7 +19,7 @@ class AssetGroupFactory extends Factory
             'name' => $this->faker->word,
             'number' => $this->faker->word,
             'notes' => $this->faker->text,
-            'sort_order' => $this->faker->word
+            'sort_order' => $this->faker->word,
         ];
     }
 }

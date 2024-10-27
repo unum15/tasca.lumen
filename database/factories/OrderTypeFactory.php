@@ -2,22 +2,20 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\OrderType;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderTypeFactory extends Factory
 {
     protected $model = OrderType::class;
 
-    
-      public function definition()
+    public function definition()
     {
 
         return [
             'name' => $this->faker->word,
             'notes' => $this->faker->text,
-            'sort_order' => $this->faker->randomDigitNotNull
+            'sort_order' => $this->faker->randomDigitNotNull,
         ];
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateOrderActionOrderStatusTable extends Migration
 {
@@ -17,7 +17,7 @@ class CreateOrderActionOrderStatusTable extends Migration
             $table->integer('order_action_id');
             $table->integer('order_status_id');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();                        
+            $table->timestamp('updated_at')->useCurrent();
             $table->unique(['order_action_id', 'order_status_id']);
             $table->foreign('order_action_id')
                 ->references('id')->on('order_actions')

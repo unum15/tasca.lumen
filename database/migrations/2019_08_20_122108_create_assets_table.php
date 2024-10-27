@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAssetsTable extends Migration
 {
@@ -22,7 +22,7 @@ class CreateAssetsTable extends Migration
             $table->text('notes')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            
+
             $table->foreign('asset_type_id')
                 ->references('id')
                 ->on('asset_types')

@@ -20,8 +20,7 @@ class NewAssetFields extends Migration
                 ->on('asset_locations')
                 ->onDelete('cascade');
         });
-        
-        
+
     }
 
     public function down()

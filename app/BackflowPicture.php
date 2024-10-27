@@ -10,7 +10,7 @@ class BackflowPicture extends Model
         'backflow_assembly_id',
         'filename',
         'original_filename',
-        'notes'
+        'notes',
     ];
 
     public function backflow_assembly()

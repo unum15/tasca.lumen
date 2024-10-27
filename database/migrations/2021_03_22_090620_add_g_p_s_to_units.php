@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class AddGPSToUnits extends Migration
 {
-
     public function up()
     {
         Schema::table('property_units', function (Blueprint $table) {

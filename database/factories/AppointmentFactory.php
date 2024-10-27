@@ -2,17 +2,15 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Appointment;
 use App\Task;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AppointmentFactory extends Factory
 {
     protected $model = Appointment::class;
 
-    
-      public function definition()
+    public function definition()
     {
         $task = Task::factory()->create();
 
@@ -26,7 +24,7 @@ class AppointmentFactory extends Factory
             'updater_id' => $this->faker->randomDigitNotNull,
             'hours' => $this->faker->time,
             'sort_order' => $this->faker->word,
-            'appointment_status_id' => $this->faker->randomDigitNotNull
+            'appointment_status_id' => $this->faker->randomDigitNotNull,
         ];
     }
 }

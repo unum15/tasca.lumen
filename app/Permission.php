@@ -1,4 +1,6 @@
-<?php namespace App;
+<?php
+
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -7,10 +9,11 @@ class Permission extends Model
     protected $fillable = [
         'name',
         'display_name',
-        'description'
+        'description',
     ];
 
-    public function roles(){
+    public function roles()
+    {
         return $this->belongsToMany('App\Role');
     }
 }

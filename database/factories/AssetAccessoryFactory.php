@@ -2,17 +2,15 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\AssetAccessory;
 use App\Asset;
+use App\AssetAccessory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AssetAccessoryFactory extends Factory
 {
     protected $model = AssetAccessory::class;
 
-    
-      public function definition()
+    public function definition()
     {
         $asset = Asset::factory()->create();
 
@@ -20,7 +18,7 @@ class AssetAccessoryFactory extends Factory
             'asset_id' => $asset->id,
             'name' => $this->faker->word,
             'notes' => $this->faker->word,
-            'value' => $this->faker->randomFloat(2,0,1000).''
+            'value' => $this->faker->randomFloat(2, 0, 1000).'',
         ];
     }
 }

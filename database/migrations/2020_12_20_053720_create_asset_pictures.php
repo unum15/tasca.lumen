@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateAssetPictures extends Migration
 {
-
     public function up()
     {
         Schema::create('asset_pictures', function (Blueprint $table) {

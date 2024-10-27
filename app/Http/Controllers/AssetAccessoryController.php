@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\AssetAccessory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class AssetAccessoryController extends Controller
 {
@@ -18,10 +17,11 @@ class AssetAccessoryController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = AssetAccessory::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -31,6 +31,7 @@ class AssetAccessoryController extends Controller
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = AssetAccessory::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('asset_accessory.read', ['id' => $item->id])]);
     }
 
@@ -38,6 +39,7 @@ class AssetAccessoryController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = AssetAccessory::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -47,6 +49,7 @@ class AssetAccessoryController extends Controller
         $values['updater_id'] = $request->user()->id;
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -54,24 +57,24 @@ class AssetAccessoryController extends Controller
     {
         $item = AssetAccessory::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'asset_id' => 'integer|exists:assets,id',
-       'quantity' => 'integer',
-       'name' => 'string|max:1020',
-       'notes' => 'string|max:1020|nullable',
-       'value' => 'numeric|nullable',
+        'asset_id' => 'integer|exists:assets,id',
+        'quantity' => 'integer',
+        'name' => 'string|max:1020',
+        'notes' => 'string|max:1020|nullable',
+        'value' => 'numeric|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'asset_id' => 'required',
-       'name' => 'required',
+        'asset_id' => 'required',
+        'name' => 'required',
     ];
 
     protected $model_includes = [
-       'asset'
+        'asset',
     ];
-    
 }

@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
@@ -50,63 +50,62 @@ class Order extends Model
         'contact_id',
         'creator_id',
         'updater_id',
-        'work_days'
+        'work_days',
     ];
-    
-    function project()
+
+    public function project()
     {
         return $this->belongsTo('App\Project');
     }
-    
-    function orderAction()
+
+    public function orderAction()
     {
         return $this->belongsTo('App\OrderAction');
     }
-    
-    function orderStatusType()
+
+    public function orderStatusType()
     {
         return $this->belongsTo('App\OrderStatusType');
     }
-    
-    function orderCategory()
+
+    public function orderCategory()
     {
         return $this->belongsTo('App\OrderCategory');
     }
-    
-    function orderPriority()
+
+    public function orderPriority()
     {
         return $this->belongsTo('App\OrderPriority');
     }
-    
-    function orderStatus()
+
+    public function orderStatus()
     {
         return $this->belongsTo('App\OrderStatus');
     }
-    
-    function orderType()
+
+    public function orderType()
     {
         return $this->belongsTo('App\OrderType');
     }
-    
-    function tasks()
+
+    public function tasks()
     {
         return $this->hasMany('App\Task');
     }
-    
-    function approver()
+
+    public function approver()
     {
         return $this->belongsTo('App\Contact');
     }
-    
+
     public function properties()
     {
         return $this->belongsToMany('App\Property')
             ->withTimestamps();
     }
 
-    function propertyUnit()
+    public function propertyUnit()
     {
         return $this->belongsTo('App\PropertyUnit');
     }
-    
 }

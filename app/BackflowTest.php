@@ -13,7 +13,7 @@ class BackflowTest extends Model
         'reading_2',
         'passed',
         'tested_on',
-        'notes'
+        'notes',
     ];
 
     public function backflow_test_report()

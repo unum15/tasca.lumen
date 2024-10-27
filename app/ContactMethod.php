@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class ContactMethod extends Model
 {
@@ -13,6 +13,6 @@ class ContactMethod extends Model
         'name',
         'notes',
         'sort_order',
-        'default'
+        'default',
     ];
 }

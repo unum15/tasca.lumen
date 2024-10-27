@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\LaborType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class LaborTypeController extends Controller
 {
@@ -18,10 +17,11 @@ class LaborTypeController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = LaborType::with($includes)->orderBy('sort_order')->orderBy('name');
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -29,6 +29,7 @@ class LaborTypeController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = LaborType::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('labor_type.read', ['id' => $item->id])]);
     }
 
@@ -36,6 +37,7 @@ class LaborTypeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = LaborType::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -44,6 +46,7 @@ class LaborTypeController extends Controller
         $item = LaborType::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -51,16 +54,17 @@ class LaborTypeController extends Controller
     {
         $item = LaborType::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'name' => 'string|max:1020',
-       'notes' => 'string|max:1073741824|nullable',
-       'sort_order' => 'integer|nullable',
+        'name' => 'string|max:1020',
+        'notes' => 'string|max:1073741824|nullable',
+        'sort_order' => 'integer|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required',
+        'name' => 'required',
     ];
 }

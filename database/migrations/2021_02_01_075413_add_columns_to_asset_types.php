@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class AddColumnsToAssetTypes extends Migration
 {
@@ -12,7 +12,7 @@ class AddColumnsToAssetTypes extends Migration
         DB::table('asset_types')->delete();
         Schema::table('asset_types', function (Blueprint $table) {
             $table->bigInteger('asset_brand_id');
-            $table->char('number',1);
+            $table->char('number', 1);
             $table->string('sort_order')->change();
             $table->foreign('asset_brand_id')
                 ->references('id')->on('asset_brands')

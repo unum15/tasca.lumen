@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateDIDReceivedMessagesTable extends Migration
 {
@@ -15,14 +15,14 @@ class CreateDIDReceivedMessagesTable extends Migration
     {
         Schema::create('did_received_messages', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string("text");
-            $table->string("from");
-            $table->json("to");
-            $table->string("reference_id");
-            $table->boolean("delivery_receipt")->default('false');
-            $table->string("status");
-            $table->json("media_urls");
-            $table->datetime("sms_created_at");
+            $table->string('text');
+            $table->string('from');
+            $table->json('to');
+            $table->string('reference_id');
+            $table->boolean('delivery_receipt')->default('false');
+            $table->string('status');
+            $table->json('media_urls');
+            $table->datetime('sms_created_at');
             $table->timestamps();
         });
 

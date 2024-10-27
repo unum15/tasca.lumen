@@ -6,14 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateAssetSubs extends Migration
 {
-
     public function up()
     {
         Schema::create('asset_subs', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('asset_group_id');
             $table->string('name');
-            $table->char('number',1);
+            $table->char('number', 1);
             $table->text('notes')->nullable();
             $table->string('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();

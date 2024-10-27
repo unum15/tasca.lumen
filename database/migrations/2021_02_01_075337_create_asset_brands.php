@@ -6,14 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateAssetBrands extends Migration
 {
-
     public function up()
     {
         Schema::create('asset_brands', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('asset_category_id');
             $table->string('name');
-            $table->char('number',1);
+            $table->char('number', 1);
             $table->text('notes')->nullable();
             $table->string('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();

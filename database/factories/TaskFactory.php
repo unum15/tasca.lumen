@@ -2,21 +2,19 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Task;
-use App\Order;
 use App\LaborAssignment;
 use App\LaborType;
+use App\Order;
+use App\Task;
 use App\TaskAction;
 use App\TaskStatus;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TaskFactory extends Factory
 {
     protected $model = Task::class;
 
-    
-      public function definition()
+    public function definition()
     {
         $order = Order::factory()->create();
         $labor_assignment = LaborAssignment::factory()->create();
@@ -35,7 +33,7 @@ class TaskFactory extends Factory
             'completion_date' => $this->faker->date,
             'group' => $this->faker->word,
             'task_hours' => $this->faker->randomDigitNotNull,
-            'crew_hours' => $this->faker->randomFloat(2,0,1000).'',
+            'crew_hours' => $this->faker->randomFloat(2, 0, 1000).'',
             'notes' => $this->faker->text,
             'creator_id' => $this->faker->randomDigitNotNull,
             'updater_id' => $this->faker->randomDigitNotNull,
@@ -44,7 +42,7 @@ class TaskFactory extends Factory
             'billed_date' => $this->faker->date,
             'hold_date' => $this->faker->date,
             'invoiced_date' => $this->faker->date,
-            'labor_assignment_id' => $labor_assignment->id
+            'labor_assignment_id' => $labor_assignment->id,
         ];
     }
 }

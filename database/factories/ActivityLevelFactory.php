@@ -9,15 +9,14 @@ class ActivityLevelFactory extends Factory
 {
     protected $model = ActivityLevel::class;
 
-    
-      public function definition()
+    public function definition()
     {
 
         return [
             'name' => $this->faker->word,
             'notes' => $this->faker->text,
             'sort_order' => $this->faker->randomDigitNotNull,
-            'default' => $this->faker->boolean
+            'default' => $this->faker->boolean,
         ];
     }
 }

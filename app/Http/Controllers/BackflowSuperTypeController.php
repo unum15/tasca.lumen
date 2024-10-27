@@ -17,10 +17,11 @@ class BackflowSuperTypeController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = BackflowSuperType::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -28,6 +29,7 @@ class BackflowSuperTypeController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = BackflowSuperType::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('backflow_super_type.read', ['id' => $item->id])]);
     }
 
@@ -35,6 +37,7 @@ class BackflowSuperTypeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = BackflowSuperType::with($includes)->findOrFail($id);
+
         return ['data' => $item];
     }
 
@@ -43,6 +46,7 @@ class BackflowSuperTypeController extends Controller
         $item = BackflowSuperType::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -50,16 +54,17 @@ class BackflowSuperTypeController extends Controller
     {
         $item = BackflowSuperType::findOrFail($id);
         $item->delete();
+
         return response([], 401);
     }
-    
+
     protected $model_validation = [
-       'name' => 'string|max:1020',
-       'notes' => 'string|max:1073741824|nullable',
-       'sort_order' => 'integer|nullable',
+        'name' => 'string|max:1020',
+        'notes' => 'string|max:1073741824|nullable',
+        'sort_order' => 'integer|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required',
+        'name' => 'required',
     ];
 }

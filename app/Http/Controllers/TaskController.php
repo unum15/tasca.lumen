@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
-    
     private $validation = [
         'order_id' => 'integer|exists:orders,id',
         'description' => 'nullable|string|max:255',
@@ -31,7 +30,7 @@ class TaskController extends Controller
         'order_id' => 'integer|exists:orders,id',
         'notes' => 'nullable|string|max:1024',
         'group' => 'nullable|string|max:255',
-        'hide'  => 'nullable|boolean'
+        'hide' => 'nullable|boolean',
     ];
 
     public function __construct()
@@ -60,13 +59,13 @@ class TaskController extends Controller
             'appointments.AppointmentStatus',
             'contacts'
         )
-        ->orderBy('id');
+            ->orderBy('id');
 
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $active_only = $request->input('active_only');
-        if((!empty($active_only)) && ($active_only == 'true')) {
+        if ((! empty($active_only)) && ($active_only == 'true')) {
             $items_query->whereHas(
                 'order', function ($q) {
                     $q->whereNull('completion_date');
@@ -82,21 +81,21 @@ class TaskController extends Controller
             $items_query->whereNull('completion_date');
         }
         $completed = $request->input('completed');
-        if((!empty($completed)) && ($completed == 'true')) {
+        if ((! empty($completed)) && ($completed == 'true')) {
             $items_query->whereNotNull('completion_date');
         }
-        if((!empty($completed)) && ($completed == 'false')) {
+        if ((! empty($completed)) && ($completed == 'false')) {
             $items_query->whereNull('completion_date');
         }
         $closed = $request->input('closed');
-        if((!empty($closed)) && ($closed == 'true')) {
+        if ((! empty($closed)) && ($closed == 'true')) {
             $items_query->whereNotNull('closed_date');
         }
-        if((!empty($closed)) && ($closed == 'false')) {
+        if ((! empty($closed)) && ($closed == 'false')) {
             $items_query->whereNull('closed_date');
         }
         $min_closed_date = $request->input('min_closed_date');
-        if(!empty($min_closed_date)) {
+        if (! empty($min_closed_date)) {
             $items_query->where(
                 function ($q) use ($min_closed_date) {
                     $q->where('closed_date', '>=', $min_closed_date)
@@ -104,9 +103,10 @@ class TaskController extends Controller
                 }
             );
         }
+
         return $items_query->get();
     }
-    
+
     public function create(Request $request)
     {
         $this->validate($request, $this->validation);
@@ -116,12 +116,13 @@ class TaskController extends Controller
         $values['updater_id'] = $request->user()->id;
         $item = Task::create($values);
         $contacts = $request->only('contacts');
-        if($contacts) {
+        if ($contacts) {
             $item->contacts()->sync($contacts['contacts']);
         }
+
         return response(['data' => $item], 201, ['Location' => route('asset.read', ['id' => $item->id])]);
     }
-    
+
     public function read($id)
     {
         $item = Task::with(
@@ -146,47 +147,51 @@ class TaskController extends Controller
             'appointments',
             'contacts'
         )
-        ->findOrFail($id);
+            ->findOrFail($id);
+
         return $item;
     }
-    
+
     public function update($id, Request $request)
     {
-        $this->validate($request, $this->validation);     
+        $this->validate($request, $this->validation);
         $item = Task::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
-        $dates = ['completion_date', 'billed_date', 'closed_date','hold_date'];
-        foreach($dates as $date){
-            if(isset($values[$date])) {
-                $values[$date] = $values[$date] != "" ? $values[$date] : null;
+        $dates = ['completion_date', 'billed_date', 'closed_date', 'hold_date'];
+        foreach ($dates as $date) {
+            if (isset($values[$date])) {
+                $values[$date] = $values[$date] != '' ? $values[$date] : null;
             }
         }
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         $contacts = $request->only('contacts');
-        if($contacts) {
+        if ($contacts) {
             $item->contacts()->sync($contacts['contacts']);
         }
+
         return $item;
     }
-    
+
     public function delete($id)
     {
         $item = Task::findOrFail($id);
         $item->delete();
+
         return response([], 204);
-    }    
+    }
 
     public function unique($field)
     {
-        if(!in_array($field,array_keys($this->validation))){
+        if (! in_array($field, array_keys($this->validation))) {
             $error = \Illuminate\Validation\ValidationException::withMessages([
                 'field' => ['Field is not a valid field for Project'],
             ]);
             throw $error;
         }
-        $mininium = Setting::where('name','mininium-auto-suggest-count')->first();
-        $items = Task::whereNotNull($field)->where($field,'!=','')->groupBy($field)->having(DB::raw('COUNT(*)'),'>=',$mininium['value'])->orderBy($field)->pluck($field);
+        $mininium = Setting::where('name', 'mininium-auto-suggest-count')->first();
+        $items = Task::whereNotNull($field)->where($field, '!=', '')->groupBy($field)->having(DB::raw('COUNT(*)'), '>=', $mininium['value'])->orderBy($field)->pluck($field);
+
         return ['data' => $items];
     }
 }

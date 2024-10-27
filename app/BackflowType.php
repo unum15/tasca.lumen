@@ -10,9 +10,9 @@ class BackflowType extends Model
         'backflow_super_type_id',
         'name',
         'notes',
-        'sort_order'
+        'sort_order',
     ];
-    
+
     public function backflow_super_type()
     {
         return $this->belongsTo('App\BackflowSuperType');

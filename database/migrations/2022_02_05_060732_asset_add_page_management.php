@@ -17,10 +17,11 @@ class AssetAddPageManagement extends Migration
             $table->boolean('needs_services')->default(false);
         });
     }
+
     public function down()
     {
         Schema::table('assets', function (Blueprint $table) {
-            $table->integer('asset_usage_type_id')->nullable();;
+            $table->integer('asset_usage_type_id')->nullable();
             $table->dropColumn('needs_maintenances');
             $table->dropColumn('needs_parts');
             $table->dropColumn('needs_repairs');

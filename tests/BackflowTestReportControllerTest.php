@@ -2,13 +2,11 @@
 
 use App\BackflowTestReport;
 use Laravel\Lumen\Testing\WithoutMiddleware;
-use App\Http\Controllers\BackflowTestReportController;
 
 class BackflowTestReportControllerTest extends TestCase
 {
-
     use WithoutMiddleware;
-   
+
     public function testIndex()
     {
         $items = factory('App\BackflowTestReport', 2)->create();
@@ -16,8 +14,8 @@ class BackflowTestReportControllerTest extends TestCase
         $response->seeStatusCode(200);
         $this->seeInDatabase('backflow_test_reports', $items[0]->toArray());
         $this->seeInDatabase('backflow_test_reports', $items[1]->toArray());
-    }    
-    
+    }
+
     public function testCreate()
     {
         $item = factory('App\BackflowTestReport')->make();
@@ -26,29 +24,30 @@ class BackflowTestReportControllerTest extends TestCase
         $response->seeJson($item->toArray());
         $this->seeInDatabase('backflow_test_reports', $item->toArray());
     }
-    
+
     public function testRead()
     {
         $item = factory('App\BackflowTestReport')->create();
-        $response = $this->get('/backflow_test_report/' . $item->id);
+        $response = $this->get('/backflow_test_report/'.$item->id);
         $response->seeStatusCode(200);
         $data = $item->toArray();
         $data['backflow_tests'] = [];
         $response->seeJsonEquals(['data' => $data]);
         $this->seeInDatabase('backflow_test_reports', $item->toArray());
     }
-    
+
     public function testUpdate()
     {
         $item = factory('App\BackflowTestReport')->create();
         $update = ['notes' => 'test'];
-        $response = $this->patch('/backflow_test_report/' . $item->id, $update);
+        $response = $this->patch('/backflow_test_report/'.$item->id, $update);
         $response->seeStatusCode(200);
-        $update['updated_at'] = date('Y-m-d H:i:s',strtotime(BackflowTestReport::find($item->id)['updated_at']));
+        $update['updated_at'] = date('Y-m-d H:i:s', strtotime(BackflowTestReport::find($item->id)['updated_at']));
         $updated_array = array_merge($item->toArray(), $update);
         $response->seeJsonEquals(['data' => $updated_array]);
         $this->seeInDatabase('backflow_test_reports', $updated_array);
     }
+
     /*
     public function testNullDate()
     {
@@ -64,9 +63,8 @@ class BackflowTestReportControllerTest extends TestCase
     public function testDelete()
     {
         $item = factory('App\BackflowTestReport')->create();
-        $response = $this->delete('/backflow_test_report/' . $item->id);
+        $response = $this->delete('/backflow_test_report/'.$item->id);
         $response->seeStatusCode(204);
         $this->notSeeInDatabase('backflow_test_reports', $item->toArray());
     }
 }
-

@@ -2,18 +2,17 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\ActivityLevel;
 use App\Client;
 use App\Contact;
 use App\ContactMethod;
 use App\ContactType;
-Use App\PropertyType;
-Use Faker\Factory;
+use App\PropertyType;
+use Faker\Factory;
+use Illuminate\Database\Seeder;
 
 class PropertiesTableSeeder extends Seeder
 {
-
     public function run()
     {
         $faker = Factory::create();
@@ -24,9 +23,9 @@ class PropertiesTableSeeder extends Seeder
         $admin = Contact::first();
         $clients = Client::all();
 
-        foreach($clients as $client){
-            $prop_count = rand(1,4);
-            for($x=0;$x<$prop_count;$x++){
+        foreach ($clients as $client) {
+            $prop_count = rand(1, 4);
+            for ($x = 0; $x < $prop_count; $x++) {
                 $property = $client->properties()->create([
                     'name' => 'Home',
                     'notes' => $faker->realText,
@@ -40,11 +39,11 @@ class PropertiesTableSeeder extends Seeder
                     'work_property' => $faker->boolean,
                     'property_type_id' => $faker->randomElement($property_types),
                     'creator_id' => $admin->id,
-                    'updater_id' => $admin->id
+                    'updater_id' => $admin->id,
                 ]);
-                if($x==0){
+                if ($x == 0) {
                     $client->update([
-                       'main_mailing_property_id' => $property->id
+                        'main_mailing_property_id' => $property->id,
                     ]);
                 }
             }

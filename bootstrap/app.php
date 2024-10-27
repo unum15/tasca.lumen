@@ -59,15 +59,15 @@ $app->singleton(
 |
 */
 
- $app->middleware([
-     //\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-     //\Illuminate\Foundation\Http\Middleware\TrimStrings::class,
+$app->middleware([
+    //\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+    //\Illuminate\Foundation\Http\Middleware\TrimStrings::class,
 
- ]);
+]);
 
- $app->routeMiddleware([
+$app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
- ]);
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -80,30 +80,29 @@ $app->singleton(
 |
 */
 
- $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
- $app->register(App\Providers\AppServiceProvider::class);
- $app->register(App\Providers\AuthServiceProvider::class);
- $app->register(niklasravnsborg\LaravelPdf\PdfServiceProvider::class);
- //$app->register(App\Providers\MailServiceProvider::class);
- $app->register(Illuminate\Mail\MailServiceProvider::class);
- $app->register(Illuminate\Auth\Passwords\PasswordResetServiceProvider::class);
- $app->register(Illuminate\Notifications\NotificationServiceProvider::class);
- $env = env('APP_ENV', '');
- if($env == 'local'){
-  $app->register(Unum\Maker\MakerServiceProvider::class);
- }
- $app->register(Unum\DID\DIDServiceProvider::class);
+$app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
+$app->register(niklasravnsborg\LaravelPdf\PdfServiceProvider::class);
+//$app->register(App\Providers\MailServiceProvider::class);
+$app->register(Illuminate\Mail\MailServiceProvider::class);
+$app->register(Illuminate\Auth\Passwords\PasswordResetServiceProvider::class);
+$app->register(Illuminate\Notifications\NotificationServiceProvider::class);
+$env = env('APP_ENV', '');
+if ($env == 'local') {
+    $app->register(Unum\Maker\MakerServiceProvider::class);
+}
+$app->register(Unum\DID\DIDServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
- $app->alias('mail.manager', \Illuminate\Mail\MailManager::class);
- $app->alias('mail.manager', \Illuminate\Contracts\Mail\Factory::class);
- 
- $app->alias('mailer', \Illuminate\Mail\Mailer::class);
- $app->alias('mailer', \Illuminate\Contracts\Mail\Mailer::class);
- $app->alias('mailer', \Illuminate\Contracts\Mail\MailQueue::class);
+$app->alias('mail.manager', \Illuminate\Mail\MailManager::class);
+$app->alias('mail.manager', \Illuminate\Contracts\Mail\Factory::class);
 
- $app->configure('mail');
+$app->alias('mailer', \Illuminate\Mail\Mailer::class);
+$app->alias('mailer', \Illuminate\Contracts\Mail\Mailer::class);
+$app->alias('mailer', \Illuminate\Contracts\Mail\MailQueue::class);
 
+$app->configure('mail');
 
 /*
 |--------------------------------------------------------------------------

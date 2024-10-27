@@ -2,30 +2,31 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\ActivityLevel;
+use App\AppointmentStatus;
 use App\ClientType;
 use App\ContactMethod;
 use App\ContactType;
 use App\Crew;
 use App\EmailType;
-use App\PhoneNumberType;
-use App\PropertyType;
 use App\OrderAction;
-use App\OrderStatusType;
 use App\OrderCategory;
 use App\OrderPriority;
 use App\OrderStatus;
+use App\OrderStatusType;
 use App\OrderType;
+use App\PhoneNumberType;
+use App\PropertyType;
 use App\TaskAction;
-use App\AppointmentStatus;
+use App\TaskCategory;
 use App\TaskStatus;
 use App\TaskType;
-use App\TaskCategory;
+use Illuminate\Console\Command;
 
 class InitTypesCommand extends Command
 {
     protected $signature = 'init:types';
+
     protected $description = 'Create initial types for Tasca.';
 
     public function __construct()
@@ -38,52 +39,50 @@ class InitTypesCommand extends Command
         $activity_levels = [
             [
                 'name' => 'Level 1',
-                'notes' =>  'Customers that have called in the last three years.',
-                'sort_order' => 1
+                'notes' => 'Customers that have called in the last three years.',
+                'sort_order' => 1,
             ],
             [
                 'name' => 'Level 2',
-                'notes' =>  'Customers that have not called in the past three years.',
-                'sort_order' => 2
-            ],        
+                'notes' => 'Customers that have not called in the past three years.',
+                'sort_order' => 2,
+            ],
             [
                 'name' => 'Level 3',
-                'notes' =>  'Customers that have not called in the past five years.',
-                'sort_order' => 3
-            ],        
+                'notes' => 'Customers that have not called in the past five years.',
+                'sort_order' => 3,
+            ],
             [
                 'name' => 'Level 4',
-                'notes' =>  'Customers that have moved, but the location is still good.',
-                'sort_order' => 4
-            ],        
+                'notes' => 'Customers that have moved, but the location is still good.',
+                'sort_order' => 4,
+            ],
             [
                 'name' => 'Level 5',
-                'notes' =>  'Customers have moved and location is gone.',
-                'sort_order' => 5
-            ]
-        ];        
-        
-        foreach($activity_levels as $activity_level){
+                'notes' => 'Customers have moved and location is gone.',
+                'sort_order' => 5,
+            ],
+        ];
+
+        foreach ($activity_levels as $activity_level) {
             ActivityLevel::create($activity_level);
-        };
-        
-        
+        }
+
         $names = [
-                'None',
-                'Mail',
-                'Email',
-                'Text',
-                'Call'
+            'None',
+            'Mail',
+            'Email',
+            'Text',
+            'Call',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             ContactMethod::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
-        
-        
+
         $names = [
             'Residential',
             'Commercial',
@@ -94,41 +93,41 @@ class InitTypesCommand extends Command
             'Other',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             ClientType::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
-        
+
         $names = [
-            "Owner",
-            "Manager",
-            "Maintenance",
-            "Billing",
-            "Contract Manager",
-            "Project Manager",
-            "Contractor",
-            "Renter",
-            "Family Member",
-            "President",
-            "Foreman"
+            'Owner',
+            'Manager',
+            'Maintenance',
+            'Billing',
+            'Contract Manager',
+            'Project Manager',
+            'Contractor',
+            'Renter',
+            'Family Member',
+            'President',
+            'Foreman',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             ContactType::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
         $names = [
-            "A"
+            'A',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             Crew::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
 
@@ -145,227 +144,223 @@ class InitTypesCommand extends Command
             'Job Site',
             'Condo',
             'HOA',
-            'Wharehouse'            
+            'Wharehouse',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             PropertyType::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
-        
+
         $names = [
             'Personal',
             'Office',
-            'Home'            
+            'Home',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             EmailType::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
-        
+
         $names = [
             'Mobile',
             'Home',
             'Office',
             'Work',
             'Extension',
-            'Unknown'            
+            'Unknown',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             PhoneNumberType::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
-        
+
         $names = [
-            "Next Action",
-            "Active",
-            "Planning",
-            "Pending",
-            "On Hold",
-            "Postponed",
-            "Waiting",
-            "Someday",
-            "Reference",
-            "Canceled"
+            'Next Action',
+            'Active',
+            'Planning',
+            'Pending',
+            'On Hold',
+            'Postponed',
+            'Waiting',
+            'Someday',
+            'Reference',
+            'Canceled',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             OrderPriority::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
-        
+
         $names = [
-            "Renovation",
-            "Consulting",
-            "Lighting",
-            "Other Projects",
+            'Renovation',
+            'Consulting',
+            'Lighting',
+            'Other Projects',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             OrderCategory::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
-        
-        
+
         $names = [
-            "Will Call Back",
-            "Reviewing",
-            "Renewing",
-            "On Hold",
-            "Canceled"
+            'Will Call Back',
+            'Reviewing',
+            'Renewing',
+            'On Hold',
+            'Canceled',
         ];
         $sort = 1;
         $statuses = [];
-        foreach($names as $name){
+        foreach ($names as $name) {
             $status = OrderStatus::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
             $statuses[$name] = $status->id;
         }
-        
-        
+
         $actions = [
-                    "Contact" => [$statuses['Renewing']],
-                    "Site Visit" => [$statuses['Reviewing']],
-                    "Bid/Price" => [$statuses['Reviewing']],
-                    "Get P.O." => [$statuses['On Hold']],
-                    "Follow Up" => [$statuses['Will Call Back'],$statuses['Reviewing'],$statuses['On Hold']],
-                    "Close Out" => [$statuses['Will Call Back'],$statuses['On Hold'],$statuses['Canceled']]
-                ];
-        
+            'Contact' => [$statuses['Renewing']],
+            'Site Visit' => [$statuses['Reviewing']],
+            'Bid/Price' => [$statuses['Reviewing']],
+            'Get P.O.' => [$statuses['On Hold']],
+            'Follow Up' => [$statuses['Will Call Back'], $statuses['Reviewing'], $statuses['On Hold']],
+            'Close Out' => [$statuses['Will Call Back'], $statuses['On Hold'], $statuses['Canceled']],
+        ];
+
         $sort = 1;
-        foreach($actions as $name => $statuses){
+        foreach ($actions as $name => $statuses) {
             $action = OrderAction::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
-            
+
             $action->orderStatuses()->sync($statuses);
         }
-                
-       $names = [
-            "Service Order",
-            "Pending Work Order",
-            "Work Order"
+
+        $names = [
+            'Service Order',
+            'Pending Work Order',
+            'Work Order',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             OrderStatusType::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
 
         $names = [
-            "No Appointment",
-            "Contact for Appointment",
-            "Confirmed Appointment",
-            "Message",
-            "Text",
-            "Email"
+            'No Appointment',
+            'Contact for Appointment',
+            'Confirmed Appointment',
+            'Message',
+            'Text',
+            'Email',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             AppointmentStatus::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
 
-        
         $service_order_type_id = OrderStatusType::where('name', 'Service Order')->first()->id;
         $pending_work_order_type_id = OrderStatusType::where('name', 'Pending Work Order')->first()->id;
         $work_order_type_id = OrderStatusType::where('name', 'Work Order')->first()->id;
-        
+
         $names = [
-            "T & M",
-            "Lead",
-            "Quote",
-            "Estimate",
-            "Bid"
+            'T & M',
+            'Lead',
+            'Quote',
+            'Estimate',
+            'Bid',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             OrderType::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
 
         $names = [
-            "Non Billing",
-            "Billing"
+            'Non Billing',
+            'Billing',
         ];
         $sort = 1;
-        foreach($names as $name){
+        foreach ($names as $name) {
             TaskType::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
         }
 
         $names = [
-            "In Review" => [1],
-            "Completed" => [1],
-            "Call Off" => [1],
-            "Pending" => [2],
-            "In Progress" => [2],
-            "Done" => [2],
-            "On Hold" => [2],
-            "Cancelled" => [2],
+            'In Review' => [1],
+            'Completed' => [1],
+            'Call Off' => [1],
+            'Pending' => [2],
+            'In Progress' => [2],
+            'Done' => [2],
+            'On Hold' => [2],
+            'Cancelled' => [2],
         ];
 
-        
         $sort = 1;
-        foreach($names as $name => $types){
+        foreach ($names as $name => $types) {
             $status = TaskStatus::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
             $status->taskTypes()->sync($types);
         }
         $actions = [
-            "Call/Email" => [1],
-            "Schedule" => [1, 2],
-            "Bill" => [2],
-            "Close Out" => [1],
-            "Report" => [1, 2],
+            'Call/Email' => [1],
+            'Schedule' => [1, 2],
+            'Bill' => [2],
+            'Close Out' => [1],
+            'Report' => [1, 2],
         ];
         $sort = 1;
-        foreach($actions as $name => $types){
+        foreach ($actions as $name => $types) {
             $action = TaskAction::create([
-               'name' => $name,
-               'sort_order' => $sort++
+                'name' => $name,
+                'sort_order' => $sort++,
             ]);
             $action->taskTypes()->sync($types);
         }
         $names = [
-            "Site Visit" => [1],
-            "Appointment" => [1],
-            "Office" => [1],
-            "Errand" => [1],
-            "Evaluation" => [2],
-            "Day Task" => [2],
-            "Service Task" => [2]
+            'Site Visit' => [1],
+            'Appointment' => [1],
+            'Office' => [1],
+            'Errand' => [1],
+            'Evaluation' => [2],
+            'Day Task' => [2],
+            'Service Task' => [2],
         ];
         $sort = 1;
-        foreach($names as $name => $types){
+        foreach ($names as $name => $types) {
             $category = TaskCategory::create([
                 'name' => $name,
-                'sort_order' => $sort++
+                'sort_order' => $sort++,
             ]);
             $category->taskTypes()->sync($types);
         }

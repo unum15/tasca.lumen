@@ -6,14 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateAssetGroups extends Migration
 {
-
     public function up()
     {
         Schema::create('asset_groups', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('asset_type_id');
             $table->string('name');
-            $table->char('number',1);
+            $table->char('number', 1);
             $table->text('notes')->nullable();
             $table->string('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();

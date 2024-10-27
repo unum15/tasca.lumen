@@ -12,7 +12,7 @@ class CreateContactTaskTable extends Migration
             $table->integer('contact_id');
             $table->integer('task_id');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();                        
+            $table->timestamp('updated_at')->useCurrent();
             $table->unique(['contact_id', 'task_id']);
             $table->foreign('contact_id')
                 ->references('id')->on('contacts')

@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class AddCrewLaborRateContact extends Migration
 {
-
     public function up()
     {
         Schema::table('contacts', function (Blueprint $table) {

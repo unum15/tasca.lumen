@@ -2,13 +2,14 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\OverheadAssignment;
 use App\OverheadCategory;
+use Illuminate\Console\Command;
 
 class InitOverheadCommand extends Command
 {
     protected $signature = 'init:overhead';
+
     protected $description = 'Create initial overhead assignments and categories.';
 
     public function __construct()
@@ -25,7 +26,7 @@ class InitOverheadCommand extends Command
                 ],
                 'categories' => [
                     'Driving',
-                    'Shopping'
+                    'Shopping',
                 ],
             ],
             [
@@ -35,26 +36,26 @@ class InitOverheadCommand extends Command
                     'Gas',
                     'Wash',
                     'Repairing',
-                    'Driving'
-                ]
+                    'Driving',
+                ],
             ],
             [
-                'name' => 'Shop Time'
+                'name' => 'Shop Time',
             ],
             [
                 'name' => 'Heavy Equipment',
                 'categories' => [
                     'Maintenance',
                     'Repairing',
-                    'Cleaning'
-                ]
+                    'Cleaning',
+                ],
             ],
             [
                 'name' => 'Gas Equipment',
                 'categories' => [
                     'Maintenance',
                     'Repairing',
-                    'Cleaning'
+                    'Cleaning',
                 ],
             ],
             [
@@ -62,16 +63,15 @@ class InitOverheadCommand extends Command
                 'categories' => [
                     'Design',
                     'Financial',
-                    'Schedule'
-                ]
+                    'Schedule',
+                ],
             ],
             [
-                'name' => 'Inventory'
-            ]
-        ];        
-        
-        $this->createAssignments($assignments);
+                'name' => 'Inventory',
+            ],
+        ];
 
+        $this->createAssignments($assignments);
 
         $categories = [
             [
@@ -106,34 +106,34 @@ class InitOverheadCommand extends Command
             ],
             [
                 'name' => 'Schedule',
-            ]
+            ],
         ];
 
-        foreach($categories as $category){
+        foreach ($categories as $category) {
             OverheadCategory::create($category);
-        };
-        
-        
-        foreach($assignments as $assignment_name){
+        }
+
+        foreach ($assignments as $assignment_name) {
             $assignment = OverheadAssignment::where('name', $assignment_name['name'])->first();
-            if(isset($assignment_name['categories'])){
-                foreach($assignment_name['categories'] as $category_name){
+            if (isset($assignment_name['categories'])) {
+                foreach ($assignment_name['categories'] as $category_name) {
                     $category = OverheadCategory::where('name', $category_name)->first();
                     $assignment->overhead_categories()->attach($category);
                 }
             }
         }
     }
-    
-    public function createAssignments($assignments, $parent=null){
-        foreach($assignments as $assignment){
-            if($parent){
+
+    public function createAssignments($assignments, $parent = null)
+    {
+        foreach ($assignments as $assignment) {
+            if ($parent) {
                 $assignment['parent_id'] = $parent;
             }
             $new = OverheadAssignment::create($assignment);
-            if(isset($assignment['children'])){
+            if (isset($assignment['children'])) {
                 $this->createAssignments($assignment['children'], $new->id);
             }
-        };
+        }
     }
 }

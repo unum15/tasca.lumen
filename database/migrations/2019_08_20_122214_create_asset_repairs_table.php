@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAssetRepairsTable extends Migration
 {
-
     public function up()
     {
         Schema::create('asset_repairs', function (Blueprint $table) {
@@ -21,7 +20,7 @@ class CreateAssetRepairsTable extends Migration
             $table->text('notes')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            
+
             $table->foreign('asset_id')
                 ->references('id')
                 ->on('assets')

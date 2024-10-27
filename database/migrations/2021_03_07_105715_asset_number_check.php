@@ -45,13 +45,13 @@ class AssetNumberCheck extends Migration
     END;
     $$";
         DB::unprepared($sql);
-        
-        DB::unprepared("CREATE TRIGGER verify_asset_number_update BEFORE UPDATE ON assets FOR EACH ROW EXECUTE PROCEDURE verify_asset_number();");
-        DB::unprepared("CREATE TRIGGER verify_asset_number_insert BEFORE INSERT ON assets FOR EACH ROW EXECUTE PROCEDURE verify_asset_number();");
+
+        DB::unprepared('CREATE TRIGGER verify_asset_number_update BEFORE UPDATE ON assets FOR EACH ROW EXECUTE PROCEDURE verify_asset_number();');
+        DB::unprepared('CREATE TRIGGER verify_asset_number_insert BEFORE INSERT ON assets FOR EACH ROW EXECUTE PROCEDURE verify_asset_number();');
     }
 
     public function down()
     {
-          DB::unprepared('DROP FUNCTION IF EXISTS verify_asset_number() CASCADE;');
+        DB::unprepared('DROP FUNCTION IF EXISTS verify_asset_number() CASCADE;');
     }
 }

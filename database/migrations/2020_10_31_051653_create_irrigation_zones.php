@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateIrrigationZones extends Migration
 {
@@ -24,14 +24,14 @@ class CreateIrrigationZones extends Migration
             $table->decimal('application_rate')->nullable();
             $table->integer('heads')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('irrigation_controller_id')
                 ->references('id')
                 ->on('irrigation_controllers')
                 ->onDelete('cascade');
 
         });
-        
+
     }
 
     /**

@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class AddAbbreviationToClients extends Migration
 {
-
     public function up()
     {
         Schema::table('clients', function (Blueprint $table) {

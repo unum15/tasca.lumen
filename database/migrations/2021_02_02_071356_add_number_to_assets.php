@@ -2,12 +2,11 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class AddNumberToAssets extends Migration
 {
-
     public function up()
     {
         DB::table('assets')->delete();
@@ -18,7 +17,7 @@ class AddNumberToAssets extends Migration
             $table->bigInteger('asset_type_id')->nullable()->change();
             $table->bigInteger('asset_group_id')->nullable();
             $table->bigInteger('asset_sub_id')->nullable();
-            $table->char('item_number',1)->nullable();
+            $table->char('item_number', 1)->nullable();
             $table->foreign('asset_category_id')
                 ->references('id')->on('asset_categories')
                 ->onDelete('cascade');

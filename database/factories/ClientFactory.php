@@ -2,20 +2,18 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Client;
 use App\ActivityLevel;
+use App\Client;
 use App\ClientType;
-use App\ContactMethod;
 use App\Contact;
+use App\ContactMethod;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ClientFactory extends Factory
 {
     protected $model = Client::class;
 
-    
-      public function definition()
+    public function definition()
     {
         $activity_level = ActivityLevel::factory()->create();
         $contact = Contact::factory()->create();
@@ -32,7 +30,7 @@ class ClientFactory extends Factory
             'billing_contact_id' => $contact->id,
             'creator_id' => $contact->id,
             'updater_id' => $contact->id,
-            'phreebooks_id' => $this->faker->randomDigitNotNull
+            'phreebooks_id' => $this->faker->randomDigitNotNull,
         ];
     }
 }

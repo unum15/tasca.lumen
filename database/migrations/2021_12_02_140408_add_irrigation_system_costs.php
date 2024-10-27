@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class AddIrrigationSystemCosts extends Migration
 {
-
     public function up()
     {
         Schema::table('irrigation_systems', function (Blueprint $table) {

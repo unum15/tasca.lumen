@@ -33,7 +33,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->app['auth']->viaRequest('api', function ($request) {
             $bearer_token = $request->header('authorization');
             $bearer_token = preg_replace('/^Bearer\s*/', '', $bearer_token);
-            if (!empty($bearer_token)) {
+            if (! empty($bearer_token)) {
                 return Contact::whereHas('logIns', function ($query) use ($bearer_token) {
                     $query->where('bearer_token', $bearer_token);
                 })->first();
@@ -43,9 +43,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('edit-settings', function (Contact $contact) {
             $perm_count = 0;
             $roles = $contact->roles;
-            $roles->map(function ($role){
-                $perm_count += $role->permissions()->where('name','edit-settings')->count;
+            $roles->map(function ($role) {
+                $perm_count += $role->permissions()->where('name', 'edit-settings')->count;
             });
+
             return $perm_count;
         });
     }

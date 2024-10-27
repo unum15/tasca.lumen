@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateBackflowTypesTable extends Migration
 {
@@ -16,12 +16,12 @@ class CreateBackflowTypesTable extends Migration
         Schema::create('backflow_types', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('backflow_super_type_id');
-            $table->string('name',4);
+            $table->string('name', 4);
             $table->text('notes')->nullable();
             $table->integer('sort_order')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            
+
             $table->foreign('backflow_super_type_id')
                 ->references('id')
                 ->on('backflow_super_types')

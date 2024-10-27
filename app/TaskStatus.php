@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class TaskStatus extends Model
 {
@@ -12,9 +12,9 @@ class TaskStatus extends Model
     protected $fillable = [
         'name',
         'notes',
-        'sort_order'
+        'sort_order',
     ];
-    
+
     public function labor_types()
     {
         return $this->belongsToMany('App\LaborType');

@@ -13,24 +13,24 @@ class BackflowTestReport extends Model
         'report_date',
         'submitted_date',
         'tag_year',
-        'notes'
+        'notes',
     ];
 
     public function backflow_assembly()
     {
         return $this->belongsTo('App\BackflowAssembly');
     }
-    
+
     public function backflow_tests()
     {
         return $this->hasMany('App\BackflowTest')->orderBy('id');
     }
-    
+
     public function backflow_repairs()
     {
         return $this->hasMany('App\BackflowRepair');
     }
-    
+
     public function backflow_cleanings()
     {
         return $this->hasMany('App\BackflowCleaning');

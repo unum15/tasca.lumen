@@ -1,4 +1,5 @@
 <?php
+
 return [
     'default' => env('DB_CONNECTION', 'pgsql'),
     'connections' => [
@@ -15,8 +16,8 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-		
-		'pgsql_old' => [
+
+        'pgsql_old' => [
             'driver' => 'pgsql',
             'host' => env('OLDDB_HOST', '127.0.0.1'),
             'port' => env('OLDDB_PORT', '5432'),
@@ -28,7 +29,7 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-        
+
         'phreebooks' => [
             'driver' => 'mysql',
             'host' => env('PHREEBOOKS_HOST', '127.0.0.1'),
@@ -42,5 +43,5 @@ return [
             'sslmode' => 'prefer',
         ],
     ],
-    'migrations' => 'migrations'
+    'migrations' => 'migrations',
 ];

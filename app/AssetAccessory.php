@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class AssetAccessory extends Model
 {
@@ -14,7 +14,7 @@ class AssetAccessory extends Model
         'quantity',
         'name',
         'notes',
-        'value'
+        'value',
     ];
 
     public function asset()

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\AssetServiceType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class AssetServiceTypeController extends Controller
 {
@@ -18,10 +17,11 @@ class AssetServiceTypeController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = AssetServiceType::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -29,6 +29,7 @@ class AssetServiceTypeController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = AssetServiceType::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('asset_service_type.read', ['id' => $item->id])]);
     }
 
@@ -36,6 +37,7 @@ class AssetServiceTypeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = AssetServiceType::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -44,6 +46,7 @@ class AssetServiceTypeController extends Controller
         $item = AssetServiceType::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -51,16 +54,17 @@ class AssetServiceTypeController extends Controller
     {
         $item = AssetServiceType::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'name' => 'string|max:1020',
-       'notes' => 'string|max:1073741824|nullable',
-       'sort_order' => 'integer|nullable',
+        'name' => 'string|max:1020',
+        'notes' => 'string|max:1073741824|nullable',
+        'sort_order' => 'integer|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required',
+        'name' => 'required',
     ];
 }
