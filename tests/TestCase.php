@@ -2,9 +2,9 @@
 
 use App\Contact;
 use App\Role;
-use Laravel\Lumen\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-abstract class TestCase extends Laravel\Lumen\Testing\TestCase
+abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
     use DatabaseTransactions;
 
