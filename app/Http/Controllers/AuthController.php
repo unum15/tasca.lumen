@@ -2,49 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Contact;
+use App\LogIn;
+use App\Traits\ResetsPasswords;
+use App\Traits\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use App\Contact;
-use App\LogIn;
-use App\Traits\SendsPasswordResetEmails;
-use App\Traits\ResetsPasswords;
-
 class AuthController extends Controller
 {
-
-    use SendsPasswordResetEmails,ResetsPasswords;
+    use ResetsPasswords,SendsPasswordResetEmails;
 
     public function __construct()
     {
         $this->broker = 'users';
     }
-  
+
     public function auth(Request $request)
     {
-        try{
-            $this->validate($request, ['login' => 'required', 'password' => 'required',]);
-        }
-        catch (HttpResponseException $e){
+        try {
+            $this->validate($request, ['login' => 'required', 'password' => 'required']);
+        } catch (HttpResponseException $e) {
             return response()->json(
                 [
-                'error' => [
-                'message'     => 'Invalid auth',
-                'status_code' => IlluminateResponse::HTTP_BAD_REQUEST
-                ]],
+                    'error' => [
+                        'message' => 'Invalid auth',
+                        'status_code' => IlluminateResponse::HTTP_BAD_REQUEST,
+                    ]],
                 IlluminateResponse::HTTP_BAD_REQUEST,
                 $headers = []
             );
         }
-    
+
         $login = $request->input('login');
-        $password=$request->input('password');
+        $password = $request->input('password');
         $user = Contact::where('login', $login)->first();
-        if(!$user) {
+        if (! $user) {
             return response()->json(['error' => 'invalid_credentials'], 401);
         }
-        $password_hash=fgets($user->password);
-        if(!password_verify($password, $password_hash)) {
+        $password_hash = fgets($user->password);
+        if (! password_verify($password, $password_hash)) {
             return response()->json(['error' => 'invalid_credentials'], 401);
         }
         $bearer_token = bin2hex(openssl_random_pseudo_bytes(16));
@@ -52,60 +49,60 @@ class AuthController extends Controller
         $host = $request->header('host');
         LogIn::create(
             [
-            'contact_id' => $user->id,
-            'bearer_token' => $bearer_token,
-            'user_agent' => $user_agent,
-            'host' => $host
+                'contact_id' => $user->id,
+                'bearer_token' => $bearer_token,
+                'user_agent' => $user_agent,
+                'host' => $host,
             ]
         );
         $user_array = $this->getReturnUserData($user->id);
         $user_array['bearer_token'] = $bearer_token;
+
         return $user_array;
     }
 
     public function unauth(Request $request)
     {
         $user = Auth::user();
-        if($user != null) {
+        if ($user != null) {
             $bearer_token = $request->header('authorization');
             $bearer_token = preg_replace('/^Bearer\s*/', '', $bearer_token);
             LogIn::where('bearer_token', $bearer_token)->delete();
         }
+
         return ['status' => 'success'];
     }
-    
-    
+
     public function status(Request $request)
     {
         $user = Auth::user();
-        if($user) {
+        if ($user) {
             $user = $this->getReturnUserData($user->id);
             $user['status'] = 'active';
+
             return $user;
-        }
-        else{
+        } else {
             return ['status' => 'inactive'];
         }
     }
-    
-    
+
     private function getReturnUserData($id)
     {
         $user = Contact::select(
             [
-            'id',
-            'name',
-            'login',
-            'show_help',
-            'show_maximium_activity_level_id',
-            'default_service_window',
-            'pending_days_out',
-            'fluid_containers'
+                'id',
+                'name',
+                'login',
+                'show_help',
+                'show_maximium_activity_level_id',
+                'default_service_window',
+                'pending_days_out',
+                'fluid_containers',
             ]
         )
             //->with('roles', 'roles.perms')
             ->findOrFail($id);
+
         return $user->toArray();
     }
- 
 }

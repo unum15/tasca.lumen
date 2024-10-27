@@ -16,6 +16,7 @@ class BackflowWaterSystemController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $items = BackflowWaterSystem::with($includes)->orderBy('name')->get();
+
         return ['data' => $items];
     }
 
@@ -23,6 +24,7 @@ class BackflowWaterSystemController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = BackflowWaterSystem::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('backflow_water_system.read', ['id' => $item->id])]);
     }
 
@@ -30,6 +32,7 @@ class BackflowWaterSystemController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = BackflowWaterSystem::with($includes)->findOrFail($id);
+
         return ['data' => $item];
     }
 
@@ -38,6 +41,7 @@ class BackflowWaterSystemController extends Controller
         $item = BackflowWaterSystem::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -45,9 +49,10 @@ class BackflowWaterSystemController extends Controller
     {
         $item = BackflowWaterSystem::findOrFail($id);
         $item->delete();
+
         return response([], 401);
     }
-    
+
     protected $model_validation = [
         'name' => 'string|max:1020',
         'address' => 'string|max:1020|nullable',
@@ -55,14 +60,14 @@ class BackflowWaterSystemController extends Controller
         'state' => 'string|max:2|nullable',
         'zip' => 'string|max:16|nullable',
         'phone' => 'string|max:16|nullable',
-        'contact' =>  'string|max:1020|nullable',
-        'email' =>  'string|max:1020|nullable',
+        'contact' => 'string|max:1020|nullable',
+        'email' => 'string|max:1020|nullable',
         'notes' => 'string|max:1073741824|nullable',
         'sort_order' => 'integer|nullable|nullable',
-        'abbreviation' =>  'string|max:1020|nullable',
+        'abbreviation' => 'string|max:1020|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required',
+        'name' => 'required',
     ];
 }

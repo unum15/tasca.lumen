@@ -11,7 +11,7 @@ class BackflowRepair extends Model
         'contact_id',
         'backflow_valve_id',
         'backflow_valve_part_id',
-        'repaired_on'
+        'repaired_on',
     ];
 
     public function backflow_test_report()

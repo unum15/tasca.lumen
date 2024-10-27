@@ -9,6 +9,6 @@ class AssetPart extends Model
     protected $fillable = [
         'name',
         'on_hand',
-        'notes'
+        'notes',
     ];
 }

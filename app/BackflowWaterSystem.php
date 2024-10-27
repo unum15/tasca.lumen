@@ -17,6 +17,6 @@ class BackflowWaterSystem extends Model
         'email',
         'notes',
         'sort_order',
-        'abbreviation'
+        'abbreviation',
     ];
 }

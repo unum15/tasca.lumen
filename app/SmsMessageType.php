@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class SmsMessageType extends Model
 {
@@ -12,6 +12,6 @@ class SmsMessageType extends Model
     protected $fillable = [
         'name',
         'uses_date',
-        'sort_order'
+        'sort_order',
     ];
 }

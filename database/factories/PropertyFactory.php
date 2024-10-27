@@ -2,20 +2,18 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Property;
 use App\ActivityLevel;
 use App\Client;
 use App\Contact;
+use App\Property;
 use App\PropertyType;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyFactory extends Factory
 {
     protected $model = Property::class;
 
-    
-      public function definition()
+    public function definition()
     {
         $activity_level = ActivityLevel::factory()->create();
         $client = Client::factory()->create();
@@ -39,7 +37,7 @@ class PropertyFactory extends Factory
             'creator_id' => $contact->id,
             'updater_id' => $contact->id,
             'phreebooks_id' => $this->faker->randomDigitNotNull,
-            'abbreviation' => $this->faker->word
+            'abbreviation' => $this->faker->word,
         ];
     }
 }

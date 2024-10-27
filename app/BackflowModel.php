@@ -11,7 +11,7 @@ class BackflowModel extends Model
         'backflow_type_id',
         'name',
         'notes',
-        'sort_order'
+        'sort_order',
     ];
 
     public function backflow_type()

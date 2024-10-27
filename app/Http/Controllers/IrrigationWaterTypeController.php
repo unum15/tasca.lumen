@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\IrrigationWaterType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class IrrigationWaterTypeController extends Controller
 {
@@ -18,10 +17,11 @@ class IrrigationWaterTypeController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = IrrigationWaterType::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -29,6 +29,7 @@ class IrrigationWaterTypeController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = IrrigationWaterType::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('irrigation_water_type.read', ['id' => $item->id])]);
     }
 
@@ -36,6 +37,7 @@ class IrrigationWaterTypeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = IrrigationWaterType::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -44,6 +46,7 @@ class IrrigationWaterTypeController extends Controller
         $item = IrrigationWaterType::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -51,14 +54,15 @@ class IrrigationWaterTypeController extends Controller
     {
         $item = IrrigationWaterType::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'name' => 'string|max:1020',
+        'name' => 'string|max:1020',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required',
+        'name' => 'required',
     ];
 }

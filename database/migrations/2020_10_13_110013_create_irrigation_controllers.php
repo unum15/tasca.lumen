@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateIrrigationControllers extends Migration
 {
@@ -27,7 +27,7 @@ class CreateIrrigationControllers extends Migration
             $table->boolean('accessible')->nullable();
             $table->string('notes')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('irrigation_system_id')
                 ->references('id')
                 ->on('irrigation_systems')
@@ -37,7 +37,7 @@ class CreateIrrigationControllers extends Migration
                 ->references('id')
                 ->on('property_units')
                 ->onDelete('cascade');
-                
+
             $table->foreign('irrigation_controller_location_id')
                 ->references('id')
                 ->on('irrigation_controller_locations')

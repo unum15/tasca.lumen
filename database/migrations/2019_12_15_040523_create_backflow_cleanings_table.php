@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateBackflowCleaningsTable extends Migration
 {
@@ -22,22 +22,22 @@ class CreateBackflowCleaningsTable extends Migration
             $table->date('cleaned_on');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            
+
             $table->foreign('backflow_test_report_id')
                 ->references('id')
                 ->on('backflow_test_reports')
                 ->onDelete('cascade');
-                
+
             $table->foreign('contact_id')
                 ->references('id')
                 ->on('contacts')
                 ->onDelete('cascade');
-                
+
             $table->foreign('backflow_valve_id')
                 ->references('id')
                 ->on('backflow_valves')
                 ->onDelete('cascade');
-            
+
             $table->foreign('backflow_valve_part_id')
                 ->references('id')
                 ->on('backflow_valve_parts')

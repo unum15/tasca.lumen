@@ -1,7 +1,5 @@
 <?php
 
-use App\Project;
-
 class ProjectControllerTest extends TestCase
 {
     public function testIndex()
@@ -12,7 +10,7 @@ class ProjectControllerTest extends TestCase
         $response->seeJson($items[0]->toArray());
         $response->seeJson($items[1]->toArray());
     }
-    
+
     public function testCreate()
     {
         $admin = $this->getAdminUser();
@@ -25,24 +23,24 @@ class ProjectControllerTest extends TestCase
     public function testRead()
     {
         $item = factory('App\Project')->create();
-        $response = $this->actingAs($this->getAdminUser())->get('/project/' . $item->id);
+        $response = $this->actingAs($this->getAdminUser())->get('/project/'.$item->id);
         $response->seeStatusCode(200);
-        $response->seeJson($item->toArray());        
-    }    
+        $response->seeJson($item->toArray());
+    }
 
     public function testUpdate()
     {
         $item = factory('App\Project')->create();
         $patch = ['name' => 'Test Project 2'];
-        $response = $this->actingAs($this->getAdminUser())->patch('/project/' . $item->id, $patch);
+        $response = $this->actingAs($this->getAdminUser())->patch('/project/'.$item->id, $patch);
         $response->seeStatusCode(200);
         $response->seeJson($patch);
     }
-    
+
     public function testDelete()
     {
         $item = factory('App\Project')->create();
-        $response = $this->actingAs($this->getAdminUser())->delete('/project/' . $item->id);
+        $response = $this->actingAs($this->getAdminUser())->delete('/project/'.$item->id);
         $response->seeStatusCode(204);
     }
 

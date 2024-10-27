@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class BackflowModelBackflowSize extends Migration
 {
@@ -17,7 +17,7 @@ class BackflowModelBackflowSize extends Migration
             $table->integer('backflow_model_id');
             $table->integer('backflow_size_id');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();                        
+            $table->timestamp('updated_at')->useCurrent();
             $table->unique(['backflow_model_id', 'backflow_size_id']);
             $table->foreign('backflow_model_id')
                 ->references('id')->on('backflow_models')

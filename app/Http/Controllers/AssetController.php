@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Asset;
 use App\AssetExport;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use DB;
+use Illuminate\Http\Request;
 
 class AssetController extends Controller
 {
@@ -20,11 +19,12 @@ class AssetController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = Asset::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
-        $items_query->orderBy('id','DESC');
+        $items_query->orderBy('id', 'DESC');
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -32,17 +32,19 @@ class AssetController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = Asset::create($values);
+
         return response(['data' => $item], 201, ['Home' => route('asset.read', ['id' => $item->id])]);
     }
-    
+
     public function createExport($id)
     {
         $values = [
-          'asset_id' => $id,
-          'exported_at' => date('Y-m-d H:i:s')
+            'asset_id' => $id,
+            'exported_at' => date('Y-m-d H:i:s'),
         ];
         AssetExport::create($values);
         $item = Asset::with(['asset_exports'])->find($id);
+
         return response(['data' => $item], 201, ['Home' => route('asset.read', ['id' => $item->id])]);
     }
 
@@ -50,18 +52,20 @@ class AssetController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = Asset::with($includes)->find($id);
+
         return ['data' => $item];
     }
-    
+
     public function unique($field)
     {
-        if(!in_array($field,array_keys($this->model_validation))){
+        if (! in_array($field, array_keys($this->model_validation))) {
             $error = \Illuminate\Validation\ValidationException::withMessages([
                 'field' => ['Field is not a valid field for Asset'],
             ]);
             throw $error;
         }
-        $items = Asset::whereNotNull($field)->groupBy($field)->having(DB::raw('count(*)'),'>=',2)->pluck($field);
+        $items = Asset::whereNotNull($field)->groupBy($field)->having(DB::raw('count(*)'), '>=', 2)->pluck($field);
+
         return ['data' => $items];
     }
 
@@ -69,26 +73,26 @@ class AssetController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item_query = Asset::with($includes);
-        list($category,$brand,$type,$group,$sub,$item_num) = str_split($number);
-        $item_query = $item_query->whereHas('asset_category', function($q) use ($category){
+        [$category, $brand, $type, $group, $sub, $item_num] = str_split($number);
+        $item_query = $item_query->whereHas('asset_category', function ($q) use ($category) {
             $q->where('number', $category);
         });
-        $item_query = $item_query->whereHas('asset_brand', function($q) use ($brand){
+        $item_query = $item_query->whereHas('asset_brand', function ($q) use ($brand) {
             $q->where('number', $brand);
         });
-        $item_query = $item_query->whereHas('asset_type', function($q) use ($type){
+        $item_query = $item_query->whereHas('asset_type', function ($q) use ($type) {
             $q->where('number', $type);
         });
-        $item_query = $item_query->whereHas('asset_group', function($q) use ($group){
+        $item_query = $item_query->whereHas('asset_group', function ($q) use ($group) {
             $q->where('number', $group);
         });
-        $item_query = $item_query->whereHas('asset_sub', function($q) use ($sub){
+        $item_query = $item_query->whereHas('asset_sub', function ($q) use ($sub) {
             $q->where('number', $sub);
         });
-        $item_query = $item_query->whereHas('asset_sub', function($q) use ($sub){
+        $item_query = $item_query->whereHas('asset_sub', function ($q) use ($sub) {
             $q->where('number', $sub);
         });
-        $item_query = $item_query->where('item_number',$item_num);
+        $item_query = $item_query->where('item_number', $item_num);
 
         $item = $item_query->get()->first();
 
@@ -100,6 +104,7 @@ class AssetController extends Controller
         $item = Asset::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -107,52 +112,52 @@ class AssetController extends Controller
     {
         $item = Asset::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'name' => 'string|max:1020',
-       'asset_category_id' => 'integer|exists:asset_categories,id|nullable',
-       'asset_brand_id' => 'integer|exists:asset_brands,id|nullable',
-       'asset_type_id' => 'integer|exists:asset_types,id|nullable',
-       'asset_group_id' => 'integer|exists:asset_groups,id|nullable',
-       'asset_sub_id' => 'integer|exists:asset_subs,id|nullable',
-       'asset_usage_type_id' => 'integer|exists:asset_usage_types,id|nullable',
-       'item_number' => 'string|max:1|nullable',
-       'year' => 'integer|nullable',
-       'make' => 'string|max:1020|nullable',
-       'model' => 'string|max:1020|nullable',
-       'trim' => 'string|max:1020|nullable',
-       'vin' => 'string|max:1020|nullable',
-       'location' => 'string|max:1020|nullable',
-       'parent_asset_id' => 'integer|nullable',
-       'notes' => 'string|max:1073741824|nullable',
-       'asset_home_id' => 'integer|exists:asset_homes,id|nullable',
-       'manufacture' => 'string|max:1020|nullable',
-       'number' => 'string|max:1020|nullable',
-       'purchase_cost' => 'numeric|nullable',
-       'purchase_date' => 'date|nullable',
-       'needs_maintenances' => 'boolean|nullable',
-       'needs_parts' => 'boolean|nullable',
+        'name' => 'string|max:1020',
+        'asset_category_id' => 'integer|exists:asset_categories,id|nullable',
+        'asset_brand_id' => 'integer|exists:asset_brands,id|nullable',
+        'asset_type_id' => 'integer|exists:asset_types,id|nullable',
+        'asset_group_id' => 'integer|exists:asset_groups,id|nullable',
+        'asset_sub_id' => 'integer|exists:asset_subs,id|nullable',
+        'asset_usage_type_id' => 'integer|exists:asset_usage_types,id|nullable',
+        'item_number' => 'string|max:1|nullable',
+        'year' => 'integer|nullable',
+        'make' => 'string|max:1020|nullable',
+        'model' => 'string|max:1020|nullable',
+        'trim' => 'string|max:1020|nullable',
+        'vin' => 'string|max:1020|nullable',
+        'location' => 'string|max:1020|nullable',
+        'parent_asset_id' => 'integer|nullable',
+        'notes' => 'string|max:1073741824|nullable',
+        'asset_home_id' => 'integer|exists:asset_homes,id|nullable',
+        'manufacture' => 'string|max:1020|nullable',
+        'number' => 'string|max:1020|nullable',
+        'purchase_cost' => 'numeric|nullable',
+        'purchase_date' => 'date|nullable',
+        'needs_maintenances' => 'boolean|nullable',
+        'needs_parts' => 'boolean|nullable',
         'needs_repairs' => 'boolean|nullable',
         'needs_fuelings' => 'boolean|nullable',
-        'needs_services' => 'boolean|nullable'
+        'needs_services' => 'boolean|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required'
+        'name' => 'required',
     ];
 
     protected $model_includes = [
-       'asset_usage_type',
-       'asset_category',
-       'asset_brand',
-       'asset_type',
-       'asset_group',
-       'asset_sub',
-       'parent_asset',
-       'asset_home',
-       'asset_exports'
+        'asset_usage_type',
+        'asset_category',
+        'asset_brand',
+        'asset_type',
+        'asset_group',
+        'asset_sub',
+        'parent_asset',
+        'asset_home',
+        'asset_exports',
     ];
-    
 }

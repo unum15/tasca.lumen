@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class AssetType extends Model
 {
@@ -14,7 +14,7 @@ class AssetType extends Model
         'notes',
         'sort_order',
         'asset_brand_id',
-        'number'
+        'number',
     ];
 
     public function asset_brand()

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class OrderCloseCommand extends Command
 {
     protected $signature = 'order:close';
+
     protected $description = 'Closes all orders older than 30 days for which there is no open tasks.';
 
     public function __construct()

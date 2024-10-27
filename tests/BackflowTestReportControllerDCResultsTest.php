@@ -1,14 +1,11 @@
 <?php
 
-use App\BackflowTestReport;
-use Laravel\Lumen\Testing\WithoutMiddleware;
 use App\Http\Controllers\BackflowTestReportController;
+use Laravel\Lumen\Testing\WithoutMiddleware;
 
 class BackflowTestReportControllerDCResultsTest extends TestCase
 {
-
     use WithoutMiddleware;
-
 
     public function testDCTestResultsBarely()
     {
@@ -17,18 +14,17 @@ class BackflowTestReportControllerDCResultsTest extends TestCase
             'check_1' => [
                 'PSI' => $test['reading_1'],
                 'closed_tight' => true,
-                'leaked' => false
+                'leaked' => false,
             ],
             'check_2' => [
                 'PSI' => $test['reading_2'],
                 'closed_tight' => true,
-                'leaked' => false
-            ]
+                'leaked' => false,
+            ],
         ];
         $results = BackflowTestReportController::DCTestResults($test);
         $this->assertEquals($expected_results, $results);
     }
-
 
     public function testDCTestResultsExtra()
     {
@@ -37,13 +33,13 @@ class BackflowTestReportControllerDCResultsTest extends TestCase
             'check_1' => [
                 'PSI' => $test['reading_1'],
                 'closed_tight' => true,
-                'leaked' => false
+                'leaked' => false,
             ],
             'check_2' => [
                 'PSI' => $test['reading_2'],
                 'closed_tight' => true,
-                'leaked' => false
-            ]
+                'leaked' => false,
+            ],
         ];
         $results = BackflowTestReportController::DCTestResults($test);
         $this->assertEquals($expected_results, $results);
@@ -55,95 +51,93 @@ class BackflowTestReportControllerDCResultsTest extends TestCase
         $expected_results = [
             'PSI' => $test['reading_1'],
             'closed_tight' => true,
-            'leaked' => false
+            'leaked' => false,
         ];
         $results = BackflowTestReportController::DCTestCheck1Results($test);
         $this->assertEquals($expected_results, $results);
     }
-    
+
     public function testDCReading1ResultEqualOne()
     {
         $test = ['reading_1' => 1, 'reading_2' => 10];
         $expected_results = [
             'PSI' => $test['reading_1'],
             'closed_tight' => true,
-            'leaked' => false
+            'leaked' => false,
         ];
         $results = BackflowTestReportController::DCTestCheck1Results($test);
         $this->assertEquals($expected_results, $results);
     }
-    
+
     public function testDCReading1ResultLessThanOne()
     {
         $test = ['reading_1' => .9, 'reading_2' => 10];
         $expected_results = [
             'PSI' => $test['reading_1'],
             'closed_tight' => false,
-            'leaked' => true
+            'leaked' => true,
         ];
         $results = BackflowTestReportController::DCTestCheck1Results($test);
         $this->assertEquals($expected_results, $results);
     }
-    
+
     public function testDCReading1ResultZero()
     {
         $test = ['reading_1' => 0, 'reading_2' => 10];
         $expected_results = [
             'PSI' => $test['reading_1'],
             'closed_tight' => false,
-            'leaked' => true
+            'leaked' => true,
         ];
         $results = BackflowTestReportController::DCTestCheck1Results($test);
         $this->assertEquals($expected_results, $results);
     }
-    
+
     public function testDCReading2ResultGreaterThanOne()
     {
         $test = ['reading_1' => 10, 'reading_2' => 2];
         $expected_results = [
             'PSI' => $test['reading_2'],
             'closed_tight' => true,
-            'leaked' => false
+            'leaked' => false,
         ];
         $results = BackflowTestReportController::DCTestCheck2Results($test);
         $this->assertEquals($expected_results, $results);
     }
-    
+
     public function testDCReading2ResultEqualOne()
     {
         $test = ['reading_1' => 10, 'reading_2' => 1];
         $expected_results = [
             'PSI' => $test['reading_2'],
             'closed_tight' => true,
-            'leaked' => false
+            'leaked' => false,
         ];
         $results = BackflowTestReportController::DCTestCheck2Results($test);
         $this->assertEquals($expected_results, $results);
     }
-    
+
     public function testDCReading2ResultLessThanOne()
     {
         $test = ['reading_1' => 10, 'reading_2' => .9];
         $expected_results = [
             'PSI' => $test['reading_2'],
             'closed_tight' => false,
-            'leaked' => true
+            'leaked' => true,
         ];
         $results = BackflowTestReportController::DCTestCheck2Results($test);
         $this->assertEquals($expected_results, $results);
     }
-    
+
     public function testDCReading2ResultZero()
     {
         $test = ['reading_1' => 10, 'reading_2' => 0];
         $expected_results = [
             'PSI' => $test['reading_2'],
             'closed_tight' => false,
-            'leaked' => true
+            'leaked' => true,
         ];
         $results = BackflowTestReportController::DCTestCheck2Results($test);
         $this->assertEquals($expected_results, $results);
     }
-    
 }
-

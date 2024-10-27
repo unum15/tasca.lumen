@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class PartialTextMessageType extends Model
 {
@@ -11,6 +11,6 @@ class PartialTextMessageType extends Model
 
     protected $fillable = [
         'name',
-        'sort_order'
+        'sort_order',
     ];
 }

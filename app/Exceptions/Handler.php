@@ -2,74 +2,40 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Response;
-use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that should not be reported.
+     * A list of the exception types that are not reported.
      *
-     * @var array
+     * @var array<int, class-string<Throwable>>
      */
     protected $dontReport = [
-        AuthorizationException::class,
-        HttpException::class,
-        ModelNotFoundException::class,
-        ValidationException::class,
+        //
     ];
 
     /**
-     * Report or log an exception.
+     * A list of the inputs that are never flashed for validation exceptions.
      *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Exception  $e
-     * @return void
+     * @var array<int, string>
      */
-    public function report(Throwable $e)
-    {
-        parent::report($e);
-    }
+    protected $dontFlash = [
+        'current_password',
+        'password',
+        'password_confirmation',
+    ];
 
     /**
-     * Render an exception into an HTTP response.
+     * Register the exception handling callbacks for the application.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function render($request, Throwable $e)
+    public function register()
     {
-        if ($request->wantsJson() && !($e instanceof ValidationException)){
-            $response = [
-                'message' => (string) $e->getMessage(),
-                'status' => 400
-            ];
-            if ($e instanceof HttpException) {
-                $response['message'] = Response::$statusTexts[$e->getStatusCode()];
-                $response['status'] = $e->getStatusCode();
-            }
-            
-            if ($this->isDebugMode()) {
-                $response['debug'] = [
-                    'exception' => get_class($e),
-                    'trace' => $e->getTrace()
-                ];
-            }
-            //return response()->json(['error' => $response], $response['status']);
-        }
-        return parent::render($request, $e);
-    }
-
-    public function isDebugMode()
-    {
-        return (Boolean) env('APP_DEBUG');
+        $this->reportable(function (Throwable $e) {
+            //
+        });
     }
 }

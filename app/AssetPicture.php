@@ -10,7 +10,7 @@ class AssetPicture extends Model
         'asset_id',
         'filename',
         'original_filename',
-        'notes'
+        'notes',
     ];
 
     public function asset()

@@ -11,7 +11,7 @@ class AssetImprovement extends Model
         'description',
         'details',
         'date',
-        'cost'
+        'cost',
     ];
 
     public function asset()

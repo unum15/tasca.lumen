@@ -12,7 +12,7 @@ class PropertyUnit extends Model
         'number',
         'phone',
         'notes',
-        'coordinates'
+        'coordinates',
     ];
 
     public function property()

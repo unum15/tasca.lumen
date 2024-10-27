@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateBackflowTypeBackflowValve extends Migration
 {
@@ -17,7 +17,7 @@ class CreateBackflowTypeBackflowValve extends Migration
             $table->integer('backflow_type_id');
             $table->integer('backflow_valve_id');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();                        
+            $table->timestamp('updated_at')->useCurrent();
             $table->unique(['backflow_type_id', 'backflow_valve_id']);
             $table->foreign('backflow_type_id')
                 ->references('id')->on('backflow_types')

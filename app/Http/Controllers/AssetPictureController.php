@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\AssetPicture;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class AssetPictureController extends Controller
 {
@@ -18,19 +17,20 @@ class AssetPictureController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = AssetPicture::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
     public function create(Request $request)
     {
-        if (!$request->hasFile('picture')) {
+        if (! $request->hasFile('picture')) {
             return response('No picture attached', 422);
         }
-        if (!$request->file('picture')->isValid()) {
+        if (! $request->file('picture')->isValid()) {
             return response('Picture is invalid:', 422);
         }
         $values = $this->validateModel($request, true);
@@ -38,6 +38,7 @@ class AssetPictureController extends Controller
         $values['original_filename'] = $request->file('picture')->getClientOriginalName();
         $request->file('picture')->move('uploads/assets/pictures/', $values['filename']);
         $item = AssetPicture::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('asset_picture.read', ['id' => $item->id])]);
     }
 
@@ -45,6 +46,7 @@ class AssetPictureController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = AssetPicture::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -53,6 +55,7 @@ class AssetPictureController extends Controller
         $item = AssetPicture::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -60,22 +63,22 @@ class AssetPictureController extends Controller
     {
         $item = AssetPicture::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'asset_id' => 'integer|exists:assets,id',
-       'filename' => 'string|max:1020',
-       'original_filename' => 'string|max:1020|nullable',
-       'notes' => 'string|max:1020|nullable',
+        'asset_id' => 'integer|exists:assets,id',
+        'filename' => 'string|max:1020',
+        'original_filename' => 'string|max:1020|nullable',
+        'notes' => 'string|max:1020|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'asset_id' => 'required'
+        'asset_id' => 'required',
     ];
 
     protected $model_includes = [
-       'asset'
+        'asset',
     ];
-    
 }

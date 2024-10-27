@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddBackflowAssembliesFields extends Migration
 {
@@ -16,7 +16,7 @@ class AddBackflowAssembliesFields extends Migration
         Schema::table('backflow_assemblies', function (Blueprint $table) {
             $table->bigInteger('property_account_id')->nullable();
             $table->boolean('need_access')->default(false);
-            
+
             $table->foreign('property_account_id')
                 ->references('id')
                 ->on('property_accounts')

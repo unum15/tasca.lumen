@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
@@ -15,9 +15,9 @@ class Project extends Model
         'notes',
         'contact_id',
         'open_date',
-        'close_date', 
+        'close_date',
         'creator_id',
-        'updater_id'
+        'updater_id',
     ];
 
     public function contact()

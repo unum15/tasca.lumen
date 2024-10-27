@@ -11,7 +11,7 @@ class BackflowCleaning extends Model
         'contact_id',
         'backflow_valve_id',
         'backflow_valve_part_id',
-        'cleaned_on'
+        'cleaned_on',
     ];
 
     public function backflow_test_report()

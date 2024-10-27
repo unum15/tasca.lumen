@@ -17,10 +17,11 @@ class BackflowModelController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = BackflowModel::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -28,6 +29,7 @@ class BackflowModelController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = BackflowModel::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('backflow_model.read', ['id' => $item->id])]);
     }
 
@@ -35,6 +37,7 @@ class BackflowModelController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = BackflowModel::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -43,9 +46,10 @@ class BackflowModelController extends Controller
         $item = BackflowModel::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
-        if(isset($values['sizes'])){
+        if (isset($values['sizes'])) {
             $item->backflow_sizes()->attach($values['sizes']);
         }
+
         return ['data' => $item];
     }
 
@@ -53,28 +57,28 @@ class BackflowModelController extends Controller
     {
         $item = BackflowModel::findOrFail($id);
         $item->delete();
+
         return response([], 401);
     }
-    
+
     protected $model_validation = [
-       'backflow_manufacturer_id' => 'integer|exists:backflow_manufacturers,id',
-       'backflow_type_id' => 'integer|exists:backflow_types,id',
-       'name' => 'string|max:1020',
-       'notes' => 'string|max:1073741824|nullable',
-       'sort_order' => 'integer|nullable',
-       'sizes' => 'array'
+        'backflow_manufacturer_id' => 'integer|exists:backflow_manufacturers,id',
+        'backflow_type_id' => 'integer|exists:backflow_types,id',
+        'name' => 'string|max:1020',
+        'notes' => 'string|max:1073741824|nullable',
+        'sort_order' => 'integer|nullable',
+        'sizes' => 'array',
     ];
-    
+
     protected $model_validation_required = [
-       'backflow_manufacturer_id' => 'required',
-       'backflow_type_id' => 'required',
-       'name' => 'required',
+        'backflow_manufacturer_id' => 'required',
+        'backflow_type_id' => 'required',
+        'name' => 'required',
     ];
 
     protected $model_includes = [
-       'backflow_manufacturer',
-       'backflow_type',
-       'backflow_sizes'
+        'backflow_manufacturer',
+        'backflow_type',
+        'backflow_sizes',
     ];
-    
 }

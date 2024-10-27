@@ -34,12 +34,12 @@ class AssetService extends Model
     {
         return $this->belongsTo('App\AssetUsageType');
     }
-    
+
     public function asset_time_unit()
     {
         return $this->belongsTo('App\AssetTimeUnit');
     }
-    
+
     public function asset_unit()
     {
         return $this->belongsTo('App\AssetUnit');

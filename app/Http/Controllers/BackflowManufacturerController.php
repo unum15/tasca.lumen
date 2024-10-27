@@ -16,6 +16,7 @@ class BackflowManufacturerController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $items = BackflowManufacturer::with($includes)->get();
+
         return ['data' => $items];
     }
 
@@ -23,6 +24,7 @@ class BackflowManufacturerController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = BackflowManufacturer::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('backflow_manufacturer.read', ['id' => $item->id])]);
     }
 
@@ -30,6 +32,7 @@ class BackflowManufacturerController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = BackflowManufacturer::with($includes)->findOrFail($id);
+
         return ['data' => $item];
     }
 
@@ -38,6 +41,7 @@ class BackflowManufacturerController extends Controller
         $item = BackflowManufacturer::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -45,16 +49,17 @@ class BackflowManufacturerController extends Controller
     {
         $item = BackflowManufacturer::findOrFail($id);
         $item->delete();
+
         return response([], 401);
     }
-    
+
     protected $model_validation = [
-       'name' => 'string|max:1020',
-       'notes' => 'string|max:1073741824|nullable',
-       'sort_order' => 'integer|nullable',
+        'name' => 'string|max:1020',
+        'notes' => 'string|max:1073741824|nullable',
+        'sort_order' => 'integer|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required',
+        'name' => 'required',
     ];
 }

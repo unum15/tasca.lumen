@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class RoleController extends Controller
 {
@@ -18,11 +17,12 @@ class RoleController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = Role::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items_query->orderBy('name');
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -30,6 +30,7 @@ class RoleController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = Role::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('role.read', ['id' => $item->id])]);
     }
 
@@ -37,6 +38,7 @@ class RoleController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = Role::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -45,6 +47,7 @@ class RoleController extends Controller
         $item = Role::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -53,28 +56,30 @@ class RoleController extends Controller
         $item = Role::findOrFail($id);
         $values = $request->only('permissions');
         $item->permissions()->sync($values['permissions']);
+
         return ['data' => $item];
     }
-    
+
     public function delete(Request $request, $id)
     {
         $item = Role::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'name' => 'string|max:1020',
-       'display_name' => 'string|max:1020|nullable',
-       'description' => 'string|max:1020|nullable',
+        'name' => 'string|max:1020',
+        'display_name' => 'string|max:1020|nullable',
+        'description' => 'string|max:1020|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required',
+        'name' => 'required',
     ];
-    
+
     protected $model_includes = [
-       'permissions',
-       'contacts'
+        'permissions',
+        'contacts',
     ];
 }

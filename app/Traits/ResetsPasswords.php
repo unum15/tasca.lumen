@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
 
 trait ResetsPasswords
 {
@@ -19,6 +18,7 @@ trait ResetsPasswords
                 $this->resetPassword($user, $password);
             }
         );
+
         return $response == Password::PASSWORD_RESET
                     ? $this->sendResetResponse($request, $response)
                     : $this->sendResetFailedResponse($request, $response);
@@ -62,7 +62,8 @@ trait ResetsPasswords
     protected function sendResetResponse(Request $request, $response)
     {
         $login = $request->only('login');
-        return response(['message' => 'You may now login with your new password using login: ' . $login['login']]);
+
+        return response(['message' => 'You may now login with your new password using login: '.$login['login']]);
     }
 
     protected function sendResetFailedResponse(Request $request, $response)

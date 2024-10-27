@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class OrderType extends Model
 {
@@ -12,6 +12,6 @@ class OrderType extends Model
     protected $fillable = [
         'name',
         'notes',
-        'sort_order'
+        'sort_order',
     ];
 }

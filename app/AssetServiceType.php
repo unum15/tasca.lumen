@@ -9,6 +9,6 @@ class AssetServiceType extends Model
     protected $fillable = [
         'name',
         'notes',
-        'sort_order'
+        'sort_order',
     ];
 }

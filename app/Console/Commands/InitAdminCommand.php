@@ -2,15 +2,17 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Client;
 use App\Contact;
 use App\Setting;
+use Illuminate\Console\Command;
+
 //use App\Role;
 
 class InitAdminCommand extends Command
 {
     protected $signature = 'init:admin';
+
     protected $description = 'Create initial admin account for Tasca.';
 
     public function __construct()
@@ -26,11 +28,11 @@ class InitAdminCommand extends Command
             'contact_method_id' => ClientMethod::where('name', 'None')->first()->id,
             'login' => 'admin@example.com',
             'show_maximium_activity_level_id' => 5,
-            'password' => password_hash("adminpass", PASSWORD_DEFAULT),
+            'password' => password_hash('adminpass', PASSWORD_DEFAULT),
             'creator_id' => 1,
-            'updater_id' => 1 
+            'updater_id' => 1,
         ]);
-        
+
         $adminCompany = Client::create([
             'name' => 'Admin Company',
             'client_type_id' => ClientType::where('name', 'Other')->first()->id,
@@ -39,16 +41,16 @@ class InitAdminCommand extends Command
             'activity_level_id' => 1,
             'login' => 'admin@example.com',
             'show_maximium_activity_level_id' => 5,
-            'password' => password_hash("adminpass", PASSWORD_DEFAULT),
+            'password' => password_hash('adminpass', PASSWORD_DEFAULT),
             'creator_id' => $adminUser->id,
-            'updater_id' => $adminUser->id 
+            'updater_id' => $adminUser->id,
         ]);
 
         $adminCompany->clients()->sync([$adminUser->id]);
 
         Setting::create([
             'name' => 'operating_company_client_id',
-            'value' => $adminCompany->id
+            'value' => $adminCompany->id,
         ]);
         $admin = Role::where('name', 'admin')->first();
         $adminUser->roles()->attach($admin);

@@ -9,9 +9,9 @@ class BackflowSize extends Model
     protected $fillable = [
         'name',
         'notes',
-        'sort_order'
+        'sort_order',
     ];
-    
+
     public function backflow_models()
     {
         return $this->belongsToMany('App\BackflowModel');

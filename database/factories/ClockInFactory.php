@@ -2,19 +2,17 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Appointment;
 use App\ClockIn;
 use App\Contact;
 use App\LaborActivity;
-use App\Appointment;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ClockInFactory extends Factory
 {
     protected $model = ClockIn::class;
 
-    
-      public function definition()
+    public function definition()
     {
         $contact = Contact::factory()->create();
         $labor_activity = LaborActivity::factory()->create();
@@ -28,7 +26,7 @@ class ClockInFactory extends Factory
             'creator_id' => $this->faker->randomDigitNotNull,
             'updater_id' => $this->faker->randomDigitNotNull,
             'appointment_id' => $appointment->id,
-            'labor_activity_id' => $labor_activity->id
+            'labor_activity_id' => $labor_activity->id,
         ];
     }
 }

@@ -17,10 +17,11 @@ class PropertyUnitController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = PropertyUnit::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -28,6 +29,7 @@ class PropertyUnitController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = PropertyUnit::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('property_unit.read', ['id' => $item->id])]);
     }
 
@@ -35,6 +37,7 @@ class PropertyUnitController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = PropertyUnit::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -43,6 +46,7 @@ class PropertyUnitController extends Controller
         $item = PropertyUnit::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -50,25 +54,25 @@ class PropertyUnitController extends Controller
     {
         $item = PropertyUnit::findOrFail($id);
         $item->delete();
+
         return response([], 401);
     }
-    
+
     protected $model_validation = [
-       'property_id' => 'integer|exists:properties,id',
-       'name' => 'string|max:1020',
-       'number' => 'string|max:1020|nullable',
-       'phone' => 'string|max:1020|nullable',
-       'notes' => 'string|max:1020|nullable',
-       'coordinates' => 'string|max:1020|nullable',
+        'property_id' => 'integer|exists:properties,id',
+        'name' => 'string|max:1020',
+        'number' => 'string|max:1020|nullable',
+        'phone' => 'string|max:1020|nullable',
+        'notes' => 'string|max:1020|nullable',
+        'coordinates' => 'string|max:1020|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'property_id' => 'required',
-       'name' => 'required',
+        'property_id' => 'required',
+        'name' => 'required',
     ];
 
     protected $model_includes = [
-       'property'
+        'property',
     ];
-    
 }

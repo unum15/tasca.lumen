@@ -14,7 +14,7 @@ class AssetRepair extends Model
         'date',
         'amount',
         'where',
-        'notes'
+        'notes',
     ];
 
     public function asset()

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\AssetHome;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class AssetHomeController extends Controller
 {
@@ -18,10 +17,11 @@ class AssetHomeController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = AssetHome::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -29,6 +29,7 @@ class AssetHomeController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = AssetHome::create($values);
+
         return response(['data' => $item], 201, ['Home' => route('asset_home.read', ['id' => $item->id])]);
     }
 
@@ -36,6 +37,7 @@ class AssetHomeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = AssetHome::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -44,6 +46,7 @@ class AssetHomeController extends Controller
         $item = AssetHome::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -51,16 +54,17 @@ class AssetHomeController extends Controller
     {
         $item = AssetHome::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'name' => 'string|max:1020',
-       'notes' => 'string|max:1073741824|nullable',
-       'sort_order' => 'integer|nullable',
+        'name' => 'string|max:1020',
+        'notes' => 'string|max:1073741824|nullable',
+        'sort_order' => 'integer|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required',
+        'name' => 'required',
     ];
 }

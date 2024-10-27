@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateClientContactTable extends Migration
 {
@@ -18,7 +18,7 @@ class CreateClientContactTable extends Migration
             $table->integer('contact_id');
             $table->integer('contact_type_id');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();                        
+            $table->timestamp('updated_at')->useCurrent();
             $table->unique(['client_id', 'contact_id']);
             $table->foreign('client_id')
                 ->references('id')->on('clients')

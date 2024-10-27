@@ -17,16 +17,17 @@ class BackflowValveController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = BackflowValve::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $type = $request->input('backflow_super_type_id');
-        if($type){
-            $items_query->whereHas('backflow_super_types', function ($query) use ($type){
-                $query->where('backflow_super_types.id',$type);
+        if ($type) {
+            $items_query->whereHas('backflow_super_types', function ($query) use ($type) {
+                $query->where('backflow_super_types.id', $type);
             });
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -34,6 +35,7 @@ class BackflowValveController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = BackflowValve::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('backflow_valve.read', ['id' => $item->id])]);
     }
 
@@ -41,6 +43,7 @@ class BackflowValveController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = BackflowValve::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -49,6 +52,7 @@ class BackflowValveController extends Controller
         $item = BackflowValve::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -56,20 +60,21 @@ class BackflowValveController extends Controller
     {
         $item = BackflowValve::findOrFail($id);
         $item->delete();
+
         return response([], 401);
     }
-    
+
     protected $model_validation = [
-       'name' => 'string|max:1020',
-       'notes' => 'string|max:1020',
-       'sort_order' => 'integer'
+        'name' => 'string|max:1020',
+        'notes' => 'string|max:1020',
+        'sort_order' => 'integer',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required'
+        'name' => 'required',
     ];
-    
+
     protected $model_includes = [
-       'backflow_valve_parts'
+        'backflow_valve_parts',
     ];
 }

@@ -14,7 +14,7 @@ class IrrigationZone extends Model
         'head_type',
         'gallons_per_minute',
         'application_rate',
-        'heads'
+        'heads',
     ];
 
     public function irrigation_controller()

@@ -1,12 +1,7 @@
 <?php
 
-use App\Contact;
-use App\Email;
-use App\EmailType;
-
 class EmailControllerTest extends TestCase
 {
-
     public function testIndex()
     {
         $items = factory('App\Email', 2)->create();
@@ -15,7 +10,7 @@ class EmailControllerTest extends TestCase
         $response->seeJson($items[0]->toArray());
         $response->seeJson($items[1]->toArray());
     }
-    
+
     public function testCreate()
     {
         $admin = $this->getAdminUser();
@@ -28,7 +23,7 @@ class EmailControllerTest extends TestCase
     public function testRead()
     {
         $item = factory('App\Email')->create();
-        $response = $this->actingAs($this->getAdminUser())->get('/email/' . $item->id);
+        $response = $this->actingAs($this->getAdminUser())->get('/email/'.$item->id);
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
     }
@@ -37,18 +32,18 @@ class EmailControllerTest extends TestCase
     {
         $item = factory('App\Email')->create();
         $patch = ['email' => 'Test2@test.com'];
-        $response = $this->actingAs($this->getAdminUser())->patch('/email/' . $item->id, $patch);
+        $response = $this->actingAs($this->getAdminUser())->patch('/email/'.$item->id, $patch);
         $response->seeStatusCode(200);
         $response->seeJson($patch);
     }
-    
+
     public function testDelete()
     {
         $item = factory('App\Email')->create();
-        $response = $this->actingAs($this->getAdminUser())->delete('/email/' . $item->id);
+        $response = $this->actingAs($this->getAdminUser())->delete('/email/'.$item->id);
         $response->seeStatusCode(204);
     }
-    
+
     public function testAuth()
     {
         $response = $this->get('/emails');

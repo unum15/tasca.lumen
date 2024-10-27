@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 class InitAllCommand extends Command
 {
     protected $signature = 'init:all';
+
     protected $description = 'Populate default data for Tasca.';
 
     public function __construct()
@@ -21,14 +22,12 @@ class InitAllCommand extends Command
         $this->call('init:admin');
         $this->call('init:settings');
 
-
         $this->call('init:overhead');
 
         $this->call('init:asset-types');
-        
+
         $this->call('init:bftypes');
         $this->call('init:iwtypes');
-
 
     }
 }

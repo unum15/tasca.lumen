@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class ClockIn extends Model
 {
@@ -17,20 +17,20 @@ class ClockIn extends Model
         'clock_out',
         'notes',
         'creator_id',
-        'updater_id'
+        'updater_id',
     ];
-    
-    function appointment()
+
+    public function appointment()
     {
         return $this->belongsTo('App\Appointment');
     }
-    
-    function contact()
+
+    public function contact()
     {
         return $this->belongsTo('App\Contact');
     }
-     
-    function labor_activity()
+
+    public function labor_activity()
     {
         return $this->belongsTo('App\LaborActivity');
     }

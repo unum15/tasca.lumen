@@ -17,7 +17,7 @@ class IrrigationController extends Model
         'username',
         'accessible',
         'password',
-        'notes'
+        'notes',
     ];
 
     public function irrigation_system()
@@ -29,7 +29,7 @@ class IrrigationController extends Model
     {
         return $this->hasMany('App\IrrigationControllerOther');
     }
-    
+
     public function irrigation_zones()
     {
         return $this->hasMany('App\IrrigationZone')->orderBy('number');

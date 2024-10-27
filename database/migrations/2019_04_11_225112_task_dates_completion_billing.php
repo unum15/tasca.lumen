@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class TaskDatesCompletionBilling extends Migration
 {
@@ -20,7 +20,7 @@ class TaskDatesCompletionBilling extends Migration
         DB::statement("UPDATE task_dates SET completion_date=\"date\",billed_date=\"date\" WHERE date<'2019-01-01'");
         DB::statement("UPDATE task_dates SET completion_date=\"date\" WHERE date>='2019-01-01' AND date<NOW()::DATE AND task_id =ANY (SELECT tasks.id FROM orders LEFT JOIN tasks ON (tasks.order_id = orders.id) WHERE approval_date IS NOT NULL);");
         DB::statement("UPDATE task_dates SET billed_date=\"date\" WHERE date>='2019-01-01' AND date<NOW()::DATE-'1 month'::INTERVAL AND task_id =ANY (SELECT tasks.id FROM orders LEFT JOIN tasks ON (tasks.order_id = orders.id) WHERE approval_date IS NOT NULL);");
-        
+
     }
 
     /**

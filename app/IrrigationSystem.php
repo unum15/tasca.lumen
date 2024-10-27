@@ -19,7 +19,7 @@ class IrrigationSystem extends Model
         'start_up_cost',
         'management_cost',
         'winterizing_cost',
-        'visits_count'
+        'visits_count',
     ];
 
     public function irrigation_water_type()

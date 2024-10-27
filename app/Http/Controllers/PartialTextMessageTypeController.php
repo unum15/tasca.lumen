@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\PartialTextMessageType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class PartialTextMessageTypeController extends Controller
 {
@@ -18,10 +17,11 @@ class PartialTextMessageTypeController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = PartialTextMessageType::with($includes)->orderBy('sort_order')->orderBy('id');
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -31,6 +31,7 @@ class PartialTextMessageTypeController extends Controller
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = PartialTextMessageType::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('partial_text_message_type.read', ['id' => $item->id])]);
     }
 
@@ -38,6 +39,7 @@ class PartialTextMessageTypeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = PartialTextMessageType::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -47,6 +49,7 @@ class PartialTextMessageTypeController extends Controller
         $values['updater_id'] = $request->user()->id;
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -54,15 +57,16 @@ class PartialTextMessageTypeController extends Controller
     {
         $item = PartialTextMessageType::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'name' => 'string|max:1020',
-       'sort_order' => 'integer|nullable',
+        'name' => 'string|max:1020',
+        'sort_order' => 'integer|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required',
+        'name' => 'required',
     ];
 }

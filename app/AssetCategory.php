@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class AssetCategory extends Model
 {
@@ -13,6 +13,6 @@ class AssetCategory extends Model
         'name',
         'number',
         'notes',
-        'sort_order'
+        'sort_order',
     ];
 }

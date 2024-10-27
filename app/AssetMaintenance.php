@@ -13,7 +13,7 @@ class AssetMaintenance extends Model
         'date',
         'amount',
         'where',
-        'notes'
+        'notes',
     ];
 
     public function asset_service()

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class MoveAppointmentStatusTable extends Migration
 {
@@ -17,7 +17,7 @@ class MoveAppointmentStatusTable extends Migration
             $table->integer('appointment_status_id')->nullable();
         });
         $db = DB::connection();
-        $sql="
+        $sql = '
             UPDATE
                 task_dates
             SET
@@ -32,8 +32,8 @@ class MoveAppointmentStatusTable extends Migration
                 ) AS tasks
             WHERE
                 task_dates.task_id = tasks.id            
-        ";
-        
+        ';
+
         $db->update($sql);
         Schema::table('tasks', function (Blueprint $table) {
             $table->dropColumn('task_appointment_status_id');
@@ -57,7 +57,7 @@ class MoveAppointmentStatusTable extends Migration
             $table->integer('task_appointment_status_id')->nullable();
         });
         $db = DB::connection();
-         $sql="
+        $sql = '
             UPDATE
                 tasks
             SET
@@ -72,8 +72,8 @@ class MoveAppointmentStatusTable extends Migration
                 ) AS task_dates
             WHERE
                 task_dates.task_id = tasks.id            
-        ";
-        
+        ';
+
         $db->update($sql);
 
         Schema::table('task_dates', function (Blueprint $table) {

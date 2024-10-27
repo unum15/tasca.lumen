@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class OrderAction extends Model
 {
@@ -12,12 +12,11 @@ class OrderAction extends Model
     protected $fillable = [
         'name',
         'notes',
-        'sort_order'
+        'sort_order',
     ];
-    
+
     public function orderStatuses()
     {
         return $this->belongsToMany('App\OrderStatus');
     }
-    
 }

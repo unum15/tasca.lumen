@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateIrrigationSystems extends Migration
 {
@@ -41,8 +41,7 @@ class CreateIrrigationSystems extends Migration
                 ->on('property_units')
                 ->onDelete('cascade');
         });
-        
-        
+
     }
 
     /**

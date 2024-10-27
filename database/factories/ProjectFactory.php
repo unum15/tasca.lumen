@@ -2,16 +2,14 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Project;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProjectFactory extends Factory
 {
     protected $model = Project::class;
 
-    
-      public function definition()
+    public function definition()
     {
 
         return [
@@ -22,7 +20,7 @@ class ProjectFactory extends Factory
             'open_date' => $this->faker->date,
             'close_date' => $this->faker->date,
             'creator_id' => $this->faker->randomDigitNotNull,
-            'updater_id' => $this->faker->randomDigitNotNull
+            'updater_id' => $this->faker->randomDigitNotNull,
         ];
     }
 }

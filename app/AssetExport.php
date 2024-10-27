@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class AssetExport extends Model
 {
@@ -11,6 +11,6 @@ class AssetExport extends Model
 
     protected $fillable = [
         'asset_id',
-        'exported_at'
+        'exported_at',
     ];
 }

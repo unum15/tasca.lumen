@@ -5,15 +5,11 @@ namespace App\Http\Controllers;
 use App\ActivityLevel;
 use App\Client;
 use App\Contact;
-use Illuminate\Http\Request;
 use App\Traits\SendsPasswordResetEmails;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Mail;
-use Log;
+use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-
     use SendsPasswordResetEmails;
 
     private $validation = [
@@ -26,7 +22,7 @@ class ContactController extends Controller
         'login' => 'nullable|string|max:255',
         'password' => 'nullable|string|max:255',
         'crew_id' => 'nullable|integer|exists:crews,id',
-        'labor_rate' => 'nullable|regex:/[\d\.]+/'
+        'labor_rate' => 'nullable|regex:/[\d\.]+/',
     ];
 
     public function __construct()
@@ -48,7 +44,7 @@ class ContactController extends Controller
             ->with('roles')
             ->orderBy('name');
         $client_id = $request->input('client_id');
-        if($client_id) {
+        if ($client_id) {
             $items_query->whereHas(
                 'clients', function ($q) use ($client_id) {
                     $q->where('client_id', $client_id);
@@ -56,17 +52,18 @@ class ContactController extends Controller
             );
         }
         $max_activity_level = $request->input('maximium_activity_level_id');
-        if(!empty($max_activity_level)) {
-            $items_query->where('activity_level_id','<=',$max_activity_level);
+        if (! empty($max_activity_level)) {
+            $items_query->where('activity_level_id', '<=', $max_activity_level);
         }
         $values = $request->only(array_keys($this->validation));
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return $items;
     }
-    
+
     public function create(Request $request)
     {
         $this->validate($request, ['name' => 'required']);
@@ -78,34 +75,36 @@ class ContactController extends Controller
         $item = Contact::create($values);
         $item = Contact::findOrFail($item->id);
         $client_id = $request->input('client_id');
-        if($client_id) {
+        if ($client_id) {
             $this->validate($request, ['contact_type_id' => 'required|integer|exists:contact_types,id']);
             $contact_type_id = $request->input('contact_type_id');
             $client = Client::findOrFail($client_id);
             $item->clients()->attach($client, ['contact_type_id' => $contact_type_id]);
         }
+
         return $item;
     }
-    
+
     public function read($id)
     {
         $item = Contact::findOrFail($id);
+
         return $item;
     }
-    
+
     public function update($id, Request $request)
     {
-        $this->validate($request, $this->validation);     
+        $this->validate($request, $this->validation);
         $item = Contact::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
         $values['updater_id'] = $request->user()->id;
-        if(!empty($values['password'])) {
+        if (! empty($values['password'])) {
             $values['password'] = password_hash($values['password'], PASSWORD_DEFAULT);
         }
         $item->update($values);
         $client_id = $request->input('client_id');
-        if($client_id) {
-            if(!$item->clients->contains($client_id)) {
+        if ($client_id) {
+            if (! $item->clients->contains($client_id)) {
                 $this->validate($request, ['contact_type_id' => 'required|integer|exists:contact_types,id']);
                 $contact_type_id = $request->input('contact_type_id');
                 $client = Client::findOrFail($client_id);
@@ -113,20 +112,22 @@ class ContactController extends Controller
             }
         }
         $properties = $request->only('properties');
-        if($properties) {
+        if ($properties) {
             $item->properties()->sync($properties['properties']);
         }
+
         return $item;
     }
-    
+
     public function createAccount($id, Request $request)
     {
         $item = Contact::findOrFail($id);
         $this->validate($request, ['login' => 'required|string|max:255']);
-        $values = $request->only(['login','roles']);
+        $values = $request->only(['login', 'roles']);
         $values['updater_id'] = $request->user()->id;
         $values['show_maximium_activity_level_id'] = ActivityLevel::orderBy('id')->first()->id;
         $item->update($values);
+
         //$item->roles()->sync($values['roles']);
         return $this->sendResetLinkEmail($request);
     }
@@ -137,14 +138,15 @@ class ContactController extends Controller
         $this->validate($request, ['roles' => 'required|array']);
         $roles = $request->only('roles');
         $item->roles()->sync($roles['roles']);
+
         return $item;
     }
-    
+
     public function delete($id)
     {
         $item = Contact::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-
 }

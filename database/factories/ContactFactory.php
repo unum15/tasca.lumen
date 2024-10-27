@@ -2,17 +2,16 @@
 
 namespace Database\Factories;
 
-use App\Contact;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\ActivityLevel;
+use App\Contact;
 use App\ContactMethod;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ContactFactory extends Factory
 {
     protected $model = Contact::class;
 
-    
-      public function definition()
+    public function definition()
     {
         $activity_level = ActivityLevel::factory()->create();
         $contact_method = ContactMethod::factory()->create();
@@ -34,7 +33,7 @@ class ContactFactory extends Factory
             'creator_id' => $this->faker->randomDigitNotNull,
             'updater_id' => $this->faker->randomDigitNotNull,
             'phreebooks_id' => $this->faker->randomDigitNotNull,
-            'backflow_certification_number' => $this->faker->word
+            'backflow_certification_number' => $this->faker->word,
         ];
     }
 }

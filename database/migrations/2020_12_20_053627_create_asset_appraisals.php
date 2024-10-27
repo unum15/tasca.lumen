@@ -14,7 +14,7 @@ class CreateAssetAppraisals extends Migration
             $table->string('date');
             $table->decimal('appraisal');
             $table->timestamps();
-        
+
             $table->foreign('asset_id')
                 ->references('id')
                 ->on('assets')

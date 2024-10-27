@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\StockTextMessage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class StockTextMessageController extends Controller
 {
@@ -18,10 +17,11 @@ class StockTextMessageController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = StockTextMessage::with($includes)->orderBy('sort_order')->orderBy('id');
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
+
         return ['data' => $items];
     }
 
@@ -31,6 +31,7 @@ class StockTextMessageController extends Controller
         $values['creator_id'] = $request->user()->id;
         $values['updater_id'] = $request->user()->id;
         $item = StockTextMessage::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('stock_text_message.read', ['id' => $item->id])]);
     }
 
@@ -38,6 +39,7 @@ class StockTextMessageController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = StockTextMessage::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -47,6 +49,7 @@ class StockTextMessageController extends Controller
         $values['updater_id'] = $request->user()->id;
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -54,14 +57,15 @@ class StockTextMessageController extends Controller
     {
         $item = StockTextMessage::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'message' => 'string|max:1073741824',
+        'message' => 'string|max:1073741824',
     ];
-    
+
     protected $model_validation_required = [
-       'message' => 'required',
+        'message' => 'required',
     ];
 }

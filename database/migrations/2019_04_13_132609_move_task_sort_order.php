@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class MoveTaskSortOrder extends Migration
 {
@@ -16,7 +16,7 @@ class MoveTaskSortOrder extends Migration
         Schema::table('task_dates', function (Blueprint $table) {
             $table->string('sort_order')->nullable();
         });
-        DB::statement("UPDATE task_dates SET sort_order = tasks.sort_order FROM (SELECT id,sort_order FROM  tasks) AS tasks WHERE task_dates.task_id=tasks.id;");
+        DB::statement('UPDATE task_dates SET sort_order = tasks.sort_order FROM (SELECT id,sort_order FROM  tasks) AS tasks WHERE task_dates.task_id=tasks.id;');
         Schema::table('tasks', function (Blueprint $table) {
             $table->dropColumn('sort_order');
         });
@@ -32,7 +32,7 @@ class MoveTaskSortOrder extends Migration
         Schema::table('tasks', function (Blueprint $table) {
             $table->string('sort_order')->nullable();
         });
-        DB::statement("UPDATE tasks SET sort_order = task_dates.sort_order FROM (SELECT task_id,sort_order FROM task_dates) AS task_dates WHERE task_dates.task_id=tasks.id;");        
+        DB::statement('UPDATE tasks SET sort_order = task_dates.sort_order FROM (SELECT task_id,sort_order FROM task_dates) AS task_dates WHERE task_dates.task_id=tasks.id;');
         Schema::table('task_dates', function (Blueprint $table) {
             $table->dropColumn('sort_order');
         });

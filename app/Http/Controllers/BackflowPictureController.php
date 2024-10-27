@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\BackflowPicture;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class BackflowPictureController extends Controller
 {
@@ -18,7 +17,7 @@ class BackflowPictureController extends Controller
         $includes = $this->validateIncludes($request->input('includes'));
         $values = $this->validateModel($request);
         $items_query = BackflowPicture::with($includes);
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $items = $items_query->get();
@@ -28,10 +27,10 @@ class BackflowPictureController extends Controller
 
     public function create(Request $request)
     {
-        if (!$request->hasFile('picture')) {
+        if (! $request->hasFile('picture')) {
             return response('No picture attached', 422);
         }
-        if (!$request->file('picture')->isValid()) {
+        if (! $request->file('picture')->isValid()) {
             return response('Picture is invalid:', 422);
         }
         $values = $this->validateModel($request, true);
@@ -39,6 +38,7 @@ class BackflowPictureController extends Controller
         $values['original_filename'] = $request->file('picture')->getClientOriginalName();
         $request->file('picture')->move(public_path().'/uploads/backflows/pictures/', $values['filename']);
         $item = BackflowPicture::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('backflow_picture.read', ['id' => $item->id])]);
     }
 
@@ -46,6 +46,7 @@ class BackflowPictureController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = BackflowPicture::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -54,6 +55,7 @@ class BackflowPictureController extends Controller
         $item = BackflowPicture::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -61,22 +63,22 @@ class BackflowPictureController extends Controller
     {
         $item = BackflowPicture::findOrFail($id);
         $item->delete();
+
         return response([], 204);
     }
-    
+
     protected $model_validation = [
-       'backflow_assembly_id' => 'integer|exists:backflow_assemblies,id',
-       'filename' => 'string|max:1020',
-       'original_filename' => 'string|max:1020|nullable',
-       'notes' => 'string|max:1020|nullable',
+        'backflow_assembly_id' => 'integer|exists:backflow_assemblies,id',
+        'filename' => 'string|max:1020',
+        'original_filename' => 'string|max:1020|nullable',
+        'notes' => 'string|max:1020|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'backflow_assembly_id' => 'required'
+        'backflow_assembly_id' => 'required',
     ];
 
     protected $model_includes = [
-       'backflow_assembly'
+        'backflow_assembly',
     ];
-    
 }

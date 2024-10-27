@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class BackflowOld extends Model
 {
-    protected $table = "backflow_old";
+    protected $table = 'backflow_old';
+
     public $timestamps = false;
+
     protected $fillable = [
         'active',
         'prt',
@@ -37,9 +39,9 @@ class BackflowOld extends Model
         'model',
         'serial',
         'notes,',
-        'backflow_assembly_id'
+        'backflow_assembly_id',
     ];
-    
+
     public function backflow_old_tests()
     {
         return $this->hasMany('App\BackflowOldTest')->orderBy('test_date');

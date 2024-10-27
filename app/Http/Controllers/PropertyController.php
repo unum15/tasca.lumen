@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Property;
 use Illuminate\Http\Request;
-use Log;
 
 class PropertyController extends Controller
 {
@@ -15,11 +14,11 @@ class PropertyController extends Controller
         'phone_number' => 'nullable|string|max:255',
         'address1' => 'nullable|string|max:255',
         'address2' => 'nullable|string|max:255',
-        'city' => 'nullable|string|max:255', 
+        'city' => 'nullable|string|max:255',
         'state' => 'nullable|string|max:255',
         'zip' => 'nullable|string|max:255',
         'work_property' => 'boolean',
-        'address_type_id' => 'integer|exists:address_types,id', 
+        'address_type_id' => 'integer|exists:address_types,id',
         'activity_level_id' => 'integer|exists:activity_levels,id',
         'property_type_id' => 'integer|exists:property_types,id',
         'abbreviation' => 'nullable|string|max:255',
@@ -42,28 +41,29 @@ class PropertyController extends Controller
             ->with('propertyUnits')
             ->orderBy('name');
         $values = $request->only(array_keys($this->validation));
-        if(isset($values['client_id']) && isset($request['linked'])){
+        if (isset($values['client_id']) && isset($request['linked'])) {
             $items_query->where(
                 function ($q) use ($values) {
-                    $q->where('properties.client_id',$values['client_id']);
+                    $q->where('properties.client_id', $values['client_id']);
                     $q->orWhereHas('linkedClients', function ($q) use ($values) {
-                        $q->where('client_property.client_id',$values['client_id']);
+                        $q->where('client_property.client_id', $values['client_id']);
                     });
                 }
             );
             unset($values['client_id']);
         }
-        foreach($values as $field => $value){
+        foreach ($values as $field => $value) {
             $items_query->where($field, $value);
         }
         $max_activity_level = $request->input('maximium_activity_level_id');
-        if(!empty($max_activity_level)) {
-            $items_query->where('activity_level_id','<=',$max_activity_level);
+        if (! empty($max_activity_level)) {
+            $items_query->where('activity_level_id', '<=', $max_activity_level);
         }
         $items = $items_query->get();
+
         return $items;
     }
-    
+
     public function create(Request $request)
     {
         $this->validate($request, $this->validation);
@@ -76,32 +76,35 @@ class PropertyController extends Controller
         $item = Property::findOrFail($item->id);
         $contacts = $request->input('contacts');
         $item->contacts()->sync($contacts);
+
         return $item;
     }
-    
+
     public function read($id)
     {
         $item = Property::findOrFail($id);
+
         return $item;
     }
-    
+
     public function update($id, Request $request)
     {
-        $this->validate($request, $this->validation);     
+        $this->validate($request, $this->validation);
         $item = Property::findOrFail($id);
         $values = $request->only(array_keys($this->validation));
         $values['updater_id'] = $request->user()->id;
         $item->update($values);
         $contacts = $request->input('contacts');
         $item->contacts()->sync($contacts);
+
         return $item;
     }
-    
+
     public function delete($id)
     {
         $item = Property::findOrFail($id);
         $item->delete();
-        return response([], 204);
-    }    
 
+        return response([], 204);
+    }
 }

@@ -15,18 +15,21 @@ class BackflowStyleController extends Controller
     public function index()
     {
         $items = BackflowStyle::all();
+
         return ['data' => $items];
     }
 
     public function create(Request $request)
     {
         $item = BackflowStyle::create($request->input());
+
         return response(['data' => $item], 201, ['Location' => route('backflow_style.read', ['id' => $item->id])]);
     }
 
     public function read($id)
     {
         $item = BackflowStyle::findOrFail($id);
+
         return ['data' => $item];
     }
 
@@ -34,6 +37,7 @@ class BackflowStyleController extends Controller
     {
         $item = BackflowStyle::findOrFail($id);
         $item->update($request->input());
+
         return ['data' => $item];
     }
 
@@ -41,7 +45,7 @@ class BackflowStyleController extends Controller
     {
         $item = BackflowStyle::findOrFail($id);
         $item->delete();
+
         return response([], 401);
     }
 }
-

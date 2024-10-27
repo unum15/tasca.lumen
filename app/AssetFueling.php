@@ -13,7 +13,7 @@ class AssetFueling extends Model
         'date',
         'gallons',
         'amount',
-        'notes'
+        'notes',
     ];
 
     public function asset()

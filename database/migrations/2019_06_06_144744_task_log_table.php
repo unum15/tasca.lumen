@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class TaskLogTable extends Migration
 {
@@ -40,9 +40,8 @@ class TaskLogTable extends Migration
             $table->date('billed_date')->nullable();
             $table->date('hold_date')->nullable();
         });
-        
-        
-        $sql ="
+
+        $sql = "
             CREATE OR REPLACE FUNCTION logs.log_tasks() RETURNS TRIGGER AS \$body\$
             BEGIN
                 
@@ -70,30 +69,30 @@ class TaskLogTable extends Migration
             SET search_path = pg_catalog, audit;
         ";
         DB::statement($sql);
-        $sql ="
+        $sql = '
             CREATE TRIGGER update_task_trigger
             AFTER UPDATE
             ON public.tasks
             FOR EACH ROW
             EXECUTE PROCEDURE logs.log_tasks();
           
-        ";
+        ';
         DB::statement($sql);
-        $sql ="
+        $sql = '
           CREATE TRIGGER insert_task_trigger
             AFTER INSERT
             ON public.tasks
             FOR EACH ROW
             EXECUTE PROCEDURE logs.log_tasks();
-        ";
+        ';
         DB::statement($sql);
-        $sql ="
+        $sql = '
           CREATE TRIGGER delete_task_trigger
             AFTER DELETE
             ON public.tasks
             FOR EACH ROW
             EXECUTE PROCEDURE logs.log_tasks();
-        ";
+        ';
         DB::statement($sql);
     }
 

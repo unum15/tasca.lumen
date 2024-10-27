@@ -2,17 +2,15 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\AssetBrand;
 use App\AssetCategory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AssetBrandFactory extends Factory
 {
     protected $model = AssetBrand::class;
 
-    
-      public function definition()
+    public function definition()
     {
         $asset_category = AssetCategory::factory()->create();
 
@@ -21,7 +19,7 @@ class AssetBrandFactory extends Factory
             'name' => $this->faker->word,
             'number' => $this->faker->word,
             'notes' => $this->faker->text,
-            'sort_order' => $this->faker->word
+            'sort_order' => $this->faker->word,
         ];
     }
 }

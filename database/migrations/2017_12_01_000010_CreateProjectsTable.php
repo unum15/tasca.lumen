@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateProjectsTable extends Migration
 {
@@ -22,7 +22,7 @@ class CreateProjectsTable extends Migration
             $table->date('open_date')->nullable();
             $table->date('close_date')->nullable();
             $table->integer('creator_id');
-            $table->integer('updater_id');            
+            $table->integer('updater_id');
             $table->timestamps();
         });
     }

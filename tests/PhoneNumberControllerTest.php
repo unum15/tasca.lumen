@@ -1,9 +1,5 @@
 <?php
 
-use App\Contact;
-use App\PhoneNumber;
-use App\PhoneNumberType;
-
 class PhoneNumberControllerTest extends TestCase
 {
     public function testIndex()
@@ -27,27 +23,27 @@ class PhoneNumberControllerTest extends TestCase
     public function testRead()
     {
         $item = factory('App\PhoneNumber')->create();
-        $response = $this->actingAs($this->getAdminUser())->get('/phone_number/' . $item->id);
+        $response = $this->actingAs($this->getAdminUser())->get('/phone_number/'.$item->id);
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
-    }    
+    }
 
     public function testUpdate()
     {
         $item = factory('App\PhoneNumber')->create();
         $patch = ['phone_number' => '8005555555'];
-        $response = $this->actingAs($this->getAdminUser())->patch('/phone_number/' . $item->id, $patch);
+        $response = $this->actingAs($this->getAdminUser())->patch('/phone_number/'.$item->id, $patch);
         $response->seeStatusCode(200);
         $response->seeJson($patch);
     }
-    
+
     public function testDelete()
     {
         $item = factory('App\PhoneNumber')->create();
-        $response = $this->actingAs($this->getAdminUser())->delete('/phone_number/' . $item->id);
+        $response = $this->actingAs($this->getAdminUser())->delete('/phone_number/'.$item->id);
         $response->seeStatusCode(204);
     }
-    
+
     public function testAuth()
     {
         $response = $this->get('/phone_numbers');

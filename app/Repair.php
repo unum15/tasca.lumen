@@ -13,7 +13,7 @@ class Repair extends Model
         'date',
         'amount',
         'where',
-        'notes'
+        'notes',
     ];
 
     public function vehicle()

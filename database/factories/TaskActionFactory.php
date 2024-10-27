@@ -2,22 +2,20 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\TaskAction;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TaskActionFactory extends Factory
 {
     protected $model = TaskAction::class;
 
-    
-      public function definition()
+    public function definition()
     {
 
         return [
             'name' => $this->faker->word,
             'notes' => $this->faker->text,
-            'sort_order' => $this->faker->randomDigitNotNull
+            'sort_order' => $this->faker->randomDigitNotNull,
         ];
     }
 }

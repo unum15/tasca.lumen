@@ -9,7 +9,7 @@ class AssetAppraisal extends Model
     protected $fillable = [
         'asset_id',
         'date',
-        'appraisal'
+        'appraisal',
     ];
 
     public function asset()

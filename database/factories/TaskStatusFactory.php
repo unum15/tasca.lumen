@@ -2,22 +2,20 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\TaskStatus;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TaskStatusFactory extends Factory
 {
     protected $model = TaskStatus::class;
 
-    
-      public function definition()
+    public function definition()
     {
 
         return [
             'name' => $this->faker->word,
             'notes' => $this->faker->text,
-            'sort_order' => $this->faker->randomDigitNotNull
+            'sort_order' => $this->faker->randomDigitNotNull,
         ];
     }
 }

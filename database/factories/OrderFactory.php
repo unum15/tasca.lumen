@@ -2,24 +2,22 @@
 
 namespace Database\Factories;
 
-
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Order;
-use App\Project;
-use App\OrderStatusType;
 use App\Contact;
+use App\Order;
+use App\OrderAction;
 use App\OrderCategory;
 use App\OrderPriority;
-use App\OrderType;
 use App\OrderStatus;
-use App\OrderAction;
+use App\OrderStatusType;
+use App\OrderType;
+use App\Project;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
 {
     protected $model = Order::class;
 
-    
-      public function definition()
+    public function definition()
     {
         $project = Project::factory()->create();
         $order_status_type = OrderStatusType::factory()->create();
@@ -53,10 +51,10 @@ class OrderFactory extends Factory
             'instructions' => $this->faker->text,
             'notes' => $this->faker->text,
             'purchase_order_number' => $this->faker->word,
-            'budget' => $this->faker->randomFloat(2,0,1000).'',
+            'budget' => $this->faker->randomFloat(2, 0, 1000).'',
             'budget_plus_minus' => $this->faker->randomDigitNotNull,
             'budget_invoice_number' => $this->faker->word,
-            'bid' => $this->faker->randomFloat(2,0,1000).'',
+            'bid' => $this->faker->randomFloat(2, 0, 1000).'',
             'bid_plus_minus' => $this->faker->randomDigitNotNull,
             'invoice_number' => $this->faker->word,
             'service_window' => $this->faker->randomDigitNotNull,
@@ -70,7 +68,7 @@ class OrderFactory extends Factory
             'creator_id' => $this->faker->randomDigitNotNull,
             'updater_id' => $this->faker->randomDigitNotNull,
             'recurring_interval' => $this->faker->time,
-            'renewal_interval' => $this->faker->time
+            'renewal_interval' => $this->faker->time,
         ];
     }
 }

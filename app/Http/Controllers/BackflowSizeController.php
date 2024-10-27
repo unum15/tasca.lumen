@@ -16,6 +16,7 @@ class BackflowSizeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $items = BackflowSize::with($includes)->get();
+
         return ['data' => $items];
     }
 
@@ -23,6 +24,7 @@ class BackflowSizeController extends Controller
     {
         $values = $this->validateModel($request, true);
         $item = BackflowSize::create($values);
+
         return response(['data' => $item], 201, ['Location' => route('backflow_size.read', ['id' => $item->id])]);
     }
 
@@ -30,6 +32,7 @@ class BackflowSizeController extends Controller
     {
         $includes = $this->validateIncludes($request->input('includes'));
         $item = BackflowSize::with($includes)->find($id);
+
         return ['data' => $item];
     }
 
@@ -38,6 +41,7 @@ class BackflowSizeController extends Controller
         $item = BackflowSize::findOrFail($id);
         $values = $this->validateModel($request);
         $item->update($values);
+
         return ['data' => $item];
     }
 
@@ -45,20 +49,21 @@ class BackflowSizeController extends Controller
     {
         $item = BackflowSize::findOrFail($id);
         $item->delete();
+
         return response([], 401);
     }
-    
+
     protected $model_validation = [
-       'name' => 'string|max:1020',
-       'notes' => 'string|max:1073741824|nullable',
-       'sort_order' => 'integer|nullable',
+        'name' => 'string|max:1020',
+        'notes' => 'string|max:1073741824|nullable',
+        'sort_order' => 'integer|nullable',
     ];
-    
+
     protected $model_validation_required = [
-       'name' => 'required',
+        'name' => 'required',
     ];
-    
+
     protected $model_includes = [
-       'backflow_models'
+        'backflow_models',
     ];
 }

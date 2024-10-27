@@ -9,7 +9,7 @@ class IrrigationControllerOther extends Model
     protected $fillable = [
         'irrigation_controller_id',
         'name',
-        'value'
+        'value',
     ];
 
     public function irrigation_controller()
