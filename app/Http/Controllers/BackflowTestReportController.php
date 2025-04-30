@@ -401,7 +401,7 @@ class BackflowTestReportController extends Controller
         $initial = $report->backflow_tests()->orderBy('id')->first();
         $final = null;
         if($report->backflow_tests->count() > 1){
-            $final = $report->backflow_tests()->orderBy('id', 'DESC')->first();
+            $final = $report->backflow_tests()->orderBy('id')->get()->last();
         }
         $first_parts=BackflowValvePart::whereHas('backflow_valve', function($q){
             $q->where('name', '=', 'First');
