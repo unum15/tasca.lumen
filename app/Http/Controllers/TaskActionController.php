@@ -12,10 +12,11 @@ class TaskActionController extends Controller
      *
      * @return void
      */
-    private $validation = [
+    protected $model_validation = [
         'name' => 'string|required|min:1|max:255',
         'notes' => 'string|max:255|nullable',
-        'sort_order' => 'integer|nullable'
+        'sort_order' => 'string|max:4|nullable',
+        'labor_types' => 'array'
     ];
 
     public function __construct()
@@ -51,10 +52,13 @@ class TaskActionController extends Controller
         if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
-        $this->validate($request, $this->validation);
+        $values = $this->validateModel($request);
         $this->removeConflict($request);
         $item = TaskAction::findOrFail($id);
-        $item->update($request->input());
+        $item->update($values);
+        if(isset($values['labor_types'])){
+            $item->labor_types()->sync($values['labor_types']);
+        }
         return $item;
     }
     
