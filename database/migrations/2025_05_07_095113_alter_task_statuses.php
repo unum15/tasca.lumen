@@ -13,8 +13,12 @@ class AlterTaskStatuses extends Migration
      */
     public function up()
     {
+        Schema::table('labor_type_task_status', function (Blueprint $table) {
+            $table->string('sort_order')->nullable();
+        });
+        DB::statement("UPDATE labor_type_task_status SET sort_order=ts.sort_order FROM task_statuses ts WHERE task_status_id = ts.id;");
         Schema::table('task_statuses', function (Blueprint $table) {
-            $table->string('sort_order', 4)->nullable()->change();
+            $table->dropColumn('sort_order')->nullable();
         });
     }
 
@@ -26,7 +30,11 @@ class AlterTaskStatuses extends Migration
     public function down()
     {
         Schema::table('task_statuses', function (Blueprint $table) {
-            DB::statement('ALTER TABLE task_statuses ALTER sort_order  TYPE integer USING (sort_order::integer);');
+            $table->integer('sort_order')->nullable();
+        });
+        DB::statement("UPDATE task_statuses SET sort_order=ltts.sort_order::int FROM labor_type_task_status ltts WHERE id = ltts.task_status_id;");
+        Schema::table('labor_type_task_status', function (Blueprint $table) {
+            $table->dropColumn('sort_order');
         });
     }
 }

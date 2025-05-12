@@ -10,7 +10,8 @@ use App\Client;
 class SettingController extends Controller
 {
     private $validation = [
-        'name' => 'string|required|min:1|max:255'
+        'name' => 'string|required|min:1|max:255',
+        'value' => 'string|required|min:1|max:255'
     ];
 
     public function __construct()
@@ -32,7 +33,7 @@ class SettingController extends Controller
             abort(403);
         }
         $this->validate($request, $this->validation);
-        $item = ContactMethod::Setting($request->input());
+        $item = Setting::create($request->input());
         return $item;
     }
     

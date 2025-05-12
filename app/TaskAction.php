@@ -12,11 +12,13 @@ class TaskAction extends Model
     protected $fillable = [
         'name',
         'notes',
-        'sort_order'
     ];
     
     public function labor_types()
     {
-        return $this->belongsToMany('App\LaborType');
+        return $this->belongsToMany('App\LaborType')
+        ->withPivot('sort_order')
+        ->orderByPivot('sort_order');
+
     }
 }

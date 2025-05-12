@@ -166,6 +166,7 @@ $router->delete('/task/{id:[0-9]+}', 'TaskController@delete');
 $router->get('/tasks/unique/{field:\w+}', ['uses' => 'TaskController@unique', 'as' => 'task.unique']);
 
 $router->get('/settings', 'SettingController@index');
+$router->post('/settings', 'SettingController@create');
 $router->patch('/settings', 'SettingController@update');
 
 $router->get('/calendar/status', 'GoogleCalendarController@status');

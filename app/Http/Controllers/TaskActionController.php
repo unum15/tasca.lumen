@@ -15,7 +15,6 @@ class TaskActionController extends Controller
     protected $model_validation = [
         'name' => 'string|required|min:1|max:255',
         'notes' => 'string|max:255|nullable',
-        'sort_order' => 'string|max:4|nullable',
         'labor_types' => 'array'
     ];
 
@@ -53,7 +52,6 @@ class TaskActionController extends Controller
             return response(['Unauthorized(permissions)'], 401);
         }
         $values = $this->validateModel($request);
-        $this->removeConflict($request);
         $item = TaskAction::findOrFail($id);
         $item->update($values);
         if(isset($values['labor_types'])){
@@ -72,12 +70,4 @@ class TaskActionController extends Controller
         return response([], 204);
     }
     
-    public function removeConflict(Request $request)
-    {
-        $sort_order = $request->input('sort_order');
-        if($sort_order) {
-            TaskAction::where('sort_order', $sort_order)
-                ->update(['sort_order' => null]);
-        }      
-    }
 }

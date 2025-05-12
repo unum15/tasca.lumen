@@ -13,8 +13,12 @@ class AlterTaskActions extends Migration
      */
     public function up()
     {
+        Schema::table('labor_type_task_action', function (Blueprint $table) {
+            $table->string('sort_order')->nullable();
+        });
+        DB::statement("UPDATE labor_type_task_action SET sort_order=ta.sort_order FROM task_actions ta WHERE task_action_id = ta.id;");
         Schema::table('task_actions', function (Blueprint $table) {
-            $table->string('sort_order', 4)->nullable()->change();
+            $table->dropColumn('sort_order')->nullable();
         });
     }
 
@@ -26,7 +30,11 @@ class AlterTaskActions extends Migration
     public function down()
     {
         Schema::table('task_actions', function (Blueprint $table) {
-            DB::statement('ALTER TABLE task_actions ALTER sort_order  TYPE integer USING (sort_order::integer);');
+            $table->integer('sort_order')->nullable();
+        });
+        DB::statement("UPDATE task_actions SET sort_order=ltta.sort_order::int FROM labor_type_task_action ltta WHERE id = ltta.task_action_id;");
+        Schema::table('labor_type_task_action', function (Blueprint $table) {
+            $table->dropColumn('sort_order');
         });
     }
 }
