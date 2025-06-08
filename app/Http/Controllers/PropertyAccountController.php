@@ -62,6 +62,7 @@ class PropertyAccountController extends Controller
        'city' => 'string|max:1020|nullable',
        'access_code' => 'string|max:1020|nullable',
        'notes' => 'string|max:1020|nullable',
+       'backflow_water_system_id' => 'integer|nullable|exists:backflow_water_systems,id'
     ];
     
     protected $model_validation_required = [
