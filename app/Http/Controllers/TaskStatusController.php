@@ -34,9 +34,9 @@ class TaskStatusController extends Controller
         if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
-        $this->validate($request, $this->model_validation);
-        $this->removeConflict($request);
-        $item = TaskStatus::create($request->input());
+        $values = $this->validateModel($request);
+        $item = TaskStatus::create($values);
+        $item->labor_types()->sync($values['labor_types']);
         return $item;
     }
     

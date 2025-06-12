@@ -34,9 +34,9 @@ class TaskActionController extends Controller
         if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
-        $this->validate($request, $this->validation);
-        $this->removeConflict($request);
-        $item = TaskAction::create($request->input());
+        $values = $this->validateModel($request);
+        $item = TaskAction::create($values);
+        $item->labor_types()->sync($values['labor_types']);
         return $item;
     }
     
