@@ -248,6 +248,7 @@ class BackflowAssemblyController extends Controller
        'property',
        'property.client',
        'property_unit',
+       'property_account',
        'backflow_type.backflow_super_type',
        'backflow_type.backflow_super_type.backflow_valves',
        'backflow_test_reports',
