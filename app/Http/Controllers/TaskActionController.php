@@ -12,10 +12,10 @@ class TaskActionController extends Controller
      *
      * @return void
      */
-    private $validation = [
+    protected $model_validation = [
         'name' => 'string|required|min:1|max:255',
         'notes' => 'string|max:255|nullable',
-        'sort_order' => 'integer|nullable'
+        'labor_types' => 'array'
     ];
 
     public function __construct()
@@ -34,9 +34,9 @@ class TaskActionController extends Controller
         if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
-        $this->validate($request, $this->validation);
-        $this->removeConflict($request);
-        $item = TaskAction::create($request->input());
+        $values = $this->validateModel($request);
+        $item = TaskAction::create($values);
+        $item->labor_types()->sync($values['labor_types']);
         return $item;
     }
     
@@ -51,10 +51,12 @@ class TaskActionController extends Controller
         if(!$request->user()->can('edit-settings')) {
             return response(['Unauthorized(permissions)'], 401);
         }
-        $this->validate($request, $this->validation);
-        $this->removeConflict($request);
+        $values = $this->validateModel($request);
         $item = TaskAction::findOrFail($id);
-        $item->update($request->input());
+        $item->update($values);
+        if(isset($values['labor_types'])){
+            $item->labor_types()->sync($values['labor_types']);
+        }
         return $item;
     }
     
@@ -68,12 +70,4 @@ class TaskActionController extends Controller
         return response([], 204);
     }
     
-    public function removeConflict(Request $request)
-    {
-        $sort_order = $request->input('sort_order');
-        if($sort_order) {
-            TaskAction::where('sort_order', $sort_order)
-                ->update(['sort_order' => null]);
-        }      
-    }
 }
