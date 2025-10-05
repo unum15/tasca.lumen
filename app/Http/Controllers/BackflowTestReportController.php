@@ -481,7 +481,7 @@ class BackflowTestReportController extends Controller
         $html = '
                 <div style="text-align:center"><h3>Backflow Assembly Test Report</h3></div>
                 <div style="float:left;width:68%;font-size:11px;padding:5px;">
-                    <div class="info"><span class="header">Water System:</span> ' . $report->backflow_assembly->backflow_water_system->name . '</div>
+                    <div class="info"><span class="header">Water System:</span> ' . $report->backflow_assembly?->backflow_water_system?->name . '</div>
                     <div class="info"><span class="header">Owner:</span> ' . $property->client->name . '&nbsp;&nbsp;&nbsp;<span class="header">Contact Person:</span> ' . $backflow_assembly_contact_name . '&nbsp;&nbsp;&nbsp;<span class="header">Phone:</span> ' . $number . '</div>
                     <div class="info"><span class="header">Address:</span> ' . $billing_property->address1 . ' ' . $billing_property->address_2 . '&nbsp;&nbsp;&nbsp;<span class="header">City:</span> ' . $billing_property->city . '&nbsp;&nbsp;&nbsp;<span class="header">State:</span> ' . $billing_property->state . '&nbsp;&nbsp;&nbsp;<span class="header">Zip:</span> ' . $billing_property->zip . '</div>
                     <br />
