@@ -19,7 +19,7 @@ routes/web.php          # All route definitions
 - Extend `Illuminate\Database\Eloquent\Model`
 - Use `HasFactory` trait when a factory is needed
 - `$fillable` array lists all writable fields
-- Relationships named with underscores: `asset_type()`, `asset_set_size_type()`
+- Relationships named with underscores: `asset_type()`, `asset_brand()`
 
 ### Controllers
 - Extend `App\Http\Controllers\Controller`
@@ -32,19 +32,16 @@ routes/web.php          # All route definitions
 - All responses wrapped: `['data' => $item]`
 
 ### Routes (routes/web.php)
-Pattern for a resource named `asset_set`:
+Pattern for a resource named `example_thing`:
 ```php
-$router->get('/asset_sets', ['uses' => 'AssetSetController@index', 'as' => 'asset_set.index']);
-$router->post('/asset_set', ['uses' => 'AssetSetController@create', 'as' => 'asset_set.create']);
-$router->get('/asset_set/{id:[0-9]+}', ['uses' => 'AssetSetController@read', 'as' => 'asset_set.read']);
-$router->patch('/asset_set/{id:[0-9]+}', ['uses' => 'AssetSetController@update', 'as' => 'asset_set.update']);
-$router->delete('/asset_set/{id:[0-9]+}', ['uses' => 'AssetSetController@delete', 'as' => 'asset_set.delete']);
+$router->get('/example_things', ['uses' => 'ExampleThingController@index', 'as' => 'example_thing.index']);
+$router->post('/example_thing', ['uses' => 'ExampleThingController@create', 'as' => 'example_thing.create']);
+$router->get('/example_thing/{id:[0-9]+}', ['uses' => 'ExampleThingController@read', 'as' => 'example_thing.read']);
+$router->patch('/example_thing/{id:[0-9]+}', ['uses' => 'ExampleThingController@update', 'as' => 'example_thing.update']);
+$router->delete('/example_thing/{id:[0-9]+}', ['uses' => 'ExampleThingController@delete', 'as' => 'example_thing.delete']);
 ```
 
 ### Migrations
 - Use `$table->bigIncrements('id')`
 - Timestamps: `$table->timestamp('created_at')->useCurrent()` and `updated_at` separately (not `timestamps()`)
 - Foreign keys use `bigInteger` (not `unsignedBigInteger`) and are defined inside the same `Schema::create` callback
-
-## Active Branch: feature/112-sets
-Adding `asset_set_size_types` and `asset_sets` tables/resources. Migrations already exist. Missing: models, controllers, routes.
