@@ -61,6 +61,7 @@ class PartialTextMessageController extends Controller
        'message' => 'string|max:1073741824',
        'sort_order' => 'integer|nullable',
        'partial_text_message_type_id' => 'integer|exists:partial_text_message_types,id',
+       'name' => 'string|max:255|nullable',
     ];
     
     protected $model_validation_required = [

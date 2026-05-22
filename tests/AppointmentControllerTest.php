@@ -52,5 +52,10 @@ class AppointmentControllerTest extends TestCase
         $response->seeStatusCode(204);
         $this->notSeeInDatabase('appointments', $item->toArray());
     }
-}
 
+    public function testAuth()
+    {
+        $response = $this->get('/appointments');
+        $response->seeStatusCode(401);
+    }
+}

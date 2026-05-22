@@ -7,7 +7,7 @@ class TaskActionControllerTest extends TestCase
   
    public function testIndex()
    {
-      $item = factory('App\TaskAction')->create();
+      $item = TaskAction::factory()->create();
       $response = $this->actingAs($this->getAdminUser())->get('/task_actions');
       $response->seeStatusCode(200);
       $response->seeJson($item->toArray());
@@ -57,7 +57,7 @@ class TaskActionControllerTest extends TestCase
     
    public function testRead()
    {
-      $item = factory('App\TaskAction')->create();
+      $item = TaskAction::factory()->create();
       $response = $this->actingAs($this->getAdminUser())->get('/task_action/' . $item->id);
       $response->seeStatusCode(200);
       $response->seeJson($item->toArray());
@@ -71,7 +71,7 @@ class TaskActionControllerTest extends TestCase
 
    public function testUpdate()
    {
-      $item = factory('App\TaskAction')->create();
+      $item = TaskAction::factory()->create();
       $patch = ['name' => 'Test 2'];
       $response = $this->actingAs($this->getAdminUser())->patch('/task_action/' . $item->id, $patch);
       $response->seeStatusCode(200);
@@ -82,7 +82,7 @@ class TaskActionControllerTest extends TestCase
    
    public function testDelete()
    {
-      $item = factory('App\TaskAction')->create();
+      $item = TaskAction::factory()->create();
       $response = $this->actingAs($this->getAdminUser())->delete('/task_action/' . $item->id);
       $response->seeStatusCode(204);
    }

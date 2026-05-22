@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BackflowModel extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'backflow_manufacturer_id',
         'backflow_type_id',

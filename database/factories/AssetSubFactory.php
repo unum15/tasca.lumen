@@ -19,9 +19,11 @@ class AssetSubFactory extends Factory
         return [
             'asset_group_id' => $asset_group->id,
             'name' => $this->faker->word,
-            'number' => $this->faker->word,
+            'number' => $this->faker->randomLetter,
             'notes' => $this->faker->text,
-            'sort_order' => $this->faker->word
+            'sort_order' => (string)$this->faker->randomDigitNotNull,
+            'creator_id' => null,
+            'updater_id' => null,
         ];
     }
 }

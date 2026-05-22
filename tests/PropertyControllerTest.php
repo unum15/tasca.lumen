@@ -1,5 +1,6 @@
 <?php
 
+use App\ActivityLevel;
 use App\Property;
 
 class PropertyControllerTest extends TestCase
@@ -7,7 +8,7 @@ class PropertyControllerTest extends TestCase
 
     public function testIndex()
     {
-        $items = factory('App\Property', 2)->create();
+        $items = Property::factory(2)->create();
         $response = $this->actingAs($this->getAdminUser())->get('/properties');
         $response->seeStatusCode(200);
         $response->seeJson($items[0]->toArray());
@@ -16,9 +17,9 @@ class PropertyControllerTest extends TestCase
 
     public function testIndexWithActivityLevel()
     {
-        $activity_levels = factory('App\ActivityLevel', 5)->create();
-        $property0 = factory('App\Property')->create(['activity_level_id' => $activity_levels[0]->id]);
-        $property1 = factory('App\Property')->create(['activity_level_id' => $activity_levels[4]->id]);
+        $activity_levels = ActivityLevel::factory(5)->create();
+        $property0 = Property::factory()->create(['activity_level_id' => $activity_levels[0]->id]);
+        $property1 = Property::factory()->create(['activity_level_id' => $activity_levels[4]->id]);
         $response = $this->actingAs($this->getAdminUser())->get('/properties?maximium_activity_level_id=' . $activity_levels[0]->id);
         $response->seeStatusCode(200);
         $response->seeJson($property0->toArray());
@@ -28,7 +29,7 @@ class PropertyControllerTest extends TestCase
     public function testCreate()
     {
         $admin = $this->getAdminUser();
-        $item = factory('App\Property')->make(['creator_id' => $admin->id, 'updater_id' => $admin->id]);
+        $item = Property::factory()->make(['creator_id' => $admin->id, 'updater_id' => $admin->id]);
         $response = $this->actingAs($admin)->post('/property', $item->toArray());
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
@@ -37,7 +38,7 @@ class PropertyControllerTest extends TestCase
 
     public function testRead()
     {
-        $item = factory('App\Property')->create();
+        $item = Property::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/property/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
@@ -45,16 +46,16 @@ class PropertyControllerTest extends TestCase
 
     public function testUpdate()
     {
-        $item = factory('App\Property')->create();
+        $item = Property::factory()->create();
         $patch = ['name' => 'Test Property 2'];
         $response = $this->actingAs($this->getAdminUser())->patch('/property/' . $item->id, $patch);
         $response->seeStatusCode(200);
         $response->seeJson($patch);
     }
-    
+
     public function testDelete()
     {
-        $item = factory('App\Property')->create();
+        $item = Property::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/property/' . $item->id);
         $response->seeStatusCode(204);
     }

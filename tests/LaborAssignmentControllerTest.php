@@ -51,5 +51,10 @@ class LaborAssignmentControllerTest extends TestCase
         $response->seeStatusCode(204);
         $this->notSeeInDatabase('labor_assignments', $item->toArray());
     }
-}
 
+    public function testAuth()
+    {
+        $response = $this->get('/labor_assignments');
+        $response->seeStatusCode(401);
+    }
+}

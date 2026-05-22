@@ -70,7 +70,8 @@ class OrderFactory extends Factory
             'creator_id' => $this->faker->randomDigitNotNull,
             'updater_id' => $this->faker->randomDigitNotNull,
             'recurring_interval' => $this->faker->time,
-            'renewal_interval' => $this->faker->time
+            'renewal_interval' => $this->faker->time,
+            'property_unit_id' => null,
         ];
     }
 }

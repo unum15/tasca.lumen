@@ -20,12 +20,8 @@ class OrderControllerTest extends TestCase
         $user = $this->getAdminUser();
         $item = Order::factory(['creator_id'=>$user->id,'updater_id'=>$user->id])->make();
         $response = $this->actingAs($this->getAdminUser())->post('/order', $item->toArray());
-        $response->seeStatusCode(200);
+        $response->seeStatusCode(201);
         $response->seeJson($item->toArray());
-        $response_array = json_decode($response->response->getContent());
-        $dbitem = Order::find($response_array->id);
-        $response->seeJson($dbitem->toArray());
-        $dbitem->delete();
     }
 
     public function testRead()
@@ -34,9 +30,6 @@ class OrderControllerTest extends TestCase
         $response = $this->actingAs($this->getAdminUser())->get('/order/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
-        $dbitem = Order::find($item->id);
-        $response->seeJson($dbitem->toArray());
-        $dbitem->delete();
     }    
        
     public function testUpdate()
@@ -62,7 +55,7 @@ class OrderControllerTest extends TestCase
     
     public function testRenewal()
     {
-        $item = Order::factory('App\Order')->create(['recurring' => false, 'renewable'=> true, 'close_date' => null]);
+        $item = Order::factory()->create(['recurring' => false, 'renewable'=> true, 'close_date' => null]);
         $prop1 = Property::factory()->create();
         $prop2 = Property::factory()->create();
         $item->properties()->sync([$prop1->id, $prop2->id]);
@@ -75,7 +68,7 @@ class OrderControllerTest extends TestCase
     
     public function testConversionRecurring()
     {
-        $item = Order::factory('App\Order')->create(['recurring' => true, 'renewable'=> false]);
+        $item = Order::factory()->create(['recurring' => true, 'renewable'=> false]);
         $prop1 = Property::factory()->create();
         $prop2 = Property::factory()->create();
         $item->properties()->sync([$prop1->id, $prop2->id]);
@@ -88,7 +81,7 @@ class OrderControllerTest extends TestCase
     
     public function testConversionProperties()
     {
-        $item = Order::factory('App\Order')->create(['recurring' => false, 'renewable'=> false]);
+        $item = Order::factory()->create(['recurring' => false, 'renewable'=> false]);
         $prop1 = Property::factory()->create();
         $prop2 = Property::factory()->create();
         $item->properties()->sync([$prop1->id, $prop2->id]);

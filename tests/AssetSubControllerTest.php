@@ -52,5 +52,10 @@ class AssetSubControllerTest extends TestCase
         $response->seeStatusCode(204);
         $this->notSeeInDatabase('asset_subs', $item->toArray());
     }
-}
 
+    public function testAuth()
+    {
+        $response = $this->get('/asset_subs');
+        $response->seeStatusCode(401);
+    }
+}

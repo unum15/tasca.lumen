@@ -6,7 +6,7 @@ class OrderPriorityControllerTest extends TestCase
 {
     public function testIndex()
     {
-        $item = factory('App\OrderPriority')->create();
+        $item = OrderPriority::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/order_priorities');
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
@@ -57,7 +57,7 @@ class OrderPriorityControllerTest extends TestCase
     
     public function testRead()
     {
-        $item = factory('App\OrderPriority')->create();
+        $item = OrderPriority::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/order_priority/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());        
@@ -73,7 +73,7 @@ class OrderPriorityControllerTest extends TestCase
     
     public function testUpdate()
     {
-        $item = factory('App\OrderPriority')->create();
+        $item = OrderPriority::factory()->create();
         $patch = ['name' => 'Test 2'];
         $response = $this->actingAs($this->getAdminUser())->patch('/order_priority/' . $item->id, $patch);
         $response->seeStatusCode(200);
@@ -84,7 +84,7 @@ class OrderPriorityControllerTest extends TestCase
     
     public function testDelete()
     {
-        $item = factory('App\OrderPriority')->create();
+        $item = OrderPriority::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/order_priority/' . $item->id);
         $response->seeStatusCode(204);
     }

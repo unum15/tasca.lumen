@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AssetService extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'asset_id',
         'asset_service_type_id',

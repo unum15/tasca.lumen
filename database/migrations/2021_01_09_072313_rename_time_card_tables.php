@@ -120,20 +120,24 @@ class RenameTimeCardTables extends Migration
             ";
         $db->insert($sql);
         $overhead_id = DB::getPdo()->lastInsertId();
-        
+
         $db->insert("INSERT INTO labor_assignment_labor_type SELECT id,? FROM labor_assignments;",[$overhead_id]);
         $orders = $db->select("SELECT id FROM orders WHERE name='Overhead'");
-        $db->update("UPDATE labor_assignments SET order_id = ?;",[$orders[0]->id]);
-        
+        if (!empty($orders)) {
+            $db->update("UPDATE labor_assignments SET order_id = ?;",[$orders[0]->id]);
+        }
+
         $nonbilling_default = $db->select("SELECT value FROM settings WHERE name='default_nonbilling_task_category_id'");
         $billing_default = $db->select("SELECT value FROM settings WHERE name='default_billing_task_category_id'");
-        
+
         $nonbilling = $db->select("SELECT id FROM labor_types WHERE name='Non Billing'");
-        $nonbilling_id = $nonbilling[0]->id;
+        $nonbilling_id = !empty($nonbilling) ? $nonbilling[0]->id : null;
         $billing = $db->select("SELECT id FROM labor_types WHERE name='Billing'");
-        $billing_id = $billing[0]->id;
+        $billing_id = !empty($billing) ? $billing[0]->id : null;
         $db->insert("INSERT INTO settings (name,value) VALUES ('overhead_labor_type_id',?);",[$overhead_id]);
-        $db->insert("INSERT INTO settings (name,value) VALUES ('default_labor_type_id',?);",[$billing_id]);
+        if ($billing_id) {
+            $db->insert("INSERT INTO settings (name,value) VALUES ('default_labor_type_id',?);",[$billing_id]);
+        }
         $db->insert("INSERT INTO settings (name,value) VALUES ('default_state','UT');");
         $sql="
             SELECT
@@ -142,7 +146,7 @@ class RenameTimeCardTables extends Migration
                 task_categories
                 LEFT JOIN task_category_task_type ON (task_categories.id = task_category_task_type.task_category_id)
         ";
-        
+
         $categories = $db->select($sql);
         foreach($categories as $category){
             $sql="
@@ -155,18 +159,22 @@ class RenameTimeCardTables extends Migration
             $assignment_id = DB::getPdo()->lastInsertId();
             $db->insert('INSERT INTO labor_assignment_labor_type (labor_assignment_id,labor_type_id) VALUES (?,?);',[$assignment_id,$category->task_type_id]);
             $db->update('UPDATE tasks SET labor_assignment_id=?,task_category_id=null WHERE task_category_id=?;',[$assignment_id,$category->id]);
-            if($category->id == $nonbilling_default[0]->value){
+            if (!empty($nonbilling_default) && $category->id == $nonbilling_default[0]->value){
                 $db->update("UPDATE settings SET name='default_labor_assignment_id-labor_type_id-$nonbilling_id',value=? WHERE name='default_nonbilling_task_category_id';",[$assignment_id]);
             }
-            if($category->id == $billing_default[0]->value){
+            if (!empty($billing_default) && $category->id == $billing_default[0]->value){
                 $db->update("UPDATE settings SET name='default_labor_assignment_id-labor_type_id-$billing_id',value=? WHERE name='default_billing_task_category_id';",[$assignment_id]);
             }
         }
         $db->update("UPDATE settings SET name='default_labor_assignment_id-labor_type_id-$overhead_id' WHERE name='default_overhead_assignment_id';");
-        $db->update("UPDATE settings SET name='default_task_action_id-labor_type_id-$nonbilling_id' WHERE name='default_nonbilling_task_action_id';");
-        $db->update("UPDATE settings SET name='default_task_action_id-labor_type_id-$billing_id' WHERE name='default_billing_task_action_id';");
-        $db->update("UPDATE settings SET name='default_task_status_id-labor_type_id-$nonbilling_id' WHERE name='default_nonbilling_task_status_id';");
-        $db->update("UPDATE settings SET name='default_task_status_id-labor_type_id-$billing_id' WHERE name='default_billing_task_status_id';");
+        if ($nonbilling_id) {
+            $db->update("UPDATE settings SET name='default_task_action_id-labor_type_id-$nonbilling_id' WHERE name='default_nonbilling_task_action_id';");
+            $db->update("UPDATE settings SET name='default_task_status_id-labor_type_id-$nonbilling_id' WHERE name='default_nonbilling_task_status_id';");
+        }
+        if ($billing_id) {
+            $db->update("UPDATE settings SET name='default_task_action_id-labor_type_id-$billing_id' WHERE name='default_billing_task_action_id';");
+            $db->update("UPDATE settings SET name='default_task_status_id-labor_type_id-$billing_id' WHERE name='default_billing_task_status_id';");
+        }
         Schema::dropIfExists('task_category_task_type');
         Schema::dropIfExists('task_categories');
         Schema::table('tasks', function (Blueprint $table) {

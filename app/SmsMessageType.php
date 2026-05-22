@@ -12,6 +12,8 @@ class SmsMessageType extends Model
     protected $fillable = [
         'name',
         'uses_date',
-        'sort_order'
+        'sort_order',
+        'creator_id',
+        'updater_id',
     ];
 }

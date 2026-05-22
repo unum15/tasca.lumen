@@ -16,9 +16,11 @@ class AssetCategoryFactory extends Factory
 
         return [
             'name' => $this->faker->word,
-            'number' => $this->faker->word,
+            'number' => strtoupper($this->faker->unique()->randomLetter),
             'notes' => $this->faker->text,
-            'sort_order' => $this->faker->word
+            'sort_order' => (string)$this->faker->randomDigitNotNull,
+            'creator_id' => null,
+            'updater_id' => null,
         ];
     }
 }

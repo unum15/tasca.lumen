@@ -2,10 +2,21 @@
 
 namespace App;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BackflowTest extends Model
 {
+    use HasFactory;
+
+    protected $dateFormat = 'Y-m-d H:i:s';
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format($this->dateFormat);
+    }
+
     protected $fillable = [
         'backflow_test_report_id',
         'contact_id',
@@ -14,6 +25,11 @@ class BackflowTest extends Model
         'passed',
         'tested_on',
         'notes'
+    ];
+
+    protected $casts = [
+        'reading_1' => 'float',
+        'reading_2' => 'float',
     ];
 
     public function backflow_test_report()

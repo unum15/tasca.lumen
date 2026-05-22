@@ -12,6 +12,7 @@ class TaskAction extends Model
     protected $fillable = [
         'name',
         'notes',
+        'sort_order',
     ];
     
     public function labor_types()

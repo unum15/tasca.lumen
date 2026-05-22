@@ -19,7 +19,10 @@ class PartialTextMessageFactory extends Factory
         return [
             'message' => $this->faker->text,
             'sort_order' => $this->faker->randomDigitNotNull,
-            'partial_text_message_type_id' => $partial_text_message_type->id
+            'partial_text_message_type_id' => $partial_text_message_type->id,
+            'name' => null,
+            'creator_id' => null,
+            'updater_id' => null,
         ];
     }
 }

@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AssetMaintenance extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'asset_service_id',
         'asset_usage_type_id',
@@ -14,6 +17,10 @@ class AssetMaintenance extends Model
         'amount',
         'where',
         'notes'
+    ];
+
+    protected $casts = [
+        'amount' => 'float',
     ];
 
     public function asset_service()

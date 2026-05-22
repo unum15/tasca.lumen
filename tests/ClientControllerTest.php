@@ -1,5 +1,6 @@
 <?php
 
+use App\ActivityLevel;
 use App\Client;
 
 class ClientControllerTest extends TestCase
@@ -7,18 +8,18 @@ class ClientControllerTest extends TestCase
 
     public function testIndex()
     {
-        $items = factory('App\Client', 2)->create();
+        $items = Client::factory(2)->create();
         $response = $this->actingAs($this->getAdminUser())->get('/clients');
         $response->seeStatusCode(200);
         $response->seeJson($items[0]->toArray());
         $response->seeJson($items[1]->toArray());
     }
-    
+
     public function testIndexWithActivityLevel()
     {
-        $activity_levels = factory('App\ActivityLevel', 5)->create();
-        $client0 = factory('App\Client')->create(['activity_level_id' => $activity_levels[0]->id]);
-        $client1 = factory('App\Client')->create(['activity_level_id' => $activity_levels[4]->id]);
+        $activity_levels = ActivityLevel::factory(5)->create();
+        $client0 = Client::factory()->create(['activity_level_id' => $activity_levels[0]->id]);
+        $client1 = Client::factory()->create(['activity_level_id' => $activity_levels[4]->id]);
         $response = $this->actingAs($this->getAdminUser())->get('/clients?maximium_activity_level_id=' . $activity_levels[0]->id);
         $response->seeStatusCode(200);
         $response->seeJson($client0->toArray());
@@ -29,7 +30,7 @@ class ClientControllerTest extends TestCase
     public function testCreate()
     {
         $admin = $this->getAdminUser();
-        $item = factory('App\Client')->make(['creator_id' => $admin->id, 'updater_id' => $admin->id]);
+        $item = Client::factory()->make(['creator_id' => $admin->id, 'updater_id' => $admin->id]);
         $response = $this->actingAs($admin)->post('/client', $item->toArray());
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
@@ -37,7 +38,7 @@ class ClientControllerTest extends TestCase
 
     public function testRead()
     {
-        $item = factory('App\Client')->create();
+        $item = Client::factory()->create();
         $client = Client::first();
         $response = $this->actingAs($this->getAdminUser())->get('/client/' . $client->id);
         $response->seeStatusCode(200);
@@ -46,20 +47,20 @@ class ClientControllerTest extends TestCase
 
     public function testUpdate()
     {
-        $item = factory('App\Client')->create();
+        $item = Client::factory()->create();
         $patch = ['name' => 'Test 2'];
         $response = $this->actingAs($this->getAdminUser())->patch('/client/' . $item->id, $patch);
         $response->seeStatusCode(200);
         $response->seeJson($patch);
     }
-    
+
     public function testDelete()
     {
-        $client = factory('App\Client')->create();
+        $client = Client::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/client/' . $client->id);
         $response->seeStatusCode(204);
     }
-    
+
     public function testAuth()
     {
         $response = $this->get('/clients');

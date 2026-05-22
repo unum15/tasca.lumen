@@ -57,7 +57,7 @@ class OrderController extends Controller
 
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     public function index(Request $request)
@@ -179,10 +179,10 @@ class OrderController extends Controller
         $item = Order::create($values);
         $item = Order::findOrFail($item->id);
         $this->syncProperties($item, $request);
-        return $item;
+        return response($item, 201);
     }
-    
-    
+
+
     public function read($id)
     {
         $item = Order::with(

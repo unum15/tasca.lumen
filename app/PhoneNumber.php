@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PhoneNumber extends Model
 {
+    use HasFactory;
+
     
     protected $fillable = [
         'contact_id',

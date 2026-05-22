@@ -1,13 +1,10 @@
 <?php
 
 use App\BackflowTestReport;
-use Laravel\Lumen\Testing\WithoutMiddleware;
 use App\Http\Controllers\BackflowTestReportController;
 
 class BackflowTestReportControllerRPResultsTest extends TestCase
 {
-
-    use WithoutMiddleware;
 
 
     public function testRPTestResultsBarely()

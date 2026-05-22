@@ -83,7 +83,7 @@ class ContactMethodControllerTest extends TestCase
     
     public function testDelete()
     {
-        $contact_method = factory('App\ContactMethod')->create();
+        $contact_method = ContactMethod::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/contact_method/' . $contact_method->id);
         $response->seeStatusCode(204);
     }

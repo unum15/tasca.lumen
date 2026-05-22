@@ -5,24 +5,27 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Project;
+use App\Client;
+use App\Contact;
 
 class ProjectFactory extends Factory
 {
     protected $model = Project::class;
 
-    
-      public function definition()
+    public function definition()
     {
+        $client = Client::factory()->create();
+        $contact = Contact::factory()->create();
 
         return [
-            'client_id' => $this->faker->randomDigitNotNull,
+            'client_id' => $client->id,
             'name' => $this->faker->word,
             'notes' => $this->faker->text,
-            'contact_id' => $this->faker->randomDigitNotNull,
+            'contact_id' => $contact->id,
             'open_date' => $this->faker->date,
             'close_date' => $this->faker->date,
-            'creator_id' => $this->faker->randomDigitNotNull,
-            'updater_id' => $this->faker->randomDigitNotNull
+            'creator_id' => $contact->id,
+            'updater_id' => $contact->id,
         ];
     }
 }

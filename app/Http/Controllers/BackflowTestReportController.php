@@ -902,7 +902,7 @@ class BackflowTestReportController extends Controller
        'submitted_date' => 'date|nullable',
        'tag_year' => 'string|max:4|nullable'
     ];
-    
+
     protected $model_validation_required = [
        'backflow_assembly_id' => 'required',
        'backflow_installed_to_code' => 'required',

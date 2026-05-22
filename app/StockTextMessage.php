@@ -10,6 +10,11 @@ class StockTextMessage extends Model
     use HasFactory;
 
     protected $fillable = [
-        'message'
+        'message',
+        'message_type_id',
+        'name',
+        'sort_order',
+        'creator_id',
+        'updater_id',
     ];
 }

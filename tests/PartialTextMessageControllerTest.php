@@ -52,5 +52,10 @@ class PartialTextMessageControllerTest extends TestCase
         $response->seeStatusCode(204);
         $this->notSeeInDatabase('partial_text_messages', $item->toArray());
     }
-}
 
+    public function testAuth()
+    {
+        $response = $this->get('/partial_text_messages');
+        $response->seeStatusCode(401);
+    }
+}

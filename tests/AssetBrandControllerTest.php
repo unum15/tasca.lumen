@@ -52,5 +52,10 @@ class AssetBrandControllerTest extends TestCase
         $response->seeStatusCode(204);
         $this->notSeeInDatabase('asset_brands', $item->toArray());
     }
-}
 
+    public function testAuth()
+    {
+        $response = $this->get('/asset_brands');
+        $response->seeStatusCode(401);
+    }
+}

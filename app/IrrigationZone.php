@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class IrrigationZone extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'irrigation_controller_id',
         'number',

@@ -44,8 +44,8 @@ class AssetAccessoryController extends Controller
     public function update($id, Request $request)
     {
         $item = AssetAccessory::findOrFail($id);
-        $values['updater_id'] = $request->user()->id;
         $values = $this->validateModel($request);
+        $values['updater_id'] = $request->user()->id;
         $item->update($values);
         return ['data' => $item];
     }
@@ -59,7 +59,7 @@ class AssetAccessoryController extends Controller
     
     protected $model_validation = [
        'asset_id' => 'integer|exists:assets,id',
-       'quantity' => 'integer',
+       'quantity' => 'integer|nullable',
        'name' => 'string|max:1020',
        'notes' => 'string|max:1020|nullable',
        'value' => 'numeric|nullable',

@@ -39,7 +39,7 @@ class TaskFactory extends Factory
             'notes' => $this->faker->text,
             'creator_id' => $this->faker->randomDigitNotNull,
             'updater_id' => $this->faker->randomDigitNotNull,
-            'crew_id' => $this->faker->randomDigitNotNull,
+            'crew_id' => null,
             'closed_date' => $this->faker->date,
             'billed_date' => $this->faker->date,
             'hold_date' => $this->faker->date,

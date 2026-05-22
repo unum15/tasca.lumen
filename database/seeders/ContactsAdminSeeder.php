@@ -18,11 +18,14 @@ class ContactsAdminSeeder extends Seeder
      */
     public function run()
     {
+        $activity_level = ActivityLevel::first() ?? ActivityLevel::factory()->create();
+        $contact_method = ContactMethod::first() ?? ContactMethod::factory()->create();
+
         $admin = Contact::create([
                 'name' => 'Admin Administrator',
-                'activity_level_id' => ActivityLevel::first()->id,
-                'show_maximium_activity_level_id' => ActivityLevel::first()->id,
-                'contact_method_id' => ContactMethod::first()->id,
+                'activity_level_id' => $activity_level->id,
+                'show_maximium_activity_level_id' => $activity_level->id,
+                'contact_method_id' => $contact_method->id,
                 'login' => 'admin@example.com',
                 'password' => password_hash("adminpass", PASSWORD_DEFAULT),
                 'creator_id' => 0,

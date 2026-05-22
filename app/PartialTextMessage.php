@@ -12,7 +12,10 @@ class PartialTextMessage extends Model
     protected $fillable = [
         'message',
         'sort_order',
-        'partial_text_message_type_id'
+        'partial_text_message_type_id',
+        'creator_id',
+        'updater_id',
+        'name',
     ];
 
     public function partial_text_message_type()

@@ -11,6 +11,8 @@ class PartialTextMessageType extends Model
 
     protected $fillable = [
         'name',
-        'sort_order'
+        'sort_order',
+        'creator_id',
+        'updater_id',
     ];
 }

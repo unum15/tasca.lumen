@@ -60,6 +60,7 @@ class AssetImprovementController extends Controller
        'details' => 'string|max:1020|nullable',
        'date' => 'string|max:1020|nullable',
        'cost' => 'numeric|nullable',
+       'name' => 'string|max:255|nullable',
     ];
     
     protected $model_validation_required = [

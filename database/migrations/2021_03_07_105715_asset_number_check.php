@@ -24,7 +24,7 @@ class AssetNumberCheck extends Migration
             $table->unique(['asset_group_id', 'number']);
         });
         $sql = "
-    CREATE FUNCTION verify_asset_number() 
+    CREATE OR REPLACE FUNCTION verify_asset_number()
     RETURNS TRIGGER 
     LANGUAGE PLPGSQL
     AS $$
