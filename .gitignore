@@ -6,3 +6,4 @@ Homestead.json
 Homestead.yaml
 google.config
 .env
+.phpunit.result.cache
