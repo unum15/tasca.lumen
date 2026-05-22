@@ -509,6 +509,12 @@ $router->get('/task_action/{id:[0-9]+}', ['uses' => 'TaskActionController@read',
 $router->patch('/task_action/{id:[0-9]+}', ['uses' => 'TaskActionController@update', 'as' => 'task_action.update']);
 $router->delete('/task_action/{id:[0-9]+}', ['uses' => 'TaskActionController@delete', 'as' => 'task_action.delete']);
 
+$router->get('/task_types', ['uses' => 'TaskTypeController@index', 'as' => 'task_type.index']);
+$router->post('/task_type', ['uses' => 'TaskTypeController@create', 'as' => 'task_type.create']);
+$router->get('/task_type/{id:[0-9]+}', ['uses' => 'TaskTypeController@read', 'as' => 'task_type.read']);
+$router->patch('/task_type/{id:[0-9]+}', ['uses' => 'TaskTypeController@update', 'as' => 'task_type.update']);
+$router->delete('/task_type/{id:[0-9]+}', ['uses' => 'TaskTypeController@delete', 'as' => 'task_type.delete']);
+
 $router->get('/asset_categories', ['uses' => 'AssetCategoryController@index', 'as' => 'asset_category.index']);
 $router->post('/asset_category', ['uses' => 'AssetCategoryController@create', 'as' => 'asset_category.create']);
 $router->get('/asset_category/{id:[0-9]+}', ['uses' => 'AssetCategoryController@read', 'as' => 'asset_category.read']);

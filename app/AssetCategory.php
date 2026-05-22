@@ -13,6 +13,9 @@ class AssetCategory extends Model
         'name',
         'number',
         'notes',
-        'sort_order'
+        'sort_order',
+        'creator_id',
+        'updater_id',
     ];
+
 }

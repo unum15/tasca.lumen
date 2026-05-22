@@ -18,7 +18,7 @@ class CreateBackflowTestReportsTable extends Migration
             $table->integer('backflow_assembly_id');
             $table->string('visual_inspection_notes')->nullable();
             $table->string('notes')->nullable();
-            $table->boolean('backflow_installed_to_code')->nullable();
+            $table->boolean('backflow_installed_to_code');
             $table->date('report_date');
             $table->date('submitted_date')->nullable();
             $table->string('tag_year',4)->nullable();

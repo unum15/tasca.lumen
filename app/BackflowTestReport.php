@@ -2,10 +2,21 @@
 
 namespace App;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BackflowTestReport extends Model
 {
+    use HasFactory;
+
+    protected $dateFormat = 'Y-m-d H:i:s';
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format($this->dateFormat);
+    }
+
     protected $fillable = [
         'backflow_assembly_id',
         'visual_inspection_notes',

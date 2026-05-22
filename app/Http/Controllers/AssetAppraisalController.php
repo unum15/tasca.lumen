@@ -58,6 +58,7 @@ class AssetAppraisalController extends Controller
        'asset_id' => 'integer|exists:assets,id',
        'date' => 'string|max:1020',
        'appraisal' => 'numeric',
+       'name' => 'string|max:255|nullable',
     ];
     
     protected $model_validation_required = [

@@ -12,7 +12,8 @@ class LaborType extends Model
     protected $fillable = [
         'name',
         'notes',
-        'sort_order'
+        'sort_order',
+        'assigned',
     ];
     
     public function labor_assignments()

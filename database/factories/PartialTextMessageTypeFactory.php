@@ -16,7 +16,9 @@ class PartialTextMessageTypeFactory extends Factory
 
         return [
             'name' => $this->faker->word,
-            'sort_order' => $this->faker->randomDigitNotNull
+            'sort_order' => $this->faker->randomDigitNotNull,
+            'creator_id' => null,
+            'updater_id' => null,
         ];
     }
 }

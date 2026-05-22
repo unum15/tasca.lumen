@@ -380,5 +380,9 @@ class ClockInControllerTest extends TestCase
         $this->seeInDatabase('clock_ins', $updated_array);
     }
 
+    public function testAuth()
+    {
+        $response = $this->get('/clock_ins');
+        $response->seeStatusCode(401);
+    }
 }
-

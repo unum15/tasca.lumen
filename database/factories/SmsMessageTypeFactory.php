@@ -17,7 +17,9 @@ class SmsMessageTypeFactory extends Factory
         return [
             'name' => $this->faker->text,
             'uses_date' => $this->faker->boolean,
-            'sort_order' => $this->faker->randomDigitNotNull
+            'sort_order' => $this->faker->randomDigitNotNull,
+            'creator_id' => null,
+            'updater_id' => null,
         ];
     }
 }

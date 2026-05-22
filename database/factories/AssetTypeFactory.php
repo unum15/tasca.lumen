@@ -19,9 +19,11 @@ class AssetTypeFactory extends Factory
         return [
             'name' => $this->faker->word,
             'notes' => $this->faker->text,
-            'sort_order' => $this->faker->word,
+            'sort_order' => (string)$this->faker->randomDigitNotNull,
             'asset_brand_id' => $asset_brand->id,
-            'number' => $this->faker->word
+            'number' => $this->faker->randomLetter,
+            'creator_id' => null,
+            'updater_id' => null,
         ];
     }
 }

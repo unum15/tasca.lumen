@@ -63,7 +63,7 @@ class AssetTypeController extends Controller
        'notes' => 'string|max:1073741824|nullable',
        'sort_order' => 'string|max:1020|nullable',
        'asset_brand_id' => 'integer|exists:asset_brands,id',
-       'number' => 'string|max:1',
+       'number' => 'string|max:255',
     ];
     
     protected $model_validation_required = [

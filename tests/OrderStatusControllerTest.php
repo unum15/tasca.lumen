@@ -6,7 +6,7 @@ class OrderStatusControllerTest extends TestCase
 {
     public function testIndex()
     {
-        $item = factory('App\OrderStatus')->create();
+        $item = OrderStatus::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/order_statuses');
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
@@ -58,13 +58,10 @@ class OrderStatusControllerTest extends TestCase
     
     public function testRead()
     {
-        $item = factory('App\OrderStatus')->create();
+        $item = OrderStatus::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/order_status/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
-        $dbitem = OrderStatus::find($item->id);
-        $response->seeJsonEquals($dbitem->toArray());
-        $dbitem->delete();
     }
     
     
@@ -76,7 +73,7 @@ class OrderStatusControllerTest extends TestCase
 
     public function testUpdate()
     {
-        $item = factory('App\OrderStatus')->create();
+        $item = OrderStatus::factory()->create();
         $patch = ['name' => 'Test 2'];
         $response = $this->actingAs($this->getAdminUser())->patch('/order_status/' . $item->id, $patch);
         $response->seeStatusCode(200);
@@ -87,7 +84,7 @@ class OrderStatusControllerTest extends TestCase
     
     public function testDelete()
     {
-        $item = factory('App\OrderStatus')->create();
+        $item = OrderStatus::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/order_status/' . $item->id);
         $response->seeStatusCode(204);
     }

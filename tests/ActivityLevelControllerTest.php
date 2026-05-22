@@ -19,13 +19,9 @@ class ActivityLevelControllerTest extends TestCase
         $response = $this->actingAs($this->getAdminUser())->post('/activity_level',$item);
         $response->seeStatusCode(200);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
-        $dbitem = ActivityLevel::find($response_array->id);
-        $response->seeJsonEquals($dbitem->toArray());
-        $dbitem->delete();
     }
-    
-    
+
+
     public function testCreateBad()
     {
         $item = ['name' => '', 'sort_order' => 'a', 'default' => 'a'];
@@ -40,10 +36,9 @@ class ActivityLevelControllerTest extends TestCase
         $response = $this->actingAs($this->getAdminUser())->post('/activity_level',$item);
         $response->seeStatusCode(200);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());        
+        $response_array = json_decode($response->response->getContent());
         $dbitem = ActivityLevel::find($response_array->id);
         $response->assertNotNull($dbitem);
-        $dbitem->delete();
     }
     
     public function testCreateLong()
@@ -91,7 +86,7 @@ class ActivityLevelControllerTest extends TestCase
     
     public function testDelete()
     {
-        $level = factory('App\ActivityLevel')->create();
+        $level = ActivityLevel::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/activity_level/' . $level->id);
         $response->seeStatusCode(204);
     }

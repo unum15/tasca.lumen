@@ -82,7 +82,7 @@ class ClientTypeControllerTest extends TestCase
     
     public function testDelete()
     {
-        $client_type = factory('App\ClientType')->create();
+        $client_type = ClientType::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/client_type/' . $client_type->id);
         $response->seeStatusCode(204);
     }

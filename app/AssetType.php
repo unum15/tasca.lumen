@@ -14,7 +14,9 @@ class AssetType extends Model
         'notes',
         'sort_order',
         'asset_brand_id',
-        'number'
+        'number',
+        'creator_id',
+        'updater_id',
     ];
 
     public function asset_brand()

@@ -19,9 +19,11 @@ class AssetBrandFactory extends Factory
         return [
             'asset_category_id' => $asset_category->id,
             'name' => $this->faker->word,
-            'number' => $this->faker->word,
+            'number' => $this->faker->randomLetter,
             'notes' => $this->faker->text,
-            'sort_order' => $this->faker->word
+            'sort_order' => (string)$this->faker->randomDigitNotNull,
+            'creator_id' => null,
+            'updater_id' => null,
         ];
     }
 }

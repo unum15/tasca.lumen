@@ -14,7 +14,7 @@ class CreateOrdersLogTable extends Migration
     public function up()
     {
         
-        DB::statement('CREATE SCHEMA logs');
+        DB::statement('CREATE SCHEMA IF NOT EXISTS logs');
         Schema::create('logs.orders', function (Blueprint $table) {
             $table->increments('id');
             $table->char('operation', 1);

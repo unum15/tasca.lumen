@@ -52,5 +52,10 @@ class TaskControllerTest extends TestCase
         $response->seeStatusCode(204);
         $this->notSeeInDatabase('tasks', $item->toArray());
     }
-}
 
+    public function testAuth()
+    {
+        $response = $this->get('/tasks');
+        $response->seeStatusCode(401);
+    }
+}

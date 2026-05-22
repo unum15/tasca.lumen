@@ -1,0 +1,20 @@
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use App\AssetUsageType;
+
+class AssetUsageTypeFactory extends Factory
+{
+    protected $model = AssetUsageType::class;
+
+    public function definition()
+    {
+        return [
+            'name' => $this->faker->word,
+            'notes' => $this->faker->text,
+            'sort_order' => $this->faker->randomDigitNotNull,
+        ];
+    }
+}

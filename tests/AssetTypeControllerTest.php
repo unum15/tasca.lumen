@@ -52,5 +52,10 @@ class AssetTypeControllerTest extends TestCase
         $response->seeStatusCode(204);
         $this->notSeeInDatabase('asset_types', $item->toArray());
     }
-}
 
+    public function testAuth()
+    {
+        $response = $this->get('/asset_types');
+        $response->seeStatusCode(401);
+    }
+}

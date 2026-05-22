@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AssetFueling extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'asset_id',
         'asset_usage_type_id',
@@ -14,6 +17,11 @@ class AssetFueling extends Model
         'gallons',
         'amount',
         'notes'
+    ];
+
+    protected $casts = [
+        'amount' => 'float',
+        'gallons' => 'float',
     ];
 
     public function asset()

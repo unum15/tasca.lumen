@@ -15,7 +15,8 @@ class TaskActionController extends Controller
     protected $model_validation = [
         'name' => 'string|required|min:1|max:255',
         'notes' => 'string|max:255|nullable',
-        'labor_types' => 'array'
+        'labor_types' => 'array',
+        'sort_order' => 'integer|nullable',
     ];
 
     public function __construct()
@@ -36,7 +37,7 @@ class TaskActionController extends Controller
         }
         $values = $this->validateModel($request);
         $item = TaskAction::create($values);
-        $item->labor_types()->sync($values['labor_types']);
+        $item->labor_types()->sync($values['labor_types'] ?? []);
         return $item;
     }
     

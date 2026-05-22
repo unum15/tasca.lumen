@@ -2,10 +2,21 @@
 
 namespace App;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BackflowAssembly extends Model
 {
+    use HasFactory;
+
+    protected $dateFormat = 'Y-m-d H:i:s';
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format($this->dateFormat);
+    }
+
     protected $fillable = [
         'property_id',
         'property_unit_id',

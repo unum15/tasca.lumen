@@ -58,7 +58,7 @@ class IrrigationControllerController extends Controller
        'irrigation_system_id' => 'integer|exists:irrigation_systems,id',
        'name' => 'string|max:1020',
        'placement' => 'string|max:1020|nullable',
-       'irrigation_controller_location_id' => 'integer|exists:irrigation_controller_locations,id',
+       'irrigation_controller_location_id' => 'integer|exists:irrigation_controller_locations,id|nullable',
        'model' => 'string|max:1020|nullable',
        'zones' => 'integer|nullable',
        'property_unit_id' => 'integer|exists:property_units,id|nullable',

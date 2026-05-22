@@ -84,7 +84,7 @@ class EmailTypeControllerTest extends TestCase
     
     public function testDelete()
     {
-        $item = factory('App\EmailType')->create();
+        $item = EmailType::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/email_type/' . $item->id);
         $response->seeStatusCode(204);
     }

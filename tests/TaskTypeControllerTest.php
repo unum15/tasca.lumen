@@ -6,7 +6,7 @@ class TaskTypeControllerTest extends TestCase
 {
     public function testIndex()
     {
-        $item = factory('App\TaskType')->create();
+        $item = TaskType::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/task_types');
         $response->seeStatusCode(200);
         $dbitems = TaskType::all();
@@ -57,7 +57,7 @@ class TaskTypeControllerTest extends TestCase
     
     public function testRead()
     {
-        $item = factory('App\TaskType')->create();
+        $item = TaskType::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/task_type/' . $item->id);
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray);
@@ -74,7 +74,7 @@ class TaskTypeControllerTest extends TestCase
     
     public function testUpdate()
     {
-        $item = factory('App\TaskType')->create();
+        $item = TaskType::factory()->create();
         $patch = ['name' => 'Test 2'];
         $response = $this->actingAs($this->getAdminUser())->patch('/task_type/' . $item->id, $patch);
         $response->seeStatusCode(200);
@@ -85,7 +85,7 @@ class TaskTypeControllerTest extends TestCase
     
     public function testDelete()
     {
-        $item = factory('App\TaskType')->create();
+        $item = TaskType::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/task_type/' . $item->id);
         $response->seeStatusCode(204);
     }

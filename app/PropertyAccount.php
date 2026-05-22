@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PropertyAccount extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'property_id',
         'number',

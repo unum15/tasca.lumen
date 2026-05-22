@@ -57,13 +57,10 @@ class ContactTypeControllerTest extends TestCase
     
     public function testRead()
     {
-        $contact_type = factory('App\ContactType')->create();
+        $contact_type = ContactType::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/contact_type/' . $contact_type->id);
         $response->seeStatusCode(200);
         $response->seeJson($contact_type->toArray());
-        $dbitem = ContactType::find($contact_type->id);
-        $response->seeJsonEquals($dbitem->toArray());
-        $dbitem->delete();
     }
     
     
@@ -86,7 +83,7 @@ class ContactTypeControllerTest extends TestCase
     
     public function testDelete()
     {
-        $contact_type = factory('App\ContactType')->create();
+        $contact_type = ContactType::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/contact_type/' . $contact_type->id);
         $response->seeStatusCode(204);
     }

@@ -58,7 +58,7 @@ class BackflowTestController extends Controller
     
     protected $model_validation = [
        'backflow_test_report_id' => 'integer|exists:backflow_test_reports,id',
-       'contact_id' => 'integer|exists:contacts,id',
+       'contact_id' => 'integer|exists:contacts,id|nullable',
        'reading_1' => 'numeric|nullable',
        'reading_2' => 'numeric|nullable',
        'tested_on' => 'date',
@@ -68,7 +68,6 @@ class BackflowTestController extends Controller
     
     protected $model_validation_required = [
        'backflow_test_report_id' => 'required',
-       'contact_id' => 'required',
        'tested_on' => 'required',
     ];
 

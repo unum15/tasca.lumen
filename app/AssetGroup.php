@@ -14,7 +14,9 @@ class AssetGroup extends Model
         'name',
         'number',
         'notes',
-        'sort_order'
+        'sort_order',
+        'creator_id',
+        'updater_id',
     ];
 
     public function asset_type()

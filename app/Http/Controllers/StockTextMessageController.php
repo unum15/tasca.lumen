@@ -59,6 +59,9 @@ class StockTextMessageController extends Controller
     
     protected $model_validation = [
        'message' => 'string|max:1073741824',
+       'name' => 'string|max:255|nullable',
+       'sort_order' => 'integer|nullable',
+       'message_type_id' => 'integer|nullable',
     ];
     
     protected $model_validation_required = [

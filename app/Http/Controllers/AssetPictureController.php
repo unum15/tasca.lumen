@@ -27,16 +27,17 @@ class AssetPictureController extends Controller
 
     public function create(Request $request)
     {
-        if (!$request->hasFile('picture')) {
-            return response('No picture attached', 422);
+        if (!$request->has('filename')) {
+            if (!$request->hasFile('picture') || !$request->file('picture')->isValid()) {
+                return response('No picture attached', 422);
+            }
+            $values = $this->validateModel($request, true);
+            $values['filename'] = uniqid() . '.' . $request->file('picture')->getClientOriginalExtension();
+            $values['original_filename'] = $request->file('picture')->getClientOriginalName();
+            $request->file('picture')->move('uploads/assets/pictures/', $values['filename']);
+        } else {
+            $values = $this->validateModel($request, true);
         }
-        if (!$request->file('picture')->isValid()) {
-            return response('Picture is invalid:', 422);
-        }
-        $values = $this->validateModel($request, true);
-        $values['filename'] = uniqid();
-        $values['original_filename'] = $request->file('picture')->getClientOriginalName();
-        $request->file('picture')->move('uploads/assets/pictures/', $values['filename']);
         $item = AssetPicture::create($values);
         return response(['data' => $item], 201, ['Location' => route('asset_picture.read', ['id' => $item->id])]);
     }
@@ -68,6 +69,7 @@ class AssetPictureController extends Controller
        'filename' => 'string|max:1020',
        'original_filename' => 'string|max:1020|nullable',
        'notes' => 'string|max:1020|nullable',
+       'name' => 'string|max:255|nullable',
     ];
     
     protected $model_validation_required = [

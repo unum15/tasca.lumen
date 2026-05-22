@@ -17,7 +17,7 @@ class TaskActionFactory extends Factory
         return [
             'name' => $this->faker->word,
             'notes' => $this->faker->text,
-            'sort_order' => $this->faker->randomDigitNotNull
+            'sort_order' => $this->faker->randomDigitNotNull,
         ];
     }
 }

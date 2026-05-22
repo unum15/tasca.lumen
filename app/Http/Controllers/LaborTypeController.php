@@ -58,6 +58,7 @@ class LaborTypeController extends Controller
        'name' => 'string|max:1020',
        'notes' => 'string|max:1073741824|nullable',
        'sort_order' => 'integer|nullable',
+       'assigned' => 'boolean|nullable',
     ];
     
     protected $model_validation_required = [

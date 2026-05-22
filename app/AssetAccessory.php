@@ -14,7 +14,13 @@ class AssetAccessory extends Model
         'quantity',
         'name',
         'notes',
-        'value'
+        'value',
+        'creator_id',
+        'updater_id',
+    ];
+
+    protected $casts = [
+        'value' => 'float',
     ];
 
     public function asset()

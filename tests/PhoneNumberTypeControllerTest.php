@@ -82,7 +82,7 @@ class PhoneNumberTypeControllerTest extends TestCase
     
     public function testDelete()
     {
-        $item = factory('App\PhoneNumberType')->create();
+        $item = PhoneNumberType::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/phone_number_type/' . $item->id);
         $response->seeStatusCode(204);
     }

@@ -52,5 +52,10 @@ class SmsMessageTypeControllerTest extends TestCase
         $response->seeStatusCode(204);
         $this->notSeeInDatabase('sms_message_types', $item->toArray());
     }
-}
 
+    public function testAuth()
+    {
+        $response = $this->get('/sms_message_types');
+        $response->seeStatusCode(401);
+    }
+}

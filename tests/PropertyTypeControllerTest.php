@@ -82,7 +82,7 @@ class PropertyTypeControllerTest extends TestCase
     
     public function testDelete()
     {
-        $item = factory('App\PropertyType')->create();
+        $item = PropertyType::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->delete('/property_type/' . $item->id);
         $response->seeStatusCode(204);
     }
