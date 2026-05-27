@@ -1,35 +1,19 @@
 #!/usr/bin/env php
 <?php
 
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
+define('LARAVEL_START', microtime(true));
 
-/*
-|--------------------------------------------------------------------------
-| Create The Application
-|--------------------------------------------------------------------------
-|
-| First we need to get an application instance. This creates an instance
-| of the application / container and bootstraps the application so it
-| is ready to receive HTTP / Console requests from the environment.
-|
-*/
+require __DIR__.'/vendor/autoload.php';
 
-$app = require __DIR__.'/bootstrap/app.php';
+$app = require_once __DIR__.'/bootstrap/app.php';
 
-/*
-|--------------------------------------------------------------------------
-| Run The Artisan Application
-|--------------------------------------------------------------------------
-|
-| When we run the console application, the current CLI command will be
-| executed in this console and the response sent back to a terminal
-| or another output device for the developers. Here goes nothing!
-|
-*/
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 
-$kernel = $app->make(
-    'Illuminate\Contracts\Console\Kernel'
+$status = $kernel->handle(
+    $input = new Symfony\Component\Console\Input\ArgvInput,
+    new Symfony\Component\Console\Output\ConsoleOutput
 );
 
-exit($kernel->handle(new ArgvInput, new ConsoleOutput));
+$kernel->terminate($input, $status);
+
+exit($status);

@@ -16,9 +16,9 @@ class PropertyTypeControllerTest extends TestCase
     {
         $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => true];
         $response = $this->actingAs($this->getAdminUser())->post('/property_type',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
+        $response_array = json_decode($response->getContent());
         $dbitem = PropertyType::find($response_array->id);
         $response->seeJsonEquals($dbitem->toArray());
 
@@ -37,9 +37,9 @@ class PropertyTypeControllerTest extends TestCase
     {
         $item = ['name' => "a'; DROP TABLE property_types CASCADE; --", 'notes' => "a'; DROP TABLE activity_levels CASCADE; --"];
         $response = $this->actingAs($this->getAdminUser())->post('/property_type',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());        
+        $response_array = json_decode($response->getContent());        
         $dbitem = PropertyType::find($response_array->id);
         $response->assertNotNull($dbitem);
     }

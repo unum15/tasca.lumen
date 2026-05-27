@@ -1,19 +1,16 @@
 {
-    "name": "laravel/lumen",
-    "description": "The Laravel Lumen Framework.",
-    "keywords": ["framework", "laravel", "lumen"],
+    "name": "laravel/laravel",
+    "description": "Tasca Lumen API",
+    "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
     "require": {
         "php": ">=8.2",
-        "laravel/lumen-framework": "^8.0",
+        "laravel/framework": "^8.0",
         "google/apiclient": "^2.0",
         "doctrine/dbal": "^2.9",
         "niklasravnsborg/laravel-pdf": "^4.0",
-        "irazasyed/larasupport": "^1.6",
         "laravel/legacy-factories": "^1.1",
-        "illuminate/mail": "^8.16",
-        "illuminate/notifications": "^8.16",
         "symfony/psr-http-message-bridge": "^2.0",
         "laminas/laminas-diactoros": "^3.0"
     },

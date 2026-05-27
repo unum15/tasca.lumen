@@ -17,9 +17,9 @@ class TaskTypeControllerTest extends TestCase
     {
         $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1];
         $response = $this->actingAs($this->getAdminUser())->post('/task_type',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
+        $response_array = json_decode($response->getContent());
         $dbitem = TaskType::find($response_array->id);
         $response->seeJson($dbitem->toArray());
     }
@@ -37,9 +37,9 @@ class TaskTypeControllerTest extends TestCase
     {
         $item = ['name' => "a'; DROP TABLE task_types CASCADE; --", 'notes' => "a'; DROP TABLE activity_levels CASCADE; --"];
         $response = $this->actingAs($this->getAdminUser())->post('/task_type',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());        
+        $response_array = json_decode($response->getContent());        
         $dbitem = TaskType::find($response_array->id);
         $response->assertNotNull($dbitem);
     }
@@ -60,7 +60,7 @@ class TaskTypeControllerTest extends TestCase
         $item = TaskType::factory()->create();
         $response = $this->actingAs($this->getAdminUser())->get('/task_type/' . $item->id);
         $response->seeStatusCode(200);
-        $response->seeJson($item->toArray);
+        $response->seeJson($item->toArray());
         $dbitem = TaskType::find($item->id);
         $response->seeJsonEquals($dbitem->toArray());
     }

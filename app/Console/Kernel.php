@@ -3,7 +3,7 @@
 namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Laravel\Lumen\Console\Kernel as ConsoleKernel;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\PopulateDatabaseAdminCommand;
 use App\Console\Commands\InitAdminCommand;
 use App\Console\Commands\InitAllCommand;
