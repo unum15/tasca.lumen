@@ -17,9 +17,9 @@ class ContactMethodControllerTest extends TestCase
     {
         $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => true];
         $response = $this->actingAs($this->getAdminUser())->post('/contact_method',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
+        $response_array = json_decode($response->getContent());
         $dbitem = ContactMethod::find($response_array->id);
         $response->seeJsonEquals($dbitem->toArray());
     }
@@ -37,9 +37,9 @@ class ContactMethodControllerTest extends TestCase
     {
         $item = ['name' => "a'; DROP TABLE contact_methods CASCADE; --", 'notes' => "a'; DROP TABLE activity_levels CASCADE; --"];
         $response = $this->actingAs($this->getAdminUser())->post('/contact_method',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());        
+        $response_array = json_decode($response->getContent());        
         $dbitem = ContactMethod::find($response_array->id);
         $response->assertNotNull($dbitem);
     }

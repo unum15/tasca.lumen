@@ -8,7 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
-use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
@@ -42,30 +42,26 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
+     * @param  \Throwable  $e
      * @return \Illuminate\Http\Response
      */
     public function render($request, Throwable $e)
     {
-        if ($request->wantsJson() && !($e instanceof ValidationException)){
-            $response = [
-                'message' => (string) $e->getMessage(),
-                'status' => 400
-            ];
-            if ($e instanceof HttpException) {
-                $response['message'] = Response::$statusTexts[$e->getStatusCode()];
-                $response['status'] = $e->getStatusCode();
-            }
-            
-            if ($this->isDebugMode()) {
-                $response['debug'] = [
-                    'exception' => get_class($e),
-                    'trace' => $e->getTrace()
-                ];
-            }
-            //return response()->json(['error' => $response], $response['status']);
+        if ($e instanceof ModelNotFoundException) {
+            return response()->json(['message' => 'Not Found'], 404);
         }
+
         return parent::render($request, $e);
+    }
+
+    protected function convertValidationExceptionToResponse(ValidationException $e, $request)
+    {
+        return $e->response ?? $this->invalidJson($request, $e);
+    }
+
+    protected function invalidJson($request, ValidationException $exception)
+    {
+        return response()->json($exception->errors(), $exception->status);
     }
 
     public function isDebugMode()

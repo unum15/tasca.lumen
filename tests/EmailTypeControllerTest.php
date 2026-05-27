@@ -1,8 +1,5 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
-
 use App\EmailType;
 
 class EmailTypeControllerTest extends TestCase
@@ -19,9 +16,9 @@ class EmailTypeControllerTest extends TestCase
     {
         $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => true];
         $response = $this->actingAs($this->getAdminUser())->post('/email_type',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
+        $response_array = json_decode($response->getContent());
         $dbitem = EmailType::find($response_array->id);
         $response->seeJsonEquals($dbitem->toArray());
     }
@@ -38,9 +35,9 @@ class EmailTypeControllerTest extends TestCase
     {
         $item = ['name' => "a'; DROP TABLE email_types CASCADE; --", 'notes' => "a'; DROP TABLE activity_levels CASCADE; --"];
         $response = $this->actingAs($this->getAdminUser())->post('/email_type',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());        
+        $response_array = json_decode($response->getContent());        
         $dbitem = EmailType::find($response_array->id);
         $response->assertNotNull($dbitem);
     }

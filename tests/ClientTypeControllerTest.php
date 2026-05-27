@@ -16,9 +16,9 @@ class ClientTypeControllerTest extends TestCase
     {
         $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1];
         $response = $this->actingAs($this->getAdminUser())->post('/client_type',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());        
+        $response_array = json_decode($response->getContent());        
         $dbitem = ClientType::find($response_array->id);
         $response->seeJsonEquals($dbitem->toArray());
     }
@@ -36,9 +36,9 @@ class ClientTypeControllerTest extends TestCase
     {
         $item = ['name' => "a'; DROP TABLE client_types CASCADE; --", 'notes' => "a'; DROP TABLE client_types CASCADE; --"];
         $response = $this->actingAs($this->getAdminUser())->post('/client_type',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());        
+        $response_array = json_decode($response->getContent());        
         $dbitem = ClientType::find($response_array->id);
         $response->assertNotNull($dbitem);
     }
@@ -59,7 +59,7 @@ class ClientTypeControllerTest extends TestCase
         $client_type = ClientType::first();
         $response = $this->actingAs($this->getAdminUser())->get('/client_type/' . $client_type->id);
         $response->seeStatusCode(200);
-        $response->seeJson($client_type->toArray);        
+        $response->seeJson($client_type->toArray());        
     }
     
     

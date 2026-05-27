@@ -48,7 +48,7 @@ class ContactControllerTest extends TestCase
         $response = $this->actingAs($this->getAdminUser())->post('/contact', $item);
         $response->seeStatusCode(200);
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
+        $response_array = json_decode($response->getContent());
         $dbitem = Contact::find($response_array->id);
         $response->assertNotNull($dbitem);
     }

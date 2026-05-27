@@ -33,7 +33,7 @@ class PropertyControllerTest extends TestCase
         $response = $this->actingAs($admin)->post('/property', $item->toArray());
         $response->seeStatusCode(200);
         $response->seeJson($item->toArray());
-        $response->seeInDatabase('properties', $item->toArray());
+        $this->seeInDatabase('properties', $item->toArray());
     }
 
     public function testRead()

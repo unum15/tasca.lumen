@@ -18,9 +18,9 @@ class OrderStatusControllerTest extends TestCase
     {
         $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1];
         $response = $this->actingAs($this->getAdminUser())->post('/order_status',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
+        $response_array = json_decode($response->getContent());
         $dbitem = OrderStatus::find($response_array->id);
         $response->seeJsonEquals($dbitem->toArray());
     }
@@ -38,9 +38,9 @@ class OrderStatusControllerTest extends TestCase
     {
         $item = ['name' => "a'; DROP TABLE order_statuss CASCADE; --", 'notes' => "a'; DROP TABLE activity_levels CASCADE; --"];
         $response = $this->actingAs($this->getAdminUser())->post('/order_status',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());        
+        $response_array = json_decode($response->getContent());        
         $dbitem = OrderStatus::find($response_array->id);
         $response->assertNotNull($dbitem);
     }

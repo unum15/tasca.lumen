@@ -16,9 +16,9 @@ class PhoneNumberTypeControllerTest extends TestCase
     {
         $item = ['name' => 'Test 1', 'notes' => 'Test Notes', 'sort_order' => 1, 'default' => false];
         $response = $this->actingAs($this->getAdminUser())->post('/phone_number_type',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());
+        $response_array = json_decode($response->getContent());
         $dbitem = PhoneNumberType::find($response_array->id);
         $response->seeJsonEquals($dbitem->toArray());
     }
@@ -36,9 +36,9 @@ class PhoneNumberTypeControllerTest extends TestCase
     {
         $item = ['name' => "a'; DROP TABLE phone_number_types CASCADE; --", 'notes' => "a'; DROP TABLE activity_levels CASCADE; --"];
         $response = $this->actingAs($this->getAdminUser())->post('/phone_number_type',$item);
-        $response->seeStatusCode(200);                
+        $response->seeStatusCode(201);                
         $response->seeJson($item);
-        $response_array = json_decode($response->response->getContent());        
+        $response_array = json_decode($response->getContent());        
         $dbitem = PhoneNumberType::find($response_array->id);
         $response->assertNotNull($dbitem);
     }

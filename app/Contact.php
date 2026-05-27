@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Auth\Authenticatable;
-use Laravel\Lumen\Auth\Authorizable;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -92,13 +92,13 @@ class Contact extends Model implements AuthenticatableContract, AuthorizableCont
     }
     
     public function can($ability, $arguments = []){
-        if(empty($ablity)){
+        if(empty($ability)){
             return true;
         }
         $perm_count = 0;
         $roles = $this->roles;
-        $roles->map(function ($role){
-            $perm_count += $role->permissions()->where('name',$ability)->count;
+        $roles->map(function ($role) use ($ability, &$perm_count){
+            $perm_count += $role->permissions()->where('name', $ability)->count();
         });
         return $perm_count;
     }

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Laravel\Lumen\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 
 class Controller extends BaseController
 {
+    use ValidatesRequests;
+
     protected $model_validation = [];
     protected $model_validation_required = [];
     protected $model_includes = [];

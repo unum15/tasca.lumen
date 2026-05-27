@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use DB;
+use DateTimeInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Log;
 
@@ -15,7 +18,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ($this->app->environment('local')) {
+            $this->app->register(\Unum\Maker\MakerServiceProvider::class);
+        }
     }
     
     public function boot()
