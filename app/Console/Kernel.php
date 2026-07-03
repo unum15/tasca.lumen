@@ -57,7 +57,7 @@ class Kernel extends ConsoleKernel
        $schedule->command('appointment:create')->timezone(env("TIMEZONE", 'America/Denver'));
        $schedule->command('order:status')->timezone(env("TIMEZONE", 'America/Denver'));
        $schedule->command('reminder:clockout')->timezone(env("TIMEZONE", 'America/Denver'))->hourly();
-       $schedule->command('db:email')->timezone(env("TIMEZONE", 'America/Denver'));
+       $schedule->command('db:email')->timezone(env("TIMEZONE", 'America/Denver'))->withoutOverlapping();
        //$schedule->command('db:closeOrders')->timezone(env("TIMEZONE", 'America/Denver'));
     }
 }

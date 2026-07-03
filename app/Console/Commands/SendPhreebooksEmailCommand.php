@@ -88,13 +88,14 @@ class SendPhreebooksEmailCommand extends Command
             $rawMessageString .= $email->body . "\r\n";
             $rawMessage = strtr(base64_encode($rawMessageString), array('+' => '-', '/' => '_'));
             $message->setRaw($rawMessage);
-            try {	    
+            try {
 		        $success = $service->users_messages->send("me", $message);
             } catch (\Exception $e) {
-                $message = $e->getMessage();
-                $rawMessageString .= "To: $from\r\n";
-                $rawMessageString .= "Subject: Failed to send message:$message\r\n";
-                $service->users_messages->send("me", $message);
+                $errorText = $e->getMessage();
+                $errorMessage = new \Google_Service_Gmail_Message();
+                $errorRaw = "From: $from\r\nTo: $from\r\nSubject: Failed to send message: $errorText\r\n";
+                $errorMessage->setRaw(strtr(base64_encode($errorRaw), ['+' => '-', '/' => '_']));
+                $service->users_messages->send("me", $errorMessage);
             }
             finally{
                 $phreebooksdb->update("UPDATE emails SET sent=true WHERE id=?",[$email->id]);
