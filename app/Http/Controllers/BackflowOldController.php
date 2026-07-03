@@ -159,8 +159,8 @@ class BackflowOldController extends Controller
         $item->update(['backflow_assembly_id' => $backflow_assembly->id]);
         $old_backflow_assembly = BackflowAssembly::where('placement',$item->placement)->where('property_id',$property_id)->first();
         foreach($item->backflow_old_tests as $test){
-            $reading_1 = $test->check_1 != "" ? $test->check_1 : $test->rp_check_1 != "" ? $test->rp_check_1 : $test->ail;
-            $reading_2 = $test->check_2 != "" ? $test->check_2 : $test->rp != "" ? $test->rp : $test->ch_1;
+            $reading_1 = $test->check_1 != "" ? $test->check_1 : ($test->rp_check_1 != "" ? $test->rp_check_1 : $test->ail);
+            $reading_2 = $test->check_2 != "" ? $test->check_2 : ($test->rp != "" ? $test->rp : $test->ch_1);
             $reading_1 = $reading_1 != "" ? $reading_1 : null;
             $reading_2 = $reading_1 != "" ? $reading_1 : null;
             if(!empty($reading_1)&&(!is_numeric($reading_1))){

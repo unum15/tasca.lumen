@@ -7,9 +7,6 @@ Route::get('/', function () {
 Route::post('/auth', 'AuthController@auth');
 Route::post('/unauth', 'AuthController@unauth');
 Route::get('/status', 'AuthController@status');
-Route::get('/auth/password/reset', ['uses' => 'AuthController@passwordReset', 'as' => 'password.reset']);
-Route::post('/auth/password/email', 'AuthController@sendResetLinkEmail');
-Route::post('/auth/password/reset', 'AuthController@reset');
 
 Route::get('/activity_levels', 'ActivityLevelController@index');
 Route::post('/activity_level', 'ActivityLevelController@create');
@@ -112,7 +109,7 @@ Route::post('/client', 'ClientController@create');
 Route::get('/client/{id}', 'ClientController@read');
 Route::patch('/client/{id}', 'ClientController@update');
 Route::delete('/client/{id}', 'ClientController@delete');
-Route::get('/clients/unique/{field:\w+}', ['uses' => 'ClientController@unique', 'as' => 'client.unique']);
+Route::get('/clients/unique/{field}', ['uses' => 'ClientController@unique', 'as' => 'client.unique']);
 Route::post('/client/{id}/properties', 'ClientController@addProperty');
 Route::delete('/client/{id}/property/{property_id}', 'ClientController@deleteProperty');
 
@@ -141,7 +138,7 @@ Route::post('/project', 'ProjectController@create');
 Route::get('/project/{id}', 'ProjectController@read');
 Route::patch('/project/{id}', 'ProjectController@update');
 Route::delete('/project/{id}', 'ProjectController@delete');
-Route::get('/projects/unique/{field:\w+}', ['uses' => 'ProjectController@unique', 'as' => 'project.unique']);
+Route::get('/projects/unique/{field}', ['uses' => 'ProjectController@unique', 'as' => 'project.unique']);
 
 Route::get('/properties', 'PropertyController@index');
 Route::post('/property', 'PropertyController@create');
@@ -156,14 +153,14 @@ Route::get('/order/{id}', 'OrderController@read');
 Route::patch('/order/{id}', 'OrderController@update');
 Route::delete('/order/{id}', 'OrderController@delete');
 Route::get('/orders/closable', 'OrderController@closable');
-Route::get('/orders/unique/{field:\w+}', ['uses' => 'OrderController@unique', 'as' => 'order.unique']);
+Route::get('/orders/unique/{field}', ['uses' => 'OrderController@unique', 'as' => 'order.unique']);
 
 Route::get('/tasks', 'TaskController@index');
 Route::post('/task', 'TaskController@create');
 Route::get('/task/{id}', 'TaskController@read');
 Route::patch('/task/{id}', 'TaskController@update');
 Route::delete('/task/{id}', 'TaskController@delete');
-Route::get('/tasks/unique/{field:\w+}', ['uses' => 'TaskController@unique', 'as' => 'task.unique']);
+Route::get('/tasks/unique/{field}', ['uses' => 'TaskController@unique', 'as' => 'task.unique']);
 
 Route::get('/settings', 'SettingController@index');
 Route::post('/settings', 'SettingController@create');
@@ -213,7 +210,7 @@ Route::post('/backflow_assembly', ['uses' => 'BackflowAssemblyController@create'
 Route::get('/backflow_assembly/{id}', ['uses' => 'BackflowAssemblyController@read', 'as' => 'backflow_assembly.read']);
 Route::patch('/backflow_assembly/{id}', ['uses' => 'BackflowAssemblyController@update', 'as' => 'backflow_assembly.update']);
 Route::delete('/backflow_assembly/{id}', ['uses' => 'BackflowAssemblyController@delete', 'as' => 'backflow_assembly.delete']);
-Route::get('/backflow_assembly/unique/{field:\w+}', ['uses' => 'BackflowAssemblyController@unique', 'as' => 'backflow_assembly.unique']);
+Route::get('/backflow_assembly/unique/{field}', ['uses' => 'BackflowAssemblyController@unique', 'as' => 'backflow_assembly.unique']);
 Route::get('/backflow_assemblies/tags/pdf', ['uses' => 'BackflowAssemblyController@tagsPdf', 'as' => 'backflow_assembly.tags_pdf']);
 
 Route::get('/backflow_sizes', ['uses' => 'BackflowSizeController@index', 'as' => 'backflow_size.index']);
@@ -291,8 +288,6 @@ Route::delete('/property_unit/{id}', ['uses' => 'PropertyUnitController@delete',
 Route::get('/phree_books/contacts', 'PhreeBooksController@contacts');
 Route::get('/phree_books/addresses', 'PhreeBooksController@addresses');
 Route::get('/phree_books/matches', 'PhreeBooksController@matches');
-Route::get('/phree_books/tasca', 'PhreeBooksController@tasca');
-Route::get('/phree_books/phree_books', 'PhreeBooksController@phreeBooks');
 
 Route::get('/phree_books/clients', 'PhreeBooksController@clients');
 Route::post('/phree_books/client/{id}', 'PhreeBooksController@createClient');
@@ -376,11 +371,11 @@ Route::delete('/asset_usage_type/{id}', ['uses' => 'AssetUsageTypeController@del
 Route::get('/assets', ['uses' => 'AssetController@index', 'as' => 'asset.index']);
 Route::post('/asset', ['uses' => 'AssetController@create', 'as' => 'asset.create']);
 Route::get('/asset/{id}', ['uses' => 'AssetController@read', 'as' => 'asset.read']);
-Route::get('/asset/number/{number:[0-9A-Z]+}', ['uses' => 'AssetController@readNumber', 'as' => 'asset.read_number']);
+Route::get('/asset/number/{number}', ['uses' => 'AssetController@readNumber', 'as' => 'asset.read_number']);
 Route::patch('/asset/{id}', ['uses' => 'AssetController@update', 'as' => 'asset.update']);
 Route::delete('/asset/{id}', ['uses' => 'AssetController@delete', 'as' => 'asset.delete']);
 Route::post('/asset/{id}/export', ['uses' => 'AssetController@createExport', 'as' => 'asset.create.export']);
-Route::get('/assets/unique/{field:\w+}', ['uses' => 'AssetController@unique', 'as' => 'asset.unique']);
+Route::get('/assets/unique/{field}', ['uses' => 'AssetController@unique', 'as' => 'asset.unique']);
 
 Route::get('/asset_fuelings', ['uses' => 'AssetFuelingController@index', 'as' => 'asset_fueling.index']);
 Route::post('/asset_fueling', ['uses' => 'AssetFuelingController@create', 'as' => 'asset_fueling.create']);
@@ -400,7 +395,7 @@ Route::post('/asset_repair', ['uses' => 'AssetRepairController@create', 'as' => 
 Route::get('/asset_repair/{id}', ['uses' => 'AssetRepairController@read', 'as' => 'asset_repair.read']);
 Route::patch('/asset_repair/{id}', ['uses' => 'AssetRepairController@update', 'as' => 'asset_repair.update']);
 Route::delete('/asset_repair/{id}', ['uses' => 'AssetRepairController@delete', 'as' => 'asset_repair.delete']);
-Route::get('/asset_repairs/unique/{field:\w+}', ['uses' => 'AssetRepairController@unique', 'as' => 'asset_repair.unique']);
+Route::get('/asset_repairs/unique/{field}', ['uses' => 'AssetRepairController@unique', 'as' => 'asset_repair.unique']);
 
 Route::get('/asset_service_types', ['uses' => 'AssetServiceTypeController@index', 'as' => 'asset_service_type.index']);
 Route::post('/asset_service_type', ['uses' => 'AssetServiceTypeController@create', 'as' => 'asset_service_type.create']);
@@ -420,7 +415,7 @@ Route::get('/asset_maintenance/{id}', ['uses' => 'AssetMaintenanceController@rea
 Route::get('/asset_maintenance/last/', ['uses' => 'AssetMaintenanceController@last', 'as' => 'asset_maintenance.last']);
 Route::patch('/asset_maintenance/{id}', ['uses' => 'AssetMaintenanceController@update', 'as' => 'asset_maintenance.update']);
 Route::delete('/asset_maintenance/{id}', ['uses' => 'AssetMaintenanceController@delete', 'as' => 'asset_maintenance.delete']);
-Route::get('/asset_maintenances/unique/{field:\w+}', ['uses' => 'AssetMaintenanceController@unique', 'as' => 'asset_maintenance.unique']);
+Route::get('/asset_maintenances/unique/{field}', ['uses' => 'AssetMaintenanceController@unique', 'as' => 'asset_maintenance.unique']);
 
 Route::get('/asset_units', ['uses' => 'AssetUnitController@index', 'as' => 'asset_unit.index']);
 Route::post('/asset_unit', ['uses' => 'AssetUnitController@create', 'as' => 'asset_unit.create']);

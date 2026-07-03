@@ -12,6 +12,8 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         Route::pattern('id', '[0-9]+');
+        Route::pattern('field', '\w+');
+        Route::pattern('number', '[0-9A-Z]+');
         parent::boot();
     }
 
