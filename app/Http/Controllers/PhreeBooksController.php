@@ -68,7 +68,9 @@ class PhreeBooksController extends Controller
             $pb_contacts[$pb_contact->id] = $pb_contact;
         }
         foreach($clients as $index => $client){
-            $clients[$index]->phree_books = $pb_contacts[$client->phreebooks_id];
+            if(isset($pb_contacts[$client->phreebooks_id])){
+                $clients[$index]->phree_books = $pb_contacts[$client->phreebooks_id];
+            }
             foreach($client->contacts as $contact_index => $contact){
                 
                 if(($contact->phreebooks_id)&&(isset($pb_contacts[$contact->phreebooks_id]))){
