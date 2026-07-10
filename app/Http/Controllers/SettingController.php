@@ -22,7 +22,7 @@ class SettingController extends Controller
     public function index()
     {
         $items = Setting::pluck('value', 'name');
-        $items['operating_company'] = Client::find($items['operating_company_client_id']);
+        $items['operating_company'] = Client::find($items->get('operating_company_client_id'));
         return $items;
     }
     
